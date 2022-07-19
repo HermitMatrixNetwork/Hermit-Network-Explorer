@@ -1,7 +1,9 @@
 <template>
     <el-table
       :data="tableData"
-      style="width: 100%">
+      style="width: 100%"
+      stripe border 
+      >
       <el-table-column
         prop="date"
         label="日期"
@@ -149,6 +151,9 @@
             address: '上海市普陀区金沙江路 1518 弄'
           }]
         }
+      },
+      methods:{
+
       }
     }
   </script>
