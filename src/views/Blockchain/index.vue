@@ -3,6 +3,7 @@
       <h1>区块链</h1>
       <div>
           <el-pagination
+            small
             background
             layout="prev, pager, next"
             :total="1000">

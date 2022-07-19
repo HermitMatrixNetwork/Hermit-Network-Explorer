@@ -1,9 +1,12 @@
 import * as echarts from 'echarts';
-function bar(classname, message) {
-    var myChart = echarts.init(document.querySelector(classname));
+export const bar = (classname, message) => {
+    var myChart = echarts.init(classname);
     var option;
 
     option = {
+        title:{
+            text:message.title
+        },
         xAxis: {
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -19,6 +22,33 @@ function bar(classname, message) {
         ]
     };
     myChart.setOption(option);
+    myChart.resize()
 }
 
-export default bar
+export const line = (classname, message) => {
+    var chartDom = document.querySelector(classname);
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+        title: {
+            text: '折线图'
+        },
+        xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'line',
+                smooth: true
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+}

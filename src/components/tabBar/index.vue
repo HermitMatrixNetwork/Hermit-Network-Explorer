@@ -1,162 +1,112 @@
 <template>
-  <div class="header">
-    <div class="logo">
-      <h1>这里是logo</h1>
-    </div>
-    <div class="navs">
-      <router-link to="home">{{ Language.text01 }}</router-link>
-      <a @mouseenter="popselect" @mouseleave="upopselect" @click="toblock">{{ Language.text02 }} <Popselect :selectIsShow="selectIsShow"/></a>
-      <a>{{ Language.text03 }}</a>
-      <a>{{ Language.text04 }}</a>
-      
-    </div>
-    <div class="search">
-
-    </div>
-    <div class="langage">
-      <select v-model="lang" @change="ccc">
-        <option value="0">简体中文</option>
-        <option value="1">English</option>
-      </select>
-    </div>
-    <div class="more">
-      <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
-        <img src="https://scan.platon.network/static/images/icon_menu.svg" alt="">
-      </el-button>
-      <el-drawer title="我是标题" :visible.sync="drawer" :with-header="false" modal modal-append-to-body size="210px">
-        <!-- modal='false' modal-append-to-body='false' -->
-        <div class="popTitle">
-          <p>{{Language.text01}}</p>
-          <p>{{Language.text01}}</p>
-          <p>{{Language.text01}}</p> 
-          <p>{{Language.text01}}</p>
-          <p>{{Language.text01}}</p>
-          <p>{{Language.text01}}</p>
-        </div>
-      </el-drawer>
-    </div>
-  </div>
+    <el-header class="tabBar">
+        <el-row type="flex">
+            <el-col :span="6" :sm="12" :xs="12">
+                <h1>logo{{ languagePack.text01 }}</h1>
+            </el-col>
+            <el-col :span="10" class="hidden-sm-and-down">
+                <div class="navs">
+                    <router-link to="home">{{ languagePack.text01 }}</router-link>
+                    <a @click="toblock">{{ languagePack.text02 }}</a>
+                    <a>{{ languagePack.text03 }}</a>
+                    <a>{{ languagePack.text04 }}</a>
+                    <router-link to="contracts">{{ languagePack.text05 }}</router-link>
+                </div>
+            </el-col>
+            <el-col :span="5" />
+            <el-col :span="3">
+                <div class="langage hidden-sm-and-down">
+                    <select v-model="lang" @change="LanguageChange">
+                        <option value="0">简体中文</option>
+                        <option value="1">English</option>
+                    </select>
+                </div>
+            </el-col>
+            <el-col class="more hidden-md-and-up" :sm="12" :xs="12">
+                <el-button @click="drawer = true" type="primary" style="margin-left: 16px">
+                    <img src="https://scan.platon.network/static/images/icon_menu.svg" alt="" />
+                </el-button>
+                <el-drawer
+                    title="我是标题"
+                    :visible.sync="drawer"
+                    :with-header="false"
+                    size="210px"
+                >
+                    <div class="popTitle">
+                        <p>{{ languagePack.text01 }}</p>
+                        <p @click="toblock">{{ languagePack.text02 }}</p>
+                        <p>{{ languagePack.text01 }}</p>
+                        <p>{{ languagePack.text01 }}</p>
+                        <p>{{ languagePack.text01 }}</p>
+                        <p @click="sss">中文简体/English</p>
+                    </div>
+                </el-drawer>
+            </el-col>
+        </el-row>
+    </el-header>
 </template>
 
 <script>
-import Popselect from '../popselect/index.vue'
-import { Language } from './language'
 export default {
-  components:{ Popselect, Popselect },
-  data() {
-    return {
-      Language: {},
-      lang: '',
-      drawer: false,
-      selectIsShow:false
-    }
-  },
-  created() {
-    this.initLanguage()
-  },
-  mounted() {
-
-  },
-  methods: {
-    LanguageChange(e) {
-      localStorage.setItem('language',e)
-      location. reload()
+    data() {
+        return {
+            lang: '',
+            drawer: false,
+        };
     },
-    initLanguage() {
-      const langVal = localStorage.getItem('language')
-      if (langVal) {
-        this.Language = Language[langVal]
-        this.lang = langVal
-      } else {
-        this.Language = Language[0]
-        this.lang = 0
-      }
+    created() {
+        this.lang = localStorage.getItem('language') || 1;
     },
-    ccc(){
-      this.LanguageChange(this.lang)
+    mounted() {},
+    methods: {
+        LanguageChange() {
+            localStorage.setItem('language', this.lang);
+            // 调用mutation中的方法，通过本地存储切换语言
+            this.$store.commit('CHANGE_LANGUAGE');
+        },
+        toblock() {
+            this.$router.push('blockchain');
+        },
+        sss() {
+            this.lang == 1 ? (this.lang = 0) : (this.lang = 1);
+            this.LanguageChange();
+            this.drawer = !this.drawer;
+        },
     },
-    popselect(){
-      this.selectIsShow = true
+    computed: {
+        languagePack() {
+            return this.$store.state.Language;
+        },
     },
-    upopselect(){
-      this.selectIsShow = false
-    },
-    toblock(){
-      this.$router.push('/blockchain')
-    }
-  }
-}
-
+};
 </script>
-<style lang="scss">
-.header {
-  width: 100%;
-  height: 80px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background: #808080;
-
-  .logo {
-    flex: 1;
-    text-align: center;
-  }
-
-  .navs {
+<style lang="scss" scoped>
+.tabBar {
+    background: #fff;
+    width: 100%;
+}
+.el-row {
+    height: 100%;
+    overflow: hidden;
+}
+.el-col {
+    line-height: 60px;
+}
+.navs {
     display: flex;
-    width: 400px;
-    height: 80px;
-    line-height: 80px;
-
     a {
-      width: 25%;
-      text-align: center;
+        width: 20%;
+        display: block;
+        height: 60px;
+        overflow: hidden;
+        cursor: pointer;
+        text-align: center;
     }
-
-    a:hover{
-      cursor: pointer;
-    }
-
-    .tablight {
-      color: red;
-    }
-  }
-
-  .langage {
-    flex: 1;
-  }
-
-  .search {
-    flex: 2;
-  }
-
-  .more {
-    display: none;
-  }
 }
-
-@media screen and (max-width:768px) {
-  .header {
-    .langage {
-      display: none;
+@media screen and (max-width: 598px) {
+    .tabBar {
+        // position: fixed;
+        // // z-index: 999;
     }
-
-    .navs {
-      display: none;
-    }
-
-    .search {
-      display: none;
-    }
-
-    .more {
-      display: block;
-      flex: 1;
-    }
-  }
-}
-
-.popTitle{
-  margin: 10px;
 }
 </style>

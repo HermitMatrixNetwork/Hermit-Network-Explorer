@@ -1,7 +1,7 @@
 <template>
-    <div class="bottom">
+    <el-footer height="200px">
         <h1>这里是底部</h1>
-    </div>
+    </el-footer>
 </template>
 
 <script>
