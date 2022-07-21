@@ -15,7 +15,8 @@ import {
     Footer,
     Avatar,
     Skeleton,
-    SkeletonItem
+    SkeletonItem,
+    Progress
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(Button)
@@ -34,6 +35,7 @@ Vue.use(Footer)
 Vue.use(Avatar)
 Vue.use(Skeleton)
 Vue.use(SkeletonItem)
+Vue.use(Progress)
 
 
 

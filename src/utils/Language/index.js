@@ -27,7 +27,9 @@ export const Language = [
         account:'账户',
         Validationnode:'验证节点',
         resources:'资源',
-        more:'更多'
+        more:'更多',
+        Incirculation:'流通量/总发行量',
+        Pledgerate:'质押率'
     },
 
     {
@@ -58,6 +60,8 @@ export const Language = [
         account:'account',
         Validationnode:'Validation',
         resources:'resources',
-        more:'more'
+        more:'more',
+        Incirculation:'Incirculation/Total',
+        Pledgerate:'Pledge rate'
     }
 ]

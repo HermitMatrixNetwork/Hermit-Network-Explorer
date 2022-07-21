@@ -72,20 +72,21 @@
 
            <!--流通量-->
           <div>
-            <p>{{ languagePack.text19 }}</p>
-            <h3>{{ blockHeight }}</h3>
+            <p>{{ languagePack.Incirculation }}</p>
+            <h3>{{ (circulation / 1e6).toFixed(2) + 'M' }}/{{(issueNum / 1e6).toFixed(2) + 'M'}}</h3>
+            <!-- <el-progress :percentage="circulationAndissueNum" text-inside></el-progress> -->
           </div>
 
            <!--质押率-->
           <div>
-            <p>{{ languagePack.text19 }}</p>
-            <h3>{{ blockHeight }}</h3>
+            <p>{{ languagePack.Pledgerate }}</p>
+            <h3>{{ Pledgerate }}% /{{issueNum}}</h3>
           </div>
 
            <!--地址数-->
           <div>
             <p>{{ languagePack.text19 }}</p>
-            <h3>{{ blockHeight }}</h3>
+            <h3>{{ totalNum }}</h3>
           </div>
         </div>
       </div>
@@ -136,6 +137,8 @@ export default {
       issueNum: "",
       pledgeNum: "",
       outNode: "",
+      circulation:"",  //流通量
+      Pledgerate:"",  //质押率
       messageList: [
         {
           title: "GHM价格",
@@ -206,15 +209,21 @@ export default {
           break;
       }
     },
-    //获取总地址数量
+    //获取数据
     async getBlockMsg() {
-      const res = await allAdresQuantity();
-      const issueNum = await totalCirculation();
-      const pledgeNum = await pledgeParameter();
-      this.totalNum = res.pagination.total;
+      const res = await allAdresQuantity();  //总地址数
+      const issueNum = await totalCirculation();  //获取总发行量
+      const pledgeNum = await pledgeParameter();  //获取质押参数
+      this.totalNum = res.pagination.total;  //总地址数量
       this.issueNum = issueNum.supply[0].amount;
-      this.outNode = issueNum.supply[0].denom;
-      this.pledgeNum = pledgeNum.params.historical_entries;
+      this.outNode = issueNum.supply[0].denom;  //出块节点
+      this.pledgeNum = pledgeNum.params.historical_entries;  //质押参数
+      //  流通量 = 总发行量 -  质押量
+      this.circulation = this.issueNum - this.pledgeNum
+      console.log('流通量',this.circulation,'总发行量',this.issueNum,'质押量',this.pledgeNum);
+      //质押率
+      this.Pledgerate = (this.pledgeNum / this.issueNum).toFixed(2)
+      // console.log('总地址数量',res);
     },
   },
   beforeDestroy() {
@@ -224,6 +233,9 @@ export default {
     languagePack() {
       return this.$store.state.Language;
     },
+    circulationAndissueNum(){
+      return (this.circulation / this.issueNum) * 100
+    }
   },
   watch: {
     screenWidth(val) {
@@ -349,6 +361,7 @@ export default {
       div {
         height: 44px;
         width: 25%;
+        position: relative;
 
         p {
           height: 17px;
