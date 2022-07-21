@@ -14,13 +14,20 @@ export const Language = [
         text12: '实时出块时长(s)',
         text13: '出块交易数',
         text14: '区块',
-        text15: '当选验证节点',
+        text15: '当前出块节点',
         text16: '查看所有区块',
         text17: '查看所有验证节点',
         text18: '出块节点',
         text19: '当前区块高度',
-        text20: '实时交易笔数',
-        text21: '节点总数'
+        text20: '累计交易笔数',
+        text21: '节点总数',
+        home:'主页',
+        Blockchain:'区块链',
+        contract:'合约',
+        account:'账户',
+        Validationnode:'验证节点',
+        resources:'资源',
+        more:'更多'
     },
 
     {
@@ -45,5 +52,12 @@ export const Language = [
         text19: 'LIVE BLOCK HEIGHT',
         text20: 'LIVE TRANSACTIONS',
         text21: 'LIVE ADDRESS',
+        home:'home',
+        Blockchain:'Blockchain',
+        contract:'contract',
+        account:'account',
+        Validationnode:'Validation',
+        resources:'resources',
+        more:'more'
     }
 ]

@@ -38,11 +38,10 @@ html,
 body,
 #app {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     box-sizing: border-box;
     color: #333;
-    // font-size: calc(100vw/750*100);
-    // font-size: .2rem;
+    overflow-x: hidden;
 }
 
 a {
