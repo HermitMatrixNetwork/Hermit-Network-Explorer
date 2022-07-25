@@ -2,7 +2,7 @@
     <div id="app">
         <TabBar/>
         <router-view />
-        <Bottom />
+        <!-- <Bottom /> -->
     </div>
 </template>
 

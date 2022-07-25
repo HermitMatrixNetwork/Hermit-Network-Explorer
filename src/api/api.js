@@ -119,7 +119,7 @@ export function totalCirculation() {     //总发行量
     })
 }
 
-export function pledgeParameter() {      //质押参数
+export function pledgeParameter() {      //质押参数  实时质押信息
     return Service({
         url: '/cosmos/staking/v1beta1/params',
         method: 'GET'
@@ -140,7 +140,14 @@ export function allValidationNode() {     //获取所有验证节点
     })
 }
 
-
+export function newestBlocks(){
+    // return Service({
+    //     url:`/block_search?query=10&page=1`,
+    //     method:'GET'
+    // })
+}
+//各个节点的具体信息
+// export function 
 
 
 

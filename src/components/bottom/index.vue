@@ -1,5 +1,5 @@
 <template>
-  <div class="bottom">
+  <footer class="bottom">
     <div class="contact">
       <div class="bottom_logo">
         <img src="../../assets/img/bottom-bar_logo.png" alt="" width="28" />
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="record">Hermit Matrix Network © 2022 (HGM)</div>
-  </div>
+  </footer>
 </template>
 
 <script>

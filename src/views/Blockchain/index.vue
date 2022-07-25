@@ -1,7 +1,7 @@
 <template>
-  <div>
-      <h1>区块链</h1>
-      <div>
+  <div class="main">
+      <h3>GHM的顶级账户</h3>
+      <div class="pagination" >
           <el-pagination
             small
             background
@@ -9,7 +9,7 @@
             :total="1000">
           </el-pagination>
       </div>
-      <div class="main">
+      <div>
           <Table/>
       </div>
   </div>
@@ -24,10 +24,22 @@ export default{
         return{
 
         }
+    },
+    mounted(){
+        document.querySelector('body').style.background = "#F8FAFB"
     }
 }
 
 </script>
 <style lang="scss" scoped>
-
+.main{
+    width: 1280px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    padding: 15px;
+    .pagination{
+        display: flex;
+        justify-content: flex-end;
+    }
+}
 </style>

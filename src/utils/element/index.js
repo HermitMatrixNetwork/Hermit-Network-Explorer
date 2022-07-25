@@ -16,7 +16,10 @@ import {
     Avatar,
     Skeleton,
     SkeletonItem,
-    Progress
+    Progress,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(Button)
@@ -36,9 +39,9 @@ Vue.use(Avatar)
 Vue.use(Skeleton)
 Vue.use(SkeletonItem)
 Vue.use(Progress)
-
-
-
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)
 
 
 

@@ -47,43 +47,47 @@
         </div>
 
         <div class="newest-data-item">
-            <!--当前区块高度-->
-          <div>
+          <!--当前区块高度-->
+          <div @click="checkBlock_Detail">
             <p>{{ languagePack.text19 }}</p>
             <h3>{{ blockHeight }}</h3>
           </div>
-            <!--当前出块节点-->
+          <!--当前出块节点-->
           <div>
             <p>{{ languagePack.text15 }}</p>
             <h3>{{ outNode }}</h3>
           </div>
 
-            <!--累计交易笔数-->
+          <!--累计交易笔数-->
           <div>
             <p>{{ languagePack.text20 }}</p>
             <h3>{{ totalNum }}</h3>
           </div>
 
-            <!--10秒内平均TPS/瞬时最高TPS-->
+          <!--10秒内平均TPS/瞬时最高TPS-->
           <div>
             <p>{{ languagePack.text19 }}</p>
             <h3>{{ blockHeight }}</h3>
           </div>
 
-           <!--流通量-->
+          <!--流通量-->
           <div>
             <p>{{ languagePack.Incirculation }}</p>
-            <h3>{{ (circulation / 1e6).toFixed(2) + 'M' }}/{{(issueNum / 1e6).toFixed(2) + 'M'}}</h3>
+            <h3>
+              {{ (circulation / 1e6).toFixed(2) + "M" }}/{{
+                (issueNum / 1e6).toFixed(2) + "M"
+              }}
+            </h3>
             <!-- <el-progress :percentage="circulationAndissueNum" text-inside></el-progress> -->
           </div>
 
-           <!--质押率-->
+          <!--质押率-->
           <div>
             <p>{{ languagePack.Pledgerate }}</p>
-            <h3>{{ Pledgerate }}% /{{issueNum}}</h3>
+            <h3>{{ Pledgerate }}% /{{ issueNum }}</h3>
           </div>
 
-           <!--地址数-->
+          <!--地址数-->
           <div>
             <p>{{ languagePack.text19 }}</p>
             <h3>{{ totalNum }}</h3>
@@ -98,13 +102,24 @@
           <button class="seeAll">{{ languagePack.text16 }}</button>
         </div>
         <div class="topBlock">
-          {{ languagePack.text15 }}
-          <ul>
-            <li v-for="item in 20" :key="item">
-              {{ item }}
+          <div class="nodeTitle">{{ languagePack.text15 }}</div>
+          <ul class="nodeInformation">
+            <li
+              v-for="(item, index) in nodelist"
+              :key="item.operator_address"
+              class="nodeInformation_item"
+            >
+              <div class="icon">Top{{ index + 1 }}</div>
+              <div class="basic">
+                <p>当前验证节点{{ index + 1 }}</p>
+                <p>总质押{{ item.tokens }}uGHM</p>
+              </div>
+              <div class="btnRate">338.45% 佣金率</div>
             </li>
           </ul>
-          <button class="seeAll">{{ languagePack.text17 }}</button>
+          <div class="bottom">
+            <button class="seeAll">{{ languagePack.text17 }}</button>
+          </div>
         </div>
       </div>
     </div>
@@ -120,6 +135,7 @@ import {
   allAdresQuantity,
   pledgeParameter,
   totalCirculation,
+  allValidationNode,
 } from "@/api/api.js";
 export default {
   name: "Home",
@@ -137,8 +153,9 @@ export default {
       issueNum: "",
       pledgeNum: "",
       outNode: "",
-      circulation:"",  //流通量
-      Pledgerate:"",  //质押率
+      circulation: "", //流通量
+      Pledgerate: "", //质押率
+      nodelist: "", //当前验证节点
       messageList: [
         {
           title: "GHM价格",
@@ -148,7 +165,7 @@ export default {
         },
         {
           title: "交易额",
-          price: "",
+          price: "0.48",
           updown: "",
           icon: "",
         },
@@ -180,7 +197,7 @@ export default {
       const res = await getLatestBlock();
       this.blockHeight = res.block.last_commit.height;
     },
-    block_detail() {
+    checkBlock_Detail() {
       this.$router.push({
         path: "block_detail",
         query: { height: this.blockHeight },
@@ -211,19 +228,30 @@ export default {
     },
     //获取数据
     async getBlockMsg() {
-      const res = await allAdresQuantity();  //总地址数
-      const issueNum = await totalCirculation();  //获取总发行量
-      const pledgeNum = await pledgeParameter();  //获取质押参数
-      this.totalNum = res.pagination.total;  //总地址数量
+      const res = await allAdresQuantity(); //总地址数
+      const issueNum = await totalCirculation(); //获取总发行量
+      const pledgeNum = await pledgeParameter(); //获取质押参数
+      this.totalNum = res.pagination.total; //总地址数量
       this.issueNum = issueNum.supply[0].amount;
-      this.outNode = issueNum.supply[0].denom;  //出块节点
-      this.pledgeNum = pledgeNum.params.historical_entries;  //质押参数
+      this.outNode = issueNum.supply[0].denom; //出块节点
+      this.pledgeNum = pledgeNum.params.historical_entries; //质押参数
       //  流通量 = 总发行量 -  质押量
-      this.circulation = this.issueNum - this.pledgeNum
-      console.log('流通量',this.circulation,'总发行量',this.issueNum,'质押量',this.pledgeNum);
+      this.circulation = this.issueNum - this.pledgeNum;
+      console.log(
+        "流通量",
+        this.circulation,
+        "总发行量",
+        this.issueNum,
+        "质押量",
+        this.pledgeNum
+      );
       //质押率
-      this.Pledgerate = (this.pledgeNum / this.issueNum).toFixed(2)
+      this.Pledgerate = (this.pledgeNum / this.issueNum).toFixed(2);
+
       // console.log('总地址数量',res);
+      const nodelist = await allValidationNode();
+      this.nodelist = nodelist.validators;
+      console.log("节点信息", nodelist);
     },
   },
   beforeDestroy() {
@@ -233,9 +261,9 @@ export default {
     languagePack() {
       return this.$store.state.Language;
     },
-    circulationAndissueNum(){
-      return (this.circulation / this.issueNum) * 100
-    }
+    circulationAndissueNum() {
+      return (this.circulation / this.issueNum) * 100;
+    },
   },
   watch: {
     screenWidth(val) {
@@ -402,36 +430,127 @@ export default {
   .allblock-number {
     width: 1280px;
     margin: 0 auto;
-    height: 600px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
-    div {
+    .newBlock,
+    .topBlock {
       // flex: 1;
-      width: 50%;
+      width: 630px;
       height: 100%;
-      text-align: center;
-      background: #999;
+      background: #ffffff;
+      position: relative;
+
+      height: 838px;
+      background: #ffffff;
+      border: 1px solid #e9eaef;
+      box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
+      border-radius: 4px;
     }
     .seeAll {
-      width: 400px;
-      height: 60px;
-      background: #000;
-      color: #fff;
+      width: 597px;
+      height: 32px;
+      background: #edf0ff;
+      border-radius: 2px;
+      border: none;
     }
     .topBlock {
       overflow: hidden;
-      ul {
-        margin: 0 20px;
-        height: 530px;
+      .nodeTitle {
+        height: 52px;
+        box-shadow: inset 0 -1px 0 0 #e9eaef;
+        line-height: 52px;
+        font-family: PingFangSC-Medium;
+        font-weight: 500;
+        font-size: 14px;
+        color: rgba(20, 37, 62, 0.85);
+        letter-spacing: 0;
+        text-indent: 16px;
+        z-index: 9;
+        position: absolute;
+        top: 0;
+        background: #ffffff;
+        width: 100%;
+      }
+      .nodeInformation {
+        height: 720px;
+        padding: 0 16px;
         transform: translateY(-100%);
         animation: sliding 5s linear infinite;
-        li {
+        &_item {
           width: 100%;
-          height: 60px;
-          background: #000;
-          color: #fff;
+          height: 40px;
+          padding: 16px 0;
+          display: flex;
+          align-items: center;
+          position: relative;
+          .icon {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 50%;
+            background: #f2f3f4;
+            font-family: DIN-Bold;
+            font-weight: Bold;
+            font-size: 12px;
+            color: rgba(20, 37, 62, 0.85);
+            letter-spacing: 0;
+            text-align: center;
+          }
+          .basic {
+            // display: flex;
+            // flex-direction: column;
+            // justify-content: space-between;
+            padding-left: 16px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            font-size: 12px;
+            p:nth-child(1) {
+              height: 17px;
+              color: #5671f2;
+              padding-bottom: 6px;
+            }
+            p:nth-child(2) {
+              height: 17px;
+              color: rgba(20, 37, 62, 0.45);
+            }
+          }
+          .btnRate {
+            width: 124px;
+            height: 28px;
+            background-image: linear-gradient(
+              90deg,
+              rgba(242, 243, 244, 0) 0%,
+              #f2f3f4 35%
+            );
+            border-radius: 1px 4px 4px 1px 0;
+            font-family: PingFangSC-Medium;
+            font-weight: 500;
+            font-size: 12px;
+            color: rgba(20, 37, 62, 0.45);
+            letter-spacing: 0;
+            text-align: center;
+            line-height: 28px;
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
         }
+      }
+      .bottom {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        z-index: 999;
+        height: 56px;
+        background: #ffffff;
+        box-shadow: inset 0 1px 0 0 #e9eaef;
+        border-radius: 0 0 4px 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       ul:hover {
         animation-play-state: paused;
@@ -459,10 +578,10 @@ export default {
       padding: 0;
     }
   }
-  .el-input-group__append{
-    background: #1E42EC;
+  .el-input-group__append {
+    background: #1e42ec;
     border: none;
-    color: #FFFFFF;
+    color: #ffffff;
   }
 }
 

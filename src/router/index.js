@@ -8,6 +8,8 @@ import Tsx from '@/views/Blockchain/tsx.vue'
 import Contracts from '@/views/Contracts/index.vue'
 import Addressdetail from '@/views/Accounts/address_detail/index.vue'
 import Blockdetail from '@/views/block_detail/index.vue'
+import BlockCheck from '@/views/Blockchain/blockcheck.vue'
+import Validation from '@/views/validation/index.vue'
 
 
 Vue.use(VueRouter)
@@ -26,8 +28,16 @@ const routes = [
     component: Blockchain
   },
   {
+    path: '/blockcheck',
+    component: BlockCheck
+  },
+  {
     path: '/accounts',
     component: Accounts
+  },
+  {
+    path:'/validation',
+    component:Validation
   },
   {
     path: '/more',
