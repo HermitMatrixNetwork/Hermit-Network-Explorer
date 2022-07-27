@@ -19,7 +19,8 @@ import {
     Progress,
     Dropdown,
     DropdownMenu,
-    DropdownItem
+    DropdownItem,
+    Tag
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(Button)
@@ -42,6 +43,7 @@ Vue.use(Progress)
 Vue.use(Dropdown)
 Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
+Vue.use(Tag)
 
 
 
