@@ -10,7 +10,10 @@ import Addressdetail from '@/views/Accounts/address_detail/index.vue'
 import Blockdetail from '@/views/block_detail/index.vue'
 import BlockCheck from '@/views/Blockchain/blockcheck.vue'
 import Validation from '@/views/validation/index.vue'
-
+import currencyState from '@/views/More/currencyState.vue'
+import Govern from '@/views/More/govern.vue'
+import Foundation from '@/views/More/foundation.vue'
+import Resources from '@/views/resources/index.vue'
 
 Vue.use(VueRouter)
 
@@ -52,12 +55,8 @@ const routes = [
     component: Contracts
   },
   {
-    path: '/login',
-    component: () => import('@/views/login/index.vue')
-  },
-  {
-    path: '/register',
-    component: () => import('@/views/register/index.vue')
+    path: '/developapi',
+    component:Resources
   },
   {
     path: '/address_detail',
@@ -66,6 +65,18 @@ const routes = [
   {
     path: '/block_detail',
     component: Blockdetail
+  },
+  {
+    path:'/currency_state',
+    component:currencyState
+  },
+  {
+    path:'/govern',
+    component:Govern
+  },
+  {
+    path:'/foundation',
+    component:Foundation
   }
 ]
 

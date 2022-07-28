@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div>
         <div class="main">
             <h3>用户名</h3>
@@ -8,7 +8,7 @@
             <input type="checkbox" value="0" v-model="checkbox" />
             <label>范德萨发</label>
             <h1>{{ checkbox }}</h1>
-            没有账号去<router-link to="register">注册账号</router-link>
+            没有账号去<router-link to="">注册账号</router-link>
         </div>
     </div>
 </template>
@@ -30,4 +30,4 @@ export default {
     margin: 0 60px;
     min-height: 550px;
 }
-</style>
+</style> -->

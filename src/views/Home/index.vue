@@ -287,7 +287,7 @@ export default {
 <style lang="scss" scoped>
 .Home {
   width: 100%;
-  height: 100%;
+  background: #FFFFFF;
 }
 
 .setting_Image {
@@ -296,7 +296,7 @@ export default {
   background-size: 100% 100%;
 
   .content {
-    width: 1280px;
+    max-width: 1280px;
     height: 277px;
     margin: 0 auto;
     display: flex;

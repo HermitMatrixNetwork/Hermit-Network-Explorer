@@ -5,7 +5,16 @@
         <div class="contracts_basic_item"></div>
     </div>
     <div class="contracts_table">
-      <div class="contracts_table_title">总共 1,081,774 个区块</div>
+      <div class="contracts_table_title">
+        总共 1,081,774 个区块
+         <el-pagination
+            small
+            background
+            layout="prev, pager, next"
+            :total="1000"
+          >
+          </el-pagination>
+      </div>
       <Table />
     </div>
   </div>
@@ -51,9 +60,10 @@ export default {
 
     &_title {
       height: 60px;
-      line-height: 60px;
       padding-left: 16px;
-
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       font-family: PingFangSC-Medium;
       font-weight: 500;
       font-size: 12px;

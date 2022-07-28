@@ -1,37 +1,73 @@
 <template>
-  <div>
-    <h3>区块</h3>
-    <main class="main">
-      <Table/>
-    </main>
+  <div class="main">
+    <div class="title">区块</div>
+
+    <div class="block_table">
+      <div class="block_table_title">
+        总共 1,081,774 个区块
+        <div class="pagination">
+          <el-pagination
+            small
+            background
+            layout="prev, pager, next"
+            :total="1000"
+          >
+          </el-pagination>
+        </div>
+      </div>
+      <div class="block_table_box">
+        <Table></Table>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import Table from '@/components/Table/index.vue'
+import Table from "@/components/Table/index.vue";
 export default {
-  components:{ Table },
-  data(){
-    return{
-
-    }
+  components: { Table },
+  data() {
+    return {};
   },
-  mounted(){
-    document.querySelector('body').style.background = "#F8FAFB"
-  }
+  mounted() {
+    document.querySelector("body").style.background = "#F8FAFB";
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-  .main{
-    width: 1280px;
-    height: 600px;
-    margin: 0 auto;
-    background: #FFFFFF;
-    padding: 15px;
+.main {
+  width: 1280px;
+  margin: 0 auto;
+  padding: 16px;
+  .title {
+    height: 28px;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    font-size: 20px;
+    padding-bottom: 16px;
+    color: rgba(20, 37, 62, 0.85);
+    letter-spacing: 0;
   }
-  h3{
-    width: 1280px;
-    margin: auto;
+
+  .block_table {
+    background: #ffffff;
+    border: 1px solid #e9eaef;
+    box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
+    border-radius: 4px;
+    &_title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 21px 16px;
+      height: 18px;
+      font-family: PingFangSC-Medium;
+      font-weight: 500;
+      font-size: 12px;
+      color: rgba(20, 37, 62, 0.85);
+      letter-spacing: 0;
+      line-height: 18px;
+    }
   }
+}
 </style>

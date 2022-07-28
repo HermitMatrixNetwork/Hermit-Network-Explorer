@@ -55,7 +55,7 @@ export const Language = [
         text20: 'LIVE TRANSACTIONS',
         text21: 'LIVE ADDRESS',
         home:'home',
-        Blockchain:'Blockchain',
+        Blockchain:'blockchain',
         contract:'contract',
         account:'account',
         Validationnode:'Validation',

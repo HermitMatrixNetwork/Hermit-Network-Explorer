@@ -38,10 +38,11 @@ html,
 body,
 #app {
     width: 100%;
-    // height: 100%;
+    height: 100%;
     box-sizing: border-box;
     color: #333;
     overflow-x: hidden;
+    background: #F8FAFB;
 }
 
 a {
