@@ -118,7 +118,6 @@ export default {
     this.getblockDetail(this.$route.query.height);
   },
   mounted() {
-    document.querySelector("body").style.background = "#F8FAFB";
     document.querySelector('.selected').style.color = '#1E42ED'
   },
   methods: {
@@ -372,5 +371,26 @@ export default {
 
 ::v-deep .table_box {
   margin-bottom: 13px;
+}
+
+@media screen and (max-width:598px) {
+  .main{
+    width: 355px;
+    padding: 0 10px;
+    >div{
+      width: 100%;
+    }
+    .block_basic{
+      width: 100%;
+
+      .block_basic_content{
+        padding: 12px;
+        height: auto;
+      }
+    }
+    .block_detail{
+      width: 100%;
+    }
+  }
 }
 </style>

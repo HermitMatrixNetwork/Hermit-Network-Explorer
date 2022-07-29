@@ -44,7 +44,7 @@
         </div>
 
         <div class="validation-table-body">
-          <el-table :data="newNodeList">
+          <el-table :data="newNodeList" size="mini">
             <el-table-column
               label="排名"
               width="80"

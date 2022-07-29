@@ -2,25 +2,8 @@
   <div class="Home">
     <div class="setting_Image">
       <div class="content">
-        <div class="inputVal">
-          <el-input
-            :placeholder="languagePack.text06"
-            v-model="input3"
-            class="input-with-select"
-          >
-            <el-select v-model="select" slot="prepend">
-              <el-option :label="languagePack.text07" value="1"></el-option>
-              <el-option :label="languagePack.text08" value="2"></el-option>
-              <el-option :label="languagePack.text09" value="3"></el-option>
-              <el-option :label="languagePack.text10" value="4"></el-option>
-            </el-select>
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="searchBtn"
-            ></el-button>
-          </el-input>
-        </div>
+        <SearchBox></SearchBox>
+
         <div class="banner"></div>
       </div>
     </div>
@@ -40,9 +23,11 @@
         <div class="block-chart">
           <div class="outBlockTime">
             {{ languagePack.text12 }}
+            <div class="barChart" />
           </div>
           <div class="outBlockNum">
             {{ languagePack.text13 }}
+            <div class="barChart" />
           </div>
         </div>
 
@@ -127,9 +112,8 @@
 </template>
 
 <script>
-import { bar, line } from "@/echarts/index.js";
-import { Wallet } from "secretjs";
-import Table from "@/components/Table/index.vue";
+import { bar } from "@/echarts/index.js";
+import * as echarts from "echarts";
 import {
   getLatestBlock,
   allAdresQuantity,
@@ -139,10 +123,8 @@ import {
 } from "@/api/api.js";
 export default {
   name: "Home",
-  components: { Table },
   data() {
     return {
-      input3: "",
       select: "1",
       screenWidth: document.body.clientWidth, // 屏幕宽度
       timer: false,
@@ -180,11 +162,10 @@ export default {
     console.log(this.languagePack);
   },
   mounted() {
-    // line(".blockRight");
-    // this.aa = document.querySelector(".outBlockTime");
-    // bar(document.querySelector(".outBlockTime"), {
-    //   title: this.$store.state.Language.text12,
-    // });
+    let charts = document.querySelectorAll(".barChart");
+    charts.forEach((item) => {
+      bar(echarts.init(item));
+    });
     // window.onresize = () => {
     //   return (() => {
     //     this.screenWidth = document.body.clientWidth;
@@ -202,29 +183,6 @@ export default {
         path: "block_detail",
         query: { height: this.blockHeight },
       });
-    },
-    searchBtn() {
-      if (!this.input3.trim()) {
-        alert("输入不能为空");
-        this.input3 = "";
-        return;
-      }
-      switch (this.select * 1) {
-        case 1:
-          console.log("通过hash搜索");
-          break;
-        case 2:
-          console.log("通过块搜索");
-          break;
-        case 3:
-          console.log("通过地址搜索");
-          break;
-        case 4:
-          console.log("通过token搜索");
-          break;
-        default:
-          break;
-      }
     },
     //获取数据
     async getBlockMsg() {
@@ -274,7 +232,7 @@ export default {
         this.timer = true;
         let that = this;
         setTimeout(function () {
-          bar(that.aa, { title: that.$store.state.Language.text12 });
+          // bar(that.aa, { title: that.$store.state.Language.text12 });
           // that.getECharts()  // 操作
           // console.log(val);
           that.timer = false;
@@ -287,7 +245,7 @@ export default {
 <style lang="scss" scoped>
 .Home {
   width: 100%;
-  background: #FFFFFF;
+  background: #ffffff;
 }
 
 .setting_Image {
@@ -570,6 +528,12 @@ export default {
   }
 }
 
+.barChart {
+  width: 376px;
+  height: 44px !important;
+  margin-top: 24px;
+}
+
 ::v-deep .input-with-select {
   .el-input--suffix {
     .el-input__inner {
@@ -585,89 +549,70 @@ export default {
   }
 }
 
-@media screen and(min-width: 569px) and (max-width: 756px) {
-  .setting_Image {
-    .banner {
-      display: none;
-    }
-  }
-
-  .block-message {
-    height: 400px;
-    flex-direction: column;
-
-    .blockLeft {
-      width: 100%;
-    }
-
-    .blockRight {
-      width: 100%;
-    }
-  }
-
-  .block-chart {
-    height: 600px;
-
-    flex-direction: column;
-    align-items: center;
-
-    div {
-      width: 100%;
-    }
-  }
-
-  .allblock-number {
-    flex-direction: column;
-    align-items: center;
-
-    div {
-      width: 100%;
-    }
-  }
-}
-
 @media screen and (max-width: 598px) {
+  .setting_Image {
+    min-height: 200px;
+    .content{
+      height: 200px;
+    }
+  }
   .pageMain {
-    margin: 0 20px;
+    margin: 0 10px;
 
     .block-message {
-      height: 600px;
+      width: 100%;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       transform: translateY(-10%);
-      .blockLeft {
-        width: 100%;
-        flex-direction: column;
-        flex-wrap: nowrap;
-
-        div {
-          width: 100%;
-        }
-      }
-
-      .blockRight {
-        width: 100%;
+      height: 180px;
+      .block-item {
+        padding: 16px;
       }
     }
 
-    .block-chart {
-      height: 600px;
-      flex-direction: column;
-      align-items: center;
+    .newest-data {
+      width: 100%;
+      height: 420px;
+      .block-chart {
+        padding: 12px;
+        height: 200px;
+        flex-direction: column;
+        align-items: center;
+        div{
+          width: 100%; 
+        }
+      }
+      &-item{
+        padding: 0 12px !important;
+        >div{
+          width: 50% !important;
+          h3{
+            font-size: 12px !important;
+          }
 
-      div {
-        width: 100%;
+        }
       }
     }
 
     .allblock-number {
+      // width: 100%;
+      width: 100%;
       flex-direction: column;
       align-items: center;
-      height: 1200px;
-      div {
-        width: 100%;
-        flex: 600px;
+      height: 1000px;
+      >div {
+        margin: 0 12px;
+        width: 100% !important;
+        height: 560px !important;
         overflow: hidden;
+      }
+      .topBlock{
+        .nodeInformation{
+          padding: 0 12px !important;
+          .btnRate{
+            right: 0;
+          }
+        }
       }
       .seeAll {
         width: 100%;
@@ -682,7 +627,10 @@ export default {
     }
 
     .inputVal {
-      margin: 0 20px;
+      margin: 0 10px;
+      .el-input__inner {
+        display: none;
+      }
     }
   }
 }

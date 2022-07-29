@@ -23,7 +23,6 @@ export default {
     return {};
   },
   mounted() {
-    document.querySelector("body").style.background = "#F8FAFB";
   },
 };
 </script>

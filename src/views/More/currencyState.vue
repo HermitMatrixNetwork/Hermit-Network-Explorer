@@ -184,7 +184,6 @@ export default {
         desc,
         official,
       };
-      // axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded"
       const res = await axios.post(" http://localhost:8081/api/apply/apply",{...params});
       console.log('提交结果',res);
     },

@@ -47,7 +47,6 @@ body,
 
 a {
     text-decoration: none;
-    color: #333;
 }
 
 ul,

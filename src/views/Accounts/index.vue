@@ -2,6 +2,9 @@
   <div>
     <div class="accounts_chart">
       <div class="chart_Title">账户增长</div>
+      <div class="line_chart">
+
+      </div>
     </div>
     <div class="accounts_table">
       <div class="table_Tile">总用户数 200,664 位</div>
@@ -56,6 +59,8 @@
 
 <script>
 import { getAllaccounts, adresBalance, getAllanmount } from "@/api/api.js";
+import * as echarts from 'echarts';
+import { bar, line } from "@/echarts/index.js";
 export default {
   name: "Accounts",
   data() {
@@ -73,6 +78,14 @@ export default {
     const {page,pageSize} = this.pageData
     this.getaccounts(page,pageSize);
     this.amountNumber();
+    // console.log('echarts',echarts);
+  },
+  mounted(){
+    const chart = document.querySelector('.line_chart')
+    // console.log('chart',chart);
+    let lineChart = echarts.init(chart)
+    // console.log(lineChart);
+    line(lineChart)
   },
   methods: {
     async getaccounts(page,pageSize) {
@@ -111,7 +124,6 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(val);
-      // console.log(`当前页: ${val}`);
       const {page,pageSize} = this.pageData
       page = val
       // // this.getaccounts()
@@ -131,8 +143,7 @@ export default {
   border-radius: 4px;
   .chart_Title {
     height: 20px;
-    font-family: PingFangSC-Medium;
-    font-weight: 500;
+    font-weight: bold;
     font-size: 14px;
     color: rgba(20, 37, 62, 0.85);
     letter-spacing: 0;
@@ -160,5 +171,19 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+.line_chart{
+  width: 1280px;
+  height: 260px;
+}
+
+@media screen and (max-width:598px) {
+  .accounts_chart{
+    display: none;
+  }
+  .accounts_table{
+    width: 100%;
+  }
 }
 </style>

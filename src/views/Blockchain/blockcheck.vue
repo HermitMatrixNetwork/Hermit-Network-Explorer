@@ -78,7 +78,6 @@ export default {
     }
 	},
 	mounted() {
-		document.querySelector('body').style.background = '#F8FAFB'
 		document.querySelector('.selected').style.color = '#1E42ED'
 	},
   methods: {
