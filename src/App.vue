@@ -38,10 +38,15 @@ html,
 body,
 #app {
     width: 100%;
-    // height: 100%;
+    height: 100%;
     box-sizing: border-box;
     color: #333;
     overflow-x: hidden;
+<<<<<<< HEAD
+=======
+    background: #F8FAFB;
+}
+>>>>>>> a28fa6c16893717cfe8c94999217be988761ac5e
 
     /* 修改全局滚动条 */
     ::-webkit-scrollbar{ width:3px; height:0px;} /* 滚动条的大小 */
@@ -50,7 +55,6 @@ body,
   }
 a {
     text-decoration: none;
-    color: #333;
 }
 
 ul,

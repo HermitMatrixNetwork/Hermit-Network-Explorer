@@ -25,12 +25,12 @@ Service.interceptors.response.use(response => {
   return response.data
 }, error => {
   console.log('error', error)
-  /* const msg = error.Message !== undefined ? error.Message : ''
+  const msg = error.Message !== undefined ? error.Message : ''
   Message({
     message: '网络错误' + msg,
     type: 'error',
     duration: 3 * 1000
   })
-  loadingInstance.close() */
+  loadingInstance.close()
   return Promise.reject(error)
 })

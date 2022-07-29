@@ -12,7 +12,7 @@ const store = new Vuex.Store({
             if (langVal) {
                 state.Language = Language[langVal]
             } else {
-                state.Language = Language[1]
+                state.Language = Language[0]
             }
         }
     },

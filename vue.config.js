@@ -8,7 +8,7 @@ module.exports = defineConfig({
       postcss: {
         postcssOptions: {
           plugins: [
-            autoprefixer()
+            // autoprefixer()
             // [
             //   'postcss-px-to-viewport',
             //   {
@@ -31,6 +31,17 @@ module.exports = defineConfig({
             // ]
           ]
         }
+      }
+    }
+  },
+  devServer: {
+    proxy: {  //代理服务器
+      '/api': {
+        target: 'http://158.247.237.78:8888',
+        pathRewrite: { '^/api': '' },
+        logLevel: "debug"
+        // ws: true,
+        // changeOrigin: true
       }
     }
   }

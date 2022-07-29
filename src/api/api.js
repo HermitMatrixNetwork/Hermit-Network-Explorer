@@ -14,9 +14,9 @@ export function addNewAndroidPlugin(data) {
     })
 }*/
 
-export function getAllaccounts() {  //返回所有现有账户
+export function getAllaccounts(page,pageSize) {  //返回所有现有账户
     return Service({
-        url: '/cosmos/auth/v1beta1/accounts',
+        url: `/cosmos/auth/v1beta1/accounts?pagination.offset=${page}&pagination.limit=${pageSize}`,
         method: 'get'
     })
 }

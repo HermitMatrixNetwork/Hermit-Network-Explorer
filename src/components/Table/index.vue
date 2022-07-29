@@ -12,8 +12,7 @@
 <script>
 export default {
   props: {
-    tableHeader: Object,
-    // tableData:Array
+    tableHeader: [Array,Object],
   },
   data() {
     return {
