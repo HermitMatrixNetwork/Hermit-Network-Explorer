@@ -18,7 +18,7 @@
 
     <div class="block_detail">
       <div class="block_detail_title">交易</div>
-        <el-table :data="tableData" size="mini" height="515px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @cell-click="toDetail">
+        <el-table :data="tableData" size="mini" height="630px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @cell-click="toDetail">
           <el-table-column prop="transHash" label="交易哈希" :show-overflow-tooltip="true" />
           <el-table-column prop="operationType" label="操作类型" width="80px">
             <template slot-scope="scope">
@@ -346,8 +346,8 @@ export default {
 }
 
 ::v-deep .el-input__inner {
-  height: 30px !important;
-  line-height: 30px !important;
+  height: 23px !important;
+  line-height: 23px !important;
   // border-color: #1E42ED !important;
 
   &:hover {
@@ -365,7 +365,7 @@ export default {
 }
 
 ::v-deep .table_box {
-  margin-bottom: 13px;
+  margin-bottom: 10px;
 }
 
 @media screen and (max-width:598px) {

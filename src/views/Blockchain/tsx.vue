@@ -15,12 +15,12 @@
 					</el-pagination>
 				</el-col>
 			</el-row>
-      <el-table :data="tableData" size="mini" height="545px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @cell-click="toDetail">
+      <el-table :data="tableData" size="mini" height="665px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @cell-click="toDetail">
         <el-table-column width="30px">
           <template>
             <el-popover
               placement="right"
-              :offset="150"
+              :offset="155"
               :visible-arrow="false"
               width="300px"
               trigger="click">
@@ -47,7 +47,7 @@
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column prop="block" label="交易哈希" width="120px">
+        <el-table-column prop="block" label="交易哈希" width="150px">
           <template slot-scope="scope">
             <div style="display: flex;align-items: center;">
                 <el-tooltip class="item" effect="dark" content="交易失败" placement="top-start">
@@ -64,18 +64,18 @@
             <el-tag type="info" size="mini">{{ scope.row.operationType || '' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="transNum" label="区块" width="100px" />
-        <el-table-column prop="person" label="时长" width="120px" />
-        <el-table-column prop="fuelCon" label="发起地址" :show-overflow-tooltip="true" width="120px" />
+        <el-table-column prop="transNum" label="区块" />
+        <el-table-column prop="person" label="时长" />
+        <el-table-column prop="fuelCon" label="发起地址" :show-overflow-tooltip="true" width="150px" />
         <el-table-column :width="operationType1 ? '80px' : '40px'">
           <template slot-scope="scope">
             <el-tag v-show="scope.row.operationType1" type="info" size="mini">{{ scope.row.operationType || '' }}</el-tag>
             <el-button v-show="!scope.row.operationType1" class="toBtn" type="success" icon="el-icon-right" size="mini" circle />
           </template>
         </el-table-column>
-        <el-table-column prop="fuelTotal" label="目标地址" width="120px" :show-overflow-tooltip="true"/>
-        <el-table-column prop="blockReward" label="交易额" width="150px"/>
-        <el-table-column prop="blockReward" label="手续费（GHM）" width="150px"/>
+        <el-table-column prop="fuelTotal" label="目标地址" width="150px" :show-overflow-tooltip="true"/>
+        <el-table-column prop="blockReward" label="交易额" />
+        <el-table-column prop="blockReward" label="手续费（GHM）"/>
       </el-table>
       <el-row type="flex" justify="end" >
         <el-pagination
@@ -357,8 +357,8 @@ h3 {
 }
 
 ::v-deep .el-input__inner {
-  height: 30px !important;
-  line-height: 30px !important;
+  height: 23px !important;
+  line-height: 23px !important;
   // border-color: #1E42ED !important;
 
   &:hover {

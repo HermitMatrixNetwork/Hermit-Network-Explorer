@@ -15,7 +15,7 @@
 					</el-pagination>
 				</el-col>
 			</el-row>
-      <el-table :data="tableData" size="mini" height="435px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @row-click="toBlockDetail">
+      <el-table :data="tableData" size="mini" height="535px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @row-click="toBlockDetail">
         <el-table-column prop="block" label="区块" width="80px" />
         <el-table-column prop="blockAge" label="块龄" width="150px"/>
         <el-table-column prop="transNum" label="交易数" width="70px" />
