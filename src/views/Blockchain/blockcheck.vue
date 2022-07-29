@@ -278,7 +278,6 @@ h3 {
   height: 60px !important;
   cursor: pointer;
 }
-<<<<<<< HEAD
 
 ::v-deep .pagina {
   display: flex;
@@ -287,6 +286,3 @@ h3 {
   margin-right: 18px;
 }
 </style>
-=======
-</style>
->>>>>>> a28fa6c16893717cfe8c94999217be988761ac5e

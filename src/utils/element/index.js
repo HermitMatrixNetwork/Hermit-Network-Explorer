@@ -20,18 +20,15 @@ import {
     Dropdown,
     DropdownMenu,
     DropdownItem,
-<<<<<<< HEAD
     Tag,
     Tooltip,
     Popover,
-    Divider
-=======
+    Divider,
     Form,
     FormItem,
     Upload,
     Dialog,
     Tag
->>>>>>> a28fa6c16893717cfe8c94999217be988761ac5e
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(Button)
