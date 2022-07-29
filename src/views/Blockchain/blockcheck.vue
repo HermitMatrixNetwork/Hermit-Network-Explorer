@@ -10,6 +10,7 @@
 						layout="prev, pager, next"
 						:total="1000"
 						small
+            class="pagina"
 					>
 					</el-pagination>
 				</el-col>
@@ -21,7 +22,7 @@
         <el-table-column prop="person" label="提案人" width="100px" />
         <el-table-column prop="fuelCon" label="燃料用量">
           <template slot-scope="scope">
-            <el-progress :percentage="50" :width="196" :stroke-width="6" color="#1E42EDFF" :format="format"></el-progress>
+            <el-progress :percentage="30" :width="196" :stroke-width="6" color="#1E42EDFF" :format="format(scope.row.fuelCon)"></el-progress>
           </template>
         </el-table-column>
         <el-table-column prop="fuelTotal" label="燃料总量" width="100px"/>
@@ -88,8 +89,10 @@ export default {
     },
 
     // 指定进度条文字内容
-    format() {
-        return '20,312,021(50%)'
+    format(value) {
+        return () => {
+          return value
+        }
     },
 
     // 设置列的字体颜色
@@ -275,5 +278,12 @@ h3 {
 ::v-deep .el-table__row {
   height: 60px !important;
   cursor: pointer;
+}
+
+::v-deep .pagina {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 18px;
 }
 </style>

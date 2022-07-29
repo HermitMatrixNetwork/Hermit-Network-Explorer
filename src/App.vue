@@ -42,8 +42,12 @@ body,
     box-sizing: border-box;
     color: #333;
     overflow-x: hidden;
-}
 
+    /* 修改全局滚动条 */
+    ::-webkit-scrollbar{ width:3px; height:0px;} /* 滚动条的大小 */
+    ::-webkit-scrollbar-track {background-color: #6d7277;} /* 滚动条的滑轨背景颜色 */
+    ::-webkit-scrollbar-thumb {background-color:#5671F2; border-radius:0px;}
+  }
 a {
     text-decoration: none;
     color: #333;

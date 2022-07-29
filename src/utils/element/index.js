@@ -20,7 +20,10 @@ import {
     Dropdown,
     DropdownMenu,
     DropdownItem,
-    Tag
+    Tag,
+    Tooltip,
+    Popover,
+    Divider
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(Button)
@@ -44,6 +47,10 @@ Vue.use(Dropdown)
 Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
 Vue.use(Tag)
+Vue.use(Tooltip)
+Vue.use(Popover)
+Vue.use(Divider)
+
 
 
 

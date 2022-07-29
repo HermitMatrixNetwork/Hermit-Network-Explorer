@@ -18,24 +18,24 @@
 
     <div class="block_detail">
       <div class="block_detail_title">交易</div>
-        <el-table :data="tableData" size="mini" height="515px" class="table_box" tooltip-effect="light" :cell-style="columnStyle" :header-cell-style="rowStyle" @cell-click="toDetail">
+        <el-table :data="tableData" size="mini" height="515px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @cell-click="toDetail">
           <el-table-column prop="transHash" label="交易哈希" :show-overflow-tooltip="true" />
           <el-table-column prop="operationType" label="操作类型" width="80px">
             <template slot-scope="scope">
-              <el-tag type="info" size="mini">转账</el-tag>
+              <el-tag type="info" size="mini">{{ scope.row.operationType || '' }}</el-tag>
             </template>
           </el-table-column>
-         <el-table-column prop="block" label="区块" width="100px"/>
-         <el-table-column prop="timer" label="时长" width="100px" />
-         <el-table-column prop="adress" label="发起地址" width="150px" :show-overflow-tooltip="true"/>
-         <el-table-column width="40px">
-           <template slot-scope="scope">
+          <el-table-column prop="block" label="区块" width="100px"/>
+          <el-table-column prop="timer" label="时长" width="100px" />
+          <el-table-column prop="adress" label="发起地址" width="150px" :show-overflow-tooltip="true"/>
+          <el-table-column width="40px">
+            <template>
              <el-button type="success" icon="el-icon-right" size="mini" circle />
-           </template>
-         </el-table-column>
-         <el-table-column prop="targetAdress" label="目标地址" width="150px" :show-overflow-tooltip="true"/>
-         <el-table-column prop="transValue" label="交易数值" />
-         <el-table-column prop="poundage" label="手续费（GHM）" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="targetAdress" label="目标地址" width="150px" :show-overflow-tooltip="true"/>
+          <el-table-column prop="transValue" label="交易数值" />
+          <el-table-column prop="poundage" label="手续费（GHM）" />
        </el-table>
        <el-row type="flex" justify="end" >
         <el-pagination  
@@ -131,7 +131,7 @@ export default {
     columnStyle({ row, column, rowIndex, columnIndex }) {
       switch(columnIndex) {
         case 0:
-          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #5671F2;'
+          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #5671F2;cursor: pointer;'
           break;
         case 1: 
           return 'font-family: PingFangSC-Regular;font-weight: 400;font-size: 12px;color: rgba(20,37,62,0.65);'
@@ -143,10 +143,10 @@ export default {
           return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: rgba(20,37,62,0.45);'
           break;
         case 4: 
-          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #5671F2;'
+          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #5671F2;cursor: pointer;'
           break;
         case 6:
-          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #5671F2;'
+          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #5671F2;cursor: pointer;'
           break;
         case 7:
           return 'font-family: PingFangSC-Regular;font-weight: 400;font-size: 12px;color: rgba(20,37,62,0.65);'
@@ -177,10 +177,7 @@ export default {
 
     handleSizeChange() {
       let oul = document.querySelectorAll('.el-select-dropdown__list li')
-      oul.forEach(item => {
-        console.log(item.style.color);
-        item.style.color = ''
-      })
+      oul.forEach(item => item.style.color = '')
       let oli = document.querySelector('.selected')
       oli.style.color = '#606266'
     	document.querySelector('.hover').style.color = '#1E42ED'
@@ -192,7 +189,6 @@ export default {
 
     toDetail(row, column) {
       console.log('row', row);
-      console.log('column', column);
       switch(column.property){
         case 'transHash':
           console.log('跳转到交易详情');
@@ -367,7 +363,6 @@ export default {
 
 ::v-deep .el-table__row {
   height: 60px !important;
-  cursor: pointer;
 }
 
 ::v-deep .table_box {
