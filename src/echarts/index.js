@@ -31,7 +31,7 @@ export const bar = (element,data) => {
             {
                 data: message,
                 type: 'bar',
-                barWidth: '8px'
+                barWidth: '8px',
             }
         ],
         color: '#DDE0E3'

@@ -21,7 +21,9 @@
 </template>
 
 <script>
+import mixin from '@/mixins/index.vue'
 export default {
+  mixins:[mixin],
   props: {
     boxStyle: {
       type: Object,
@@ -41,19 +43,19 @@ export default {
   methods: {
     searchBtn() {
       if (!this.searchVal.trim()) {
-        alert("输入不能为空");
+        this.messageBox('输入不能为空！ ')
         this.searchVal = "";
         return;
       }
       switch (this.select * 1) {
         case 1:
-          console.log("通过hash搜索");
+          this.queryDealtoHash(this.searchVal)
           break;
         case 2:
           console.log("通过块搜索");
           break;
         case 3:
-          console.log("通过地址搜索");
+          this.queryDealtoAddress(this.searchVal)
           break;
         case 4:
           console.log("通过token搜索");
@@ -61,6 +63,7 @@ export default {
         default:
           break;
       }
+      this.searchVal = ""
     },
   },
 };

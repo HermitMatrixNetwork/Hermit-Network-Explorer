@@ -188,54 +188,6 @@ h3 {
 	color: rgba(20, 37, 62, 0.85);
 	letter-spacing: 0;
 }
-::v-deep li {
-  border: 1px solid #E9EAEF !important;
-  border-radius: 2px !important;
-  margin: 0 4px !important;
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
-  font-size: 12px;
-  color: rgba(20,37,62,0.85);
-
-  &:hover {
-    color: #1E42ED !important;
-  }
-
-}
-::v-deep li.active {
-  color: #1E42ED !important;
-  border: 1px solid #1E42ED !important;
-  border-radius: 2px !important;
-}
-
-::v-deep .btn-prev,.btn-next {
-  width: 30px;
-  border: 1px solid #E9EAEF !important;
-  border-radius: 2px !important;
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
-  font-size: 12px;
-  color: rgba(20,37,62,0.85);
-
-  &:hover {
-    color: #1E42ED !important;
-  }
-}
-
-::v-deep .btn-next {
-  width: 30px;
-  border: 1px solid #E9EAEF !important;
-  border-radius: 2px !important;
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
-  font-size: 12px;
-  color: rgba(20,37,62,0.85);
-  padding-left: 6px !important;
-
-  &:hover {
-    color: #1E42ED !important;
-  }
-}
 
 ::v-deep th {
   background-color: #F8F9FA !important;

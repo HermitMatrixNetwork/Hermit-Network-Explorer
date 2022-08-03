@@ -4,11 +4,16 @@
       class="centerStyle"
       :style="{ height: $route.path == '/home' ? '60px' : '110px' }"
     >
-      <img src="../../assets/img/top-bar_logo.png" class="logo_style" @click="toGo('/home')"/>
-
-      <div class="memu" style="display:none;">
-        这里是导航按钮
+      <img
+        src="../../assets/img/top-bar_logo.png"
+        class="logo_style"
+        @click="toGo('/home')"
+      />
+      <!--移动端显示-->
+      <div class="memu" style="display: none">
+        <i class="el-icon-s-fold" @click="drawer = true" />
       </div>
+
       <div class="headernav" v-if="$route.path == '/home'">
         <div class="navs">
           <router-link to="home">{{ languagePack.home }}</router-link>
@@ -66,7 +71,7 @@
 
         <div class="langage hidden-sm-and-down">
           <div @click="messageBox('暂未开放')">注册</div>
-          <img src="../../assets/img/earths.png" alt="" />
+          <img @click="messageBox('暂未开放')" src="../../assets/img/earths.png" alt=""/>
           <el-dropdown @command="LanguageChange">
             <span class="el-dropdown-link">
               {{ languageType[lang].type
@@ -145,7 +150,7 @@
           <div style="width: 1px; height: 24px; background: #f0f0f0" />
           <div class="langage hidden-sm-and-down">
             <div @click="messageBox('暂未开放')">注册</div>
-            <img src="../../assets/img/earths.png" alt="" />
+            <img @click="messageBox('暂未开放')" src="../../assets/img/earths.png" alt="" />
             <el-dropdown @command="LanguageChange">
               <span class="el-dropdown-link">
                 {{ languageType[lang].type
@@ -164,6 +169,59 @@
           </div>
         </div>
       </div>
+
+      <el-drawer
+        :append-to-body="true"
+        :with-header="false"
+        :visible.sync="drawer"
+        :before-close="handleClose"
+        size="45%"
+      >
+        <div class="drawerMemu">
+          <div @click="toGo('/home')">主页</div>
+          <el-collapse v-model="activeNames" accordion>
+            <el-collapse-item title="区块链">
+              <p
+                v-for="item in blocknavs"
+                :key="item.title"
+                @click="toGo(item.command)"
+              >
+                {{ item.title }}
+              </p>
+            </el-collapse-item>
+            <div>合约</div>
+            <div>账户</div>
+            <div>验证节点</div>
+            <el-collapse-item title="资源">
+              <p
+                v-for="item in resourcesnavs"
+                :key="item.title"
+                @click="toGo(item.command)"
+              >
+                {{ item.title }}
+              </p>
+            </el-collapse-item>
+            <el-collapse-item title="更多">
+              <p
+                v-for="item in morenavs"
+                :key="item.title"
+                @click="toGo(item.command)"
+              >
+                {{ item.title }}
+              </p>
+            </el-collapse-item>
+            <el-collapse-item :title="languageType[lang].type">
+              <p
+                v-for="item in languageType"
+                :key="item.type"
+                @click="LanguageChange(item.id)"
+              >
+                {{ item.type }}
+              </p>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+      </el-drawer>
     </div>
   </div>
 </template>
@@ -177,6 +235,7 @@ export default {
       lang: "",
       drawer: false,
       Logo: "",
+      activeNames: "1",
       languageType: [
         { type: "English", id: 0 },
         { type: "简体中文", id: 1 },
@@ -195,6 +254,14 @@ export default {
         { title: "查看Txns", command: "/tsx", divided: true },
         { title: "查看区块", command: "/blockcheck" },
       ],
+      resourcesnavs: [
+        { title: "白皮书", command: "/" },
+        { title: "开发者API", command: "/developapi",divided:true },
+        { title: "SDK下载", command: "/" },
+        { title: "Tendermint", command: "/" },
+        { title: "TBC", command: "/" },
+        { title: "合约编辑器", command: "/" },
+        ],
     };
   },
   created() {
@@ -212,6 +279,12 @@ export default {
     },
     blockCommand(command) {
       this.$router.push(command);
+    },
+    onMenu() {
+      console.log(1111);
+    },
+    handleClose(done) {
+      this.drawer = false;
     },
   },
   computed: {
@@ -307,26 +380,60 @@ export default {
   }
 }
 
+//弹出层样式
+::v-deep .drawerMemu {
+  padding: 12px;
+  height: 100%;
+  text-align: center;
+  font-size: 14px;
+  line-height: 50px;
+  .el-collapse {
+    border: none;
+  }
+  .el-collapse-item__header {
+    height: 50px !important;
+    line-height: 50px !important;
+    font-size: 14px;
+    border: none;
+    justify-content: center;
+
+    .el-collapse-item__arrow {
+      margin: 0;
+      padding-left: 8px;
+    }
+  }
+  .el-collapse-item__content {
+    padding: 0;
+    p {
+      font-size: 14px;
+      line-height: 50px;
+    }
+  }
+}
+
 @media screen and (max-width: 598px) {
   .centerStyle {
     width: 100%;
     padding: 0 10px;
     height: 60px !important;
-    .headernav{
+    .headernav {
       display: none;
     }
-    .headernavM{
+    .headernavM {
       display: none;
       height: 60px !important;
     }
   }
-  .logo_style{
+  .logo_style {
     width: 200px;
     height: 30px;
   }
-  .memu{
+  .memu {
     display: block !important;
-    margin-left: 60px;
+    width: 60px;
+    text-align: center;
+    margin-left: 100px;
+    font-size: 24px;
   }
 }
 </style>

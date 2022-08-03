@@ -14,14 +14,14 @@ export function addNewAndroidPlugin(data) {
     })
 }*/
 
-export function getAllaccounts(page,pageSize) {  //返回所有现有账户
+export function getAllaccounts(page, pageSize) {  //返回所有现有账户
     return Service({
         url: `/cosmos/auth/v1beta1/accounts?pagination.offset=${page}&pagination.limit=${pageSize}`,
         method: 'get'
     })
 }
 
-export function getAccountsBasis(address) {  //账号基础
+export function getAccountsBasis(address) {  //获取当前全部账户数量
     return Service({
         url: `/cosmos/auth/v1beta1/accounts/${address}`,
         method: 'get'
@@ -140,7 +140,7 @@ export function allValidationNode() {     //获取所有验证节点
     })
 }
 
-export function newestBlocks(){
+export function newestBlocks() {
     // return Service({
     //     url:`/block_search?query=10&page=1`,
     //     method:'GET'
@@ -151,4 +151,13 @@ export function newestBlocks(){
 
 
 
-
+//查询地址的交易信息
+export function getAddressTxs(data) {
+    return Service({
+        url: '/cosmos/tx/v1beta1/txs',
+        method: 'GET',
+        params: {
+            events: data
+        }
+    })
+}

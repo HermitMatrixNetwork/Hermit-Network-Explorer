@@ -161,6 +161,7 @@ export default {
     async getblockDetail(value) {
       const res = await getBlockContent(value);
       const { block, block_id } = res;
+      console.log(res);
         console.log(block);
         console.log(block_id);
       this.commitHeight = block.last_commit.height;

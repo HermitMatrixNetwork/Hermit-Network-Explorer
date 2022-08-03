@@ -6,14 +6,18 @@ import Accounts from '@/views/Accounts/index.vue'
 import More from '@/views/More/index.vue'
 import Tsx from '@/views/Blockchain/tsx.vue'
 import Contracts from '@/views/Contracts/index.vue'
-import Addressdetail from '@/views/Accounts/address_detail/index.vue'
-import Blockdetail from '@/views/block_detail/index.vue'
+import Addressdetail from '@/views/Detail/address_detail/index.vue'
+import Blockdetail from '@/views/Detail/block_detail/index.vue'
+import Nodedetail from '@/views/Detail/node_detail/index.vue'
 import BlockCheck from '@/views/Blockchain/blockcheck.vue'
 import Validation from '@/views/validation/index.vue'
 import currencyState from '@/views/More/currencyState.vue'
 import Govern from '@/views/More/govern.vue'
 import Foundation from '@/views/More/foundation.vue'
 import Resources from '@/views/resources/index.vue'
+import Hashdetail from '@/views/Detail/hash_detail/index.vue'
+import PunishmentNode from '@/views/validation/punishmentNode.vue'
+import HistoryNode from '@/views/validation/historyNode.vue'
 
 Vue.use(VueRouter)
 
@@ -39,8 +43,8 @@ const routes = [
     component: Accounts
   },
   {
-    path:'/validation',
-    component:Validation
+    path: '/validation',
+    component: Validation
   },
   {
     path: '/more',
@@ -56,7 +60,7 @@ const routes = [
   },
   {
     path: '/developapi',
-    component:Resources
+    component: Resources
   },
   {
     path: '/address_detail',
@@ -67,16 +71,32 @@ const routes = [
     component: Blockdetail
   },
   {
-    path:'/currency_state',
-    component:currencyState
+    path: '/currency_state',
+    component: currencyState
   },
   {
-    path:'/govern',
-    component:Govern
+    path: '/govern',
+    component: Govern
   },
   {
-    path:'/foundation',
-    component:Foundation
+    path: '/foundation',
+    component: Foundation
+  },
+  {
+    path: '/hash_detail',
+    component: Hashdetail
+  },
+  {
+    path: '/punishmentNode',
+    component: PunishmentNode
+  },
+  {
+    path: '/historyNode',
+    component: HistoryNode
+  },
+  {
+    path:'/node_detail',
+    component:Nodedetail
   }
 ]
 
@@ -89,7 +109,7 @@ const router = new VueRouter({
 })
 
 // router.beforeEach((to,from,next)=>{
-  
+
 // })
 
 
