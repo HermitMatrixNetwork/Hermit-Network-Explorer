@@ -8,7 +8,7 @@
 			<el-table
 				:data="tableData"
 				size="mini"
-				height="545px"
+				height="665px"
 				class="table_box1"
 				:cell-style="columnStyle"
 				:header-cell-style="rowStyle"
@@ -27,9 +27,7 @@
 					:show-overflow-tooltip="true"
 				>
 					<template slot-scope="scope">
-						<el-link :underline="false">{{
-							scope.row.blockAge
-						}}</el-link>
+						<el-link :underline="false">{{scope.row.blockAge}}</el-link>
 					</template>
 				</el-table-column>
 				<el-table-column prop="transNum" label="标签" />
@@ -65,7 +63,7 @@ export default {
 		return {
 			tableData: [
 				{
-					blockAge: 'dfhjkdhfkjhfkjasfksjffddfdfdsfdsfsdfdsfdsfhfj',
+					blockAge: 'dfhjkdhfkjhfkjasfksjffddfdfdsfdsfsdfdfdsfdsfdsfsdfsdfdsfdsffdsfdsfhfj',
 					transNum: 'Eth2 Defhhff Condt',
 					person: '9454544544144 GHM',
 					fuelCon: '3.4545454%',
@@ -258,8 +256,8 @@ h3 {
 }
 
 ::v-deep .el-input__inner {
-	height: 30px !important;
-	line-height: 30px !important;
+	height: 23px !important;
+	line-height: 23px !important;
 	// border-color: #1E42ED !important;
 
 	&:hover {
@@ -277,11 +275,11 @@ h3 {
 }
 
 ::v-deep .table_box1 {
-	margin-bottom: 13px;
+	margin-bottom: 10px;
 }
 
 ::v-deep .el-link--inner {
-	width: 70%;
+	width: 50%;
 	color: #1e42ed !important;
 	font-size: 12px;
 	overflow: hidden;

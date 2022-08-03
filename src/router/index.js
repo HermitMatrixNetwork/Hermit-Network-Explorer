@@ -68,7 +68,8 @@ const routes = [
   },
   {
     path: '/block_detail',
-    component: Blockdetail
+    component: Blockdetail,
+    name: 'blockDetail'
   },
   {
     path: '/currency_state',
