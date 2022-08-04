@@ -15,7 +15,7 @@
 					</el-pagination>
 				</el-col>
 			</el-row>
-      <el-table :data="tableData" size="mini" height="535px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @row-click="toBlockDetail">
+      <el-table :data="tableData" size="mini" height="535px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @cell-click="toDetail">
         <el-table-column prop="block" label="区块" width="80px" />
         <el-table-column prop="blockAge" label="块龄" width="150px"/>
         <el-table-column prop="transNum" label="交易数" width="70px" />
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { getLatestBlock } from '@/api/api'
 export default {
 	data() {
 		return {
@@ -80,6 +81,7 @@ export default {
 	},
 	mounted() {
 		document.querySelector('.selected').style.color = '#1E42ED'
+    this.getBlockData()
 	},
   methods: {
     // 表头行样式
@@ -98,7 +100,7 @@ export default {
     columnStyle({ row, column, rowIndex, columnIndex }) {
       switch(columnIndex) {
         case 0:
-          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #5671F2;'
+          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #5671F2;cursor: pointer;'
           break;
         case 1: 
           return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: rgba(20,37,62,0.45);'
@@ -120,6 +122,12 @@ export default {
       }
     },
 
+    // 获取区块数据
+    async getBlockData() {
+      let res = await getLatestBlock()
+      console.log('区块数据', res);
+    },
+
     handleSizeChange() {
         let oul = document.querySelectorAll('.el-select-dropdown__list li')
         oul.forEach(item => {
@@ -135,11 +143,17 @@ export default {
       console.log('11');
     },
 
-    // 某一行被点击跳转区块详情页面
-    toBlockDetail(row) {
-      console.log('区块详情页', row);
-      this.$router.push({name: 'blockDetail'})
-    }
+    toDetail(row, column) {
+			console.log('row', row)
+			switch (column.property) {
+				case 'block':
+					console.log('跳转到区块详情')
+          this.$router.push({name: 'blockDetail'})
+					break
+				default:
+					break
+			}
+		},
   }
 }
 </script>
@@ -276,7 +290,7 @@ h3 {
 
 ::v-deep .el-table__row {
   height: 60px !important;
-  cursor: pointer;
+  // cursor: pointer;
 }
 
 ::v-deep .pagina {

@@ -8,6 +8,7 @@ import Tsx from '@/views/Blockchain/tsx.vue'
 import Contracts from '@/views/Contracts/index.vue'
 import Addressdetail from '@/views/Accounts/address_detail/index.vue'
 import Blockdetail from '@/views/block_detail/index.vue'
+import TransDetail from '@/views/block_detail/component/transDetail.vue'
 import BlockCheck from '@/views/Blockchain/blockcheck.vue'
 import Validation from '@/views/validation/index.vue'
 import currencyState from '@/views/More/currencyState.vue'
@@ -29,6 +30,11 @@ const routes = [
   {
     path: '/blockchain',
     component: Blockchain
+  },
+  {
+    path: '/transDetail',
+    component: TransDetail,
+    name: 'transDetail'
   },
   {
     path: '/blockcheck',
@@ -60,7 +66,8 @@ const routes = [
   },
   {
     path: '/address_detail',
-    component: Addressdetail
+    component: Addressdetail,
+    name: 'addressDetail'
   },
   {
     path: '/block_detail',
