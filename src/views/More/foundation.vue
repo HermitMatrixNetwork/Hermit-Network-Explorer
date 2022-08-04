@@ -15,7 +15,6 @@
             <div class="pagination">
               <el-pagination
                 small
-                background
                 layout="prev, pager, next"
                 :total="1000"
               >

@@ -183,6 +183,7 @@ export default {
         currency,
         desc,
         official,
+        order:1,
       };
       const res = await axios.post(" http://localhost:8081/api/apply/apply",{...params});
       console.log('提交结果',res);

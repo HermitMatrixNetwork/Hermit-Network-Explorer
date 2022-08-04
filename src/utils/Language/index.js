@@ -28,8 +28,9 @@ export const Language = [
         Validationnode: 'Validation',
         resources: 'resources',
         more: 'more',
-        Incirculation: 'Incirculation/Total',
-        Pledgerate: 'Pledge rate'
+        Incirculation: 'Incirculation',
+        Pledgerate: 'Pledge rate',
+        Total: 'Total'
     },
     {
         text01: '首页',
@@ -45,8 +46,8 @@ export const Language = [
         text11: '网站',
         text12: '实时出块时长(s)',
         text13: '出块交易数',
-        text14: '区块',
-        text15: '当前出块节点',
+        text14: '实时出块区块',
+        text15: '当前验证节点',
         text16: '查看所有区块',
         text17: '查看所有验证节点',
         text18: '出块节点',
@@ -61,6 +62,7 @@ export const Language = [
         resources: '资源',
         more: '更多',
         Incirculation: '流通量/总发行量',
-        Pledgerate: '质押率'
+        Pledgerate: '质押率',
+        Total:'总量'
     }
 ]

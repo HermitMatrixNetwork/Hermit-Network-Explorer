@@ -56,8 +56,21 @@
           </div>
 
           <!--流通量-->
-          <div>
-            <p>{{ languagePack.Incirculation }}</p>
+          <div class="circulate">
+            <p>
+              {{ languagePack.Incirculation }}
+
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="circulateTooltip"
+                placement="top-start"
+                popper-class="circulateTooltipStyle"
+              >
+                <img src="@/assets/img/annotation.png" />
+              </el-tooltip>
+              /{{ languagePack.Total }}
+            </p>
             <h3>
               {{ (circulation / 1e6).toFixed(2) + "M" }}/{{
                 (issueNum / 1e6).toFixed(2) + "M"
@@ -81,13 +94,27 @@
       </div>
 
       <div class="allblock-number">
+        <!--查看所有区块-->
         <div class="newBlock">
-          <h3>{{ languagePack.text14 }}</h3>
-          <!-- <Table></Table> -->
-          <button class="seeAll">{{ languagePack.text16 }}</button>
+          <div class="block-title">{{ languagePack.text14 }}</div>
+          <ul class="blockInformation">
+            <li class="blockInformation-item" v-for="item in 9" :key="item">
+              <img src="@/assets/img/bar.png" alt="" />
+              <div class="basic">
+                <p>36895421{{ item + 1 }}<span>提案人propoasl</span></p>
+                <p>6s ago</p>
+              </div>
+              <div class="btnRate">1.86Txns</div>
+            </li>
+          </ul>
+          <div class="bottom">
+            <button class="seeAll">{{ languagePack.text16 }}</button>
+          </div>
         </div>
+
+        <!--查看所有验证节点-->
         <div class="topBlock">
-          <div class="nodeTitle">{{ languagePack.text15 }}</div>
+          <div class="block-title">{{ languagePack.text15 }}</div>
           <ul class="nodeInformation">
             <li
               v-for="(item, index) in nodelist"
@@ -126,7 +153,6 @@ export default {
   data() {
     return {
       select: "1",
-      screenWidth: document.body.clientWidth, // 屏幕宽度
       timer: false,
       aa: "",
       blockHeight: 0,
@@ -138,6 +164,8 @@ export default {
       circulation: "", //流通量
       Pledgerate: "", //质押率
       nodelist: "", //当前验证节点
+      circulateTooltip:
+        "在市场上实时流通的、公众手中的Token数量。实时流通供应量 = 总发行量 - 锁仓的Token 其中，锁仓的Token为所有锁仓状态的Token，包含当前委托或处于绑定解锁期的锁仓状态的Token。",
       messageList: [
         {
           title: "GHM价格",
@@ -155,9 +183,8 @@ export default {
     };
   },
   created() {
-    // console.log(Wallet);
     this.getnowBlockHeight();
-    this.timer2 = setInterval(() => this.getnowBlockHeight(), 4000);
+    // this.timer2 = setInterval(() => this.getnowBlockHeight(), 4000);
     this.getBlockMsg();
     console.log(this.languagePack);
   },
@@ -166,11 +193,6 @@ export default {
     charts.forEach((item) => {
       bar(echarts.init(item));
     });
-    // window.onresize = () => {
-    //   return (() => {
-    //     this.screenWidth = document.body.clientWidth;
-    //   })();
-    // };
   },
   methods: {
     //获取当前区块高度
@@ -195,14 +217,14 @@ export default {
       this.pledgeNum = pledgeNum.params.historical_entries; //质押参数
       //  流通量 = 总发行量 -  质押量
       this.circulation = this.issueNum - this.pledgeNum;
-      console.log(
-        "流通量",
-        this.circulation,
-        "总发行量",
-        this.issueNum,
-        "质押量",
-        this.pledgeNum
-      );
+      // console.log(
+      //   "流通量",
+      //   this.circulation,
+      //   "总发行量",
+      //   this.issueNum,
+      //   "质押量",
+      //   this.pledgeNum
+      // );
       //质押率
       this.Pledgerate = (this.pledgeNum / this.issueNum).toFixed(2);
 
@@ -223,23 +245,6 @@ export default {
       return (this.circulation / this.issueNum) * 100;
     },
   },
-  watch: {
-    screenWidth(val) {
-      // 为了避免频繁触发resize函数导致页面卡顿，使用定时器
-      if (!this.timer) {
-        // 一旦监听到的screenWidth值改变，就将其重新赋给data里的screenWidth
-        this.screenWidth = val;
-        this.timer = true;
-        let that = this;
-        setTimeout(function () {
-          // bar(that.aa, { title: that.$store.state.Language.text12 });
-          // that.getECharts()  // 操作
-          // console.log(val);
-          that.timer = false;
-        }, 500);
-      }
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>
@@ -252,7 +257,6 @@ export default {
   min-height: 277px;
   background: url("../../assets/img/home_background.png");
   background-size: 100% 100%;
-
   .content {
     max-width: 1280px;
     height: 277px;
@@ -275,8 +279,6 @@ export default {
 }
 
 .pageMain {
-  //   margin: 0 auto;
-
   .block-message {
     width: 1280px;
     height: 128px;
@@ -306,7 +308,6 @@ export default {
         padding-left: 23px;
         p {
           height: 17px;
-          font-family: PingFangSC-Regular;
           font-weight: 400;
           font-size: 12px;
           color: rgba(20, 37, 62, 0.45);
@@ -333,7 +334,7 @@ export default {
   .newest-data {
     height: 350px;
     width: 1280px;
-    margin: 0 auto;
+    margin: -16px auto;
     background: #ffffff;
     border: 1px solid #e9eaef;
     box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
@@ -351,7 +352,6 @@ export default {
 
         p {
           height: 17px;
-          font-family: PingFangSC-Regular;
           font-weight: 400;
           font-size: 12px;
           color: rgba(20, 37, 62, 0.45);
@@ -367,16 +367,26 @@ export default {
           letter-spacing: 0;
         }
       }
+      .circulate {
+        > p {
+          display: flex;
+          align-items: center;
+          > img {
+            padding: 0 2px;
+          }
+        }
+      }
     }
   }
 
-  //实时区块图标
   .block-chart {
     height: 90px;
     padding: 40px 64px;
     display: flex;
     align-items: center;
-
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(20, 37, 62, 0.45);
     div {
       flex: 1;
       height: 100%;
@@ -387,24 +397,49 @@ export default {
   //区块数、当选验证节点
   .allblock-number {
     width: 1280px;
-    margin: 0 auto;
+    margin: 32px auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     .newBlock,
     .topBlock {
-      // flex: 1;
       width: 630px;
       height: 100%;
       background: #ffffff;
       position: relative;
-
       height: 838px;
       background: #ffffff;
       border: 1px solid #e9eaef;
       box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
       border-radius: 4px;
+      .block-title {
+        height: 52px;
+        box-shadow: inset 0 -1px 0 0 #e9eaef;
+        line-height: 52px;
+        font-weight: 500;
+        font-size: 14px;
+        color: rgba(20, 37, 62, 0.85);
+        text-indent: 16px;
+        z-index: 9;
+        position: absolute;
+        top: 0;
+        background: #ffffff;
+        width: 100%;
+      }
+      .bottom {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        z-index: 999;
+        height: 56px;
+        background: #ffffff;
+        box-shadow: inset 0 1px 0 0 #e9eaef;
+        border-radius: 0 0 4px 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
     .seeAll {
       width: 597px;
@@ -415,22 +450,6 @@ export default {
     }
     .topBlock {
       overflow: hidden;
-      .nodeTitle {
-        height: 52px;
-        box-shadow: inset 0 -1px 0 0 #e9eaef;
-        line-height: 52px;
-        font-family: PingFangSC-Medium;
-        font-weight: 500;
-        font-size: 14px;
-        color: rgba(20, 37, 62, 0.85);
-        letter-spacing: 0;
-        text-indent: 16px;
-        z-index: 9;
-        position: absolute;
-        top: 0;
-        background: #ffffff;
-        width: 100%;
-      }
       .nodeInformation {
         height: 720px;
         padding: 0 16px;
@@ -453,62 +472,9 @@ export default {
             font-weight: Bold;
             font-size: 12px;
             color: rgba(20, 37, 62, 0.85);
-            letter-spacing: 0;
             text-align: center;
-          }
-          .basic {
-            // display: flex;
-            // flex-direction: column;
-            // justify-content: space-between;
-            padding-left: 16px;
-            font-family: PingFangSC-Regular;
-            font-weight: 400;
-            font-size: 12px;
-            p:nth-child(1) {
-              height: 17px;
-              color: #5671f2;
-              padding-bottom: 6px;
-            }
-            p:nth-child(2) {
-              height: 17px;
-              color: rgba(20, 37, 62, 0.45);
-            }
-          }
-          .btnRate {
-            width: 124px;
-            height: 28px;
-            background-image: linear-gradient(
-              90deg,
-              rgba(242, 243, 244, 0) 0%,
-              #f2f3f4 35%
-            );
-            border-radius: 1px 4px 4px 1px 0;
-            font-family: PingFangSC-Medium;
-            font-weight: 500;
-            font-size: 12px;
-            color: rgba(20, 37, 62, 0.45);
-            letter-spacing: 0;
-            text-align: center;
-            line-height: 28px;
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
           }
         }
-      }
-      .bottom {
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        z-index: 999;
-        height: 56px;
-        background: #ffffff;
-        box-shadow: inset 0 1px 0 0 #e9eaef;
-        border-radius: 0 0 4px 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
       }
       ul:hover {
         animation-play-state: paused;
@@ -523,6 +489,61 @@ export default {
         to {
           transform: translateY(0%);
         }
+      }
+    }
+    .newBlock {
+      overflow: hidden;
+      .blockInformation {
+        margin-top: 52px;
+        height: 720px;
+        &-item {
+          height: 73px;
+          width: 540px;
+          border-bottom: 1px solid #eaebef;
+          margin-left: 72px;
+          position: relative;
+          display: flex;
+          align-items: center;
+          > img {
+            position: absolute;
+            top: 50%;
+            transform: translate(-120%, -25%);
+          }
+        }
+      }
+    }
+    .btnRate {
+      width: 124px;
+      height: 28px;
+      background-image: linear-gradient(
+        90deg,
+        rgba(242, 243, 244, 0) 0%,
+        #f2f3f4 35%
+      );
+      border-radius: 1px 4px 4px 1px 0;
+      font-weight: 500;
+      font-size: 12px;
+      color: rgba(20, 37, 62, 0.45);
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 28px;
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .basic {
+      padding-left: 16px;
+      font-weight: 400;
+      font-size: 12px;
+      p:nth-child(1) {
+        height: 17px;
+        color: #5671f2;
+        padding-bottom: 6px;
+      }
+      p:nth-child(2) {
+        height: 17px;
+        color: rgba(20, 37, 62, 0.45);
       }
     }
   }
@@ -552,7 +573,7 @@ export default {
 @media screen and (max-width: 598px) {
   .setting_Image {
     min-height: 200px;
-    .content{
+    .content {
       height: 200px;
     }
   }
@@ -578,18 +599,17 @@ export default {
         height: 200px;
         flex-direction: column;
         align-items: center;
-        div{
-          width: 100%; 
+        div {
+          width: 100%;
         }
       }
-      &-item{
+      &-item {
         padding: 0 12px !important;
-        >div{
+        > div {
           width: 50% !important;
-          h3{
+          h3 {
             font-size: 12px !important;
           }
-
         }
       }
     }
@@ -600,16 +620,16 @@ export default {
       flex-direction: column;
       align-items: center;
       height: 1000px;
-      >div {
+      > div {
         margin: 0 12px;
         width: 100% !important;
         height: 560px !important;
         overflow: hidden;
       }
-      .topBlock{
-        .nodeInformation{
+      .topBlock {
+        .nodeInformation {
           padding: 0 12px !important;
-          .btnRate{
+          .btnRate {
             right: 0;
           }
         }
@@ -634,12 +654,22 @@ export default {
     }
   }
 }
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  color: transparent;
-}
 .blockHeight {
   cursor: pointer;
+}
+</style>
+<style>
+/* 文字提示弹窗样式 */
+.circulateTooltipStyle {
+  width: 250px;
+  height: 100px;
+  padding: 7px 8px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  background: rgba(0, 0, 0, 0.75) !important;
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
 }
 </style>

@@ -44,21 +44,35 @@
         </div>
 
         <div class="validation-table-body">
-          <el-table :data="newNodeList" size="mini">
+          <el-table
+            :data="nodeList"
+            size="mini"
+            height="612px"
+            :row-style="{ height: '58px' }"
+            @row-click="TableClick"
+          >
             <el-table-column
               label="排名"
               width="80"
               align="center"
-              prop="rank"
+              type="index"
             ></el-table-column>
             <el-table-column
               label="节点名称"
               width="160"
-              prop="name"
-            ></el-table-column>
+            >
+            <template slot-scope="scope">
+              <div class="moniker">
+                <img src="@/assets/img/bottom-bar_github.png" alt="">
+                {{scope.row.moniker}}
+              </div>
+            </template>
+            </el-table-column>
             <el-table-column label="节点地址" width="180">
               <template slot-scope="scope">
-                <p style="color: #5671f2">{{ scope.row.address }}</p>
+                <p class="specialFont">
+                  {{ scope.row.operator_address | sliceAddress }}
+                </p>
               </template>
             </el-table-column>
             <el-table-column label="状态" width="88">
@@ -71,30 +85,30 @@
                       borderRadius: '6px',
                       marginRight: '6px',
                       background:
-                        scope.row.state == '活跃中' ? '#55C499' : '#ED422B',
+                        scope.row.status == 'BONDED' ? '#55C499' : '#ED422B',
                     }"
                   />
-                  {{ scope.row.state }}
+                  {{ scope.row.status }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              label="总质押"
-              width="180"
-              align="right"
-              prop="pledge"
-            ></el-table-column>
-            <el-table-column
-              label="委托数"
-              width="168"
-              align="right"
-              prop="entrust"
-            ></el-table-column>
-            <el-table-column
-              label="委托奖励比例"
-              width="110"
-              prop="reward"
-            ></el-table-column>
+            <el-table-column label="总质押" width="180" align="right">
+              <template slot-scope="scope">
+                <p>{{ scope.row.tokens | toMoney }} GHM</p>
+              </template>
+            </el-table-column>
+            <el-table-column label="委托数" width="168" align="right">
+              <template slot-scope="scope">
+                <p>
+                  {{ scope.row.tokens - scope.row.min_self_delegation * 1e5 | toMoney}} GHM
+                </p>
+              </template>
+            </el-table-column>
+            <el-table-column label="委托奖励比例" width="110">
+              <template slot-scope="scope">
+                <p>{{ (1 - scope.row.commission) * 100 }} %</p>
+              </template>
+            </el-table-column>
             <el-table-column
               label="委托者数"
               width="120"
@@ -106,15 +120,18 @@
               width="80"
               prop="active"
             ></el-table-column>
-            <el-table-column label="佣金" prop="commission"></el-table-column>
+            <el-table-column label="佣金">
+              <template slot-scope="scope">
+                <p>{{ scope.row.commission * 100 }} %</p>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <div class="validation-table-bottom">
           <el-pagination
             small
-            background
             layout="prev, pager, next,sizes"
-            :total="1000"
+            :total="pagination"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage2"
@@ -129,12 +146,16 @@
 </template>
 
 <script>
+import { allValidationNode } from "@/api/api.js";
+import mixin from "@/mixins/index.vue";
 export default {
+  mixins: [mixin],
   data() {
     return {
       searchValue: "",
       currentPage2: 5,
       screenIndex: 0,
+      pagination:0,
       nodeData: [
         {
           title: "节点概览",
@@ -153,100 +174,44 @@ export default {
           },
         },
       ],
-      nodeList: [
-        //模拟数据
-        {
-          rank: 1,
-          name: "ghhhm",
-          address: "ghm19093...tu7342ge",
-          state: "活跃中",
-          pledge: "20,441,054.86 GHM",
-          entrust: "20,351,099.73 GHM",
-          reward: "88%",
-          entrustPerson: 18,
-          active: "100%",
-          commission: "5%",
-        },
-        {
-          rank: 1,
-          name: "ghhhm",
-          address: "ghm19093...tu7342ge",
-          state: "候选中",
-          pledge: "20,441,054.86 GHM",
-          entrust: "20,351,099.73 GHM",
-          reward: "88%",
-          entrustPerson: 18,
-          active: "100%",
-          commission: "5%",
-        },
-        {
-          rank: 1,
-          name: "ghhhm",
-          address: "ghm19093...tu7342ge",
-          state: "活跃中",
-          pledge: "20,441,054.86 GHM",
-          entrust: "20,351,099.73 GHM",
-          reward: "88%",
-          entrustPerson: 18,
-          active: "100%",
-          commission: "5%",
-        },
-        {
-          rank: 1,
-          name: "ghhhm",
-          address: "ghm19093...tu7342ge",
-          state: "候选中",
-          pledge: "20,441,054.86 GHM",
-          entrust: "20,351,099.73 GHM",
-          reward: "88%",
-          entrustPerson: 18,
-          active: "100%",
-          commission: "5%",
-        },
-        {
-          rank: 1,
-          name: "ghhhm",
-          address: "ghm19093...tu7342ge",
-          state: "候选中",
-          pledge: "20,441,054.86 GHM",
-          entrust: "20,351,099.73 GHM",
-          reward: "88%",
-          entrustPerson: 18,
-          active: "100%",
-          commission: "5%",
-        },
-        {
-          rank: 1,
-          name: "ghhhm",
-          address: "ghm19093...tu7342ge",
-          state: "活跃中",
-          pledge: "20,441,054.86 GHM",
-          entrust: "20,351,099.73 GHM",
-          reward: "88%",
-          entrustPerson: 18,
-          active: "100%",
-          commission: "5%",
-        },
-        {
-          rank: 1,
-          name: "ghhhm",
-          address: "ghm19093...tu7342ge",
-          state: "候选中",
-          pledge: "20,441,054.86 GHM",
-          entrust: "20,351,099.73 GHM",
-          reward: "88%",
-          entrustPerson: 18,
-          active: "100%",
-          commission: "5%",
-        },
-      ],
+      nodeList: [],
       newNodeList: [],
     };
   },
+  created() {
+    this.queryAllValidation();
+  },
   mounted() {
-    this.newNodeList = JSON.parse(JSON.stringify(this.nodeList));
+    // this.newNodeList = JSON.parse(JSON.stringify(this.nodeList));
   },
   methods: {
+    async queryAllValidation() {
+      const res = await allValidationNode();
+      console.log("获取所有验证节点信息", res);
+      let arr = [];
+      res.validators.forEach((item) => {
+        let {
+          description: { moniker },
+          status,
+          tokens,
+          jailed,
+          min_self_delegation,
+          operator_address,
+          commission,
+        } = item;
+        arr.push({
+          moniker,
+          status: status.split("_").pop(),
+          tokens,
+          jailed,
+          operator_address,
+          commission: commission.commission_rates.rate,
+          min_self_delegation,
+        });
+      });
+      this.nodeList = arr.sort((a, b) => b.tokens - a.tokens);
+      console.log(this.nodeList);
+    },
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
     },
@@ -255,11 +220,16 @@ export default {
     },
     navBtn(index) {
       this.screenIndex = index;
-      if(index==0) return this.newNodeList = JSON.parse(JSON.stringify(this.nodeList))
+      if (index == 0)
+        return (this.newNodeList = JSON.parse(JSON.stringify(this.nodeList)));
       this.newNodeList = this.nodeList.filter((item) => {
         return index == 1 ? item.state == "活跃中" : item.state == "候选中";
       });
     },
+
+    TableClick(val){
+      console.log(val);
+    }
   },
 };
 </script>
@@ -345,6 +315,14 @@ export default {
       .stateColumn {
         display: flex;
         align-items: center;
+      }
+      .moniker{
+        display: flex;
+        align-items: center;
+        >img{
+          width: 24px;
+          padding: 0 8px;
+        }
       }
     }
     &-bottom {

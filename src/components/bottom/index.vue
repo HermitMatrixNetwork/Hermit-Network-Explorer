@@ -2,7 +2,8 @@
   <footer class="bottom">
     <div class="contact">
       <div class="bottom_logo">
-        <img src="../../assets/img/bottom-bar_logo.png" alt="" width="28" />
+        <img src="../../assets/img/bottom-bar_logo.png" alt="" width="28" class="bottomLogo"/>
+        <!-- <img src="@/assets/img/bottom-bar_logo@2x.png" alt="" width="48" class="bottomLogoM"> -->
         <p>Powered by Hermit Matrix Network</p>
       </div>
 
@@ -12,13 +13,27 @@
           <img src="../../assets/img/bottom-bar_qrcode.png" alt="" />
         </div>
         <span>
-            <img src="../../assets/img/bottom-bar_telegram.png" alt="" />
-            <p>1111</p>
+          <img src="../../assets/img/bottom-bar_telegram.png" alt="" />
+          <p>Telegram</p>
         </span>
-        <img src="../../assets/img/bottom-bar_twitter.png" alt="" />
-        <img src="../../assets/img/bottom-bar_medium.png" alt="" />
-        <img src="../../assets/img/bottom-bar_github.png" alt="" />
-        <img src="../../assets/img/bottom-bar_gitbook.png" alt="" />
+        <span>
+          <img src="../../assets/img/bottom-bar_twitter.png" alt="" />
+          <p>twitter</p>
+        </span>
+        <span>
+          <img src="../../assets/img/bottom-bar_medium.png" alt="" />
+          <p>Medium</p>
+        </span>
+
+        <span>
+          <img src="../../assets/img/bottom-bar_github.png" alt="" />
+          <p>GitHub</p>
+        </span>
+
+        <span>
+          <img src="../../assets/img/bottom-bar_gitbook.png" alt="" />
+          <p>Gitbook</p>
+        </span>
       </div>
     </div>
     <div class="record">Hermit Matrix Network © 2022 (HGM)</div>
@@ -49,15 +64,18 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom:1px solid #FFFFFF20 ;
     .bottom_logo {
       display: flex;
       align-items: center;
       height: 28px;
-      font-family: PingFangSC-Medium;
       font-weight: 500;
       font-size: 20px;
       color: #ffffff;
       letter-spacing: 0;
+      >img{
+        padding: 0 10px;
+      }
     }
 
     .contact_ways {
@@ -76,13 +94,20 @@ export default {
         color: #ffffff;
         letter-spacing: 0;
         img {
-            padding-top:8px ;
+          padding-top: 8px;
           width: 80px;
         }
       }
       img {
         padding: 0 20px;
         width: 32px;
+        cursor: pointer;
+      }
+      > span {
+        text-align: center;
+        font-weight: 400;
+        font-size: 12px;
+        color: #ffffff;
       }
     }
   }
@@ -99,6 +124,43 @@ export default {
     font-size: 12px;
     color: rgba(255, 255, 255, 0.45);
     letter-spacing: 0;
+  }
+}
+
+@media screen and (max-width: 598px) {
+  .bottom {
+    height: 360px;
+    background-size: 100% 100%;
+  }
+  .contact {
+    position: relative;
+    top: 60px;
+    width: 100% !important;
+    height: 240px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .bottom_logo{
+      flex-direction: column;
+      height: 100px !important;
+      justify-content: space-between;
+      .bottomLogo{
+        display: none !important;
+      }
+      >img{
+        width: 36px;
+      }
+      >p{
+        font-size: 16px;
+      }
+    }
+    .contact_ways{
+      width: 100% !important;
+      justify-content: center !important;
+      .qrcode{
+        display: none !important;
+      }
+    }
   }
 }
 </style>
