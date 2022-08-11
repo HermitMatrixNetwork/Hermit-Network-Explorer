@@ -4,8 +4,12 @@
       <div class="title">
         <h3>交易详情</h3>
         <p class="specialFont">
-          {{ $route.query.hash }}
+          {{ $route.params.hash[hashIndex] }}
         </p>
+        <div class="nextBtn">
+          <span @click="lastData"><i class="el-icon-arrow-left"></i></span>
+          <span @click="nextData"><i class="el-icon-arrow-right"></i></span>
+        </div>
       </div>
 
       <BasicTitle :title="'合约执行'">
@@ -13,7 +17,7 @@
           <div class="messageBasic" style="height: 160px">
             <div class="column">
               <p>执行方：</p>
-              <span class="specialFont">{{ detailed.perform}}</span>
+              <span class="specialFont">{{ detailed.perform }}</span>
             </div>
             <div class="column">
               <p>合约：</p>
@@ -21,11 +25,11 @@
             </div>
             <div class="column">
               <p>交易额：</p>
-              <span>{{ detailed.turnover | toMoney}} GHM</span>
+              <span>{{ detailed.turnover | toMoney }} GHM</span>
             </div>
             <div class="column">
               <p>手续费：</p>
-              <span>{{ detailed.poundage | toMoney}} GHM</span>
+              <span>{{ detailed.poundage | toMoney }} GHM</span>
             </div>
           </div>
         </template>
@@ -66,21 +70,26 @@
 </template>
 
 <script>
-import mixin from '@/mixins/index.vue'
+import mixin from "@/mixins/index.vue";
+import { pastTime, debounce } from "@/utils/common.js";
 import { getHashContent } from "@/api/api.js";
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   data() {
     return {
+      hashIndex: 0,
       detailed: {},
     };
   },
   created() {
-    this.queryData();
+    this.hashIndex = this.$route.params.index;
+    const { hash, index } = this.$route.params;
+    this.queryData(hash, index);
+    console.log(pastTime("2022-06-20T07:40:39Z"));
   },
   methods: {
-    async queryData() {
-      const res = await getHashContent(this.$route.query.hash);
+    async queryData(hash, index) {
+      const res = await getHashContent(hash[index]);
       console.log("通过hash查找信息", res);
       const {
         tx_response: { txhash, timestamp, height, gas_used, gas_wanted },
@@ -119,6 +128,20 @@ export default {
       };
       console.log(this.detailed);
     },
+    lastData() {
+      if (this.hashIndex == 0) return;
+      this.hashIndex--;
+    },
+    nextData() {
+      if (this.hashIndex == this.$route.params.hash.length - 1) return;
+      this.hashIndex++;
+    },
+  },
+  watch: {
+    hashIndex(value) {
+      const { hash } = this.$route.params;
+      this.queryData(hash, value);
+    },
   },
 };
 </script>
@@ -127,15 +150,44 @@ export default {
 .hashdetail {
   width: 1280px;
   margin: 0 auto;
-
   .title {
     padding: 16px 0;
+    position: relative;
+
     > h3 {
       font-weight: 500;
       font-size: 20px;
       color: rgba(20, 37, 62, 0.85);
       padding-bottom: 8px;
     }
+  }
+  .nextBtn {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    > span {
+      background: #ffffff;
+      border: 1px solid #e9eaef;
+      border-radius: 2px;
+      font-size: 12px;
+      padding: 5px 7px;
+      margin: 0 4px;
+      cursor: pointer;
+    }
+  }
+}
+
+@media screen and (max-width: 598px) {
+  .hashdetail {
+    width: 100%;
+  }
+  .nextBtn {
+    position: relative !important;
+    transform: translateY(10%) !important;
+  }
+  .specialFont {
+    overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
   }
 }
 </style>

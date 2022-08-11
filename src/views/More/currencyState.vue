@@ -302,4 +302,13 @@ export default {
   height: 80px !important;
   border-radius: 2px !important;
 }
+
+@media screen and (max-width:598px) {
+  .pages-main{
+    width: 100%;
+    .formBox{
+      width: 100%;
+    }
+  }
+}
 </style>

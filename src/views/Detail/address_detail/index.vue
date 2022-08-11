@@ -137,13 +137,24 @@
                             >{{ scope.row.fee | toMoney }} GHM ($0.00)</span
                           >
                           <span v-show="index === 1"
-                            >27,200Gas总量中实际消耗27,168Gas<br />@0.0004GHM</span
+                            >{{
+                              scope.row.gas_wanted | toMoney
+                            }}Gas总量中实际消耗{{
+                              scope.row.gas_used | toMoney
+                            }}Gas<br />@0.0004GHM</span
                           >
-                          <span v-show="index === 2">957820 (位置154)</span>
+                          <span v-show="index === 2">{{
+                            scope.row.sequence
+                          }}</span>
                           <el-divider></el-divider>
                         </div>
                       </div>
-                      <div class="detailBox">查看详情</div>
+                      <div
+                        class="detailBox"
+                        @click="queryDealtoHash(scope.row.txhash)"
+                      >
+                        查看详情
+                      </div>
                     </div>
                     <img
                       slot="reference"
@@ -157,7 +168,7 @@
               <template slot-scope="scope">
                 <p
                   class="specialFont"
-                  @click="queryDealtoHash(scope.row.txhash)"
+                  @click="queryDealtoHash(hashList, scope.$index)"
                 >
                   {{ scope.row.txhash | sliceAddress }}
                 </p>
@@ -243,6 +254,7 @@ import {
 } from "@/api/api.js";
 import mixin from "@/mixins/index.vue";
 export default {
+  name: "addressDetail",
   mixins: [mixin],
   data() {
     return {
@@ -262,6 +274,7 @@ export default {
       unbonding: [],
       TxsList: [],
       initTxsList: [],
+      hashList: [],
       statusTitle: [
         { title: "手续费 :" },
         { title: "燃料信息 :" },
@@ -318,10 +331,15 @@ export default {
           to_address: to_address ?? "-",
           amount: amount ? amount[0].amount : "",
           fee: item.tx.auth_info.fee.amount[0].amount,
+          gas_used: item.gas_used,
+          gas_wanted: item.gas_wanted,
+          sequence: item.tx.auth_info.signer_infos[0].sequence,
         });
       });
       console.log("处理完后的数组", arr);
       this.initTxsList = arr.reverse();
+      this.hashList = this.initTxsList.map((item) => item.txhash);
+      // console.log('hashList',this.hashList);
       this.TxsList = this.initTxsList.slice(0, this.pageSize);
       this.pagination = pagination.total * 1;
     },
@@ -405,8 +423,6 @@ export default {
     }
   }
 }
-
-
 
 @media screen and (max-width: 598px) {
   .detail {

@@ -246,7 +246,7 @@ export default {
         { title: "DAO基金会地址", command: "/foundation", divided: true },
         { title: "提交代币LOGO", command: "/c" },
         { title: "提交上币申请", command: "/currency_state" },
-        { title: "RPC信息", command: "/e" },
+        { title: "RPC信息", command: "/rpc" },
         { title: "水龙头", command: "/f" },
       ],
       blocknavs: [
@@ -366,6 +366,7 @@ export default {
 .logo_style {
   width: 255px;
   height: 36px;
+  cursor: pointer;
 }
 .langage {
   width: 188px;

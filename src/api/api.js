@@ -140,6 +140,23 @@ export function allValidationNode() {     //获取所有验证节点
     })
 }
 
+export function validationNodeData(address) {  //验证器信息
+    return Service({
+        url: `/cosmos/staking/v1beta1/validators/${address}`,
+        method: 'GET'
+    })
+}
+
+export function validationEntrust(address) {   //验证器的委托信息
+    return Service({
+        url: `/cosmos/staking/v1beta1/validators/${address}/delegations`,
+        method: 'GET'
+    })
+}
+
+
+
+
 export function newestBlocks() {
     // return Service({
     //     url:`/block_search?query=10&page=1`,
@@ -159,5 +176,13 @@ export function getAddressTxs(data) {
         params: {
             events: data
         }
+    })
+}
+
+//查询最新的节点信息
+export function querylatestNodeMessage(){
+    return Service({
+        url:'/cosmos/base/tendermint/v1beta1/node_info',
+        method:'GET'
     })
 }

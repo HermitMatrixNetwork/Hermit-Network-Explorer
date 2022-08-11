@@ -8,7 +8,7 @@
             v-for="(item, index) in ['近7天', '近30天', '近60天', '近90天']"
             :key="item"
             :class="navIndex == index ? 'selectnav' : ''"
-            @click="navIndex = index"
+            @click="chartsChange(index)"
             >{{ item }}</span
           >
         </div>
@@ -40,11 +40,11 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="denom"
+          prop="@type"
           width="244px"
           label="标签"
         ></el-table-column>
-        <el-table-column prop="amount" label="余额">
+        <el-table-column prop="amount" label="余额" width="270" align="right">
           <template slot-scope="scope">
             <p>{{ scope.row.amount | toMoney }} GHM</p>
           </template>
@@ -53,6 +53,7 @@
           prop="percent"
           label="用户数量"
           sortable
+          align="right"
         ></el-table-column>
       </el-table>
 
@@ -107,9 +108,10 @@ export default {
     this.amountNumber();
   },
   mounted() {
+    let arr = [600, 1000, 800, 900, 450, 600, 920, 450, 890, 860, 400, 650];
     const chart = document.querySelector(".line_chart");
-    let lineChart = echarts.init(chart);
-    line(lineChart);
+    this.lineChart = echarts.init(chart);
+    line(this.lineChart, arr);
   },
   filters: {
     toMoney,
@@ -121,7 +123,7 @@ export default {
         (item) => item["@type"].split(".").pop() !== "ModuleAccount"
       );
       //避免数据缺失
-      // console.log(list);
+      // console.log(res);
       arr.forEach((e, index) => {
         e.amount = "";
         e.denom = "";
@@ -163,12 +165,37 @@ export default {
       this.$router.push({ path: "address_detail", query: { address } });
     },
     handleSizeChange(val) {
-      this.pageData.pageSize = val
-      this.accountslist = this.list.slice(0,val);
+      this.pageData.pageSize = val;
+      this.accountslist = this.list.slice(0, val);
     },
     handleCurrentChange(val) {
-      let {page,pageSize} = this.pageData
+      let { page, pageSize } = this.pageData;
       this.accountslist = this.list.slice((val - 1) * pageSize, val * pageSize);
+    },
+    chartsChange(index) {
+      this.navIndex = index;
+      if (index == 1) {
+      }
+      switch (index) {
+        case 0:
+          line(this.lineChart, [600, 1000, 800, 900, 450, 600, 920, 450, 890, 860, 400, 650]);
+          break;
+        case 1:
+          line(this.lineChart, [1, 2, 3, 4, 5, 6, 7]);
+
+          break;
+        case 2:
+          line(this.lineChart, [7, 6, 5, 4, 3, 2, 1]);
+          break;
+        case 3:
+          line(
+            this.lineChart,
+            [14, 2, 8, 16, 21, 3, 15, 17, 9, 13, 27, 5, 12, 8, 9, 11, 13]
+          );
+          break;
+        default:
+          break;
+      }
     },
   },
 };
@@ -247,6 +274,8 @@ export default {
     display: none;
   }
   .accounts_table {
+    margin-top: 16px;
+    padding: 0;
     width: 100%;
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="Home">
-    <div class="setting_Image">
+    <div id="setting_Image">
       <div class="content">
         <SearchBox></SearchBox>
 
@@ -40,7 +40,7 @@
           <!--当前出块节点-->
           <div>
             <p>{{ languagePack.text15 }}</p>
-            <h3>{{ outNode }}</h3>
+            <h3>{{ latestNode }}</h3>
           </div>
 
           <!--累计交易笔数-->
@@ -51,7 +51,7 @@
 
           <!--10秒内平均TPS/瞬时最高TPS-->
           <div>
-            <p>{{ languagePack.text19 }}</p>
+            <p>10秒内平均TPS/瞬时最高TPS</p>
             <h3>{{ blockHeight }}</h3>
           </div>
 
@@ -147,6 +147,7 @@ import {
   pledgeParameter,
   totalCirculation,
   allValidationNode,
+  querylatestNodeMessage,
 } from "@/api/api.js";
 export default {
   name: "Home",
@@ -164,6 +165,7 @@ export default {
       circulation: "", //流通量
       Pledgerate: "", //质押率
       nodelist: "", //当前验证节点
+      latestNode: "", //当前出块节点
       circulateTooltip:
         "在市场上实时流通的、公众手中的Token数量。实时流通供应量 = 总发行量 - 锁仓的Token 其中，锁仓的Token为所有锁仓状态的Token，包含当前委托或处于绑定解锁期的锁仓状态的Token。",
       messageList: [
@@ -186,7 +188,6 @@ export default {
     this.getnowBlockHeight();
     // this.timer2 = setInterval(() => this.getnowBlockHeight(), 4000);
     this.getBlockMsg();
-    console.log(this.languagePack);
   },
   mounted() {
     let charts = document.querySelectorAll(".barChart");
@@ -213,7 +214,6 @@ export default {
       const pledgeNum = await pledgeParameter(); //获取质押参数
       this.totalNum = res.pagination.total; //总地址数量
       this.issueNum = issueNum.supply[0].amount;
-      this.outNode = issueNum.supply[0].denom; //出块节点
       this.pledgeNum = pledgeNum.params.historical_entries; //质押参数
       //  流通量 = 总发行量 -  质押量
       this.circulation = this.issueNum - this.pledgeNum;
@@ -232,6 +232,13 @@ export default {
       const nodelist = await allValidationNode();
       this.nodelist = nodelist.validators;
       console.log("节点信息", nodelist);
+
+      const latestNode = await querylatestNodeMessage();
+      console.log(latestNode);
+      const {
+        default_node_info: { moniker },
+      } = latestNode;
+      this.latestNode = moniker;
     },
   },
   beforeDestroy() {
@@ -253,7 +260,7 @@ export default {
   background: #ffffff;
 }
 
-.setting_Image {
+#setting_Image {
   min-height: 277px;
   background: url("../../assets/img/home_background.png");
   background-size: 100% 100%;
@@ -447,6 +454,7 @@ export default {
       background: #edf0ff;
       border-radius: 2px;
       border: none;
+      cursor: pointer;
     }
     .topBlock {
       overflow: hidden;
@@ -571,7 +579,7 @@ export default {
 }
 
 @media screen and (max-width: 598px) {
-  .setting_Image {
+  #setting_Image {
     min-height: 200px;
     .content {
       height: 200px;
@@ -640,7 +648,7 @@ export default {
     }
   }
 
-  .setting_Image {
+  #setting_Image {
     // padding-top: 60px;
     .banner {
       display: none;

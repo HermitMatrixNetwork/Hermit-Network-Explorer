@@ -3,19 +3,47 @@
     <div class="validationMain">
       <h3 class="title">验证节点</h3>
 
-      <div class="column">
-        <div class="column-item" v-for="(item, index) in nodeData" :key="index">
-          <BasicTitle :title="item.title">
+      <div class="validation-column">
+        <div class="column-item">
+          <BasicTitle :title="'节点概览'">
             <template #message>
-              <div class="column-basic">
-                <p v-for="(value, key) in item.basic" :key="key">
-                  {{ key }}:{{ value }}
-                </p>
+              <div class="messageBasic" style="height: 124px">
+                <div class="column">
+                  <p>总节点数：</p>
+                  <span>{{ nodeList.length }}</span>
+                </div>
+                <div class="column">
+                  <p>活跃节点数：</p>
+                  <span></span>
+                </div>
+                <div class="column">
+                  <p>候选节点数：</p>
+                  <span></span>
+                </div>
               </div>
             </template>
           </BasicTitle>
         </div>
-        <!-- <div class="column-item">实时质押信息</div> -->
+        <div class="column-item">
+          <BasicTitle :title="'实时质押信息'">
+            <template #message>
+              <div class="messageBasic" style="height: 124px">
+                <div class="column">
+                  <p>总质押：</p>
+                  <span>{{ pledgeMessage.pledgeNum }} GHM</span>
+                </div>
+                <div class="column">
+                  <p>接收委托量：</p>
+                  <span>{{ pledgeMessage.issueNum }} GHM</span>
+                </div>
+                <div class="column">
+                  <p>质押率：</p>
+                  <span> {{ pledgeMessage.Pledgerate }} %</span>
+                </div>
+              </div>
+            </template>
+          </BasicTitle>
+        </div>
       </div>
 
       <div class="validation-table">
@@ -38,14 +66,14 @@
           </div>
 
           <div class="right">
-            <span>惩罚节点</span>
-            <span>历史验证节点</span>
+            <span @click="toGo('/punishmentNode')">惩罚节点</span>
+            <span @click="toGo('/historyNode')">历史验证节点</span>
           </div>
         </div>
 
         <div class="validation-table-body">
           <el-table
-            :data="nodeList"
+            :data="newNodeList"
             size="mini"
             height="612px"
             :row-style="{ height: '58px' }"
@@ -57,16 +85,13 @@
               align="center"
               type="index"
             ></el-table-column>
-            <el-table-column
-              label="节点名称"
-              width="160"
-            >
-            <template slot-scope="scope">
-              <div class="moniker">
-                <img src="@/assets/img/bottom-bar_github.png" alt="">
-                {{scope.row.moniker}}
-              </div>
-            </template>
+            <el-table-column label="节点名称" width="160">
+              <template slot-scope="scope">
+                <div class="moniker">
+                  <img src="@/assets/img/bottom-bar_github.png" alt="" />
+                  {{ scope.row.moniker }}
+                </div>
+              </template>
             </el-table-column>
             <el-table-column label="节点地址" width="180">
               <template slot-scope="scope">
@@ -88,7 +113,11 @@
                         scope.row.status == 'BONDED' ? '#55C499' : '#ED422B',
                     }"
                   />
-                  {{ scope.row.status }}
+                  {{
+                    scope.row.status == "BONDED" && scope.row.jailed !== true
+                      ? "活跃中"
+                      : "候选中"
+                  }}
                 </div>
               </template>
             </el-table-column>
@@ -100,7 +129,11 @@
             <el-table-column label="委托数" width="168" align="right">
               <template slot-scope="scope">
                 <p>
-                  {{ scope.row.tokens - scope.row.min_self_delegation * 1e5 | toMoney}} GHM
+                  {{
+                    (scope.row.tokens - scope.row.min_self_delegation * 1e5)
+                      | toMoney
+                  }}
+                  GHM
                 </p>
               </template>
             </el-table-column>
@@ -146,44 +179,34 @@
 </template>
 
 <script>
-import { allValidationNode } from "@/api/api.js";
+import {
+  allValidationNode,
+  pledgeParameter,
+  totalCirculation,
+} from "@/api/api.js";
 import mixin from "@/mixins/index.vue";
 export default {
   mixins: [mixin],
   data() {
     return {
       searchValue: "",
-      currentPage2: 5,
+      currentPage2: 0,
       screenIndex: 0,
-      pagination:0,
-      nodeData: [
-        {
-          title: "节点概览",
-          basic: {
-            节点总数: 253,
-            活跃节点数: 86,
-            候选节点数: 354,
-          },
-        },
-        {
-          title: "实时质押信息",
-          basic: {
-            总质押: "120M GHM",
-            接受委托量: "1,386,169,037.96114985 GHM",
-            质押率: "0%",
-          },
-        },
-      ],
+      pagination: 0,
+      pledgeMessage: {
+        issueNum: 0,
+        pledgeNum: 0,
+        Pledgerate: 0,
+      },
       nodeList: [],
       newNodeList: [],
     };
   },
   created() {
     this.queryAllValidation();
+    this.queryPledge();
   },
-  mounted() {
-    // this.newNodeList = JSON.parse(JSON.stringify(this.nodeList));
-  },
+  mounted() {},
   methods: {
     async queryAllValidation() {
       const res = await allValidationNode();
@@ -210,7 +233,8 @@ export default {
         });
       });
       this.nodeList = arr.sort((a, b) => b.tokens - a.tokens);
-      console.log(this.nodeList);
+      // console.log(this.nodeList);
+      this.newNodeList = JSON.parse(JSON.stringify(this.nodeList));
     },
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
@@ -223,13 +247,26 @@ export default {
       if (index == 0)
         return (this.newNodeList = JSON.parse(JSON.stringify(this.nodeList)));
       this.newNodeList = this.nodeList.filter((item) => {
-        return index == 1 ? item.state == "活跃中" : item.state == "候选中";
+        return index == 1
+          ? item.status == "BONDED"
+          : item.status == "UNBONDING";
       });
     },
 
-    TableClick(val){
-      console.log(val);
-    }
+    TableClick(val) {
+      this.$router.push({ name: "node_detail", params: { basic: val } });
+    },
+    async queryPledge() {
+      const pledge = await pledgeParameter(); //获取质押参数
+      const issueNum = await totalCirculation(); //获取总发行量
+      this.pledgeMessage.issueNum = issueNum.supply[0].amount;
+      this.pledgeMessage.pledgeNum = pledge.params.historical_entries; //质押参数
+      this.pledgeMessage.Pledgerate = (
+        this.pledgeMessage.pledgeNum / this.pledgeMessage.issueNum
+      ).toFixed(2); //质押率
+
+      console.log(pledge);
+    },
   },
 };
 </script>
@@ -242,24 +279,13 @@ export default {
     padding: 16px 0;
   }
 
-  .column {
+  .validation-column {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    &-item {
+    .column-item {
       width: 632px;
       height: 208px;
-    }
-    &-basic {
-      height: 120px;
-      > p {
-        height: 28px;
-        line-height: 28px;
-        margin-bottom: 16px;
-        font-weight: 400;
-        font-size: 12px;
-        color: rgba(20, 37, 62, 0.85);
-      }
     }
   }
 
@@ -291,10 +317,8 @@ export default {
             font-size: 12px;
             line-height: 20px;
             color: rgba(0, 0, 0, 0.65);
-            background: #ffffff;
             border: 1px solid #e9eaef;
-            // border-radius: 2px 0 0 2px;
-            // border-radius: 2px 0px 0px 2px;
+            cursor: pointer;
           }
         }
       }
@@ -306,6 +330,7 @@ export default {
           font-size: 12px;
           color: #1e42ed;
           line-height: 18px;
+          cursor: pointer;
         }
       }
     }
@@ -316,10 +341,10 @@ export default {
         display: flex;
         align-items: center;
       }
-      .moniker{
+      .moniker {
         display: flex;
         align-items: center;
-        >img{
+        > img {
           width: 24px;
           padding: 0 8px;
         }
@@ -353,5 +378,43 @@ export default {
 }
 ::v-deep .el-input-group__append {
   padding: 0 6px;
+}
+
+@media screen and (max-width:598px) {
+  .validationMain{
+    width: 100%;
+    .title{
+      padding-left: 10px;
+    }
+    .validation-column{
+      flex-direction:column;
+      width: 100%;
+
+      .column-item{
+      width: 100%;
+      margin: 8px 0;
+      }
+    }
+
+    .validation-table{
+      width: 100%;
+      &-header{
+        height: 100px;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0;
+        .left{
+          margin-top: 10px;
+          flex-direction: column;
+          height: 60px;
+          width: 100%;
+          align-items: flex-start;
+          >div{
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+  }
 }
 </style>

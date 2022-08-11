@@ -111,4 +111,23 @@ export default {};
     line-height: 28px;
   }
 }
+
+@media screen and (max-width:598px) {
+  .developMain{
+    width: 100%;
+    &-title{
+      padding-left: 16px;
+    }
+    .basic{
+      width: 100%;
+      height: auto;
+      padding: 0;
+    }
+  }
+
+  .developApi{
+    height: 80px;
+    justify-content: space-evenly;
+  }
+}
 </style>

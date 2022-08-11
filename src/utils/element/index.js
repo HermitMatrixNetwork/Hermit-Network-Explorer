@@ -29,7 +29,9 @@ import {
     Upload,
     Dialog,
     Collapse,
-    CollapseItem
+    CollapseItem,
+    Step,
+    Steps
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(Button)
@@ -62,7 +64,8 @@ Vue.use(Popover)
 Vue.use(Divider)
 Vue.use(Collapse)
 Vue.use(CollapseItem)
-
+Vue.use(Step)
+Vue.use(Steps)
 
 
 

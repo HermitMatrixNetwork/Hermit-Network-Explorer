@@ -94,4 +94,14 @@ export default {
     }
   }
 }
+
+@media screen and (max-width:598px) {
+  .governMain{
+    width: 100%;
+    &-title{
+      padding-left: 16px;
+    }
+  }
+}
 </style>
+ 

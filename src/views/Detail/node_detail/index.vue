@@ -1,14 +1,22 @@
 <template>
   <div class="address-detail">
     <div class="detail">
-      <div class="detail-title">验证节点：GHMohhh</div>
+      <div class="detail-title">验证节点：{{basic.moniker}}</div>
       <div class="detailColumn">
         <BasicTitle :title="'详细信息'">
           <template #message>
             <div class="detailColumn-basic">
-              <p>总余额：</p>
-              <p>GHM价格:86</p>
-              <p>总交易次数:</p>
+              <p>当选验证节点：</p>
+              <p>当前委托者数：56</p>
+              <p>出块率：100%</p>
+              <p>24小时出块率：99.99%</p>
+              <p>累计系统奖励：99.99%</p>
+
+              <p>累计委托奖励：</p>
+              <p>待领取委托奖励：</p>
+              <p>自有质押：</p>
+              <p>总质押：</p>
+              <p>接受质押：</p>
             </div>
           </template>
         </BasicTitle>
@@ -34,24 +42,32 @@
           <div class="basicMessage messageBasic" v-if="selectNav == 0">
             <div class="basicMessage-title">
               <img src="@/assets/img/bottom-bar_github.png" alt="" />
-              <h3>GHMohhh</h3>
+              <h3>{{basic.moniker}}</h3>
             </div>
 
             <div class="column">
-              <p>执行方：</p>
-              <span class="specialFont">fsdaaaaaaa</span>
+              <p>节点ID：</p>
+              <span>1d41e93a32abf8a9afd4de2a014b72512144a395fda0462f798f898f6f5a70f30b41b106bd73</span>
             </div>
             <div class="column">
-              <p>合约：</p>
-              <span>fsdaaaaaaa</span>
+              <p>操作地址：</p>
+              <span>035C0FDD9FBB94C2892D97BB1A6B0AE264BD3018</span>
             </div>
             <div class="column">
-              <p>交易额：</p>
-              <span>fsdaaaaaaa GHM</span>
+              <p>奖励账户：</p>
+              <span>ghm15urq2dtp9qce4fyc85m6upwm9xul3049772z73</span>
             </div>
             <div class="column">
-              <p>手续费：</p>
-              <span>fsdaaaaaaa GHM</span>
+              <p>官网：</p>
+              <span>www.xxxxx.com</span>
+            </div>
+            <div class="column">
+              <p>身份证认证ID：</p>
+              <span class="specialFont">67667585785765</span>
+            </div>
+            <div class="column">
+              <p>描述：</p>
+              <span>xxxx</span>
             </div>
           </div>
 
@@ -209,15 +225,29 @@
 
 <script>
 import mixin from "@/mixins/index.vue";
+import {validationNodeData,validationEntrust} from '@/api/api.js'
 export default {
   mixins: [mixin],
   data() {
     return {
       selectNav: 0,
+      basic:{}
     };
   },
-  created() {},
-  methods: {},
+  created() {
+    this.basic = this.$route.params.basic
+    console.log(this.basic);
+    const {jailed,operator_address} = this.basic
+    this.getData(operator_address)
+  },
+  methods: {
+    async getData(address){
+      const res = await validationNodeData(address)
+      const res2 = await validationEntrust(address) 
+      console.log('节点基本信息',res);
+      console.log('节点委托信息',res2);
+    }
+  },
   computed: {},
   watch: {},
 };
@@ -255,7 +285,10 @@ export default {
     }
     &-basic {
       height: 200px;
+      display: flex;
+      flex-wrap: wrap;
       > p {
+        width: 50%;
         height: 28px;
         line-height: 28px;
         margin-bottom: 16px;

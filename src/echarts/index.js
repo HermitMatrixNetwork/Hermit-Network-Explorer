@@ -99,7 +99,7 @@ export const line = (element, message) => {
         },
         series: [
             {
-                data: [600, 1000, 800, 900, 450, 600, 920, 450, 890, 860, 400, 650],
+                data: message,
                 type: 'line',
                 areaStyle: {
                     color: {

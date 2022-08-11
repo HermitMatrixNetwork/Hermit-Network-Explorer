@@ -18,6 +18,7 @@ import Resources from '@/views/resources/index.vue'
 import Hashdetail from '@/views/Detail/hash_detail/index.vue'
 import PunishmentNode from '@/views/validation/punishmentNode.vue'
 import HistoryNode from '@/views/validation/historyNode.vue'
+import RPC from '@/views/More/RPC.vue'
 
 Vue.use(VueRouter)
 
@@ -85,7 +86,8 @@ const routes = [
   },
   {
     path: '/hash_detail',
-    component: Hashdetail
+    component: Hashdetail,
+    name: 'hash_detail'
   },
   {
     path: '/punishmentNode',
@@ -96,8 +98,13 @@ const routes = [
     component: HistoryNode
   },
   {
-    path:'/node_detail',
-    component:Nodedetail
+    path: '/node_detail',
+    name: 'node_detail',
+    component: Nodedetail
+  },
+  {
+    path: '/rpc',
+    component: RPC
   }
 ]
 
