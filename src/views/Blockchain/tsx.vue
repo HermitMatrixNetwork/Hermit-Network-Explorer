@@ -137,7 +137,6 @@ export default {
 		document.querySelector('.selected').style.color = '#1E42ED'
     let olg = document.querySelector('.el-popover')
     olg.style.fontSize = '12px'
-    console.log('111', olg);
 	},
   methods: {
     // 表头行样式
@@ -213,15 +212,27 @@ export default {
       switch(column.property){
         case 'block':
           console.log('跳转到交易详情');
+          this.$router.push({
+            name: 'transDetail'
+          })
           break;
         case 'transNum':
           console.log('跳转到区块详情');
+          this.$router.push({
+            name: 'blockDetail'
+          })
           break;
         case 'fuelCon':
           console.log('跳转到发起地址详情');
+          this.$router.push({
+            name: 'addressDetail'
+          })
           break;
         case 'fuelTotal':
           console.log('跳转到目标地址详情');
+          this.$router.push({
+            name: 'addressDetail'
+          })
           break;
         default:
           break;
@@ -230,6 +241,9 @@ export default {
 
     toTransDetail() {
       console.log('查看交易详情');
+      this.$router.push({
+        name: 'transDetail'
+      })
     }
   }
 }
