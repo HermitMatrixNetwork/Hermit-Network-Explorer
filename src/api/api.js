@@ -1,4 +1,5 @@
 import { Service } from "./request"
+import service1 from "./request1"
 
 /*export function getConfigsByProductId(productId) {
     return Service({
@@ -185,4 +186,31 @@ export function querylatestNodeMessage(){
         url:'/cosmos/base/tendermint/v1beta1/node_info',
         method:'GET'
     })
+}
+
+//查询区块的数据信息
+export function queryBlockList(data){
+  return service1({
+      url:'/api/browser/blocklist',
+      method:'POST',
+      data
+  })
+}
+
+//查询顶级账户的数据信息
+export function queryAccountList(data){
+  return service1({
+      url:'/api/browser/accountlist',
+      method:'POST',
+      data
+  })
+}
+
+//查询顶级账户的数据信息
+export function queryTxList(data){
+  return service1({
+      url:'/api/browser/txlist',
+      method:'POST',
+      data
+  })
 }

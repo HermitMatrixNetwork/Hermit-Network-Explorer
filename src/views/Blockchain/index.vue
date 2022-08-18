@@ -5,7 +5,9 @@
 			<div class="table_title">
 				展示匿名币余额排名前<span>1000</span>账户
 			</div>
+      <el-skeleton v-if="!tableData.length" :rows="20" animated></el-skeleton>
 			<el-table
+        v-else
 				:data="tableData"
 				size="mini"
 				height="665px"
@@ -22,19 +24,19 @@
 					align="center"
 				/>
 				<el-table-column
-					prop="blockAge"
+					prop="address"
 					label="地址"
 					:show-overflow-tooltip="true"
 				>
 					<template slot-scope="scope">
-						<el-link :underline="false">{{scope.row.blockAge}}</el-link>
+						<el-link :underline="false">{{scope.row.address}}</el-link>
 					</template>
 				</el-table-column>
 				<el-table-column prop="transNum" label="标签" />
-				<el-table-column prop="person" label="余额" />
-				<el-table-column prop="fuelCon" label="百分比" />
+				<el-table-column prop="balance" label="余额" />
+				<el-table-column prop="percentage" label="百分比" />
 				<el-table-column
-					prop="fuelTotal"
+					prop="tx_count"
 					label="交易次数"
 					width="100px"
 				/>
@@ -44,11 +46,11 @@
 					small
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
-					:current-page.sync="currentPage"
+					:current-page.sync="page.currentPage"
 					:page-sizes="[10, 25, 50]"
-					:page-size="10"
+					:page-size="page.pageSize"
 					layout="prev, pager, next, sizes"
-					:total="100"
+					:total="page.total"
 				>
 				</el-pagination>
 			</el-row>
@@ -57,25 +59,25 @@
 </template>
 
 <script>
+import { queryAccountList } from '@/api/api'
+
 export default {
 	name: 'Blockchain',
 	data() {
 		return {
-			tableData: [
-				{
-					blockAge: 'dfhjkdhfkjhfkjasfksjffddfdfdsfdsfsdfdfdsfdsfdsfsdfsdfdsfdsffdsfdsfhfj',
-					transNum: 'Eth2 Defhhff Condt',
-					person: '9454544544144 GHM',
-					fuelCon: '3.4545454%',
-					fuelTotal: '4544454545',
-				},
-			],
-			currentPage: 1,
+			tableData: [],
+      page: {
+        pageSize: 10,
+        total: 0,
+        currentPage: 0
+      },
 		}
 	},
 	mounted() {
 		document.querySelector('body').style.background = '#F8FAFB'
 		document.querySelector('.selected').style.color = '#1E42ED'
+
+    this.getData()
 	},
 	methods: {
 		// 表头行样式
@@ -110,22 +112,35 @@ export default {
 			}
 		},
 
-		handleSizeChange() {
+		handleSizeChange(val) {
 			let oul = document.querySelectorAll('.el-select-dropdown__list li')
-			oul.forEach((item) => (item.style.color = ''))
+			oul.forEach(item => item.style.color = '')
 			let oli = document.querySelector('.selected')
 			oli.style.color = '#606266'
 			document.querySelector('.hover').style.color = '#1E42ED'
+
+      this.page.pageSize = val
+      this.getData()
 		},
 
 		handleCurrentChange() {
 			console.log('11')
 		},
 
+    async getData() {
+      let { data } = await queryAccountList({
+        chain_id: 'ghmdev',
+        limit: this.page.pageSize,
+        index: this.page.currentPage
+      })
+      console.log('顶级账户', data);
+      this.tableData = data.list
+    },
+
 		toDetail(row, column) {
 			console.log('row', row)
 			switch (column.property) {
-				case 'blockAge':
+				case 'address':
 					console.log('跳转到地址详情')
 					break
 				default:

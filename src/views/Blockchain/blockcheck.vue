@@ -3,30 +3,31 @@
 		<h3>区块</h3>
 		<main class="main">
 			<el-row type="flex" class="total_title" align="middle">
-				<el-col :span="15" style="padding-left: 10px;">总共<span class="block_num">1,081,774</span>个区块</el-col>
+				<el-col :span="15" style="padding-left: 10px;">总共<span class="block_num">{{ blockTotal }}</span>个区块</el-col>
 				<el-col :span="9">
 					<el-pagination
             border	
 						layout="prev, pager, next"
-						:total="1000"
+						:total="page.total"
 						small
             class="pagina"
 					>
 					</el-pagination>
 				</el-col>
 			</el-row>
-      <el-table :data="tableData" size="mini" height="535px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @cell-click="toDetail">
-        <el-table-column prop="block" label="区块" width="80px" />
-        <el-table-column prop="blockAge" label="块龄" width="150px"/>
-        <el-table-column prop="transNum" label="交易数" width="70px" />
-        <el-table-column prop="person" label="提案人" width="100px" />
-        <el-table-column prop="fuelCon" label="燃料用量">
+      <el-skeleton v-if="!tableData.length" animated :rows="20"/>
+      <el-table v-else :data="tableData" size="mini" height="535px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @cell-click="toDetail">
+        <el-table-column prop="_id" label="区块" width="80px" />
+        <el-table-column prop="timestamp" label="块龄" width="150px" :formatter="mainFomrmatter"/>
+        <el-table-column prop="tx_count" label="交易数" width="100px" />
+        <el-table-column prop="proposer_address" label="提案人" width="250px" :show-overflow-tooltip="true" />
+        <el-table-column prop="gas_used" label="燃料用量">
           <template slot-scope="scope">
-            <el-progress :percentage="30" :width="196" :stroke-width="6" color="#1E42EDFF" :format="format(scope.row.fuelCon)"></el-progress>
+            <el-progress :percentage="percenTage" :width="196" :stroke-width="6" color="#1E42EDFF" :format="format(scope.row.gas_used, scope.row.gas_total)"></el-progress>
           </template>
         </el-table-column>
-        <el-table-column prop="fuelTotal" label="燃料总量" width="100px"/>
-        <el-table-column prop="blockReward" label="出块奖励（GHM）" width="150px"/>
+        <el-table-column prop="gas_total" label="燃料总量" width="100px"/>
+        <el-table-column prop="reward" label="出块奖励（GHM）" width="150px"/>
       </el-table>
       <el-row type="flex" justify="end" >
         <el-pagination
@@ -34,11 +35,11 @@
           small
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
+          :current-page.sync="page.currentPage"
           :page-sizes="[50, 100]"
-          :page-size="50"
+          :page-size="page.pageSize"
           layout="prev, pager, next, sizes"
-          :total="1000">
+          :total="page.total">
         </el-pagination>
       </el-row>
 		</main>
@@ -47,36 +48,20 @@
 </template>
 
 <script>
-import { getLatestBlock } from '@/api/api'
+import { queryBlockList } from '@/api/api'
+import { pastTime } from '@/utils/common'
+
 export default {
 	data() {
 		return {
-      tableData: [
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-        {block: 3021245, blockAge: '12 secs ago', transNum: 525, person: 'AiCJA', fuelCon: '22,769,528', fuelTotal: '808,080,254', blockReward: 0.55165456415111},
-      ], // 表格数据
-      currentPage: 1
+      blockTotal: 0,
+      tableData: [], // 表格数据
+      page: {
+        pageSize: 50,
+        total: 0,
+        currentPage: 0
+      },
+      percenTage: 1 // 百分比占度条不可设置为0
     }
 	},
 	mounted() {
@@ -90,10 +75,20 @@ export default {
     },
 
     // 指定进度条文字内容
-    format(value) {
+    format(val, val2) {
+      let num = Number(val)
+      let num2 = Number(val2)
+      let result = (num/num2*100).toFixed(2)
+      if (result && result !== 'NaN'){
+        this.percenTage = Number(result)
         return () => {
-          return value
+          return `${num} (${result})%`
         }
+      } else {
+        return () => {
+          return '0%'
+        }
+      }
     },
 
     // 设置列的字体颜色
@@ -124,11 +119,17 @@ export default {
 
     // 获取区块数据
     async getBlockData() {
-      let res = await getLatestBlock()
-      console.log('区块数据', res);
+      let { data } = await queryBlockList({
+        chain_id: 'ghmdev',
+        limit: this.page.pageSize,
+        index: this.page.currentPage
+      })
+      console.log('区块数据', data);
+      this.tableData = data.list
+      this.blockTotal = data.total
     },
 
-    handleSizeChange() {
+    handleSizeChange(val) {
         let oul = document.querySelectorAll('.el-select-dropdown__list li')
         oul.forEach(item => {
           console.log(item.style.color);
@@ -137,18 +138,32 @@ export default {
         let oli = document.querySelector('.selected')
         oli.style.color = '#606266'
     		document.querySelector('.hover').style.color = '#1E42ED'
+        
+        this.page.pageSize = val
+        this.getBlockData()
     },
 
-    handleCurrentChange() {
-      console.log('11');
+    handleCurrentChange(val) {
+      console.log('11', val);
+    },
+
+    mainFomrmatter(row, column) {
+      if (column.property = 'timestamp') {
+        return pastTime(row.timestamp)
+      }
     },
 
     toDetail(row, column) {
 			console.log('row', row)
 			switch (column.property) {
-				case 'block':
+				case '_id':
 					console.log('跳转到区块详情')
-          this.$router.push({name: 'blockDetail'})
+          this.$router.push({
+            name: 'blockDetail',
+            query: {
+              height: row._id
+            }
+            })
 					break
 				default:
 					break

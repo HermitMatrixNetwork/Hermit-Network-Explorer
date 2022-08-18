@@ -116,6 +116,7 @@ export default {
   },
   created() {
     this.getblockDetail(this.$route.query.height);
+    // console.log('高度块', this.$route.query);
   },
   mounted() {
     document.querySelector('.selected').style.color = '#1E42ED'

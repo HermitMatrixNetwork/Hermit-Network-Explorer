@@ -2,6 +2,8 @@ import axios from 'axios'
 import { Message, Loading } from 'element-ui'
 const ConfigBaseURL = 'http://45.32.116.172:1317' //默认路径，这里也可以使用env来判断环境
 // const ConfigBaseURL = 'http://167.179.118.118:1317'
+// const ConfigBaseURL = ''
+// const ConfigBaseURL = 'http://158.247.237.78:8888'
 let loadingInstance = null //这里是loading
 //使用create方法创建axios实例
 export const Service = axios.create({
