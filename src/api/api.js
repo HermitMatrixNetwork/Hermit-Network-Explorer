@@ -1,4 +1,5 @@
 import { Service } from "./request"
+import service1 from "./request1"
 
 /*export function getConfigsByProductId(productId) {
     return Service({
@@ -159,9 +160,7 @@ export function getAddressTxs(data) {
 //查询历史验证节点
 export function queryHistoryNode(){
     return Service({
-        url:`/cosmos/tx/v1beta1/txs?events=message.module = 'staking'&events=message.action='create_validator'`,
-        method:'get'
+        url:'/cosmos/base/tendermint/v1beta1/node_info',
+        method:'GET'
     })
 }
-
-
