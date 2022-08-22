@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import mixin from "@/mixins/index.vue";
+import mixin from "@/mixins";
 export default {
   mixins: [mixin],
   data() {

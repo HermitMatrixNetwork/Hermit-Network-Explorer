@@ -57,7 +57,7 @@ export default {
   width: 1280px;
   margin: 0 auto;
   &-title {
-    height: 28px;
+    height: 60px;
     font-weight: 500;
     font-size: 20px;
     color: rgba(20, 37, 62, 0.85);
@@ -71,8 +71,8 @@ export default {
     flex-wrap: wrap;
     justify-content: space-between;
     &-item {
-      width: 368px;
-      height: 134px;
+      width: 416px;
+      height: 182px;
       background: #ffffff;
       border: 1px solid #e9eaef;
       box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);

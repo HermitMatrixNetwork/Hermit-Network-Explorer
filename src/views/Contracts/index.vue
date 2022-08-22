@@ -1,26 +1,26 @@
 <template>
   <div class="contracts-main">
     <div class="main">
-      <div class="title">合约</div>
+      <div class="title">{{ languagePack.contract }}</div>
       <div class="contracts_basic">
         <div class="contracts_basic_item">
           <div class="icon"></div>
           <div class="explain">
-            <p>总运算次数</p>
+            <p>{{ languagePack.operation }}</p>
             <h3>1,256,017</h3>
           </div>
         </div>
         <div class="contracts_basic_item">
           <div class="icon"></div>
           <div class="explain">
-            <p>总用户数</p>
+            <p>{{ languagePack.thenumberofusers }}</p>
             <h3>51,631</h3>
           </div>
         </div>
         <div class="contracts_basic_item">
           <div class="icon"></div>
           <div class="explain">
-            <p>已部署合约</p>
+            <p>{{ languagePack.deployedcontracts }}</p>
             <h3>$0.48</h3>
           </div>
         </div>
@@ -31,18 +31,83 @@
           <el-pagination small layout="prev, pager, next" :total="1000">
           </el-pagination>
         </div>
-        <Table />
+        <el-table
+          height="656px"
+          :data="tableList"
+          style="width: 100%"
+          :header-cell-class-name="'tableHeaderCellStyle'"
+          :row-class-name="'tableRowStyle'"
+          v-loading="loading"
+        >
+          <el-table-column
+            prop="contract_id"
+            :label="languagePack.contractID"
+            width="160"
+          >
+          </el-table-column>
+          <el-table-column :label="languagePack.contractname" width="548">
+            <template slot-scope="scope">
+              <p class="specialFont" @click="toGo('/contract_detail')">{{ scope.row.contract_lable }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="compute_count"
+            :label="languagePack.operation"
+            width="160"
+            align="right"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="user_count"
+            :label="languagePack._thenumberofusers"
+            width="160"
+            align="right"
+          >
+          </el-table-column>
+          <el-table-column :label="languagePack.TotalValueLocked" align="right">
+            <template slot-scope="scope">
+              <div>
+                {{ scope.row.price }}
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="table_bottom">
+          <el-pagination small layout="prev, pager, next" :total="1000">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Table from "@/components/Table/index.vue";
+import { getContract } from "@/api/contract";
+import axios from "axios";
+import mixins from '@/mixins';
+
 export default {
-  components: { Table },
+  mixins:[mixins],
   data() {
-    return {};
+    return {
+      tableList: [],
+      loading:false
+    };
+  },
+  created() {
+    this.getData(10);
+  },
+  methods: {
+    async getData(limit) {
+      // const res = await getContract(limit)
+      // console.log('合约列表',res);
+      // this.tableList = res.data.list
+    },
+  },
+  computed: {
+    languagePack() {
+      return this.$store.state.Language;
+    },
   },
 };
 </script>
@@ -52,7 +117,9 @@ export default {
   width: 1280px;
   margin: 0 auto;
   .title {
-    padding: 16px 0;
+    height: 60px;
+    line-height: 60px;
+    font-weight: bold;
   }
 
   .contracts_basic {
@@ -67,7 +134,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     &_item {
-      height: 64px;
+      height: 128px;
       padding: 32px 64px;
       flex: 1;
       display: flex;
@@ -115,7 +182,6 @@ export default {
 
   .contracts_table {
     width: 1280px;
-    height: 776px;
     background: #ffffff;
     border: 1px solid #e9eaef;
     box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
@@ -128,11 +194,18 @@ export default {
       align-items: center;
       justify-content: space-between;
       font-family: PingFangSC-Medium;
-      font-weight: 500;
+      font-weight: bold;
       font-size: 12px;
       color: rgba(20, 37, 62, 0.85);
       letter-spacing: 0;
     }
+  }
+
+  .table_bottom {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 }
 
@@ -152,18 +225,34 @@ export default {
       &_item {
         padding: 10px 0;
         width: 100%;
-        .explain{
+        .explain {
           padding-left: 64px;
         }
-        .icon{
+        .icon {
           margin-left: 10px;
         }
       }
     }
 
-    .contracts_table{
+    .contracts_table {
       width: 100%;
     }
   }
 }
+</style>
+<style lang="scss">
+.tableHeaderCellStyle {
+  padding: 0 !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  background: #f8fafb !important;
+  .cell {
+    color: rgba(20,37,62,0.45);
+    font-size:12px;
+    padding: 0 16px !important;
+    white-space: nowrap !important;
+  }
+}
+
+
 </style>

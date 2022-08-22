@@ -16,39 +16,40 @@
 
       <div class="headernav" v-if="$route.path == '/home'">
         <div class="navs">
-          <router-link to="home">{{ languagePack.home }}</router-link>
+          <router-link to="home">{{ languagePack.Home }}</router-link>
           <el-dropdown @command="blockCommand">
             <span class="el-dropdown-link">
-              {{ languagePack.Blockchain
+              {{ languagePack.blockchain
+              }}<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="/blockchain">{{
+                languagePack.TopAccounts
+              }}</el-dropdown-item>
+              <el-dropdown-item command="/tsx" divided>{{
+                languagePack.viewTransactions
+              }}</el-dropdown-item>
+              <el-dropdown-item command="/blockcheck">{{
+                languagePack.viewBlock
+              }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <a @click="toGo('/contracts')">{{ languagePack.contract }}</a>
+          <a @click="toGo('/accounts')">{{ languagePack.account }}</a>
+          <a @click="toGo('/validation')">{{ languagePack.Validators }}</a>
+          <el-dropdown @command="blockCommand">
+            <span class="el-dropdown-link"
+              >{{ languagePack.Resources
               }}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
-                v-for="item in blocknavs"
+                v-for="item in resourcesnavs"
                 :key="item.command"
                 :divided="item.divided"
                 :command="item.command"
                 >{{ item.title }}</el-dropdown-item
               >
-            </el-dropdown-menu>
-          </el-dropdown>
-          <a @click="toGo('/contracts')">{{ languagePack.contract }}</a>
-          <a @click="toGo('/accounts')">{{ languagePack.account }}</a>
-          <a @click="toGo('/validation')">{{ languagePack.Validationnode }}</a>
-          <el-dropdown @command="blockCommand">
-            <span class="el-dropdown-link">
-              {{ languagePack.resources
-              }}<i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <!-- <el-dropdown-item>白皮书</el-dropdown-item> -->
-              <el-dropdown-item command="/developapi"
-                >开发者API</el-dropdown-item
-              >
-              <!-- <el-dropdown-item>SDK下载</el-dropdown-item> -->
-              <!-- <el-dropdown-item>Tendermint</el-dropdown-item> -->
-              <!-- <el-dropdown-item>IBC</el-dropdown-item> -->
-              <el-dropdown-item>合约编译器</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <el-dropdown @command="blockCommand">
@@ -70,8 +71,12 @@
         <div style="width: 1px; height: 24px; background: #f0f0f0" />
 
         <div class="langage hidden-sm-and-down">
-          <div @click="messageBox('暂未开放')">注册</div>
-          <img @click="messageBox('暂未开放')" src="../../assets/img/earths.png" alt=""/>
+          <div @click="messageBox('暂未开放')">{{ languagePack.logIn }}</div>
+          <img
+            @click="messageBox('暂未开放')"
+            src="../../assets/img/earths.png"
+            alt=""
+          />
           <el-dropdown @command="LanguageChange">
             <span class="el-dropdown-link">
               {{ languageType[lang].type
@@ -94,37 +99,40 @@
         <SearchBox :boxStyle="{ height: '50px' }"></SearchBox>
         <div>
           <div class="navs">
-            <router-link to="home">{{ languagePack.home }}</router-link>
+            <router-link to="home">{{ languagePack.Home }}</router-link>
             <el-dropdown @command="blockCommand">
               <span class="el-dropdown-link">
-                {{ languagePack.Blockchain
+                {{ languagePack.blockchain
+                }}<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="/blockchain">{{
+                  languagePack.TopAccounts
+                }}</el-dropdown-item>
+                <el-dropdown-item command="/tsx" divided>{{
+                  languagePack.viewTransactions
+                }}</el-dropdown-item>
+                <el-dropdown-item command="/blockcheck">{{
+                  languagePack.viewBlock
+                }}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <a @click="toGo('/contracts')">{{ languagePack.contract }}</a>
+            <a @click="toGo('/accounts')">{{ languagePack.account }}</a>
+            <a @click="toGo('/validation')">{{ languagePack.Validators }}</a>
+            <el-dropdown @command="blockCommand">
+              <span class="el-dropdown-link"
+                >{{ languagePack.Resources
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item
-                  v-for="item in blocknavs"
+                  v-for="item in resourcesnavs"
                   :key="item.command"
                   :divided="item.divided"
                   :command="item.command"
                   >{{ item.title }}</el-dropdown-item
                 >
-              </el-dropdown-menu>
-            </el-dropdown>
-            <a @click="toGo('/contracts')">{{ languagePack.contract }}</a>
-            <a @click="toGo('/accounts')">{{ languagePack.account }}</a>
-            <a @click="toGo('/validation')">{{
-              languagePack.Validationnode
-            }}</a>
-            <el-dropdown @command="blockCommand">
-              <span class="el-dropdown-link">
-                {{ languagePack.resources
-                }}<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="/developapi"
-                  >开发者API</el-dropdown-item
-                >
-                <el-dropdown-item>合约编译器</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
             <el-dropdown @command="blockCommand">
@@ -145,8 +153,12 @@
           </div>
           <div style="width: 1px; height: 24px; background: #f0f0f0" />
           <div class="langage hidden-sm-and-down">
-            <div @click="messageBox('暂未开放')">注册</div>
-            <img @click="messageBox('暂未开放')" src="../../assets/img/earths.png" alt="" />
+            <div @click="messageBox('暂未开放')">{{ languagePack.logIn }}</div>
+            <img
+              @click="messageBox('暂未开放')"
+              src="../../assets/img/earths.png"
+              alt=""
+            />
             <el-dropdown @command="LanguageChange">
               <span class="el-dropdown-link">
                 {{ languageType[lang].type
@@ -223,7 +235,7 @@
 </template>
 
 <script>
-import mixin from "@/mixins/index.vue";
+import mixin from "@/mixins";
 export default {
   mixins: [mixin],
   data() {
@@ -237,27 +249,11 @@ export default {
         { type: "简体中文", id: 1 },
         { type: "繁体中文", id: 2 },
       ],
-      morenavs: [
-        { title: "DAO可治理参数", command: "/govern" },
-        { title: "DAO基金会地址", command: "/foundation", divided: true },
-        { title: "提交代币LOGO", command: "/c" },
-        { title: "提交上币申请", command: "/currency_state" },
-        { title: "RPC信息", command: "/rpc" },
-        { title: "水龙头", command: "/f" },
-      ],
       blocknavs: [
         { title: "顶级账户", command: "/blockchain" },
         { title: "查看Txns", command: "/tsx", divided: true },
         { title: "查看区块", command: "/blockcheck" },
       ],
-      resourcesnavs: [
-        { title: "白皮书", command: "/" },
-        { title: "开发者API", command: "/developapi",divided:true },
-        { title: "SDK下载", command: "/" },
-        { title: "Tendermint", command: "/" },
-        { title: "TBC", command: "/" },
-        { title: "合约编辑器", command: "/" },
-        ],
     };
   },
   created() {
@@ -286,6 +282,39 @@ export default {
   computed: {
     languagePack() {
       return this.$store.state.Language;
+    },
+    morenavs() {
+      const {
+        GovernableParameter,
+        DAOfundationAddress,
+        SubmitApplicattion,
+        RPCInformation,
+        faucet,
+      } = this.languagePack;
+      return [
+        { title: GovernableParameter, command: "/govern" },
+        { title: DAOfundationAddress, command: "/foundation", divided: true },
+        { title: SubmitApplicattion, command: "/currency_state" },
+        { title: RPCInformation, command: "/" },
+        { title: faucet, command: "/rpc" },
+      ];
+    },
+    resourcesnavs() {
+      const {
+        Whitepaper,
+        developerApi,
+        SDKdownload,
+        Tendermint,
+        IBC,contractCompiler,
+      } = this.languagePack;
+      return [
+        { title: Whitepaper, command: "/a" },
+        { title: developerApi, command: "/developapi", divided: true },
+        { title: SDKdownload, command: "/b" },
+        { title: Tendermint, command: "/c" },
+        { title: IBC, command: "/d" },
+        { title: contractCompiler, command: "/e" },
+      ];
     },
   },
 };

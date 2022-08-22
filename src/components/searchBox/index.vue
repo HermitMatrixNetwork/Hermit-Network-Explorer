@@ -1,15 +1,12 @@
 <template>
   <div class="inputVal" :style="boxStyle">
     <el-input
-      :placeholder="languagePack.text06"
+      :placeholder="languagePack.SearchBox"
       v-model="searchVal"
       class="input-with-select"
     >
-      <el-select v-model="select" slot="prepend" :placeholder="'请选择'">
-        <el-option :label="languagePack.text07" value="1"></el-option>
-        <el-option :label="languagePack.text08" value="2"></el-option>
-        <el-option :label="languagePack.text09" value="3"></el-option>
-        <el-option :label="languagePack.text10" value="4"></el-option>
+      <el-select v-model="select" slot="prepend" :placeholder="languagePack.Filter">
+        <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <el-button
         slot="append"
@@ -21,9 +18,9 @@
 </template>
 
 <script>
-import mixin from '@/mixins/index.vue'
+import mixin from "@/mixins";
 export default {
-  mixins:[mixin],
+  mixins: [mixin],
   props: {
     boxStyle: {
       type: Object,
@@ -32,30 +29,39 @@ export default {
   data() {
     return {
       searchVal: "",
-      select:'',
+      select: "",
     };
   },
   computed: {
     languagePack() {
       return this.$store.state.Language;
     },
+    options() {
+      const { address, Tokens, Hash, BlockHeight } = this.languagePack;
+      return [
+        { label: address, value: "1" },
+        { label: Tokens, value: "2" },
+        { label: Hash, value: "3" },
+        { label: BlockHeight, value: "4" },
+      ];
+    },
   },
   methods: {
     searchBtn() {
       if (!this.searchVal.trim()) {
-        this.messageBox('输入不能为空！ ')
+        this.messageBox("输入不能为空！ ");
         this.searchVal = "";
         return;
       }
       switch (this.select * 1) {
         case 1:
-          this.queryDealtoHash(this.searchVal)
+          this.queryDealtoHash(this.searchVal);
           break;
         case 2:
           console.log("通过块搜索");
           break;
         case 3:
-          this.queryDealtoAddress(this.searchVal)
+          this.queryDealtoAddress(this.searchVal);
           break;
         case 4:
           console.log("通过token搜索");
@@ -63,7 +69,7 @@ export default {
         default:
           break;
       }
-      this.searchVal = ""
+      this.searchVal = "";
     },
   },
 };

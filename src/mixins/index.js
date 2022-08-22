@@ -1,4 +1,4 @@
-<script>
+
 import { copy, toMoney, sliceAddress } from "@/utils/common.js";
 import { Message } from "element-ui";
 export default {
@@ -13,7 +13,7 @@ export default {
       copy(val);
     },
     toGo(path) {
-      this.$router.push({ path }, () => {});
+      this.$router.push({ path }).catch(e => { });
     },
     messageBox(message, type = "warning") {
       if (this.num > 3) {
@@ -28,13 +28,13 @@ export default {
         offset: 80,
       });
     },
-    queryDealtoHash(hash,index){
+    queryDealtoHash(hash, index) {
       // this.$router.push({path:'/hash_detail',query:{hash}})
       // console.log(hash,index);
-      this.$router.push({name:'hash_detail',params:{hash,index}})
+      this.$router.push({ name: 'hash_detail', params: { hash, index } })
     },
-    queryDealtoAddress(address){
-      this.$router.push({path:'/address_detail',query:{address}})
+    queryDealtoAddress(address) {
+      this.$router.push({ path: '/address_detail', query: { address } })
     }
   },
   filters: {
@@ -42,4 +42,4 @@ export default {
     sliceAddress,
   },
 };
-</script>
+

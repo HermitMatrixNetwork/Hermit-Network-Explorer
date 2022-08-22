@@ -10,7 +10,9 @@
     <div class="pageMain">
       <div class="block-message">
         <div v-for="item in messageList" :key="item.title" class="block-item">
-          <div class="blockicon"></div>
+          <div class="blockicon">
+            <img :src="item.icon" alt="" />
+          </div>
           <div class="explain">
             <p>{{ item.title }}</p>
             <h3>${{ item.price }}</h3>
@@ -21,11 +23,11 @@
       <div class="newest-data">
         <div class="block-chart">
           <div class="outBlockTime">
-            {{ languagePack.text12 }}
+            {{ languagePack.LiveBlocktimes }}
             <div class="barChart" />
           </div>
           <div class="outBlockNum">
-            {{ languagePack.text13 }}
+            {{ languagePack.LiveTranransactions }}
             <div class="barChart" />
           </div>
         </div>
@@ -33,32 +35,31 @@
         <div class="newest-data-item">
           <!--当前区块高度-->
           <div @click="checkBlock_Detail">
-            <p>{{ languagePack.text19 }}</p>
+            <p>{{ languagePack.Liveblockheight }}</p>
             <span>{{ basicData.blockHeight }}</span>
           </div>
           <!--当前出块节点-->
           <div>
-            <p>{{ languagePack.text15 }}</p>
+            <p>{{ languagePack.Liveblocknodes }}</p>
             <span>{{ basicData.latestNode }}</span>
           </div>
 
           <!--累计交易笔数-->
           <div @click="toGo('/tsx')">
-            <p>{{ languagePack.text20 }}</p>
+            <p>{{ languagePack.accumulatedtradingvolume }}</p>
             <span>{{ basicData.detailNum }}</span>
           </div>
 
           <!--10秒内平均TPS/瞬时最高TPS-->
           <div>
-            <p>10秒内平均TPS/瞬时最高TPS</p>
+            <p>{{languagePack.AverageTPSWithin10S}}</p>
             <span>{{ basicData.blockHeight }}</span>
           </div>
 
           <!--流通量-->
           <div class="circulate">
             <p>
-              {{ languagePack.Incirculation }}
-
+              {{ languagePack.CirculatingTotalSupply }}
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -80,13 +81,13 @@
 
           <!--质押率-->
           <div>
-            <p>{{ languagePack.Pledgerate }}</p>
+            <p>{{ languagePack.StakingRate }}</p>
             <span>{{ basicData.Pledgerate }}% /{{ basicData.issueNum }}</span>
           </div>
 
           <!--地址数-->
           <div>
-            <p>地址数</p>
+            <p>{{languagePack.LiveAddress}}</p>
             <span>{{ basicData.totalNum }}</span>
           </div>
         </div>
@@ -95,44 +96,44 @@
       <div class="allblock-number">
         <!--查看所有区块-->
         <div class="newBlock">
-          <div class="block-title">{{ languagePack.text14 }}</div>
+          <div class="block-title">{{ languagePack.LiveBlock }}</div>
           <ul class="blockInformation">
             <li class="blockInformation-item" v-for="item in 9" :key="item">
               <img src="@/assets/img/bar.png" alt="" />
               <div class="basic">
-                <p>36895421{{ item + 1 }}<span>提案人propoasl</span></p>
-                <p>6s ago</p>
+                <p>36895421{{ item + 1 }}<span>{{languagePack.proposer}}propoasl</span></p>
+                <p>6s {{languagePack.xsecondsago}}</p>
               </div>
               <div class="btnRate">1.86Txns</div>
             </li>
           </ul>
           <div class="bottom">
             <button class="seeAll" @click="toGo('/blockcheck')">
-              {{ languagePack.text16 }}
+              {{ languagePack.AllBlocks }}
             </button>
           </div>
         </div>
 
         <!--查看所有验证节点-->
         <div class="topBlock">
-          <div class="block-title">{{ languagePack.text15 }}</div>
+          <div class="block-title">{{ languagePack.ElectedValidators }}</div>
           <ul class="nodeInformation">
             <li
               v-for="(item, index) in nodelist"
               :key="item.operator_address"
               class="nodeInformation_item"
             >
-              <div class="icon">Top{{ index + 1 }}</div>
+              <div class="icon">top{{ index + 1 }}</div>
               <div class="basic">
-                <p>当前验证节点{{ index + 1 }}</p>
-                <p>总质押{{ item.tokens }}uGHM</p>
+                <p>{{languagePack.ElectedValidators}}{{ index + 1 }}</p>
+                <p>{{languagePack.TotalStakes}}{{ item.tokens }}uGHM</p>
               </div>
-              <div class="btnRate">338.45% 佣金率</div>
+              <div class="btnRate">338.45% {{languagePack.ValidatorYield}}</div>
             </li>
           </ul>
           <div class="bottom">
             <button class="seeAll" @click="toGo('/validation')">
-              {{ languagePack.text17 }}
+              {{ languagePack.AllValidators }}
             </button>
           </div>
         </div>
@@ -144,10 +145,7 @@
 <script>
 import { bar } from "@/echarts/index.js";
 import * as echarts from "echarts";
-import {
-  allValidationNode,
-  getAddressTxs,
-} from "@/api/api.js";
+import { allValidationNode, getAddressTxs } from "@/api/api.js";
 import {
   getLatestBlock,
   allAdresQuantity,
@@ -174,20 +172,6 @@ export default {
         issueNum: "",
         pledgeNum: "",
       },
-      messageList: [
-        {
-          title: "GHM价格",
-          price: "0.48",
-          updown: "-5.29",
-          icon: "",
-        },
-        {
-          title: "交易额",
-          price: "0.48",
-          updown: "",
-          icon: "",
-        },
-      ],
       circulateTooltip: `在市场上实时流通的、公众手中的Token数量。实时
                         流通供应量 = 总发行量 - 锁仓的Token 其中，锁
                         仓的Token为所有锁仓状态的Token，包含当前委托
@@ -263,6 +247,23 @@ export default {
     circulationAndissueNum() {
       return (this.circulation / this.issueNum) * 100;
     },
+    messageList() {
+      const { Price, transactionVolume } = this.languagePack;
+      return [
+        {
+          title: Price,
+          price: "0.48",
+          updown: "-5.29",
+          icon: require("@/assets/img/home_icon1.png"),
+        },
+        {
+          title: transactionVolume,
+          price: "0.48",
+          updown: "",
+          icon: require("@/assets/img/home_icon2.png"),
+        },
+      ];
+    },
   },
 };
 </script>
@@ -295,6 +296,8 @@ export default {
   .block-message {
     width: 1280px;
     height: 128px;
+    padding: 37px 0 37px 70px;
+
     margin: 0 auto;
     transform: translateY(-25%);
     display: flex;
@@ -305,15 +308,11 @@ export default {
 
     .block-item {
       width: 50%;
-      height: 54px;
-      padding: 37px 0 37px 70px;
       display: flex;
       align-items: center;
       .blockicon {
         width: 64px;
         height: 64px;
-        background: url("../../assets/img/home_icon1.png");
-        background-size: 100% 100%;
       }
       .explain {
         padding-left: 23px;
@@ -333,12 +332,6 @@ export default {
           letter-spacing: 0;
         }
       }
-      &:nth-child(2) {
-        .blockicon {
-          background: url("../../assets/img/home_icon2.png");
-          background-size: 100% 100%;
-        }
-      }
     }
   }
 
@@ -351,7 +344,7 @@ export default {
     border-radius: 4px;
     .newest-data-item {
       padding: 0 64px 40px 64px;
-      height: 140px;
+      height: 180px;
       display: flex;
       flex-wrap: wrap;
 
@@ -393,7 +386,7 @@ export default {
   }
 
   .block-chart {
-    height: 90px;
+    height: 170px;
     padding: 40px 64px;
     display: flex;
     font-size: 12px;
@@ -595,7 +588,8 @@ export default {
       flex-direction: column;
       align-items: flex-start;
       transform: translateY(-10%);
-      height: 180px;
+      height: auto;
+      padding: 0;
       .block-item {
         padding: 16px;
       }

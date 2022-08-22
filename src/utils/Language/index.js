@@ -1,68 +1,150 @@
+import {contractEn,contractCn} from './contract'
+import {accountEn,accountCn} from './account'
+import {validationEn,validationCn} from './validation'
 export const Language = [
     {
-        text01: 'Home',
-        text02: 'Node',
-        text03: 'About',
-        text04: 'Moment',
-        text05: 'Contracts',
-        text06: 'Search by Address / Txn Hash / Block / Token',
-        text07: 'Hash',
-        text08: 'Block',
-        text09: 'Addresses',
-        text10: 'Token',
-        text11: 'Websites',
-        text12: 'LIVE BLOCK TIME(s)',
-        text13: 'LIVE BLOCKS TRANSACTIONS',
-        text14: 'Blocks',
-        text15: 'Elected Validators',
-        text16: 'View all block',
-        text17: 'View all Validator',
-        text18: 'PRODUCER',
-        text19: 'LIVE BLOCK HEIGHT',
-        text20: 'LIVE TRANSACTIONS',
-        text21: 'LIVE ADDRESS',
-        home: 'home',
-        Blockchain: 'blockchain',
+        /* 首页 */
+        Home: 'Home',
+        blockchain: 'blockchain',
+        TopAccounts: 'Top Accounts',
+        viewTransactions: 'view transactions',
+        viewBlock: 'view block',
+        SearchBox: 'Search by Token/hash/address/block',
         contract: 'contract',
         account: 'account',
-        Validationnode: 'Validation',
-        resources: 'resources',
+        Validators: 'Validators',
+        Resources: 'Resources',
+        Whitepaper: 'Whitepaper',
+        developerApi: 'developer api',
+        SDKdownload: 'SDK download',
+        Tendermint: 'Tendermint',
+        IBC: 'IBC',
+        contractCompiler: 'contract compiler',
         more: 'more',
-        Incirculation: 'Incirculation',
-        Pledgerate: 'Pledge rate',
-        Total: 'Total'
+        GovernableParameter: 'Governable Parameter',
+        DAOfundationAddress: 'DAO fundation address',
+        SubmitApplicattion: 'Submit Applicattion',
+        RPCInformation: 'RPC information',
+        faucet: 'faucet',
+        logIn: 'log in',
+        MainNet: 'Main Net',
+        TestNet: 'Test Net',
+        BlockExplorer: 'Block Explorer',
+        Filter: 'Filter',
+        address: 'address',
+        Tokens: 'Tokens',
+        Hash: 'Hash',
+        BlockHeight: 'Block Height',
+
+        //实时价格展示
+        Price: 'Price   ',
+        transactionVolume: 'transaction volume ',
+
+        LiveBlocktimes: 'Live Block times',
+        LiveTranransactions: 'Live Tranransactions',
+
+        //基本信息展示
+        Liveblockheight: 'Live block height',
+        Liveblocknodes: 'Live block nodes',
+        accumulatedtradingvolume: 'accumulated trading volume',
+        AverageTPSWithin10S: 'Average TPS Within 10S/Highest TPS',
+        CirculatingTotalSupply: 'Circulating/Total Supply',
+        StakingRate: 'Staking Rate',
+        LiveAddress: 'Live Address',
+
+        //实时出块列表
+        LiveBlock: 'Live Block',
+        proposer: 'proposer',
+        transactions: 'transactions',
+        xsecondsago: ' seconds ago',
+        AllBlocks: 'All Blocks',
+
+        //验证节点列表
+        ElectedValidators: 'Elected Validators',
+        TotalStakes: 'Total Stakes',
+        ValidatorYield: 'Validator Yield',
+        Rankx: 'Rank x',
+        AllValidators: 'All Validators',
+
+        /* 合约 */
+        ...contractEn,
+
+        /* 账户 */
+        ...accountEn,
+
+        /* 验证节点 */
+        ...validationEn
     },
     {
-        text01: '首页',
-        text02: '节点',
-        text03: '关于矩链',
-        text04: '矩链主网',
-        text05: '合同',
-        text06: '请输入地址/区块高度/区块哈希/交易哈希查询',
-        text07: '哈希',
-        text08: '块',
-        text09: '地址',
-        text10: '令牌',
-        text11: '网站',
-        text12: '实时出块时长(s)',
-        text13: '出块交易数',
-        text14: '实时出块区块',
-        text15: '当前出块节点',
-        text16: '查看所有区块',
-        text17: '查看所有验证节点',
-        text18: '出块节点',
-        text19: '当前区块高度',
-        text20: '累计交易笔数',
-        text21: '节点总数',
-        home: '主页',
-        Blockchain: '区块链',
+        /* 首页 */
+        Home: '首页',
+        blockchain: '节点',
+        TopAccounts: '顶级账户',
+        viewTransactions: '查看交易',
+        viewBlock: '查看区块',
+        SearchBox: '搜索Token/hash/adreess/block',
         contract: '合约',
         account: '账户',
-        Validationnode: '验证节点',
-        resources: '资源',
+        Validators: '验证节点',
+        Resources: '资源',
+        Whitepaper: '白皮书',
+        developerApi: '开发者api',
+        SDKdownload: 'SDK 下载',
+        Tendermint: 'Tendermint',
+        IBC: 'IBC',
+        contractCompiler: '合约编译器',
         more: '更多',
-        Incirculation: '流通量/总发行量',
-        Pledgerate: '质押率',
-        Total:'总量'
+        GovernableParameter: 'DAO可治理参数',
+        DAOfundationAddress: 'DAO基金会地址',
+        SubmitApplicattion: '提交上币申请',
+        RPCInformation: 'RPC信息',
+        faucet: '水龙头',
+        logIn: '登录',
+        MainNet: '主网络',
+        TestNet: '测试网络',
+        BlockExplorer: '隐士区块浏览器',
+        Filter: '所有过滤条件',
+        address: '地址',
+        Tokens: '货币',
+        Hash: '哈希',
+        BlockHeight: '区块号',
+
+        Price: 'GHM价格',
+        transactionVolume: '交易总额',
+
+        LiveBlocktimes: '实时出块时长（s）',
+        LiveTranransactions: '实时区块交易数',
+
+        //基本信息展示
+        Liveblockheight: '当前区块高度',
+        Liveblocknodes: '当前出块节点',
+        accumulatedtradingvolume: '累计交易笔数',
+        AverageTPSWithin10S: '10秒内平均TPS/瞬时最高TPS',
+        CirculatingTotalSupply: '流通量/总发行量',
+        StakingRate: '质押率',
+        LiveAddress: '地址数',
+
+        //实时出块列表
+        LiveBlock: '实时出块区块',
+        proposer: '提案人',
+        transactions: '交易数',
+        xsecondsago: ' 秒前',
+        AllBlocks: '查看所有区块',
+
+        //验证节点列表
+        ElectedValidators: '当前验证节点',
+        TotalStakes: '总质押',
+        ValidatorYield: ' x%年化率',
+        Rankx: ' 排名x',
+        AllValidators: '查看所有验证节点',
+
+        /* 合约 */
+        ...contractCn,
+
+        /* 账户 */
+        ...accountCn,
+
+        /* 验证节点 */
+        ...validationCn
     }
 ]

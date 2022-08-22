@@ -158,9 +158,28 @@ export function getAddressTxs(data) {
 
 
 //查询历史验证节点
-export function queryHistoryNode(){
+export function queryHistoryNode() {
     return Service({
-        url:'/cosmos/base/tendermint/v1beta1/node_info',
-        method:'GET'
+        url: '/cosmos/base/tendermint/v1beta1/node_info',
+        method: 'GET'
+    })
+}
+
+
+//查询顶级账户的数据信息
+export function queryAccountList(data) {
+    return service1({
+        url: '/api/browser/accountlist',
+        method: 'POST',
+        data
+    })
+}
+
+//查询顶级账户的数据信息
+export function queryTxList(data) {
+    return service1({
+        url: '/api/browser/txlist',
+        method: 'POST',
+        data
     })
 }

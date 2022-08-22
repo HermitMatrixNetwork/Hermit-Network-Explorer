@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import mixin from "@/mixins/index.vue";
+import mixin from "@/mixins";
 import { pastTime, debounce } from "@/utils/common.js";
 import { getHashContent } from "@/api/api.js";
 export default {

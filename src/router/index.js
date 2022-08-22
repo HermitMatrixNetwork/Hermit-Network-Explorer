@@ -20,6 +20,7 @@ import Hashdetail from '@/views/Detail/hash_detail/index.vue'
 import PunishmentNode from '@/views/validation/punishmentNode.vue'
 import HistoryNode from '@/views/validation/historyNode.vue'
 import RPC from '@/views/More/RPC.vue'
+import ContractDetail from '@/views/Contracts/detail.vue'
 
 Vue.use(VueRouter)
 
@@ -48,15 +49,15 @@ const routes = [
   {
     path: '/accounts',
     component: Accounts,
-    meta:{
+    meta: {
       keepAlive: true
     }
   },
   {
     path: '/validation',
     component: Validation,
-    meta:{
-      keepAlive:true
+    meta: {
+      keepAlive: true
     }
   },
   {
@@ -118,6 +119,10 @@ const routes = [
   {
     path: '/rpc',
     component: RPC
+  },
+  {
+    path: '/contract_detail',
+    component: ContractDetail
   }
 ]
 

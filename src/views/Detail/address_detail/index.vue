@@ -2,31 +2,31 @@
   <div class="address-detail">
     <div class="detail">
       <div class="detail-title">
-        地址：{{ address
+        {{languagePack.address}}：{{ address
         }}<img src="@/assets/img/copy.png" @click="Copy(address)" /><img
           src="@/assets/img/code.png"
         />
       </div>
       <div class="basic-column">
         <div class="basic-column-item">
-          <BasicTitle :title="'概览'">
+          <BasicTitle :title="languagePack.overview">
             <template #message>
               <div
                 class="messageBasic column-basic"
                 style="justify-content: flex-start"
               >
                 <div class="column">
-                  <p>总余额：</p>
+                  <p>{{languagePack.totalbalance}}：</p>
                   <span
                     >${{ (avaliable.balances[0].amount * 86) | toMoney }}</span
                   >
                 </div>
                 <div class="column">
-                  <p>GHM价格：</p>
+                  <p>{{languagePack.Price}}：</p>
                   <span>86</span>
                 </div>
                 <div class="column">
-                  <p>总交易次数：</p>
+                  <p>{{languagePack.thetotalnumberoftransactions}}：</p>
                   <span>{{ pagination }}</span>
                 </div>
               </div>
@@ -35,15 +35,15 @@
         </div>
 
         <div class="basic-column-item">
-          <BasicTitle :title="'详细'">
+          <BasicTitle :title="languagePack.details">
             <template #message>
               <div class="messageBasic column-basic">
                 <div class="column">
-                  <p>可用余额：</p>
+                  <p>{{languagePack.availablebalance}}：</p>
                   <span>{{ avaliable.balances[0].amount | toMoney }} GHM</span>
                 </div>
                 <div class="column">
-                  <p>委托：</p>
+                  <p>{{languagePack.delegation}}：</p>
                   <span
                     >{{
                       delegated.delegation_responses.length == 0
@@ -57,7 +57,7 @@
                   >
                 </div>
                 <div class="column">
-                  <p>提取奖励：</p>
+                  <p>{{languagePack.receivereward}}：</p>
                   <span
                     >{{
                       reward.total.length == 0
@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="column">
-                  <p>解除绑定期：</p>
+                  <p>{{languagePack.unbind}}：</p>
                   <span
                     >{{
                       unbonding.length == 0 ? "0" : "unbonding  GHM"
@@ -77,7 +77,7 @@
                   >
                 </div>
                 <div class="column">
-                  <p>佣金：</p>
+                  <p>{{languagePack.commission}}：</p>
                   <span>{{
                     unbonding.length == 0 ? "0" : "unbonding  GHM"
                   }}</span>
@@ -191,7 +191,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="交易哈希" prop="txhash" width="180">
+            <el-table-column :label="languagePack.transactionhash" prop="txhash" width="180">
               <template slot-scope="scope">
                 <p
                   class="specialFont"
@@ -201,20 +201,20 @@
                 </p>
               </template>
             </el-table-column>
-            <el-table-column label="操作类型" align="center">
+            <el-table-column :label="languagePack.operationtype" align="center">
               <template slot-scope="scope">
                 <div class="dealType">
                   {{ scope.row.type == "MsgSend" ? "转账" : scope.row.type }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="区块">
+            <el-table-column :label="languagePack.block">
               <template slot-scope="scope">
                 <p class="specialFont">{{ scope.row.height | toMoney }}</p>
               </template>
             </el-table-column>
-            <el-table-column label="时长" prop="timestamp"></el-table-column>
-            <el-table-column label="发起地址" width="168">
+            <el-table-column :label="languagePack.time" prop="timestamp"></el-table-column>
+            <el-table-column :label="languagePack.startaddress" width="168">
               <template slot-scope="scope">
                 <div class="specialFont">
                   {{ scope.row.from_address | sliceAddress }}
@@ -228,14 +228,14 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="目标地址" width="168">
+            <el-table-column :label="languagePack.targetaddress" width="168">
               <template slot-scope="scope">
                 <p class="specialFont">
                   {{ scope.row.to_address | sliceAddress }}
                 </p>
               </template>
             </el-table-column>
-            <el-table-column label="交易额" width="186" align="right">
+            <el-table-column :label="languagePack.Transactions" width="186" align="right">
               <template slot-scope="scope">
                 <div>
                   <p v-if="scope.row.amount">
@@ -245,7 +245,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="手续费（GHM）" align="center" width="163">
+            <el-table-column :label="languagePack.TransactionFee" align="center" width="163">
               <template slot-scope="scope">
                 <div>{{ scope.row.fee | toMoney }} GHM</div>
               </template>
@@ -279,7 +279,7 @@ import {
   getAccountsBasis,
   getAddressTxs,
 } from "@/api/api.js";
-import mixin from "@/mixins/index.vue";
+import mixin from "@/mixins";
 export default {
   name: "addressDetail",
   mixins: [mixin],
@@ -402,7 +402,11 @@ export default {
       );
     },
   },
-  computed: {},
+  computed: {
+    languagePack(){
+      return this.$store.state.Language
+    }
+  },
   watch: {},
 };
 </script>

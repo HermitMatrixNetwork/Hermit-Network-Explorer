@@ -14,6 +14,7 @@ import TabBar from "@/components/tabBar/index.vue";
 import Bottom from "@/components/bottom/";
 import "element-ui/lib/theme-chalk/display.css";
 import "@/assets/css/common.scss";
+import '@/assets/css/init.css'
 export default {
   components: { TabBar, Bottom },
   data() {

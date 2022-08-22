@@ -1,0 +1,71 @@
+export const contractEn = {
+    contract: "contract",
+    overview: "overview",
+    thenumberofusers: "the number of users",
+    deployedcontracts: "deployed contracts",
+    contractID: "contract ID",
+    contractname: "contract name",
+    operation: "operation",
+    _thenumberofusers: "the number of users",
+    TotalValueLocked: "Total Value Locked",
+    x: "x",
+
+    /* 合约详细信息 */
+    contractinformation: "contract information",
+    contractaddress: "contract address",
+    nametag: "name tag",
+    contractnumber: "contract number",
+    developer: "developer",
+    datahash: "data hash",
+    constructor: "constructor",
+    sourcecode: "source code",
+    contractbalance: "contract balance",
+    thepercentageoflockedpositions: "the percentage of locked positions??",
+    Totalnumberofoperations: "Total number of operations",
+    totalvalueoflockedposition: "total value of locked position",
+
+    contracthistory: 'contract history',
+    xxtimesintotal: 'xx times in total',
+    useraddress: 'user address',
+    operationtime: 'operation time',
+    statussucceededfailed: 'status: succeeded/failed',
+    details: 'details',
+    x: 'x',
+
+}
+
+export const contractCn = {
+    contract: "合约",
+    overview: "概览",
+    thenumberofusers: "总用户数",
+    deployedcontracts: "已部署合约",
+    contractID: "合约ID",
+    contractname: "合约名称",
+    operation: "运算次数",
+    _thenumberofusers: "用户数量",
+    TotalValueLocked: "总锁仓价值",
+    x: "显示x条",
+
+    /* 合约详细信息 */
+    contractinformation: "合约信息",
+    contractaddress: "合约地址",
+    nametag: "名称标签",
+    contractnumber: "合约编号",
+    developer: "创建者",
+    datahash: "数据哈希",
+    constructor: "构造器",
+    sourcecode: "源代码",
+    contractbalance: "合约余额",
+    thepercentageoflockedpositions: "供应锁仓百分比",
+    Totalnumberofoperations: "总运算次数",
+    totalvalueoflockedposition: "合约总锁仓价值",
+
+    contracthistory: '合约交易历史',
+    xxtimesintotal: '总共x次',
+    useraddress: '用户地址',
+    operationtime: '操作时间',
+    statussucceededfailed: '状态：成功/失败',
+    details: '详情',
+    x: '显示x条',
+}
+

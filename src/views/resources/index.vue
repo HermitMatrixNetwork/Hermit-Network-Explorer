@@ -72,7 +72,7 @@ export default {};
   width: 1280px;
   &-title {
     padding: 16px 0;
-    height: 28px;
+    height: 60px;
     font-weight: 500;
     font-size: 20px;
     color: rgba(20, 37, 62, 0.85);
@@ -82,8 +82,8 @@ export default {};
       margin-bottom: 16px;
     }
     .basic {
-      width: 1232px;
-      height: 168px;
+      width: 1280px;
+      height: 216px;
       font-weight: 400;
       font-size: 12px;
       color: rgba(20, 37, 62, 0.85);

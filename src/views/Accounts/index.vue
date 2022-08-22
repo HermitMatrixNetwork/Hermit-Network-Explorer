@@ -2,10 +2,10 @@
   <div>
     <div class="accounts_chart">
       <div class="chart_Title">
-        账户增长
+        {{languagePack.increaseinaccounts}}
         <div class="navs">
           <span
-            v-for="(item, index) in ['近7天', '近30天', '近60天', '近90天']"
+            v-for="(item, index) in [languagePack.days7, languagePack.days30, languagePack.days60, languagePack.days90]"
             :key="item"
             :class="navIndex == index ? 'selectnav' : ''"
             @click="chartsChange(index)"
@@ -28,8 +28,8 @@
         :row-style="{ height: '58px' }"
         v-else
       >
-        <el-table-column prop="id" label="排名" width="80"></el-table-column>
-        <el-table-column label="地址" width="505px">
+        <el-table-column prop="id" :label="languagePack.ranking" width="80"></el-table-column>
+        <el-table-column :label="languagePack.address" width="505px">
           <template slot-scope="scope">
             <a
               @click="detail(scope.row)"
@@ -42,16 +42,16 @@
         <el-table-column
           prop="@type"
           width="244px"
-          label="标签"
+          :label="languagePack.labels"
         ></el-table-column>
-        <el-table-column prop="amount" label="余额" width="270" align="right">
+        <el-table-column prop="amount" :label="languagePack.balance" width="270" align="right">
           <template slot-scope="scope">
             <p>{{ scope.row.amount | toMoney }} GHM</p>
           </template>
         </el-table-column>
         <el-table-column
           prop="percent"
-          label="用户数量"
+          :label="percentage"
           align="right"
         ></el-table-column>
       </el-table>
@@ -198,6 +198,11 @@ export default {
       }
     },
   },
+  computed:{
+    languagePack(){
+      return this.$store.state.Language
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -210,7 +215,7 @@ export default {
   box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
   border-radius: 4px;
   .chart_Title {
-    height: 20px;
+    height: 52px;
     font-weight: bold;
     font-size: 14px;
     color: rgba(20, 37, 62, 0.85);
