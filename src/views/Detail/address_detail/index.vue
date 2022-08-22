@@ -7,55 +7,81 @@
           src="@/assets/img/code.png"
         />
       </div>
-      <div class="column">
-        <div class="column-item">
+      <div class="basic-column">
+        <div class="basic-column-item">
           <BasicTitle :title="'概览'">
             <template #message>
-              <div class="column-basic">
-                <p>
-                  总余额： ${{ (avaliable.balances[0].amount * 86) | toMoney }}
-                </p>
-                <p>GHM价格:86</p>
-                <p>总交易次数:{{ pagination }}</p>
+              <div
+                class="messageBasic column-basic"
+                style="justify-content: flex-start"
+              >
+                <div class="column">
+                  <p>总余额：</p>
+                  <span
+                    >${{ (avaliable.balances[0].amount * 86) | toMoney }}</span
+                  >
+                </div>
+                <div class="column">
+                  <p>GHM价格：</p>
+                  <span>86</span>
+                </div>
+                <div class="column">
+                  <p>总交易次数：</p>
+                  <span>{{ pagination }}</span>
+                </div>
               </div>
             </template>
           </BasicTitle>
         </div>
 
-        <div class="column-item">
+        <div class="basic-column-item">
           <BasicTitle :title="'详细'">
             <template #message>
-              <div class="column-basic">
-                <p>
-                  可用余额：{{ avaliable.balances[0].amount | toMoney }} GHM
-                </p>
-                <p>
-                  委托：{{
-                    delegated.delegation_responses.length == 0
-                      ? "0"
-                      : (
-                          delegated.delegation_responses[0].delegation.shares *
-                          1
-                        ).toFixed(5)
-                  }}
-                  GHM
-                </p>
-                <p>
-                  提取奖励：{{
-                    reward.total.length == 0
-                      ? 0
-                      : (reward.total[0].amount * 1).toFixed(5)
-                  }}
-                  GHM
-                </p>
-                <p>
-                  解除绑定期：{{
+              <div class="messageBasic column-basic">
+                <div class="column">
+                  <p>可用余额：</p>
+                  <span>{{ avaliable.balances[0].amount | toMoney }} GHM</span>
+                </div>
+                <div class="column">
+                  <p>委托：</p>
+                  <span
+                    >{{
+                      delegated.delegation_responses.length == 0
+                        ? "0"
+                        : (
+                            delegated.delegation_responses[0].delegation
+                              .shares * 1
+                          ).toFixed(5)
+                    }}
+                    GHM</span
+                  >
+                </div>
+                <div class="column">
+                  <p>提取奖励：</p>
+                  <span
+                    >{{
+                      reward.total.length == 0
+                        ? 0
+                        : (reward.total[0].amount * 1).toFixed(5)
+                    }}
+                    GHM</span
+                  >
+                </div>
+
+                <div class="column">
+                  <p>解除绑定期：</p>
+                  <span
+                    >{{
+                      unbonding.length == 0 ? "0" : "unbonding  GHM"
+                    }}GHM</span
+                  >
+                </div>
+                <div class="column">
+                  <p>佣金：</p>
+                  <span>{{
                     unbonding.length == 0 ? "0" : "unbonding  GHM"
-                  }}
-                </p>
-                <p>
-                  佣金 ：{{ unbonding.length == 0 ? "0" : "unbonding  GHM" }}
-                </p>
+                  }}</span>
+                </div>
               </div>
             </template>
           </BasicTitle>
@@ -80,6 +106,7 @@
         </div>
         <div class="detail-table-body">
           <el-table
+            v-loading="loading"
             style="width: 100%"
             height="612px"
             size="mini"
@@ -94,9 +121,9 @@
               <template slot-scope="scope">
                 <div class="tableEyeBackground">
                   <el-popover
-                    placement="right"
-                    :offset="150"
-                    :visible-arrow="false"
+                    placement="right-start"
+                    :offset="50"
+                    :visible-arrow="true"
                     width="300px"
                     trigger="click"
                   >
@@ -258,6 +285,7 @@ export default {
   mixins: [mixin],
   data() {
     return {
+      loading:true,
       address: "",
       currentPage: 1,
       pageSize: 10, //初始每页数量
@@ -322,6 +350,21 @@ export default {
       tx_responses.forEach((item) => {
         let { from_address, to_address, amount } = item.tx.body.messages[0];
         let type = item.tx.body.messages[0]["@type"].split(".").pop();
+        switch (type) {
+          case "MsgSend":
+            type = "发送";
+            break;
+          case "MsgVote":
+            type = "投票";
+            break;
+          case "MsgCreateValidator":
+            type = "创建验证器";
+            break;
+          case "RaAuthenticate":
+            type = "身份验证";
+          default:
+            break;
+        }
         arr.push({
           txhash: item.txhash,
           type: type,
@@ -342,6 +385,9 @@ export default {
       // console.log('hashList',this.hashList);
       this.TxsList = this.initTxsList.slice(0, this.pageSize);
       this.pagination = pagination.total * 1;
+      setTimeout(()=>{
+        this.loading = false
+      },500)
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -382,24 +428,20 @@ export default {
       cursor: pointer;
     }
   }
-  .column {
+  .basic-column {
     margin: 16px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     &-item {
       width: 632px;
-      //   height: 296px;
+      height: 296px;
     }
-    &-basic {
-      height: 200px;
-      > p {
-        height: 28px;
-        line-height: 28px;
-        margin-bottom: 16px;
-        font-weight: 400;
-        font-size: 12px;
-        color: rgba(20, 37, 62, 0.85);
+    .column-basic:nth-child(1) {
+      height: 212px;
+      .column {
+        height: 40px;
+        line-height: 40px;
       }
     }
   }
@@ -420,6 +462,12 @@ export default {
     }
     &-body {
       height: 612px;
+    }
+
+    .dealType {
+      background: #f8f9fa;
+      border: 1px solid #e9eaef;
+      border-radius: 2px;
     }
   }
 }

@@ -84,13 +84,6 @@ export function againPledgemsg(address) {    //重新质押的信息
     })
 }
 
-export function getLatestBlock() {    //获取最新出块
-    return Service({
-        url: '/blocks/latest',
-        method: 'GET'
-    })
-}
-
 export function getHashContent(hash) {    //通过hash获取
     return Service({
         url: `/cosmos/tx/v1beta1/txs/${hash}`,
@@ -112,26 +105,11 @@ export function getTokenContent(data) {    //合约地址
     })
 }
 
-export function totalCirculation() {     //总发行量
-    return Service({
-        url: '/cosmos/bank/v1beta1/supply',
-        method: 'GET'
-    })
-}
 
-export function pledgeParameter() {      //质押参数  实时质押信息
-    return Service({
-        url: '/cosmos/staking/v1beta1/params',
-        method: 'GET'
-    })
-}
 
-export function allAdresQuantity() {     //总地址数量
-    return Service({
-        url: '/cosmos/auth/v1beta1/accounts',
-        method: 'GET'
-    })
-}
+
+
+
 
 export function allValidationNode() {     //获取所有验证节点
     return Service({
@@ -147,7 +125,7 @@ export function validationNodeData(address) {  //验证器信息
     })
 }
 
-export function validationEntrust(address) {   //验证器的委托信息
+export function validationEntrust(address) {   //获取节点委托数
     return Service({
         url: `/cosmos/staking/v1beta1/validators/${address}/delegations`,
         method: 'GET'
@@ -166,8 +144,6 @@ export function newestBlocks() {
 //各个节点的具体信息
 // export function 
 
-
-
 //查询地址的交易信息
 export function getAddressTxs(data) {
     return Service({
@@ -179,10 +155,13 @@ export function getAddressTxs(data) {
     })
 }
 
-//查询最新的节点信息
-export function querylatestNodeMessage(){
+
+//查询历史验证节点
+export function queryHistoryNode(){
     return Service({
-        url:'/cosmos/base/tendermint/v1beta1/node_info',
-        method:'GET'
+        url:`/cosmos/tx/v1beta1/txs?events=message.module = 'staking'&events=message.action='create_validator'`,
+        method:'get'
     })
 }
+
+

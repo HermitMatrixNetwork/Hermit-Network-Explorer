@@ -5,7 +5,7 @@
       :style="{ height: $route.path == '/home' ? '60px' : '110px' }"
     >
       <img
-        src="../../assets/img/top-bar_logo.png"
+        src="img/top-bar_logo.png"
         class="logo_style"
         @click="toGo('/home')"
       />
@@ -41,13 +41,13 @@
               }}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>白皮书</el-dropdown-item>
-              <el-dropdown-item divided command="/developapi"
+              <!-- <el-dropdown-item>白皮书</el-dropdown-item> -->
+              <el-dropdown-item command="/developapi"
                 >开发者API</el-dropdown-item
               >
-              <el-dropdown-item>SDK下载</el-dropdown-item>
-              <el-dropdown-item>Tendermint</el-dropdown-item>
-              <el-dropdown-item>IBC</el-dropdown-item>
+              <!-- <el-dropdown-item>SDK下载</el-dropdown-item> -->
+              <!-- <el-dropdown-item>Tendermint</el-dropdown-item> -->
+              <!-- <el-dropdown-item>IBC</el-dropdown-item> -->
               <el-dropdown-item>合约编译器</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -121,13 +121,9 @@
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>白皮书</el-dropdown-item>
-                <el-dropdown-item divided command="/developapi"
+                <el-dropdown-item command="/developapi"
                   >开发者API</el-dropdown-item
                 >
-                <el-dropdown-item>SDK下载</el-dropdown-item>
-                <el-dropdown-item>Tendermint</el-dropdown-item>
-                <el-dropdown-item>IBC</el-dropdown-item>
                 <el-dropdown-item>合约编译器</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>

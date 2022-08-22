@@ -31,7 +31,8 @@ import {
     Collapse,
     CollapseItem,
     Step,
-    Steps
+    Steps,
+    Loading
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(Button)
@@ -66,6 +67,7 @@ Vue.use(Collapse)
 Vue.use(CollapseItem)
 Vue.use(Step)
 Vue.use(Steps)
+Vue.use(Loading)
 
 
 

@@ -47,11 +47,17 @@ const routes = [
   },
   {
     path: '/accounts',
-    component: Accounts
+    component: Accounts,
+    meta:{
+      keepAlive: true
+    }
   },
   {
     path: '/validation',
-    component: Validation
+    component: Validation,
+    meta:{
+      keepAlive:true
+    }
   },
   {
     path: '/more',

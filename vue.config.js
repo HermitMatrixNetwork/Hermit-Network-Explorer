@@ -3,6 +3,7 @@ const autoprefixer = require('autoprefixer')
 module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave: false,
+  assetsDir:'assets',
   css: {
     loaderOptions: {
       postcss: {
@@ -35,6 +36,10 @@ module.exports = defineConfig({
     }
   },
   devServer: {
+    port:8080,
+    host: 'localhost',
+    open:true,
+    https:false,
     proxy: {  //代理服务器
       '/api': {
         target: 'http://158.247.237.78:8888',

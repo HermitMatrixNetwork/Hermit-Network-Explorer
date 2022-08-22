@@ -5,12 +5,13 @@ const ConfigBaseURL = 'http://45.32.116.172:1317' //默认路径，这里也可�
 let loadingInstance = null //这里是loading
 //使用create方法创建axios实例
 export const Service = axios.create({
-  timeout: 10000, // 请求超时时间
+  timeout: 100000, // 请求超时时间
   baseURL: ConfigBaseURL,
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'
   }
 })
+
 // 添加请求拦截器
 Service.interceptors.request.use(config => {
   // loadingInstance = Loading.service({

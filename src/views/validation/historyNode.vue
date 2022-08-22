@@ -3,7 +3,7 @@
     <div class="punishment-main">
       <div class="title">历史验证节点</div>
       <div class="punishment-main-table">
-        <div class="header">总共一个节点</div>
+        <div class="header">总共{{list.length}}个节点</div>
         <div class="tableBody">
           <el-table
             size="mini"
@@ -48,20 +48,19 @@
 </template>
 
 <script>
+import { queryHistoryNode } from '@/api/api'
 export default {
   data() {
     return {
-      list: [
-        {
-          title: "ghhhm",
-          num: 135,
-          block: 0,
-          time: "23132",
-          height: "875",
-        },
-      ],
+      list: [],
     };
   },
+  async mounted(){
+
+    const res = await queryHistoryNode()
+    console.log(res);
+    this.list = res.tx_responses
+  }
 };
 </script>
 
@@ -95,6 +94,19 @@ export default {
     }
     .tableBody {
       height: 612px;
+    }
+  }
+}
+
+
+@media screen and (max-width:598px) {
+  .punishment-main {
+    .title{
+      padding-left: 10px ;
+    }
+    width: 100%;
+    &-table{
+      width: 100%;
     }
   }
 }

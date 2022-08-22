@@ -3,7 +3,6 @@
     <div id="setting_Image">
       <div class="content">
         <SearchBox></SearchBox>
-
         <div class="banner"></div>
       </div>
     </div>
@@ -35,24 +34,24 @@
           <!--当前区块高度-->
           <div @click="checkBlock_Detail">
             <p>{{ languagePack.text19 }}</p>
-            <h3>{{ blockHeight }}</h3>
+            <span>{{ basicData.blockHeight }}</span>
           </div>
           <!--当前出块节点-->
           <div>
             <p>{{ languagePack.text15 }}</p>
-            <h3>{{ latestNode }}</h3>
+            <span>{{ basicData.latestNode }}</span>
           </div>
 
           <!--累计交易笔数-->
-          <div>
+          <div @click="toGo('/tsx')">
             <p>{{ languagePack.text20 }}</p>
-            <h3>{{ totalNum }}</h3>
+            <span>{{ basicData.detailNum }}</span>
           </div>
 
           <!--10秒内平均TPS/瞬时最高TPS-->
           <div>
             <p>10秒内平均TPS/瞬时最高TPS</p>
-            <h3>{{ blockHeight }}</h3>
+            <span>{{ basicData.blockHeight }}</span>
           </div>
 
           <!--流通量-->
@@ -71,24 +70,24 @@
               </el-tooltip>
               /{{ languagePack.Total }}
             </p>
-            <h3>
-              {{ (circulation / 1e6).toFixed(2) + "M" }}/{{
-                (issueNum / 1e6).toFixed(2) + "M"
+            <span>
+              {{ (basicData.circulation / 1e6).toFixed(2) + "M" }}/{{
+                (basicData.issueNum / 1e6).toFixed(2) + "M"
               }}
-            </h3>
+            </span>
             <!-- <el-progress :percentage="circulationAndissueNum" text-inside></el-progress> -->
           </div>
 
           <!--质押率-->
           <div>
             <p>{{ languagePack.Pledgerate }}</p>
-            <h3>{{ Pledgerate }}% /{{ issueNum }}</h3>
+            <span>{{ basicData.Pledgerate }}% /{{ basicData.issueNum }}</span>
           </div>
 
           <!--地址数-->
           <div>
-            <p>{{ languagePack.text19 }}</p>
-            <h3>{{ totalNum }}</h3>
+            <p>地址数</p>
+            <span>{{ basicData.totalNum }}</span>
           </div>
         </div>
       </div>
@@ -108,7 +107,9 @@
             </li>
           </ul>
           <div class="bottom">
-            <button class="seeAll">{{ languagePack.text16 }}</button>
+            <button class="seeAll" @click="toGo('/blockcheck')">
+              {{ languagePack.text16 }}
+            </button>
           </div>
         </div>
 
@@ -130,7 +131,9 @@
             </li>
           </ul>
           <div class="bottom">
-            <button class="seeAll">{{ languagePack.text17 }}</button>
+            <button class="seeAll" @click="toGo('/validation')">
+              {{ languagePack.text17 }}
+            </button>
           </div>
         </div>
       </div>
@@ -142,32 +145,35 @@
 import { bar } from "@/echarts/index.js";
 import * as echarts from "echarts";
 import {
+  allValidationNode,
+  getAddressTxs,
+} from "@/api/api.js";
+import {
   getLatestBlock,
   allAdresQuantity,
   pledgeParameter,
   totalCirculation,
-  allValidationNode,
   querylatestNodeMessage,
-} from "@/api/api.js";
+} from "@/api/home.js";
+import mixin from "@/mixins";
 export default {
+  mixins: [mixin],
   name: "Home",
   data() {
     return {
       select: "1",
-      timer: false,
-      aa: "",
-      blockHeight: 0,
       timer2: "",
-      totalNum: 0,
-      issueNum: "",
-      pledgeNum: "",
-      outNode: "",
-      circulation: "", //流通量
-      Pledgerate: "", //质押率
-      nodelist: "", //当前验证节点
-      latestNode: "", //当前出块节点
-      circulateTooltip:
-        "在市场上实时流通的、公众手中的Token数量。实时流通供应量 = 总发行量 - 锁仓的Token 其中，锁仓的Token为所有锁仓状态的Token，包含当前委托或处于绑定解锁期的锁仓状态的Token。",
+      nodelist: "", //当前验证节点列表
+      basicData: {
+        blockHeight: 0, //当前区块高度
+        latestNode: "", //当前出块节点
+        detailNum: "", //累计交易笔数
+        circulation: "", //流通量
+        Pledgerate: "", //质押率
+        totalNum: 0,
+        issueNum: "",
+        pledgeNum: "",
+      },
       messageList: [
         {
           title: "GHM价格",
@@ -182,6 +188,10 @@ export default {
           icon: "",
         },
       ],
+      circulateTooltip: `在市场上实时流通的、公众手中的Token数量。实时
+                        流通供应量 = 总发行量 - 锁仓的Token 其中，锁
+                        仓的Token为所有锁仓状态的Token，包含当前委托
+                        或处于绑定解锁期的锁仓状态的Token。`,
     };
   },
   created() {
@@ -191,20 +201,21 @@ export default {
   },
   mounted() {
     let charts = document.querySelectorAll(".barChart");
-    charts.forEach((item) => {
-      bar(echarts.init(item));
-    });
+    // charts.forEach((item) => {
+    //   bar(echarts.init(item));
+    // });
+    bar(charts);
   },
   methods: {
     //获取当前区块高度
     async getnowBlockHeight() {
       const res = await getLatestBlock();
-      this.blockHeight = res.block.last_commit.height;
+      this.basicData.blockHeight = res.block.last_commit.height;
     },
     checkBlock_Detail() {
       this.$router.push({
         path: "block_detail",
-        query: { height: this.blockHeight },
+        query: { height: this.basicData.blockHeight },
       });
     },
     //获取数据
@@ -212,33 +223,34 @@ export default {
       const res = await allAdresQuantity(); //总地址数
       const issueNum = await totalCirculation(); //获取总发行量
       const pledgeNum = await pledgeParameter(); //获取质押参数
-      this.totalNum = res.pagination.total; //总地址数量
-      this.issueNum = issueNum.supply[0].amount;
-      this.pledgeNum = pledgeNum.params.historical_entries; //质押参数
+      const latestNode = await querylatestNodeMessage();
+      // const detailNum = await getAddressTxs(`message.module = 'bank'`);  //获取交易信息
+      // this.totalNum = res.pagination.total; //总地址数量
+      // this.issueNum = issueNum.supply[0].amount;
+      // this.pledgeNum = pledgeNum.params.historical_entries; //质押参数
       //  流通量 = 总发行量 -  质押量
-      this.circulation = this.issueNum - this.pledgeNum;
-      // console.log(
-      //   "流通量",
-      //   this.circulation,
-      //   "总发行量",
-      //   this.issueNum,
-      //   "质押量",
-      //   this.pledgeNum
-      // );
+      // this.circulation = this.issueNum - this.pledgeNum;
+
+      this.basicData = {
+        ...this.basicData,
+        totalNum: res.pagination.total, //总地址数量
+        issueNum: issueNum.supply[0].amount, //总发行量
+        pledgeNum: pledgeNum.params.historical_entries, //质押参数
+        circulation:
+          issueNum.supply[0].amount - pledgeNum.params.historical_entries, //流通量 = 总发行量 - 质押量
+        Pledgerate: (
+          pledgeNum.params.historical_entries / issueNum.supply[0].amount
+        ).toFixed(2), //质押率
+        latestNode: latestNode.default_node_info.moniker, //最新出块节点
+        detailNum: 63,
+      };
       //质押率
-      this.Pledgerate = (this.pledgeNum / this.issueNum).toFixed(2);
+      // this.Pledgerate = (this.pledgeNum / this.issueNum).toFixed(2);
 
       // console.log('总地址数量',res);
       const nodelist = await allValidationNode();
       this.nodelist = nodelist.validators;
       console.log("节点信息", nodelist);
-
-      const latestNode = await querylatestNodeMessage();
-      console.log(latestNode);
-      const {
-        default_node_info: { moniker },
-      } = latestNode;
-      this.latestNode = moniker;
     },
   },
   beforeDestroy() {
@@ -259,7 +271,6 @@ export default {
   width: 100%;
   background: #ffffff;
 }
-
 #setting_Image {
   min-height: 277px;
   background: url("../../assets/img/home_background.png");
@@ -272,12 +283,7 @@ export default {
     align-items: center;
     justify-content: space-between;
   }
-  .inputVal {
-    width: 768px;
-  }
-
   .banner {
-    text-align: center;
     width: 300px;
     height: 140px;
     background: #515151;
@@ -292,8 +298,6 @@ export default {
     margin: 0 auto;
     transform: translateY(-25%);
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     background: #ffffff;
     border: 1px solid #e9eaef;
     box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
@@ -342,7 +346,6 @@ export default {
     height: 350px;
     width: 1280px;
     margin: -16px auto;
-    background: #ffffff;
     border: 1px solid #e9eaef;
     box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
     border-radius: 4px;
@@ -365,13 +368,16 @@ export default {
           letter-spacing: 0;
           margin-bottom: 8px;
         }
-        h3 {
+        span {
           height: 19px;
-          font-family: DIN-Medium;
-          font-weight: 500;
+          font-weight: 560;
           font-size: 16px;
           color: rgba(20, 37, 62, 0.85);
           letter-spacing: 0;
+          cursor: pointer;
+          &:hover {
+            color: #1e42ed;
+          }
         }
       }
       .circulate {
@@ -390,9 +396,7 @@ export default {
     height: 90px;
     padding: 40px 64px;
     display: flex;
-    align-items: center;
     font-size: 12px;
-    font-weight: 400;
     color: rgba(20, 37, 62, 0.45);
     div {
       flex: 1;
@@ -413,10 +417,8 @@ export default {
     .topBlock {
       width: 630px;
       height: 100%;
-      background: #ffffff;
       position: relative;
       height: 838px;
-      background: #ffffff;
       border: 1px solid #e9eaef;
       box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
       border-radius: 4px;
@@ -666,6 +668,7 @@ export default {
   cursor: pointer;
 }
 </style>
+
 <style>
 /* 文字提示弹窗样式 */
 .circulateTooltipStyle {

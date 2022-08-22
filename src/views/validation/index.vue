@@ -1,4 +1,4 @@
-<template>
+<template ref="test">
   <div class="validation">
     <div class="validationMain">
       <h3 class="title">验证节点</h3>
@@ -14,11 +14,11 @@
                 </div>
                 <div class="column">
                   <p>活跃节点数：</p>
-                  <span></span>
+                  <span>{{activeNode.length}}</span>
                 </div>
                 <div class="column">
                   <p>候选节点数：</p>
-                  <span></span>
+                  <span>{{candidate.length}}</span>
                 </div>
               </div>
             </template>
@@ -30,11 +30,11 @@
               <div class="messageBasic" style="height: 124px">
                 <div class="column">
                   <p>总质押：</p>
-                  <span>{{ pledgeMessage.pledgeNum }} GHM</span>
+                  <span>{{ pledgeMessage.pledgeNum | toMoney}} GHM</span>
                 </div>
                 <div class="column">
                   <p>接收委托量：</p>
-                  <span>{{ pledgeMessage.issueNum }} GHM</span>
+                  <span>{{ pledgeMessage.issueNum | toMoney}} GHM</span>
                 </div>
                 <div class="column">
                   <p>质押率：</p>
@@ -78,6 +78,7 @@
             height="612px"
             :row-style="{ height: '58px' }"
             @row-click="TableClick"
+            v-loading="loading"
           >
             <el-table-column
               label="排名"
@@ -113,11 +114,8 @@
                         scope.row.status == 'BONDED' ? '#55C499' : '#ED422B',
                     }"
                   />
-                  {{
-                    scope.row.status == "BONDED" && scope.row.jailed !== true
-                      ? "活跃中"
-                      : "候选中"
-                  }}
+                  {{scope.row.status == "BONDED"? "活跃中"
+                      : scope.row.status == "UNBONDING"?"候选中":"共识中"}}
                 </div>
               </template>
             </el-table-column>
@@ -146,14 +144,14 @@
               label="委托者数"
               width="120"
               align="right"
-              prop="entrustPerson"
+              prop="count"
             ></el-table-column>
-            <el-table-column
+            <!-- <el-table-column
               label="活跃度"
               width="80"
               prop="active"
-            ></el-table-column>
-            <el-table-column label="佣金">
+            ></el-table-column> -->
+            <el-table-column label="佣金" align="center">
               <template slot-scope="scope">
                 <p>{{ scope.row.commission * 100 }} %</p>
               </template>
@@ -181,14 +179,15 @@
 <script>
 import {
   allValidationNode,
-  pledgeParameter,
-  totalCirculation,
+  validationEntrust,
 } from "@/api/api.js";
+import {pledgeParameter,totalCirculation} from '@/api/home.js'
 import mixin from "@/mixins/index.vue";
 export default {
   mixins: [mixin],
   data() {
     return {
+      loading:true,
       searchValue: "",
       currentPage2: 0,
       screenIndex: 0,
@@ -200,6 +199,8 @@ export default {
       },
       nodeList: [],
       newNodeList: [],
+      activeNode:0,  //活跃节点数
+      candidate:0, //候选节点数
     };
   },
   created() {
@@ -212,7 +213,7 @@ export default {
       const res = await allValidationNode();
       console.log("获取所有验证节点信息", res);
       let arr = [];
-      res.validators.forEach((item) => {
+      res.validators.forEach(async (item) => {
         let {
           description: { moniker },
           status,
@@ -222,6 +223,9 @@ export default {
           operator_address,
           commission,
         } = item;
+
+        // let a = await validationEntrust(operator_address);
+        // let delegateCount = a.delegation_responses.length;
         arr.push({
           moniker,
           status: status.split("_").pop(),
@@ -233,8 +237,16 @@ export default {
         });
       });
       this.nodeList = arr.sort((a, b) => b.tokens - a.tokens);
+      this.delegateCount()
+
+      this.activeNode = arr.filter(item=>item.status === "BONDED") 
+      this.candidate = arr.filter(item=>item.status == "UNBONDING")
+
       // console.log(this.nodeList);
-      this.newNodeList = JSON.parse(JSON.stringify(this.nodeList));
+      setTimeout(()=>{
+        this.newNodeList = JSON.parse(JSON.stringify(this.nodeList));
+        this.loading = false
+      },3000)
     },
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
@@ -267,6 +279,13 @@ export default {
 
       console.log(pledge);
     },
+    delegateCount(){
+      this.nodeList.forEach(async item=>{
+        const res = await validationEntrust(item.operator_address)
+        item.count = res.delegation_responses.length
+        // console.log('委托数',res);
+      })
+    } 
   },
 };
 </script>
@@ -380,36 +399,36 @@ export default {
   padding: 0 6px;
 }
 
-@media screen and (max-width:598px) {
-  .validationMain{
+@media screen and (max-width: 598px) {
+  .validationMain {
     width: 100%;
-    .title{
+    .title {
       padding-left: 10px;
     }
-    .validation-column{
-      flex-direction:column;
+    .validation-column {
+      flex-direction: column;
       width: 100%;
 
-      .column-item{
-      width: 100%;
-      margin: 8px 0;
+      .column-item {
+        width: 100%;
+        margin: 8px 0;
       }
     }
 
-    .validation-table{
+    .validation-table {
       width: 100%;
-      &-header{
+      &-header {
         height: 100px;
         flex-direction: column;
         align-items: flex-start;
         padding: 0;
-        .left{
+        .left {
           margin-top: 10px;
           flex-direction: column;
           height: 60px;
           width: 100%;
           align-items: flex-start;
-          >div{
+          > div {
             margin-left: 10px;
           }
         }

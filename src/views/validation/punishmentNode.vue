@@ -20,30 +20,36 @@
             <el-table-column
               label="名称"
               width="178"
-              prop="title"
+              prop="moniker"
             ></el-table-column>
             <el-table-column
               label="委托数"
               width="270"
               align="right"
-              prop="num"
-            ></el-table-column>
+            >
+            <template slot-scope="scope">
+              <div>{{scope.row.tokens}} GHM </div>
+            </template>
+            </el-table-column>
             <el-table-column
               label="已产生区块数"
               width="270"
               align="right"
-              prop="block"
-            ></el-table-column>
-            <el-table-column
-              label="锁定时间"
-              width="200"
-              prop="time"
-            ></el-table-column>
-            <el-table-column
-              label="解锁块高"
-              align="right"
-              prop="height"
-            ></el-table-column>
+            >
+            <template slot-scope="scope">
+              <div>0</div>
+            </template>
+            </el-table-column>
+            <el-table-column label="锁定时间" width="200">
+              <template slot-scope="scope">
+                <div>{{ scope.row.unbonding_time }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column label="解锁块高" align="right">
+              <template slot-scope="scope">
+                <div>{{ scope.row.unbonding_height }}</div>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <div class="footer">底部</div>
@@ -53,19 +59,34 @@
 </template>
 
 <script>
+import { allValidationNode } from "@/api/api.js";
 export default {
   data() {
     return {
-      list: [
-        {
-          title: "ghhhm",
-          num: 135,
-          block: 0,
-          time: "23132",
-          height: "875",
-        },
-      ],
+      list: [],
     };
+  },
+  created() {},
+  async mounted() {
+    const res = await allValidationNode();
+    let arr = res.validators.filter((item) => item.jailed);
+    console.log(arr);
+    arr.forEach((e) => {
+      let {
+        description: { moniker },
+        tokens,
+        min_self_delegation,
+        unbonding_time,
+        unbonding_height,
+      } = e;
+      this.list.push({
+        moniker,
+        tokens,
+        min_self_delegation,
+        unbonding_height,
+        unbonding_time:unbonding_time.split('.')[0].replace('T',' '),
+      });
+    });
   },
 };
 </script>
@@ -100,6 +121,18 @@ export default {
     }
     .tableBody {
       height: 612px;
+    }
+  }
+}
+
+@media screen and (max-width:598px) {
+  .punishment-main {
+    .title{
+      padding-left: 10px ;
+    }
+    width: 100%;
+    &-table{
+      width: 100%;
     }
   }
 }

@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <TabBar />
-    <router-view />
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive" />
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive" />
     <Bottom />
   </div>
 </template>
@@ -10,7 +13,7 @@
 import TabBar from "@/components/tabBar/index.vue";
 import Bottom from "@/components/bottom/";
 import "element-ui/lib/theme-chalk/display.css";
-import '@/assets/css/common.scss'
+import "@/assets/css/common.scss";
 export default {
   components: { TabBar, Bottom },
   data() {

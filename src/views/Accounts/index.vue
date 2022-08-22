@@ -52,7 +52,6 @@
         <el-table-column
           prop="percent"
           label="用户数量"
-          sortable
           align="right"
         ></el-table-column>
       </el-table>
@@ -119,9 +118,10 @@ export default {
   methods: {
     async getaccounts(page, pageSize) {
       const res = await getAllaccounts(page, 50);
-      let arr = res.accounts.filter(
-        (item) => item["@type"].split(".").pop() !== "ModuleAccount"
-      );
+      let arr = res.accounts
+      // .filter(
+      //   (item) => item["@type"].split(".").pop() !== "ModuleAccount"
+      // );
       //避免数据缺失
       // console.log(res);
       arr.forEach((e, index) => {

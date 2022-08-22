@@ -59,15 +59,15 @@
             </div>
             <div class="column">
               <p>官网：</p>
-              <span>www.xxxxx.com</span>
+              <span>{{basic.website}}</span>
             </div>
             <div class="column">
               <p>身份证认证ID：</p>
-              <span class="specialFont">67667585785765</span>
+              <span class="specialFont">{{basic.identity}}</span>
             </div>
             <div class="column">
               <p>描述：</p>
-              <span>xxxx</span>
+              <span>{{basic.details}}</span>
             </div>
           </div>
 
@@ -245,6 +245,8 @@ export default {
       const res = await validationNodeData(address)
       const res2 = await validationEntrust(address) 
       console.log('节点基本信息',res);
+      const {details,identity,website} = res.validator.description
+      this.basic = {...this.basic,details,identity,website}
       console.log('节点委托信息',res2);
     }
   },
