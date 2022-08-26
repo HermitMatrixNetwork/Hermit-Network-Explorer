@@ -6,7 +6,6 @@ import Accounts from '@/views/Accounts/index.vue'
 import More from '@/views/More/index.vue'
 import Tsx from '@/views/Blockchain/tsx.vue'
 import Contracts from '@/views/Contracts/index.vue'
-import TransDetail from '@/views/block_detail/component/transDetail.vue'
 import Addressdetail from '@/views/Detail/address_detail/index.vue'
 import Blockdetail from '@/views/Detail/block_detail/index.vue'
 import Nodedetail from '@/views/Detail/node_detail/index.vue'
@@ -31,16 +30,14 @@ const routes = [
   },
   {
     path: '/home',
-    component: Home
+    component: Home,
+    meta:{
+      keepAlive:false
+    }
   },
   {
     path: '/blockchain',
     component: Blockchain
-  },
-  {
-    path: '/transDetail',
-    component: TransDetail,
-    name: 'transDetail'
   },
   {
     path: '/blockcheck',
@@ -127,12 +124,12 @@ const routes = [
 ]
 
 
-
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
+
 
 // router.beforeEach((to,from,next)=>{
 

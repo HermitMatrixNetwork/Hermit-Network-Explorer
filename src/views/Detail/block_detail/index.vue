@@ -1,44 +1,152 @@
 <template>
   <div class="main">
-    <div class="block_title">区块 ：#{{ commitHeight }}</div>
-    <div class="block_basic">
-      <div class="block_basic_title">详细信息</div>
-      <div class="block_basic_content">
-        <div
-          v-for="item in basicTitle"
-          :key="item"
-          class="block_basic_content_item"
-        >
-          <div>
-            {{ item }}:<span>{{ commitHeight }}</span>
-          </div>
-        </div>
+    <div class="block_title">
+      {{ languagePack.block }} ：#{{ commitHeight }}
+      <div class="nextBtn">
+        <span
+          @click="nextData(-1)"
+          :style="{ cursor: waitResult ? 'wait' : 'pointer' }"
+          ><i class="el-icon-arrow-left"></i
+        ></span>
+        <span
+          @click="nextData(1)"
+          :style="{ cursor: waitResult ? 'wait' : 'pointer' }"
+          ><i class="el-icon-arrow-right"></i
+        ></span>
       </div>
+    </div>
+    <div class="block_basic">
+      <BasicTitle :title="languagePack.details">
+        <template #message>
+          <div class="basicStyle messageBasic">
+            <div class="column">
+              <p>{{ languagePack.blockheight }}：</p>
+              <span>{{ commitHeight }}</span>
+            </div>
+            <div class="column">
+              <p>{{ languagePack.parentblockhash }}：</p>
+              <span>{{ blockData.parent_hash }}</span>
+            </div>
+            <div class="column">
+              <p>{{ languagePack.TimeStamp }}：</p>
+              <span>{{ blockData.timestamp | timeStamp }} +UTC</span>
+            </div>
+            <div class="column">
+              <p>{{ languagePack.proposer }}：</p>
+              <span>{{ blockData.proposer_address }}</span>
+            </div>
+
+            <div class="column">
+              <p>{{ languagePack.Amount }}：</p>
+              <span>{{ blockData.tx_count }}</span>
+            </div>
+            <div class="column">
+              <p>{{ languagePack.GasUsed }}：</p>
+              <span>{{ blockData.gas_used }}</span>
+            </div>
+            <div class="column">
+              <p>{{ languagePack.blockhash }}：</p>
+              <span>{{ blockData.hash }}</span>
+            </div>
+            <div class="column">
+              <p>{{ languagePack.GasLimit }}：</p>
+              <span>{{ blockData.gas_total }}</span>
+            </div>
+          </div>
+        </template>
+      </BasicTitle>
     </div>
 
     <div class="block_detail">
       <div class="block_detail_title">交易</div>
-        <el-table :data="tableData" size="mini" height="630px" class="table_box" :cell-style="columnStyle" :header-cell-style="rowStyle" @cell-click="toDetail">
-          <el-table-column prop="transHash" label="交易哈希" :show-overflow-tooltip="true" />
-          <el-table-column prop="operationType" label="操作类型" width="80px">
-            <template slot-scope="scope">
-              <el-tag type="info" size="mini">{{ scope.row.operationType || '' }}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="block" label="区块" width="100px"/>
-          <el-table-column prop="timer" label="时长" width="100px" />
-          <el-table-column prop="adress" label="发起地址" width="150px" :show-overflow-tooltip="true"/>
-          <el-table-column width="40px">
-            <template>
-             <el-button type="success" icon="el-icon-right" size="mini" circle />
-            </template>
-          </el-table-column>
-          <el-table-column prop="targetAdress" label="目标地址" width="150px" :show-overflow-tooltip="true"/>
-          <el-table-column prop="transValue" label="交易数值" />
-          <el-table-column prop="poundage" label="手续费（GHM）" />
-       </el-table>
-       <el-row type="flex" justify="end" >
-        <el-pagination  
+      <el-table
+        :data="tableData"
+        size="mini"
+        height="612px"
+        :header-cell-class-name="'tableHeaderCellStyle'"
+        :row-class-name="'tableRowStyle'"
+        v-loading="loading"
+      >
+        <el-table-column :label="languagePack.transactionhash">
+          <template slot-scope="scope">
+            <div class="specialFont">
+              <el-tooltip effect="dark" content="交易失败" placement="top">
+                <img
+                  src="@/assets/img/table_mistake.png"
+                  v-if="scope.row.result === 'error'"
+                  @click.stop
+                />
+              </el-tooltip>
+              {{ scope.row._id | sliceAddress }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="operationType"
+          :label="languagePack.operationtype"
+          width="100px"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <div class="table_txOperate">{{ scope.row.type }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column :label="languagePack.blockheight">
+          <template slot-scope="scope">
+            <div class="specialFont">{{ scope.row.height }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="timestamp" :label="languagePack.time">
+          <template slot-scope="scope">
+            <div>{{ scope.row.timestamp | jetlag }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="languagePack.startaddress"
+          :show-overflow-tooltip="true"
+          width="150px"
+        >
+          <template slot-scope="scope">
+            <TableTooltip :content="scope.row.sender"></TableTooltip>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" width="56px">
+          <template slot-scope="scope">
+            <div>
+              <img
+                src="@/assets/img/table_transmit.png"
+                alt=""
+                v-if="scope.row.result !== 'error'"
+              />
+              <span v-else class="table_txfail">self</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="fuelTotal"
+          :label="languagePack.targetaddress"
+          width="150px"
+        >
+          <template slot-scope="scope">
+            <TableTooltip :content="scope.row.targetAddress"></TableTooltip>
+          </template>
+        </el-table-column>
+        <el-table-column :label="languagePack.transactionnumericalvalue">
+          <template slot-scope="scope">
+            <div>
+              {{ scope.row.tx_amount | toMoney
+              }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column :label="languagePack.TransactionFee">
+          <template slot-scope="scope">
+            <div>{{ scope.row.fee | toMoney }}</div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-row type="flex" justify="end">
+        <el-pagination
           popper-class="popperSelect"
           small
           @size-change="handleSizeChange"
@@ -47,7 +155,8 @@
           :page-sizes="[10, 25, 50]"
           :page-size="10"
           layout="prev, pager, next, sizes"
-          :total="100">
+          :total="100"
+        >
         </el-pagination>
       </el-row>
     </div>
@@ -55,155 +164,84 @@
 </template>
 
 <script>
-import { getBlockContent } from "@/api/api.js";
+import { queryBlockdetails } from "@/api/blockchain.js";
+import mixins from "@/mixins";
+import moment from "moment";
 export default {
+  mixins: [mixins],
   data() {
     return {
       block: "",
-      blockId: "",
-      commitHeight: "",
-      basicTitle: [
-        "区块高度",
-        "父区块哈希",
-        "时间戳",
-        "提案人",
-        "交易数",
-        "燃料使用量",
-        "区块哈希",
-        "燃料总量",
-      ],
-      tableData: [
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '811分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '118分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '18分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '18分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '81分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '18分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '18分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-        { transHash: 'ldfhjahdfjdfhjfhdkjffdfdsfsfsfafdfsdffh', operationType: '转账', block: '111151414', timer: '8分钟前', adress: 'afdfdfdasfdsfdsfdsfdsafdafdfdfdf', targetAdress: 'dfajdfdfadsfsafdsfadsffhkjadsfsdhkj', transValue: '0 GHM', poundage: '0.121414154544' },
-      ],
-      currentPage: 1
+      commitHeight: 0,
+      blockHight: 0,
+      tableData: [],
+      currentPage: 1,
+      blockData: {},
+      loading: true,
+      waitResult: false,
     };
   },
   created() {
-    this.getblockDetail(this.$route.query.height);
-    // console.log('高度块', this.$route.query);
+    this.commitHeight = this.blockHight = this.$route.query.height;
+    this.getblockDetail(this.commitHeight);
   },
   mounted() {
-    document.querySelector('.selected').style.color = '#1E42ED'
+    document.querySelector(".selected").style.color = "#1E42ED";
   },
   methods: {
-    // 表头行样式
-    rowStyle({row, column, rowIndex, columnIndex}) {
-      if (!rowIndex) return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #14253E;'
-    },
-
-    // 设置列的字体颜色
-    columnStyle({ row, column, rowIndex, columnIndex }) {
-      switch(columnIndex) {
-        case 0:
-          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #5671F2;cursor: pointer;'
-          break;
-        case 1: 
-          return 'font-family: PingFangSC-Regular;font-weight: 400;font-size: 12px;color: rgba(20,37,62,0.65);'
-          break;
-        case 2: 
-          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: rgba(20,37,62,0.45);'
-          break;
-        case 3: 
-          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: rgba(20,37,62,0.45);'
-          break;
-        case 4: 
-          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #5671F2;cursor: pointer;'
-          break;
-        case 6:
-          return 'font-family: PingFangSC-Medium;font-weight: 500;font-size: 12px;color: #5671F2;cursor: pointer;'
-          break;
-        case 7:
-          return 'font-family: PingFangSC-Regular;font-weight: 400;font-size: 12px;color: rgba(20,37,62,0.65);'
-          break;
-        case 8:
-          return 'font-family: PingFangSC-Regular;font-weight: 400;font-size: 12px;color: rgba(20,37,62,0.65);'
-          break;
-        default:
-          break;
-      }
-    },
-
     async getblockDetail(value) {
-      const res = await getBlockContent(value);
-      const { block, block_id } = res;
-      console.log(res);
-        console.log(block);
-        console.log(block_id);
-      this.commitHeight = block.last_commit.height;
-      const arr = []
-      arr[0] = this.commitHeight
-      arr[1] = ""
-      arr[2] = block.header.time
-      console.log(arr);
-    //   for(let i in this.basicTitle){
-    //     console.log(i);
-    //   }
+      const res = await queryBlockdetails(value * 1);
+      // console.log("区块信息", res);
+
+      if (!res.data.block) {
+        this.messageBox("暂未出块", "error");
+        return false;
+      }
+      this.blockData = res.data.block;
+      let arr = res.data.txs;
+      this.disposeTableType(arr);
+      this.tableData = arr;
+
+      return true;
+      // console.log(this.tableData);
     },
 
     handleSizeChange() {
-      let oul = document.querySelectorAll('.el-select-dropdown__list li')
-      oul.forEach(item => item.style.color = '')
-      let oli = document.querySelector('.selected')
-      oli.style.color = '#606266'
-    	document.querySelector('.hover').style.color = '#1E42ED'
+      let oul = document.querySelectorAll(".el-select-dropdown__list li");
+      oul.forEach((item) => (item.style.color = ""));
+      let oli = document.querySelector(".selected");
+      oli.style.color = "#606266";
+      document.querySelector(".hover").style.color = "#1E42ED";
     },
 
     handleCurrentChange() {
-      console.log('11');
+      console.log("11");
     },
-
-    toDetail(row, column) {
-      console.log('row', row);
-      switch(column.property){
-        case 'transHash':
-          console.log('跳转到交易详情');
-          break;
-        case 'adress':
-          console.log('跳转到发起地址详情');
-          break;
-        case 'targetAdress':
-          console.log('跳转到目标地址详情');
-          break;
-        default:
-          break;
-      }
-    }
+    nextData(num) {
+      this.waitResult = true;
+      let number = (this.blockHight = this.blockHight * 1);
+      this.blockHight += num;
+      this.getblockDetail(this.blockHight).then((res) => {
+        if (res) {
+          this.commitHeight = this.blockHight;
+          this.$router.push({ query: { height: this.blockHight } });
+        } else {
+          this.blockHight = number;
+        }
+        this.waitResult = false;
+      });
+    },
+  },
+  computed: {
+    languagePack() {
+      return this.$store.state.Language;
+    },
+  },
+  watch: {
+    tableData(value) {
+      if (!Array.isArray(value)) return (this.loading = false);
+      this.loading = value.length == 0 ? true : false;
+    },
   },
 };
 </script>
@@ -215,11 +253,11 @@ export default {
 
   .block_title {
     padding: 16px 0;
-    font-family: PingFangSC-Medium;
     font-weight: 500;
     font-size: 20px;
     color: rgba(20, 37, 62, 0.85);
     letter-spacing: 0;
+    position: relative;
   }
 
   .block_basic {
@@ -247,7 +285,6 @@ export default {
       &_item {
         width: 620px;
         height: 28px;
-        font-family: PingFangSC-Regular;
         font-weight: 400;
         font-size: 12px;
         color: rgba(20, 37, 62, 0.85);
@@ -280,114 +317,55 @@ export default {
       padding-left: 16px;
     }
   }
-
 }
 
-::v-deep .el-button {
-  width: 20px;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #55C499;
-  background-color: rgba(85,196,153,0.20);
-  border-color: rgba(85,196,153,0.10);
-}
-
-::v-deep li {
-  border: 1px solid #E9EAEF !important;
-  border-radius: 2px !important;
-  margin: 0 4px !important;
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
-  font-size: 12px;
-  color: rgba(20,37,62,0.85);
-
-  &:hover {
-    color: #1E42ED !important;
-  }
-
-}
-::v-deep li.active {
-  color: #1E42ED !important;
-  border: 1px solid #1E42ED !important;
-  border-radius: 2px !important;
-}
-
-::v-deep .btn-prev,.btn-next {
-  width: 30px;
-  border: 1px solid #E9EAEF !important;
-  border-radius: 2px !important;
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
-  font-size: 12px;
-  color: rgba(20,37,62,0.85);
-
-  &:hover {
-    color: #1E42ED !important;
+.nextBtn {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  > span {
+    background: #ffffff;
+    border: 1px solid #e9eaef;
+    border-radius: 2px;
+    font-size: 12px;
+    padding: 5px 7px;
+    margin: 0 4px;
   }
 }
 
-::v-deep .btn-next {
-  width: 30px;
-  border: 1px solid #E9EAEF !important;
-  border-radius: 2px !important;
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
-  font-size: 12px;
-  color: rgba(20,37,62,0.85);
-  padding-left: 6px !important;
-
-  &:hover {
-    color: #1E42ED !important;
-  }
-}
-
-::v-deep th {
-  background-color: #F8F9FA !important;
-}
-
-::v-deep .el-input__inner {
-  height: 23px !important;
-  line-height: 23px !important;
-  // border-color: #1E42ED !important;
-
-  &:hover {
-    color: #1E42ED !important;
-    border-color: #1E42ED !important;
-  }
-}
-
-::v-deep .is-focus {
-  border-color: #1E42ED !important;
-}
-
-::v-deep .el-table__row {
-  height: 60px !important;
-}
-
-::v-deep .table_box {
-  margin-bottom: 10px;
-}
-
-@media screen and (max-width:598px) {
-  .main{
+@media screen and (max-width: 598px) {
+  .main {
     width: 355px;
     padding: 0 10px;
-    >div{
+    > div {
       width: 100%;
     }
-    .block_basic{
+    .block_basic {
       width: 100%;
 
-      .block_basic_content{
+      .block_basic_content {
         padding: 12px;
         height: auto;
       }
     }
-    .block_detail{
+    .block_detail {
       width: 100%;
     }
+  }
+}
+
+.basicStyle {
+  width: 100%;
+  display: grid;
+  grid: 28px / auto auto;
+  grid-gap: 16px;
+  padding-bottom: 8px;
+  justify-content: normal;
+  .column {
+    height: 28px;
+    width: 600px;
+    white-space: nowrap;
   }
 }
 </style>

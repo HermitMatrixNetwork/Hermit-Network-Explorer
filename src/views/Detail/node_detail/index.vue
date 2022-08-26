@@ -30,7 +30,7 @@
           <span
             v-for="(item, index) in [
               languagePack.nodeinformation,
-              languagePack.blocknumber,
+              languagePack.block,
               languagePack.delegation,
               languagePack.rewarddetails,
             ]"
@@ -79,102 +79,87 @@
           <el-table
             v-if="selectNav == 1"
             style="width: 100%"
-            height="612px"
             size="mini"
             :row-style="{ height: '58px' }"
-            :header-cell-style="{
-              background: '#F8FAFB',
-              color: 'rgba(20,37,62,0.45)',
-              height: '32px',
-              padding: '0',
-              paddingLeft: '6px',
-            }"
+            :header-cell-class-name="'tableHeaderCellStyle'"
+            :row-class-name="'tableRowStyle'"
+            :data="outblockTable"
           >
             <el-table-column
               :label="languagePack.blocknumber"
-              prop="txhash"
-              width="180"
+              prop="_id"
+              width="240"
             >
+              <template slot-scope="scope">
+                <div class="specialFont">{{ scope.row._id }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column :label="languagePack.time" align="left">
+              <template slot-scope="scope">
+                <div>{{ scope.row.timestamp | timeStamp }}</div>
+              </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.time"
-              align="center"
-            >
-            </el-table-column>
-            <el-table-column :label="languagePack.thenumberoftransactions">
-              
-            </el-table-column>
-            <el-table-column
-              :label="languagePack.blockreward"
-              prop="timestamp"
+              :label="languagePack.thenumberoftransactions"
+              prop="tx_count"
+              width="318"
               align="right"
-            ></el-table-column>
+            >
+            </el-table-column>
+            <el-table-column :label="languagePack.blockreward" align="right">
+              <template slot-scope="scope">
+                <div>{{ scope.row.coinbase }}</div>
+              </template>
+            </el-table-column>
           </el-table>
 
           <!-- 委托 -->
           <el-table
             v-if="selectNav == 2"
             style="width: 100%"
-            height="612px"
             size="mini"
             :row-style="{ height: '58px' }"
-            :header-cell-style="{
-              background: '#F8FAFB',
-              color: 'rgba(20,37,62,0.45)',
-              height: '32px',
-              padding: '0',
-              paddingLeft: '6px',
-            }"
+            :header-cell-class-name="'tableHeaderCellStyle'"
+            :row-class-name="'tableRowStyle'"
+            :data="delegationTable"
           >
-            <el-table-column
-              :label="languagePack.delegate"
-              prop="txhash"
-              width="180"
-            >
+            <el-table-column :label="languagePack.delegate" width="240">
               <template slot-scope="scope">
-                <p
-                  class="specialFont"
-                  @click="queryDealtoHash(scope.row.txhash)"
-                >
-                  {{ scope.row.txhash | sliceAddress }}
-                </p>
+                <div class="specialFont">
+                  {{ scope.row.delegator_address | sliceAddress }}
+                </div>
               </template>
             </el-table-column>
             <el-table-column
               :label="languagePack.delegationpercentage"
-              align="center"
+              align="right"
             >
               <template slot-scope="scope">
-                <div class="dealType">
-                  {{ scope.row.type == "MsgSend" ? "转账" : scope.row.type }}
+                <div>
+                  {{ scope.row.amount | toMoney }} ({{
+                    (scope.row.amount / basic.tokens).toFixed(2)
+                  }}%)
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.lockeddelegation">
+            <el-table-column
+              :label="languagePack.lockeddelegation"
+              align="right"
+            >
               <template slot-scope="scope">
-                <p class="specialFont">{{ scope.row.height | toMoney }}</p>
+                <div>{{ scope.row.amount | toMoney }}</div>
               </template>
             </el-table-column>
-            <el-table-column
-              :label="languagePack.undelegate"
-              prop="timestamp"
-            ></el-table-column>
+            <el-table-column :label="languagePack.undelegate" align="right">
+              <template>
+                <div>0</div>
+              </template>
+            </el-table-column>
             <el-table-column
               :label="languagePack.statussucceededfailed"
-              width="168"
+              align="right"
             >
-              <template slot-scope="scope">
-                <div class="specialFont">
-                  {{ scope.row.from_address | sliceAddress }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="57">
-              <template>
-                <div>
-                  <img src="@/assets/img/table_transmit.png" alt="" />
-                </div>
-              </template>
+              <template slot-scope="scope"> 状态 </template>
             </el-table-column>
           </el-table>
 
@@ -182,29 +167,21 @@
           <el-table
             v-if="selectNav == 3"
             style="width: 100%"
-            height="612px"
             size="mini"
             :row-style="{ height: '58px' }"
-            :header-cell-style="{
-              background: '#F8FAFB',
-              color: 'rgba(20,37,62,0.45)',
-              height: '32px',
-              padding: '0',
-              paddingLeft: '6px',
-            }"
+            :header-cell-class-name="'tableHeaderCellStyle'"
+            :row-class-name="'tableRowStyle'"
+            :data="rewardTable"
           >
             <el-table-column
               :label="languagePack.transactionhash"
               prop="txhash"
-              width="180"
+              width="240"
             >
               <template slot-scope="scope">
-                <p
-                  class="specialFont"
-                  @click="queryDealtoHash(scope.row.txhash)"
-                >
+                <div class="specialFont">
                   {{ scope.row.txhash | sliceAddress }}
-                </p>
+                </div>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.delegate" align="center">
@@ -220,7 +197,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.totaldelegatedreward"
+              :label="languagePack.lockeddelegation"
               prop="timestamp"
             ></el-table-column>
             <el-table-column
@@ -230,13 +207,6 @@
               <template slot-scope="scope">
                 <div class="specialFont">
                   {{ scope.row.from_address | sliceAddress }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="57">
-              <template>
-                <div>
-                  <img src="@/assets/img/table_transmit.png" alt="" />
                 </div>
               </template>
             </el-table-column>
@@ -261,29 +231,71 @@
 
 <script>
 import mixin from "@/mixins";
-import { validationNodeData, validationEntrust } from "@/api/api.js";
+import {
+  getNodeblockList,
+  validationNodeData,
+  validationEntrust,
+  getNodeRewardList,
+} from "@/api/validation.js";
+
 export default {
   mixins: [mixin],
   data() {
     return {
-      selectNav: 0,
+      selectNav: 2,
       basic: {},
+      page: {
+        pageSize: 10,
+        currentPage: 0,
+      },
+      outblockTable: [],
+      delegationTable: [],
+      rewardTable: [],
     };
   },
   created() {
     this.basic = this.$route.params.basic;
-    console.log(this.basic);
-    const { jailed, operator_address } = this.basic;
-    this.getData(operator_address);
+    console.log("路由里面的信息", this.basic);
+    const { operator_address } = this.basic;
+    const { pageSize, currentPage } = this.page;
+    this.getData(operator_address, pageSize, currentPage);
+
+    this.$loading();
   },
   methods: {
-    async getData(address) {
-      const res = await validationNodeData(address);
-      const res2 = await validationEntrust(address);
-      console.log("节点基本信息", res);
-      const { details, identity, website } = res.validator.description;
-      this.basic = { ...this.basic, details, identity, website };
-      console.log("节点委托信息", res2);
+    async getData(address, limit, index) {
+      const res = await Promise.all([
+        validationNodeData(address),
+        validationEntrust(address),
+        getNodeblockList(limit, index, address),
+        getNodeRewardList(limit, index, address),
+      ]);
+      if (res) {
+        this.$loading().close();
+      }
+
+      console.log("节点基本信息", res[0]);
+      console.log("节点委托信息列表", res[1]);
+      console.log("节点出块", res[2]);
+
+      const {
+        description: { details, identity, website },
+        tokens,
+      } = res[0].validator;
+      this.basic = { ...this.basic, details, identity, website, tokens };
+
+      //处理数组并赋值
+      this.delegaTion(res[1].delegation_responses);
+      this.outblockTable = res[2].data.list;
+      this.rewardTable = res[3].data.list;
+    },
+    //委托列表
+    delegaTion(arr) {
+      if (!Array.isArray(arr)) return (this.delegationTable = []);
+      arr.forEach((item) => {
+        const { balance, delegation } = item;
+        this.delegationTable.push({ ...balance, ...delegation });
+      });
     },
   },
   computed: {
@@ -306,15 +318,11 @@ export default {
     box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
     border-radius: 4px;
     padding-left: 16px;
-    font-weight: 500;
+    font-weight: bold;
     font-size: 14px;
     display: flex;
     align-items: center;
     color: rgba(20, 37, 62, 0.85);
-    > img {
-      margin-left: 10px;
-      cursor: pointer;
-    }
   }
   .detailColumn {
     margin: 16px 0;

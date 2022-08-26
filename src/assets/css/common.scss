@@ -59,10 +59,13 @@
   color: #5671f2 !important;
   line-height: 18px;
   cursor: pointer;
+  white-space: nowrap;
 }
 .specialFont:hover {
-  color: #6e85f7;
+  color: #6e85f7 !important;
+  text-decoration: underline;
 }
+
 
 //列表眼睛
 .tableEyeBackground {
@@ -70,10 +73,17 @@
   height: 20px;
   background: #e9eaef;
   border-radius: 4px;
-  text-align: center;
-  align-items: center;
   margin-left: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  &:hover{
+    background: #D5D5E6;
+  }
+  img{
+    padding: 6px;
+  }
 }
 //交易类型
 .dealType {
@@ -117,6 +127,7 @@
   flex-direction: column;
   justify-content: space-between;
   .column {
+    white-space: nowrap;
     > span {
       height: 18px;
       font-size: 12px;
@@ -130,17 +141,18 @@
       font-size: 12px;
       color: rgba(20, 37, 62, 0.85);
       line-height: 20px;
-      
     }
   }
 }
 
 //弹出层
 .popoverBox {
+  width: 214px;
+  height: 330px;
   display: flex;
   flex-direction: column;
-  font-weight: 400;
   font-size: 12px !important;
+  line-height: 20px;
   color: rgba(0, 0, 0, 0.85);
   .detailBox {
     width: 100%;
@@ -150,8 +162,30 @@
     color: #5671f2;
     cursor: pointer;
   }
+  .popStatus {
+    > div {
+      display: flex;
+      align-items: center;
+      > img {
+        width: 14px;
+        height: 14px;
+        margin: 0 5px;
+      }
+      span:last-child{
+        margin-left: 6px;
+        color: rgba(0, 0, 0, 0.25)
+      }
+    }
+  }
+  &_title{
+    height: 28px;
+    line-height: 28px;
+  }
 }
 
+.el-divider--horizontal{
+  margin: 12px 0 !important;
+}
 
 //表格行样式
 .tableRowStyle {
@@ -162,4 +196,70 @@
   .cell {
     padding: 0 16px !important;
   }
+}
+
+//表格头部基本样式
+.tableHeaderCellStyle {
+  padding: 0 !important;
+  height: 31px !important;
+  line-height: 31px !important;
+  background: #f8fafb !important;
+  .cell {
+    color: rgba(20, 37, 62, 0.45);
+    font-size: 12px;
+    padding: 0 16px !important;
+    white-space: nowrap !important;
+    line-height: 24px !important;
+  }
+}
+
+
+//loading 样式
+.el-loading-spinner .path {
+  stroke:#1F40EC !important;
+}
+
+/* 文字提示弹窗样式 */
+.circulateTooltipStyle {
+  width: 250px;
+  height: 100px;
+  padding: 7px 8px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  background: rgba(0, 0, 0, 0.75) !important;
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
+}
+
+
+//交易类型表格行内样式
+.table_txHash {
+  position: relative;
+  white-space: nowrap;
+  text-align: left;
+  width: 180px;
+
+  > img {
+    left: 0;
+  }
+}
+
+.table_txOperate {
+  height: 20px;
+  line-height: 20px;
+  background: #f8f9fa;
+  border: 1px solid #e9eaef;
+  border-radius: 2px;
+}
+
+.table_txfail {
+  width: 29px;
+  height: 16px;
+  background: #f8f9fa;
+  border: 1px solid #e9eaef;
+  border-radius: 2px;
+  padding: 0 4px;
+  white-space: nowrap;
 }

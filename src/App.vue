@@ -22,24 +22,26 @@ export default {
   },
   created() {
     this.$store.commit("CHANGE_LANGUAGE", 123);
+    // console.log(this.$route);
+
+    if(this.$route.path == '/hash_detail'){
+      this.$router.replace('/home')
+    }
+    if(this.$route.path == '/node_detail'){
+      this.$router.go(-1)
+    }
   },
   mounted() {},
   watch: {},
 };
 </script>
 <style lang="scss">
-* {
-  margin: 0;
-  padding: 0;
-}
-
 html,
 body,
 #app {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  color: #333;
   overflow-x: hidden;
   background: #f8fafb;
 }
@@ -48,6 +50,7 @@ body,
 ::-webkit-scrollbar {
   width: 3px;
   height: 0px;
+  display: none;
 } /* 滚动条的大小 */
 ::-webkit-scrollbar-track {
   background-color: #6d7277;
@@ -55,13 +58,5 @@ body,
 ::-webkit-scrollbar-thumb {
   background-color: transparent;
   border-radius: 0px;
-}
-a {
-  text-decoration: none;
-}
-
-ul,
-li {
-  list-style: none;
 }
 </style>

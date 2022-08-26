@@ -69,5 +69,3 @@ Vue.use(Step)
 Vue.use(Steps)
 Vue.use(Loading)
 
-
-

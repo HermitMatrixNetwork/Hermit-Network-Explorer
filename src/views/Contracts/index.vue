@@ -7,14 +7,14 @@
           <div class="icon"></div>
           <div class="explain">
             <p>{{ languagePack.operation }}</p>
-            <h3>1,256,017</h3>
+            <h3>{{computeCount}}</h3>
           </div>
         </div>
         <div class="contracts_basic_item">
           <div class="icon"></div>
           <div class="explain">
             <p>{{ languagePack.thenumberofusers }}</p>
-            <h3>51,631</h3>
+            <h3>{{userCount}}</h3>
           </div>
         </div>
         <div class="contracts_basic_item">
@@ -28,7 +28,14 @@
       <div class="contracts_table">
         <div class="contracts_table_title">
           <p>总共 <span style="color: #5671f2">1,081,774 </span>个区块</p>
-          <el-pagination small layout="prev, pager, next" :total="1000">
+          <el-pagination
+            small
+            @current-change="handleCurrentChange"
+            :page-size="10"
+            layout="prev, pager, next"
+            :total="pagination"
+            hide-on-single-page
+          >
           </el-pagination>
         </div>
         <el-table
@@ -47,7 +54,9 @@
           </el-table-column>
           <el-table-column :label="languagePack.contractname" width="548">
             <template slot-scope="scope">
-              <p class="specialFont" @click="toGo('/contract_detail')">{{ scope.row.contract_lable }}</p>
+              <p class="specialFont" @click="toContractDetail(scope.row.contract_address)">
+                {{ scope.row.contract_lable }}
+              </p>
             </template>
           </el-table-column>
           <el-table-column
@@ -73,7 +82,16 @@
           </el-table-column>
         </el-table>
         <div class="table_bottom">
-          <el-pagination small layout="prev, pager, next" :total="1000">
+          <el-pagination
+            small
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :page-sizes="[10, 25, 50]"
+            :page-size="10"
+            layout="prev, pager, next, sizes"
+            :total="pagination"
+            hide-on-single-page
+          >
           </el-pagination>
         </div>
       </div>
@@ -84,14 +102,15 @@
 <script>
 import { getContract } from "@/api/contract";
 import axios from "axios";
-import mixins from '@/mixins';
+import mixins from "@/mixins";
 
 export default {
-  mixins:[mixins],
+  mixins: [mixins],
   data() {
     return {
       tableList: [],
-      loading:false
+      loading: true,
+      pagination: 0,
     };
   },
   created() {
@@ -99,15 +118,48 @@ export default {
   },
   methods: {
     async getData(limit) {
-      // const res = await getContract(limit)
-      // console.log('合约列表',res);
-      // this.tableList = res.data.list
+      const res = await getContract(limit);
+      console.log("合约列表", res);
+      let arr = res.data.list;
+      arr.forEach((item) => {
+        item.user_count = Object.keys(item.user_count).length;
+      });
+      this.tableList = res.data.list;
+      this.pagination = res.data.total;
     },
+    handleSizeChange() {},
+    handleCurrentChange() {},
+    toContractDetail(address){
+      // console.log(address);
+      this.$router.push({path:'/contract_detail',query:{address}})
+    }
   },
   computed: {
     languagePack() {
       return this.$store.state.Language;
     },
+    //计算总用户数量
+    userCount(){
+      let count = 0
+      this.tableList.forEach(item=>{
+        count += item.user_count
+      })
+      return count
+    },
+    //计算总运算次数
+    computeCount(){
+      let count = 0
+      this.tableList.forEach(item=>{
+        count += item.compute_count
+      })
+      return count
+    }
+  },
+  watch: {
+    tableList(value) {
+      this.loading = value.length == 0 ? true : false;
+    },
+    deep: true,
   },
 };
 </script>
@@ -240,19 +292,4 @@ export default {
   }
 }
 </style>
-<style lang="scss">
-.tableHeaderCellStyle {
-  padding: 0 !important;
-  height: 32px !important;
-  line-height: 32px !important;
-  background: #f8fafb !important;
-  .cell {
-    color: rgba(20,37,62,0.45);
-    font-size:12px;
-    padding: 0 16px !important;
-    white-space: nowrap !important;
-  }
-}
 
-
-</style>

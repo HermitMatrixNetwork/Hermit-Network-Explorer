@@ -1,4 +1,5 @@
 import { Message } from 'element-ui'
+import moment from 'moment';
 
 //复制文本
 export function copy(text) {
@@ -34,6 +35,7 @@ export function copy(text) {
 // 数字转金额类型
 export function toMoney(num) {
     let numvalue = Number(num)
+    if (isNaN(num)) return '-'
     if (numvalue) {
         numvalue = numvalue.toFixed(0);
     }
@@ -88,9 +90,32 @@ export function debounce(func, wait) {
     }
 }
 
+//时间戳
+export function timeStamp(time) {
+    if (!time) return '-'
+    return moment(time).format('LLLL')
+}
 
+export function jetlag(time) {
+    return moment(time).startOf('second').fromNow()
+}
 
-
+//倒计时
+export function numAdd(num1, num2) {
+    var baseNum, baseNum1, baseNum2;
+    try {
+        baseNum1 = num1.toString().split(".")[1].length;
+    } catch (e) {
+        baseNum1 = 0;
+    }
+    try {
+        baseNum2 = num2.toString().split(".")[1].length;
+    } catch (e) {
+        baseNum2 = 0;
+    }
+    baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
+    return (num1 * baseNum + num2 * baseNum) / baseNum;
+}
 
 
 

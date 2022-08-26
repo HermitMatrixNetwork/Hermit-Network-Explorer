@@ -1,13 +1,17 @@
 import * as echarts from "echarts";
 //柱状图
-export const bar = (element, data) => {
-  let chart1 = echarts.init(element[0]);
-  let chart2 = echarts.init(element[1]);
+let message = [
+  120, 200, 150, 80, 70, 110, 130, 10, 60, 120, 160, 140, 120, 200, 150, 80,
+  70, 110, 130, 10, 60, 120, 160, 140,
+];
+export const bar = (element, data=[]) => {
+
+
+  // let chart1 = echarts.init(element);
+  // let chart2 = echarts.init(element[1]);
   // console.log('js接受到数据',message);
-  let message = [
-    120, 200, 150, 80, 70, 110, 130, 10, 60, 120, 160, 140, 120, 200, 150, 80,
-    70, 110, 130, 10, 60, 120, 160, 140,
-  ];
+  message = [...data,...message]
+  message.length = 24
   let value = message[0];
   message[0] = { value: value, itemStyle: { color: "#344358" } };
 
@@ -62,25 +66,16 @@ export const bar = (element, data) => {
         // console.log(params);
         return `<div style="color:'#1840EE';">#36346045/<span style="color:'#BDC8FA';">${
           typeof params.data == "number" ? params.data : params.data.value
-        } 1.035s</span></div>`;
+        }s</span></div>`;
       },
     },
   };
-  echarts.connect([chart1, chart2]);
-  chart1.setOption(option);
-  chart2.setOption(option);
-
-  chart1.on('click',value=>{
-    console.log('图表数据',value);
-    value.color = 'red'
-  })
-  chart2.on('click',value=>{
-    console.log('图表数据',value);
-    // value.color = 'red'
-  })
+  // echarts.connect([chart1, chart2]);
+  element.setOption(option);
+  // chart2.setOption(option);
 
 
-  console.dir(echarts.connect);
+
   // setInterval(() => {
   //     message.shift()
   //     let first = message[0]

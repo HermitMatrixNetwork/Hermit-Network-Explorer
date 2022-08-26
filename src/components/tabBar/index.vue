@@ -16,7 +16,7 @@
 
       <div class="headernav" v-if="$route.path == '/home'">
         <div class="navs">
-          <router-link to="home">{{ languagePack.Home }}</router-link>
+          <router-link to="home" :class="$route.path == '/home'?'pathStyle':''">{{ languagePack.Home }}</router-link>
           <el-dropdown @command="blockCommand">
             <span class="el-dropdown-link">
               {{ languagePack.blockchain
@@ -461,5 +461,10 @@ export default {
     margin-left: 100px;
     font-size: 24px;
   }
+}
+
+.pathStyle{
+  font-weight: 600;
+  color: rgba(20,37,62,0.85) !important;
 }
 </style>

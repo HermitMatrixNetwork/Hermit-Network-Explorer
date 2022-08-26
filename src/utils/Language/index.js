@@ -1,6 +1,7 @@
 import {contractEn,contractCn} from './contract'
 import {accountEn,accountCn} from './account'
 import {validationEn,validationCn} from './validation'
+import {blockchainEn,blockchainCn} from './blockchain'
 export const Language = [
     {
         /* 首页 */
@@ -73,12 +74,15 @@ export const Language = [
         ...accountEn,
 
         /* 验证节点 */
-        ...validationEn
+        ...validationEn,
+
+        /* 区块链 */
+        ...blockchainEn
     },
     {
         /* 首页 */
         Home: '首页',
-        blockchain: '节点',
+        blockchain: '区块链',
         TopAccounts: '顶级账户',
         viewTransactions: '查看交易',
         viewBlock: '查看区块',
@@ -145,6 +149,9 @@ export const Language = [
         ...accountCn,
 
         /* 验证节点 */
-        ...validationCn
+        ...validationCn,
+
+        /* 区块链 */
+        ...blockchainCn
     }
 ]

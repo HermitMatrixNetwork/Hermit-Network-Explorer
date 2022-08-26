@@ -29,7 +29,7 @@ export default {
   .title {
     height: 52px;
     box-shadow: inset 0 -1px 0 0 #e9eaef;
-    font-weight: 500;
+    font-weight: bold;
     font-size: 14px;
     color: rgba(20, 37, 62, 0.85);
     letter-spacing: 0;

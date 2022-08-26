@@ -119,19 +119,9 @@ export function allValidationNode() {     //获取所有验证节点
     })
 }
 
-export function validationNodeData(address) {  //验证器信息
-    return Service({
-        url: `/cosmos/staking/v1beta1/validators/${address}`,
-        method: 'GET'
-    })
-}
 
-export function validationEntrust(address) {   //获取节点委托数
-    return Service({
-        url: `/cosmos/staking/v1beta1/validators/${address}/delegations`,
-        method: 'GET'
-    })
-}
+
+
 
 
 
@@ -167,19 +157,17 @@ export function queryHistoryNode() {
 
 
 //查询顶级账户的数据信息
-export function queryAccountList(data) {
+export function queryAccountList(limit, index) {
     return service1({
         url: '/api/browser/accountlist',
         method: 'POST',
-        data
+        data: {
+            chain_id: 'ghmdev',
+            limit,
+            index
+        }
     })
 }
 
-//查询顶级账户的数据信息
-export function queryTxList(data) {
-    return service1({
-        url: '/api/browser/txlist',
-        method: 'POST',
-        data
-    })
-}
+
+

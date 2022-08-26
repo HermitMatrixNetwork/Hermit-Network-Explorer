@@ -2,10 +2,19 @@
   <div class="address-detail">
     <div class="detail">
       <div class="detail-title">
-        {{languagePack.address}}：{{ address
-        }}<img src="@/assets/img/copy.png" @click="Copy(address)" /><img
-          src="@/assets/img/code.png"
-        />
+        {{ languagePack.address }}：{{ address
+        }}<img src="@/assets/img/copy.png" @click="Copy(address)" />
+        <el-popover placement="top" trigger="hover" popper-class="qrcodeStyle">
+          <vueQr
+            :text="address"
+            :size="80"
+            :margin="0"
+            colorDark="black"
+            colorLight="white"
+          >
+          </vueQr>
+          <img src="@/assets/img/code.png" slot="reference" />
+        </el-popover>
       </div>
       <div class="basic-column">
         <div class="basic-column-item">
@@ -16,18 +25,16 @@
                 style="justify-content: flex-start"
               >
                 <div class="column">
-                  <p>{{languagePack.totalbalance}}：</p>
-                  <span
-                    >${{ (avaliable.balances[0].amount * 86) | toMoney }}</span
-                  >
+                  <p>{{ languagePack.totalbalance }}：</p>
+                  <span>$ 131321313132</span>
                 </div>
                 <div class="column">
-                  <p>{{languagePack.Price}}：</p>
+                  <p>{{ languagePack.Price }}：</p>
                   <span>86</span>
                 </div>
                 <div class="column">
-                  <p>{{languagePack.thetotalnumberoftransactions}}：</p>
-                  <span>{{ pagination }}</span>
+                  <p>{{ languagePack.thetotalnumberoftransactions }}：</p>
+                  <span>{{ account.tx_count }}</span>
                 </div>
               </div>
             </template>
@@ -39,48 +46,25 @@
             <template #message>
               <div class="messageBasic column-basic">
                 <div class="column">
-                  <p>{{languagePack.availablebalance}}：</p>
-                  <span>{{ avaliable.balances[0].amount | toMoney }} GHM</span>
+                  <p>{{ languagePack.availablebalance }}：</p>
+                  <span>{{ account.balance | toMoney }} GHM</span>
                 </div>
                 <div class="column">
-                  <p>{{languagePack.delegation}}：</p>
-                  <span
-                    >{{
-                      delegated.delegation_responses.length == 0
-                        ? "0"
-                        : (
-                            delegated.delegation_responses[0].delegation
-                              .shares * 1
-                          ).toFixed(5)
-                    }}
-                    GHM</span
-                  >
+                  <p>{{ languagePack.delegation }}：</p>
+                  <span>{{ account.delegate_amount }} GHM</span>
                 </div>
                 <div class="column">
-                  <p>{{languagePack.receivereward}}：</p>
-                  <span
-                    >{{
-                      reward.total.length == 0
-                        ? 0
-                        : (reward.total[0].amount * 1).toFixed(5)
-                    }}
-                    GHM</span
-                  >
+                  <p>{{ languagePack.receivereward }}：</p>
+                  <span>{{ account.rewards }} GHM</span>
                 </div>
 
                 <div class="column">
-                  <p>{{languagePack.unbind}}：</p>
-                  <span
-                    >{{
-                      unbonding.length == 0 ? "0" : "unbonding  GHM"
-                    }}GHM</span
-                  >
+                  <p>{{ languagePack.unbind }}：</p>
+                  <span>{{ account.withdraw_amount }}GHM</span>
                 </div>
                 <div class="column">
-                  <p>{{languagePack.commission}}：</p>
-                  <span>{{
-                    unbonding.length == 0 ? "0" : "unbonding  GHM"
-                  }}</span>
+                  <p>{{ languagePack.commission }}：</p>
+                  <span>0</span>
                 </div>
               </div>
             </template>
@@ -94,28 +78,24 @@
         <div class="detail-table-header">
           <el-pagination
             small
-            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
-            :page-sizes="[10, 25, 50]"
-            :page-size="pageSize"
-            layout="prev, pager, next, sizes"
-            :total="pagination"
+            :current-page="page.currentPage + 1"
+            :page-size="page.pageSize"
+            layout="prev, pager, next"
+            :total="txtotal"
+            hide-on-single-page
           >
           </el-pagination>
         </div>
         <div class="detail-table-body">
           <el-table
-            v-loading="loading"
-            style="width: 100%"
-            height="612px"
-            size="mini"
             :data="TxsList"
-            :row-style="{ height: '58px' }"
-            :header-cell-style="{
-              background: '#F8FAFB',
-              color: 'rgba(20,37,62,0.45)',
-            }"
+            size="mini"
+            height="612px"
+            :header-cell-class-name="'tableHeaderCellStyle'"
+            :row-class-name="'tableRowStyle'"
+            :row-style="{ height: '58px !important' }"
+            v-loading="loading"
           >
             <el-table-column width="48">
               <template slot-scope="scope">
@@ -128,49 +108,38 @@
                     trigger="click"
                   >
                     <div class="popoverBox">
-                      <div class="popoverBox1">
-                        <div>
-                          状态 ：<span style="color: rgba(0, 0, 0, 0.25)"
-                            >(X个区块确认)</span
-                          >
+                      <div class="popoverBox_content">
+                        <div class="popoverBox_title">
+                          {{
+                            languagePack.statussucceededfailedxxblocksconfirmed
+                          }}
                         </div>
-                        <div class="popStatus" style="margin-top: 5px">
-                          <img
-                            src="@/assets/img/deal_succeed@2x.png"
-                            alt=""
-                            style="
-                              width: 14px;
-                              height: 14px;
-                              vertical-align: middle;
-                            "
-                            v-show="true"
-                          />
-                          <img
-                            src="@/assets/img/deal_lose@2x.png"
-                            alt=""
-                            style="
-                              width: 14px;
-                              height: 14px;
-                              vertical-align: middle;
-                            "
-                            v-show="false"
-                          />
-                          成功
+                        <div class="popStatus">
+                          <div v-if="scope.row.result == 'success'">
+                            <img src="@/assets/img/deal_succeed@2x.png" /><span
+                              >成功</span
+                            ><span>(X个区块确认)</span>
+                          </div>
+                          <div v-else>
+                            <img src="@/assets/img/deal_lose@2x.png" /><span
+                              >失败</span
+                            ><span>(X个区块确认)</span>
+                          </div>
                           <el-divider></el-divider>
                         </div>
                         <div v-for="(item, index) in statusTitle" :key="index">
-                          <div>{{ item.title }}</div>
-                          <span v-show="index === 0"
+                          <div class="popoverBox_title">{{ item.title }}</div>
+                          <span v-if="index === 0"
                             >{{ scope.row.fee | toMoney }} GHM ($0.00)</span
                           >
-                          <span v-show="index === 1"
+                          <span v-if="index === 1"
                             >{{
                               scope.row.gas_wanted | toMoney
                             }}Gas总量中实际消耗{{
                               scope.row.gas_used | toMoney
                             }}Gas<br />@0.0004GHM</span
                           >
-                          <span v-show="index === 2">{{
+                          <span v-if="index === 2">{{
                             scope.row.sequence
                           }}</span>
                           <el-divider></el-divider>
@@ -186,68 +155,88 @@
                     <img
                       slot="reference"
                       src="@/assets/img/table_eye_nor.png"
+                      style="vertical-align: middle"
                     />
                   </el-popover>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.transactionhash" prop="txhash" width="180">
+            <el-table-column
+              prop="_id"
+              :label="languagePack.transactionhash"
+              width="180px"
+            >
               <template slot-scope="scope">
-                <p
-                  class="specialFont"
-                  @click="queryDealtoHash(hashList, scope.$index)"
-                >
-                  {{ scope.row.txhash | sliceAddress }}
-                </p>
+                <TableTooltip :content="scope.row._id">
+                  <template #icon>
+                    <img
+                      src="@/assets/img/table_mistake.png"
+                      v-if="scope.row.result === 'error'"
+                    />
+                  </template>
+                </TableTooltip>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.operationtype" align="center">
+            <el-table-column
+              :label="languagePack.Method"
+              width="100px"
+              align="center"
+            >
               <template slot-scope="scope">
-                <div class="dealType">
-                  {{ scope.row.type == "MsgSend" ? "转账" : scope.row.type }}
-                </div>
+                <div class="table_txOperate">{{ scope.row.type }}</div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.block">
+            <el-table-column :label="languagePack.BlockHeight">
               <template slot-scope="scope">
-                <p class="specialFont">{{ scope.row.height | toMoney }}</p>
+                <div class="specialFont">{{ scope.row.height }}</div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.time" prop="timestamp"></el-table-column>
-            <el-table-column :label="languagePack.startaddress" width="168">
+            <el-table-column prop="timestamp" :label="languagePack.time">
               <template slot-scope="scope">
-                <div class="specialFont">
-                  {{ scope.row.from_address | sliceAddress }}
-                </div>
+                <div>{{ scope.row.timestamp | jetlag }}</div>
               </template>
             </el-table-column>
-            <el-table-column width="57">
-              <template>
+            <el-table-column
+              :label="languagePack.Sender"
+              :show-overflow-tooltip="true"
+              width="150px"
+            >
+              <template slot-scope="scope">
+                <TableTooltip :content="scope.row.sender"></TableTooltip>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" width="56px">
+              <template slot-scope="scope">
                 <div>
-                  <img src="@/assets/img/table_transmit.png" alt="" />
+                  <img
+                    src="@/assets/img/table_transmit.png"
+                    alt=""
+                    v-if="scope.row.result !== 'error'"
+                  />
+                  <span v-else class="table_txfail">self</span>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.targetaddress" width="168">
+            <el-table-column
+              prop="fuelTotal"
+              :label="languagePack.Recipient"
+              width="150px"
+            >
               <template slot-scope="scope">
-                <p class="specialFont">
-                  {{ scope.row.to_address | sliceAddress }}
-                </p>
+                <TableTooltip :content="scope.row.targetAddress"></TableTooltip>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.Transactions" width="186" align="right">
+            <el-table-column :label="languagePack.turnover">
               <template slot-scope="scope">
                 <div>
-                  <p v-if="scope.row.amount">
-                    {{ scope.row.amount | toMoney }} GHM
-                  </p>
-                  <p v-else>-</p>
+                  {{ scope.row.tx_amount | toMoney
+                  }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.TransactionFee" align="center" width="163">
+            <el-table-column :label="languagePack.TransactionFee">
               <template slot-scope="scope">
-                <div>{{ scope.row.fee | toMoney }} GHM</div>
+                <div>{{ scope.row.fee | toMoney }}</div>
               </template>
             </el-table-column>
           </el-table>
@@ -257,11 +246,12 @@
             small
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
+            :current-page="page.currentPage + 1"
             :page-sizes="[10, 25, 50]"
-            :page-size="pageSize"
+            :page-size="page.pageSize"
             layout="prev, pager, next, sizes"
-            :total="pagination"
+            :total="txtotal"
+            hide-on-single-page
           ></el-pagination>
         </div>
       </div>
@@ -270,144 +260,80 @@
 </template>
 
 <script>
-import axios from "axios";
-import { http } from "@/api/index.js";
-import {
-  adresBalance,
-  getadresRewards,
-  getadresDelegated,
-  getAccountsBasis,
-  getAddressTxs,
-} from "@/api/api.js";
+import { queryAccountInfo, queryAccountTx } from "@/api/account.js";
 import mixin from "@/mixins";
+import vueQr from "vue-qr";
 export default {
   name: "addressDetail",
   mixins: [mixin],
   data() {
     return {
-      loading:true,
+      loading: true,
       address: "",
-      currentPage: 1,
-      pageSize: 10, //初始每页数量
-      pagination: 0,
-      reward: {
-        total: [{ amount: "" }],
-      },
-      avaliable: {
-        balances: [{ amount: "" }],
-      },
-      delegated: {
-        delegation_responses: [],
-      },
-      unbonding: [],
+      txtotal: 0,
       TxsList: [],
-      initTxsList: [],
       hashList: [],
-      statusTitle: [
-        { title: "手续费 :" },
-        { title: "燃料信息 :" },
-        { title: "随机数 :" },
-      ],
+      account: {},
+      page: {
+        currentPage: 0,
+        pageSize: 10,
+      },
     };
   },
   created() {
     this.address = this.$route.query.address;
-    this.getAccountMsg(this.$route.query.address);
-    this.getAccountsDeals(this.$route.query.address); //账户交易详情
+    this.getAccountMsg();
+
+    let { pageSize, currentPage } = this.page;
+    this.getTxList(pageSize, currentPage);
   },
   methods: {
-    async getAccountMsg(address) {
-      // const res = await axios(http+`cosmos/auth/v1beta1/accounts/${address}`)
-      const res2 = await adresBalance(address); //获取账户余额
-      const res3 = await getadresRewards(address); //查询累积总奖励
-      // const res4 = await axios(http+`/cosmos/distribution/v1beta1/delegators/${address}/validators`);//查询委托人的验证人
-      // const res5 = await axios(http+`cosmos/distribution/v1beta1/delegators/${address}/withdraw_address`);// 撤销地址
-      const res6 = await getadresDelegated(address); //根据地址查询所有委派
-      // const res7 = await axios(http+`cosmos/staking/v1beta1/delegators/${address}/redelegations`);//查询给定地址的重新委派
-      const res8 = await axios(
-        http +
-          `cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`
-      ); //查询给定委派人地址的所有取消绑定委派。
-      // const res9 = await axios(http+`/cosmos/staking/v1beta1/delegators/${address}/validators`);//通过地址查询所有验证人信息
-      // console.log('res3', res3);
-      // console.log('res2', res2);
-      this.reward = res3;
-      this.avaliable = res2;
-      this.delegated = res6;
+    async getAccountMsg() {
+      const res = await queryAccountInfo(this.address);
+      console.log("账户基本信息", res);
+      this.account = res.data;
+    },
+    async getTxList(limit, index) {
+      const txList = await queryAccountTx(limit, index, this.address);
+      console.log("账户交易列表", txList);
+      let arr = txList.data.list;
 
-      this.unbonding = res8.data.unbonding_responses; //解除绑定期
-      // console.log("解除绑定期", res8);
-      // console.log("当前账户余额", res2);
-      // console.log("查询累积总奖励", res3);
+      // if(!arr) return
+      this.disposeTableType(arr);
+      this.TxsList = arr;
+      this.txtotal = txList.data.total;
     },
-    async getAccountsDeals(address) {
-      //获取账户地址的交易信息
-      let data = `message.sender='${address}'`;
-      const res = await getAddressTxs(data);
-      console.log("账户交易情况", res);
-      let arr = [];
-      const { tx_responses, pagination } = res;
-      tx_responses.forEach((item) => {
-        let { from_address, to_address, amount } = item.tx.body.messages[0];
-        let type = item.tx.body.messages[0]["@type"].split(".").pop();
-        switch (type) {
-          case "MsgSend":
-            type = "发送";
-            break;
-          case "MsgVote":
-            type = "投票";
-            break;
-          case "MsgCreateValidator":
-            type = "创建验证器";
-            break;
-          case "RaAuthenticate":
-            type = "身份验证";
-          default:
-            break;
-        }
-        arr.push({
-          txhash: item.txhash,
-          type: type,
-          height: item.height,
-          timestamp: item.timestamp.slice(0, 10),
-          from_address: from_address ?? this.address,
-          to_address: to_address ?? "-",
-          amount: amount ? amount[0].amount : "",
-          fee: item.tx.auth_info.fee.amount[0].amount,
-          gas_used: item.gas_used,
-          gas_wanted: item.gas_wanted,
-          sequence: item.tx.auth_info.signer_infos[0].sequence,
-        });
-      });
-      console.log("处理完后的数组", arr);
-      this.initTxsList = arr.reverse();
-      this.hashList = this.initTxsList.map((item) => item.txhash);
-      // console.log('hashList',this.hashList);
-      this.TxsList = this.initTxsList.slice(0, this.pageSize);
-      this.pagination = pagination.total * 1;
-      setTimeout(()=>{
-        this.loading = false
-      },500)
-    },
+    //分页
     handleSizeChange(val) {
-      this.pageSize = val;
-      this.TxsList = this.initTxsList.slice(0, val);
+      this.TxsList = [];
+      this.getTxList((this.page.pageSize = val), (this.page.currentPage = 0));
     },
-
-    handleCurrentChange(val) {
-      console.log(val);
-      this.TxsList = this.initTxsList.slice(
-        (val - 1) * this.pageSize,
-        val * this.pageSize
-      );
+    handleCurrentChange(index) {
+      this.page.currentPage = index - 1;
+      let { pageSize, currentPage } = this.page;
+      this.TxsList = [];
+      this.getTxList(pageSize, currentPage);
     },
   },
   computed: {
-    languagePack(){
-      return this.$store.state.Language
-    }
+    languagePack() {
+      return this.$store.state.Language;
+    },
+    statusTitle() {
+      return [
+        { title: this.languagePack.TransactionFee + ":" },
+        { title: this.languagePack.GasInformation + ":" },
+        { title: this.languagePack.GasUsed + ":" },
+      ];
+    },
   },
-  watch: {},
+  watch: {
+    TxsList(value) {
+      if (!Array.isArray(value)) return (this.loading = false);
+      this.loading = value.length == 0 ? true : false;
+    },
+  },
+  components: { vueQr },
 };
 </script>
 
@@ -415,6 +341,7 @@ export default {
 .detail {
   width: 1280px;
   margin: 24px auto;
+
   &-title {
     height: 68px;
     background: #ffffff;
@@ -427,22 +354,27 @@ export default {
     display: flex;
     align-items: center;
     color: rgba(20, 37, 62, 0.85);
-    > img {
-      margin-left: 10px;
+
+    img {
+      margin-left:10px;
       cursor: pointer;
     }
   }
+
   .basic-column {
     margin: 16px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     &-item {
       width: 632px;
       height: 296px;
     }
+
     .column-basic:nth-child(1) {
       height: 212px;
+
       .column {
         height: 40px;
         line-height: 40px;
@@ -457,6 +389,7 @@ export default {
     border: 1px solid #e9eaef;
     box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
     border-radius: 4px;
+
     &-header,
     &-bottom {
       height: 60px;
@@ -464,6 +397,7 @@ export default {
       align-items: center;
       justify-content: flex-end;
     }
+
     &-body {
       height: 612px;
     }
@@ -479,19 +413,25 @@ export default {
 @media screen and (max-width: 598px) {
   .detail {
     width: 100%;
+
     .detail-title {
       padding-left: 8px;
       font-size: 12px;
-      > img {
+
+      img {
         margin: 0;
       }
     }
-    .column {
+
+    .basic-column {
       flex-direction: column;
-      .column-item {
+
+      &-item {
         width: 100%;
+
         .column-basic {
           height: auto;
+
           p {
             height: auto;
           }
@@ -502,6 +442,12 @@ export default {
     .detail-table {
       width: 100%;
     }
+
   }
 }
+</style>
+<style>
+  .qrcodeStyle{
+    min-width: 80px !important;
+  }
 </style>

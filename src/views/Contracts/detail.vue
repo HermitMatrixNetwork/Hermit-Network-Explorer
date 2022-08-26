@@ -6,9 +6,7 @@
           <div class="basicStyle messageBasic">
             <div class="column">
               <p>{{ languagePack.contractaddress }}：</p>
-              <span
-                >#0x40c7c726995dec1676e15d3a9c471dc47aa7f56c3abc1ebf2b4e5781cc1b05b1</span
-              >
+              <span>{{ contractData.contract_address }}</span>
             </div>
             <div class="column">
               <p>{{ languagePack.sourcecode }}：</p>
@@ -16,7 +14,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.nametag }}：</p>
-              <span>隐士矩阵</span>
+              <span>{{ contractData.contract_lable }}</span>
             </div>
             <div class="column">
               <p>{{ languagePack.contractbalance }}：</p>
@@ -36,7 +34,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.Totalnumberofoperations }}：</p>
-              <span>4519</span>
+              <span>{{ contractData.compute_count }}</span>
             </div>
             <div class="column">
               <p>{{ languagePack.datahash }}：</p>
@@ -58,7 +56,7 @@
 
       <div class="contracts_table">
         <div class="contracts_table_title">
-          {{ languagePack.contracthistory }} {{languagePack.xxtimesintotal}}
+          {{ languagePack.contracthistory }} {{ languagePack.xxtimesintotal }}
         </div>
         <el-table
           height="612px"
@@ -66,7 +64,7 @@
           style="width: 100%"
           :header-cell-class-name="'tableHeaderCellStyle'"
           :row-class-name="'tableRowStyle'"
-          :row-style="{height:'58px'}"
+          :row-style="{ height: '58px' }"
           v-loading="loading"
         >
           <el-table-column
@@ -96,7 +94,15 @@
           </el-table-column>
         </el-table>
         <div class="table_bottom">
-          <el-pagination small layout="prev, pager, next" :total="1000">
+          <el-pagination
+            popper-class="popperSelect"
+            small
+            :page-sizes="[10, 25, 50]"
+            :page-size="page.pageSize"
+            layout="prev, pager, next, sizes"
+            :total="txtotal"
+            hide-on-single-page
+          >
           </el-pagination>
         </div>
       </div>
@@ -106,17 +112,34 @@
 
 <script>
 import mixins from "@/mixins";
+import { getContractInfo, getContractTx } from "@/api/contract.js";
 export default {
   mixins: [mixins],
-  data(){
+  data() {
     return {
-      loading:false,
-      tableList:[
-        {ID:'1',name:'test'}
-      ]
-    }
+      loading: false,
+      tableList: [],
+      contractData: {},
+      pageSize: 10,
+      page: 0,
+      txtotal: 0,
+    };
   },
-  created() {},
+  created() {
+    this.queryContract(this.pageSize, this.page);
+  },
+  methods: {
+    async queryContract(pageSize, page) {
+      const address = this.$route.query.address;
+      const res = await getContractInfo(address);
+      const txlist = await getContractTx(pageSize, page, address);
+      console.log("合约详细信息", res);
+      console.log(txlist);
+      this.tableList = txlist.data.list;
+      this.txtotal = txlist.data.total;
+      this.contractData = res.data;
+    },
+  },
   computed: {
     languagePack() {
       return this.$store.state.Language;

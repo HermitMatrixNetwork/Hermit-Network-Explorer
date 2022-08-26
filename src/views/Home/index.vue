@@ -3,7 +3,9 @@
     <div id="setting_Image">
       <div class="content">
         <SearchBox></SearchBox>
-        <div class="banner"></div>
+        <div class="banner">
+          {{ lastUpdate.toFixed(1) }}
+        </div>
       </div>
     </div>
 
@@ -34,7 +36,7 @@
 
         <div class="newest-data-item">
           <!--当前区块高度-->
-          <div @click="checkBlock_Detail">
+          <div @click="queryDealtoBlock(basicData.blockHeight)">
             <p>{{ languagePack.Liveblockheight }}</p>
             <span>{{ basicData.blockHeight }}</span>
           </div>
@@ -52,8 +54,8 @@
 
           <!--10秒内平均TPS/瞬时最高TPS-->
           <div>
-            <p>{{languagePack.AverageTPSWithin10S}}</p>
-            <span>{{ basicData.blockHeight }}</span>
+            <p>{{ languagePack.AverageTPSWithin10S }}</p>
+            <span>{{ TPS }}</span>
           </div>
 
           <!--流通量-->
@@ -87,7 +89,7 @@
 
           <!--地址数-->
           <div>
-            <p>{{languagePack.LiveAddress}}</p>
+            <p>{{ languagePack.LiveAddress }}</p>
             <span>{{ basicData.totalNum }}</span>
           </div>
         </div>
@@ -98,13 +100,30 @@
         <div class="newBlock">
           <div class="block-title">{{ languagePack.LiveBlock }}</div>
           <ul class="blockInformation">
-            <li class="blockInformation-item" v-for="item in 9" :key="item">
+            <li
+              class="blockInformation-item"
+              v-for="item in blockList"
+              :key="item._id"
+            >
               <img src="@/assets/img/bar.png" alt="" />
               <div class="basic">
-                <p>36895421{{ item + 1 }}<span>{{languagePack.proposer}}propoasl</span></p>
-                <p>6s {{languagePack.xsecondsago}}</p>
+                <p>
+                  <span @click="queryDealtoBlock(item._id)">{{
+                    item._id
+                  }}</span>
+                  <span
+                    style="color: rgba(20, 37, 62, 0.85); padding-left: 24px"
+                    >{{ languagePack.proposer }}</span
+                  >
+                  <span @click="queryDealtoNode(item.validator)">{{
+                    item.proposer_address | sliceAddress
+                  }}</span>
+                </p>
+                <p>{{ item.timestamp | jetlag }}</p>
+                <!-- <p>{{item.timeStamp}}</p> -->
+                <!-- {{ languagePack.xsecondsago }} -->
               </div>
-              <div class="btnRate">1.86Txns</div>
+              <div class="btnRate">{{ item.tx_count }} Txns</div>
             </li>
           </ul>
           <div class="bottom">
@@ -125,10 +144,12 @@
             >
               <div class="icon">top{{ index + 1 }}</div>
               <div class="basic">
-                <p>{{languagePack.ElectedValidators}}{{ index + 1 }}</p>
-                <p>{{languagePack.TotalStakes}}{{ item.tokens }}uGHM</p>
+                <p>{{ languagePack.ElectedValidators }}{{ index + 1 }}</p>
+                <p>{{ languagePack.TotalStakes }}{{ item.tokens }}uGHM</p>
               </div>
-              <div class="btnRate">338.45% {{languagePack.ValidatorYield}}</div>
+              <div class="btnRate">
+                338.45% {{ languagePack.ValidatorYield }}
+              </div>
             </li>
           </ul>
           <div class="bottom">
@@ -153,14 +174,19 @@ import {
   totalCirculation,
   querylatestNodeMessage,
 } from "@/api/home.js";
+import { queryBlockList } from "@/api/blockchain.js";
 import mixin from "@/mixins";
+import { numAdd } from "@/utils/common.js";
+
 export default {
   mixins: [mixin],
   name: "Home",
   data() {
     return {
       select: "1",
-      timer2: "",
+      timer: "",
+      TPS: "",
+      lastUpdate: 0,
       nodelist: "", //当前验证节点列表
       basicData: {
         blockHeight: 0, //当前区块高度
@@ -176,31 +202,29 @@ export default {
                         流通供应量 = 总发行量 - 锁仓的Token 其中，锁
                         仓的Token为所有锁仓状态的Token，包含当前委托
                         或处于绑定解锁期的锁仓状态的Token。`,
+      blockList: [],
     };
   },
-  created() {
-    this.getnowBlockHeight();
-    // this.timer2 = setInterval(() => this.getnowBlockHeight(), 4000);
+  async created() {
+    this.basicData.blockHeight = await this.getnowBlockHeight();
+    this.timer = setInterval(() => {
+      this.lastUpdate = numAdd(this.lastUpdate, 0.1);
+    }, 100);
     this.getBlockMsg();
+    this.getnowBlockList();
   },
   mounted() {
-    let charts = document.querySelectorAll(".barChart");
-    // charts.forEach((item) => {
-    //   bar(echarts.init(item));
-    // });
-    bar(charts);
+    this.charts = echarts.init(document.querySelector(".barChart"));
+    setTimeout(()=>{
+      bar(this.charts);
+    },500)
   },
   methods: {
     //获取当前区块高度
     async getnowBlockHeight() {
       const res = await getLatestBlock();
-      this.basicData.blockHeight = res.block.last_commit.height;
-    },
-    checkBlock_Detail() {
-      this.$router.push({
-        path: "block_detail",
-        query: { height: this.basicData.blockHeight },
-      });
+      // this.basicData.blockHeight = res.block.last_commit.height;
+      return res.block.last_commit.height;
     },
     //获取数据
     async getBlockMsg() {
@@ -230,15 +254,30 @@ export default {
       };
       //质押率
       // this.Pledgerate = (this.pledgeNum / this.issueNum).toFixed(2);
-
       // console.log('总地址数量',res);
       const nodelist = await allValidationNode();
       this.nodelist = nodelist.validators;
       console.log("节点信息", nodelist);
     },
+    //实时出块区块
+    async getnowBlockList() {
+      const {
+        data: { list },
+      } = await queryBlockList(10, 0);
+      console.log("最新的出块区块", list);
+      this.blockList = list;
+    },
+    queryDealtoNode(val) {
+      // this.$router.push
+    },
   },
   beforeDestroy() {
-    clearInterval(this.timer2);
+    clearInterval(this.timer);
+    this.timer = null
+    this.blockHeight = 0
+    console.log(1111111111111111);
+  },
+  destroyed(){
   },
   computed: {
     languagePack() {
@@ -263,6 +302,33 @@ export default {
           icon: require("@/assets/img/home_icon2.png"),
         },
       ];
+    },
+  },
+  watch: {
+    blockList(value) {
+      let num1 = value[0].tx_count;
+      let num2 = value[1].tx_count;
+      this.TPS = num1 + num2 + " / " + (num1 > num2 ? num1 : num2);
+    },
+    async lastUpdate(value) {
+      if (value % 3 === 0) {
+        const number = await this.getnowBlockHeight();
+        if (number !== this.basicData.blockHeight) {
+          // console.log("调用更新");
+          // let arr = []
+          // arr.length = number - this.basicData.blockHeight
+          // for(let i = 0;i<arr.length;i++){
+          //   arr[i] = 500 / arr.length
+          // }
+          // this.lastUpdate = 0
+          bar(this.charts,arr);
+
+        //   //当块的高度发生变化，就调用获取最新数组，and更新柱状图，获取高度差用3s来除以高度差
+        //   this.lastUpdate = 0;
+          this.basicData.blockHeight = number;
+        //   // this.getnowBlockList()
+        }
+      }
     },
   },
 };
@@ -363,7 +429,7 @@ export default {
         }
         span {
           height: 19px;
-          font-weight: 560;
+          font-weight: bold;
           font-size: 16px;
           color: rgba(20, 37, 62, 0.85);
           letter-spacing: 0;
@@ -419,7 +485,7 @@ export default {
         height: 52px;
         box-shadow: inset 0 -1px 0 0 #e9eaef;
         line-height: 52px;
-        font-weight: 500;
+        font-weight: bold;
         font-size: 14px;
         color: rgba(20, 37, 62, 0.85);
         text-indent: 16px;
@@ -449,6 +515,7 @@ export default {
       background: #edf0ff;
       border-radius: 2px;
       border: none;
+      color: #1e42ed;
       cursor: pointer;
     }
     .topBlock {
@@ -500,7 +567,7 @@ export default {
         margin-top: 52px;
         height: 720px;
         &-item {
-          height: 73px;
+          height: 72px;
           width: 540px;
           border-bottom: 1px solid #eaebef;
           margin-left: 72px;
@@ -516,7 +583,6 @@ export default {
       }
     }
     .btnRate {
-      width: 124px;
       height: 28px;
       background-image: linear-gradient(
         90deg,
@@ -524,7 +590,7 @@ export default {
         #f2f3f4 35%
       );
       border-radius: 1px 4px 4px 1px 0;
-      font-weight: 500;
+      font-weight: bold;
       font-size: 12px;
       color: rgba(20, 37, 62, 0.45);
       letter-spacing: 0;
@@ -534,6 +600,7 @@ export default {
       right: 16px;
       top: 50%;
       transform: translateY(-50%);
+      padding: 0 8px 0 24px;
     }
     .basic {
       padding-left: 16px;
@@ -543,6 +610,9 @@ export default {
         height: 17px;
         color: #5671f2;
         padding-bottom: 6px;
+        > span:not(:nth-child(2)) {
+          cursor: pointer;
+        }
       }
       p:nth-child(2) {
         height: 17px;
@@ -660,21 +730,5 @@ export default {
 }
 .blockHeight {
   cursor: pointer;
-}
-</style>
-
-<style>
-/* 文字提示弹窗样式 */
-.circulateTooltipStyle {
-  width: 250px;
-  height: 100px;
-  padding: 7px 8px;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 20px;
-  background: rgba(0, 0, 0, 0.75) !important;
-  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
-    0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-  border-radius: 2px;
 }
 </style>
