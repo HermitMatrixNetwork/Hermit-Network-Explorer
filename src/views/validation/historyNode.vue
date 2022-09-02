@@ -3,7 +3,7 @@
     <div class="punishment-main">
       <div class="title">历史验证节点</div>
       <div class="punishment-main-table">
-        <div class="header">总共{{list.length}}个节点</div>
+        <div class="header">总共个节点</div>
         <div class="tableBody">
           <el-table
             size="mini"
@@ -59,7 +59,7 @@ export default {
 
     const res = await queryHistoryNode()
     console.log(res);
-    this.list = res.tx_responses
+    // this.list = res.tx_responses
   }
 };
 </script>

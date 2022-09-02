@@ -1,62 +1,62 @@
 <template>
   <div>
     <div class="PageStructure">
-      <BasicTitle :title="languagePack.contractinformation">
+      <BasicTitle :title="languagePack.contracttext11">
         <template #message>
           <div class="basicStyle messageBasic">
             <div class="column">
-              <p>{{ languagePack.contractaddress }}：</p>
+              <p>{{ languagePack.contracttext12 }}：</p>
               <span>{{ contractData.contract_address }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.sourcecode }}：</p>
+              <p>{{ languagePack.contracttext18 }}：</p>
               <span>N/A</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.nametag }}：</p>
+              <p>{{ languagePack.contracttext13 }}：</p>
               <span>{{ contractData.contract_lable }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.contractbalance }}：</p>
+              <p>{{ languagePack.contracttext19 }}：</p>
               <span>0 GHM</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.contractnumber }}：</p>
-              <span>354</span>
+              <p>{{ languagePack.contracttext14 }}：</p>
+              <span>{{contractData.contract_id}}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.thepercentageoflockedpositions }}：</p>
+              <p>{{ languagePack.contracttext20 }}：</p>
               <span>0.000%</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.developer }}：</p>
+              <p>{{ languagePack.contracttext15 }}：</p>
               <span>0x9BF4001d307dFd62B26A2F1307ee0C0307632d59</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.Totalnumberofoperations }}：</p>
+              <p>{{ languagePack.contracttext21 }}：</p>
               <span>{{ contractData.compute_count }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.datahash }}：</p>
+              <p>{{ languagePack.contracttext16 }}：</p>
               <span
                 >FA824C4504F21FC59250DA0CDF549DD392FD862BAF2689D246A07B9E941F04A9</span
               >
             </div>
             <div class="column">
-              <p>{{ languagePack.totalvalueoflockedposition }}：</p>
+              <p>{{ languagePack.contracttext22 }}：</p>
               <span>0 GHM</span>
             </div>
-            <div class="column">
+            <!-- <div class="column">
               <p>{{ languagePack.constructor }}：</p>
               <span>无</span>
-            </div>
+            </div> -->
           </div>
         </template>
       </BasicTitle>
 
       <div class="contracts_table">
         <div class="contracts_table_title">
-          {{ languagePack.contracthistory }} {{ languagePack.xxtimesintotal }}
+          {{ languagePack.contracttext23 }} {{ languagePack.contracttext24 }}
         </div>
         <el-table
           height="612px"
@@ -69,28 +69,45 @@
         >
           <el-table-column
             prop="ID"
-            :label="languagePack.useraddress"
+            :label="languagePack.contracttext25"
             width="570"
           >
-          </el-table-column>
-          <el-table-column :label="languagePack.operationtime" width="430">
             <template slot-scope="scope">
-              <p class="specialFont" @click="toGo('/address_detail')">
-                {{ scope.row.name }}
+              <div class="specialFont" @click="toaddress(scope.row.sender)">{{ scope.row.sender }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column :label="languagePack.contracttext26" width="430">
+            <template slot-scope="scope">
+              <p>
+                {{ scope.row.timestamp | timeStamp}}
               </p>
             </template>
           </el-table-column>
           <el-table-column
             prop="num"
-            :label="languagePack.statussucceededfailed"
+            :label="languagePack.contracttext27"
             width="200"
           >
+            <template slot-scope="scope">
+              <div class="stateColumn">
+                <div
+                  :style="{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '6px',
+                    marginRight: '6px',
+                    background:
+                      scope.row.result == 'success' ? '#55C499' : '#ED422B',
+                  }"
+                />
+                {{ scope.row.result }}
+              </div>
+            </template>
           </el-table-column>
-          <el-table-column
-            prop="user"
-            :label="languagePack.details"
-            align="center"
-          >
+          <el-table-column :label="'操作'" align="center">
+            <template slot-scope="scope">
+              <div class="tableDetail" @click="tohash(scope.$index)">{{languagePack.contracttext28}}</div>
+            </template>
           </el-table-column>
         </el-table>
         <div class="table_bottom">
@@ -101,7 +118,8 @@
             :page-size="page.pageSize"
             layout="prev, pager, next, sizes"
             :total="txtotal"
-            hide-on-single-page
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
           >
           </el-pagination>
         </div>
@@ -117,28 +135,52 @@ export default {
   mixins: [mixins],
   data() {
     return {
-      loading: false,
+      loading: true,
       tableList: [],
       contractData: {},
       pageSize: 10,
       page: 0,
       txtotal: 0,
+      hashList:[]
     };
   },
   created() {
-    this.queryContract(this.pageSize, this.page);
+    this.queryContract();
+    this.queryTx(this.pageSize, this.page)
   },
   methods: {
-    async queryContract(pageSize, page) {
+    async queryContract() {
       const address = this.$route.query.address;
       const res = await getContractInfo(address);
-      const txlist = await getContractTx(pageSize, page, address);
       console.log("合约详细信息", res);
-      console.log(txlist);
-      this.tableList = txlist.data.list;
-      this.txtotal = txlist.data.total;
       this.contractData = res.data;
     },
+    async queryTx(pageSize, page) {
+      const address = this.$route.query.address;
+      const txlist = await getContractTx(pageSize, page, address);
+      console.log(txlist);
+      this.tableList = txlist.data.list;
+      this.hashList = txlist.data.list.map(item=>{
+        return {hash:item._id,status:item.result}
+      })
+      if(this.txtotal !== 0) return
+      this.txtotal = txlist.data.total;
+    },
+    handleSizeChange(val) {
+      this.tableList = [];
+      this.queryTx((this.pageSize = val), (this.page = 0));
+    },
+    handleCurrentChange(index) {
+      this.page = index - 1;
+      this.tableList = [];
+      this.queryTx(this.pageSize, this.page);
+    },
+    tohash(index){
+      this.$router.push({name:'hash_detail',params:{hash:this.hashList,index}})
+    },
+    toaddress(address){
+      this.$router.push({path:'/address_detail',query:{address}})
+    }
   },
   computed: {
     languagePack() {
@@ -162,12 +204,22 @@ export default {
       return;
     },
   },
+  watch: {
+    tableList(value) {
+      if (Array.isArray(value)) {
+        this.loading = this.tableList.length === 0 ? true : false;
+      } else {
+        this.loading = false;
+      }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .PageStructure {
   margin-top: 24px;
+  margin-bottom: 80px;
 }
 .basicStyle {
   width: 100%;
@@ -206,5 +258,39 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+.stateColumn {
+  display: flex;
+  align-items: center;
+}
+
+.tableDetail {
+  font-weight: bold;
+  font-size: 12px;
+  color: #5671f2;
+  text-align: center;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+
+@media screen and (max-width:598px) {
+  .PageStructure{
+    width: 100%;
+  }
+
+  .contracts_table{
+    width: 100%;
+  }
+
+  .basicStyle{
+    display: flex !important;
+    .column{
+      >span{
+        word-break: break-all;
+      }
+    }
+  }
 }
 </style>

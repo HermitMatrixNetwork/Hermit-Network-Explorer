@@ -25,11 +25,11 @@
       <div class="newest-data">
         <div class="block-chart">
           <div class="outBlockTime">
-            {{ languagePack.LiveBlocktimes }}
+            {{ languagePack.hometext10 }}
             <div class="barChart" />
           </div>
           <div class="outBlockNum">
-            {{ languagePack.LiveTranransactions }}
+            {{ languagePack.hometext11 }}
             <div class="barChart" />
           </div>
         </div>
@@ -37,31 +37,31 @@
         <div class="newest-data-item">
           <!--当前区块高度-->
           <div @click="queryDealtoBlock(basicData.blockHeight)">
-            <p>{{ languagePack.Liveblockheight }}</p>
+            <p>{{ languagePack.hometext12 }}</p>
             <span>{{ basicData.blockHeight }}</span>
           </div>
           <!--当前出块节点-->
           <div>
-            <p>{{ languagePack.Liveblocknodes }}</p>
+            <p>{{ languagePack.hometext13 }}</p>
             <span>{{ basicData.latestNode }}</span>
           </div>
 
           <!--累计交易笔数-->
           <div @click="toGo('/tsx')">
-            <p>{{ languagePack.accumulatedtradingvolume }}</p>
+            <p>{{ languagePack.hometext14 }}</p>
             <span>{{ basicData.detailNum }}</span>
           </div>
 
           <!--10秒内平均TPS/瞬时最高TPS-->
           <div>
-            <p>{{ languagePack.AverageTPSWithin10S }}</p>
+            <p>{{ languagePack.hometext15 }}</p>
             <span>{{ TPS }}</span>
           </div>
 
           <!--流通量-->
           <div class="circulate">
             <p>
-              {{ languagePack.CirculatingTotalSupply }}
+              {{ languagePack.hometext16 }}
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -71,7 +71,7 @@
               >
                 <img src="@/assets/img/annotation.png" />
               </el-tooltip>
-              /{{ languagePack.Total }}
+              /{{ languagePack.hometext29 }}
             </p>
             <span>
               {{ (basicData.circulation / 1e6).toFixed(2) + "M" }}/{{
@@ -83,13 +83,13 @@
 
           <!--质押率-->
           <div>
-            <p>{{ languagePack.StakingRate }}</p>
+            <p>{{ languagePack.hometext17 }}</p>
             <span>{{ basicData.Pledgerate }}% /{{ basicData.issueNum }}</span>
           </div>
 
           <!--地址数-->
           <div>
-            <p>{{ languagePack.LiveAddress }}</p>
+            <p>{{ languagePack.hometext18 }}</p>
             <span>{{ basicData.totalNum }}</span>
           </div>
         </div>
@@ -98,7 +98,7 @@
       <div class="allblock-number">
         <!--查看所有区块-->
         <div class="newBlock">
-          <div class="block-title">{{ languagePack.LiveBlock }}</div>
+          <div class="block-title">{{ languagePack.hometext19 }}</div>
           <ul class="blockInformation">
             <li
               class="blockInformation-item"
@@ -113,7 +113,7 @@
                   }}</span>
                   <span
                     style="color: rgba(20, 37, 62, 0.85); padding-left: 24px"
-                    >{{ languagePack.proposer }}</span
+                    >{{ languagePack.hometext20 }}</span
                   >
                   <span @click="queryDealtoNode(item.validator)">{{
                     item.proposer_address | sliceAddress
@@ -128,14 +128,14 @@
           </ul>
           <div class="bottom">
             <button class="seeAll" @click="toGo('/blockcheck')">
-              {{ languagePack.AllBlocks }}
+              {{ languagePack.hometext23 }}
             </button>
           </div>
         </div>
 
         <!--查看所有验证节点-->
         <div class="topBlock">
-          <div class="block-title">{{ languagePack.ElectedValidators }}</div>
+          <div class="block-title">{{ languagePack.hometext24 }}</div>
           <ul class="nodeInformation">
             <li
               v-for="(item, index) in nodelist"
@@ -144,17 +144,17 @@
             >
               <div class="icon">top{{ index + 1 }}</div>
               <div class="basic">
-                <p>{{ languagePack.ElectedValidators }}{{ index + 1 }}</p>
-                <p>{{ languagePack.TotalStakes }}{{ item.tokens }}uGHM</p>
+                <p>{{ languagePack.hometext24 }}{{ index + 1 }}</p>
+                <p>{{ languagePack.hometext25 }}{{ item.tokens }}uGHM</p>
               </div>
               <div class="btnRate">
-                338.45% {{ languagePack.ValidatorYield }}
+                338.45% {{ languagePack.hometext26 }}
               </div>
             </li>
           </ul>
           <div class="bottom">
             <button class="seeAll" @click="toGo('/validation')">
-              {{ languagePack.AllValidators }}
+              {{ languagePack.hometext28 }}
             </button>
           </div>
         </div>
@@ -207,23 +207,20 @@ export default {
   },
   async created() {
     this.basicData.blockHeight = await this.getnowBlockHeight();
-    this.timer = setInterval(() => {
-      this.lastUpdate = numAdd(this.lastUpdate, 0.1);
-    }, 100);
+    // this.timer = setInterval(() => {
+    //   this.lastUpdate++;
+    // }, 1000);
     this.getBlockMsg();
     this.getnowBlockList();
   },
   mounted() {
     this.charts = echarts.init(document.querySelector(".barChart"));
-    setTimeout(()=>{
-      bar(this.charts);
-    },500)
+    bar(this.charts);
   },
   methods: {
     //获取当前区块高度
     async getnowBlockHeight() {
       const res = await getLatestBlock();
-      // this.basicData.blockHeight = res.block.last_commit.height;
       return res.block.last_commit.height;
     },
     //获取数据
@@ -268,16 +265,11 @@ export default {
       this.blockList = list;
     },
     queryDealtoNode(val) {
-      // this.$router.push
+      this.$router.push({ name: "node_detail", query: { address: val } });
     },
   },
   beforeDestroy() {
     clearInterval(this.timer);
-    this.timer = null
-    this.blockHeight = 0
-    console.log(1111111111111111);
-  },
-  destroyed(){
   },
   computed: {
     languagePack() {
@@ -287,16 +279,16 @@ export default {
       return (this.circulation / this.issueNum) * 100;
     },
     messageList() {
-      const { Price, transactionVolume } = this.languagePack;
+      const { hometext08, hometext09 } = this.languagePack;
       return [
         {
-          title: Price,
+          title: hometext08,
           price: "0.48",
           updown: "-5.29",
           icon: require("@/assets/img/home_icon1.png"),
         },
         {
-          title: transactionVolume,
+          title: hometext09,
           price: "0.48",
           updown: "",
           icon: require("@/assets/img/home_icon2.png"),
@@ -315,18 +307,20 @@ export default {
         const number = await this.getnowBlockHeight();
         if (number !== this.basicData.blockHeight) {
           // console.log("调用更新");
-          // let arr = []
-          // arr.length = number - this.basicData.blockHeight
-          // for(let i = 0;i<arr.length;i++){
-          //   arr[i] = 500 / arr.length
-          // }
+          let arr = [];
+          arr.length = number - this.basicData.blockHeight;
+          for (let i = 0; i < arr.length; i++) {
+            arr[i] = this.lastUpdate / arr.length;
+          }
           // this.lastUpdate = 0
-          bar(this.charts,arr);
+          bar(this.charts, arr);
 
-        //   //当块的高度发生变化，就调用获取最新数组，and更新柱状图，获取高度差用3s来除以高度差
-        //   this.lastUpdate = 0;
+          //   //当块的高度发生变化，就调用获取最新数组，and更新柱状图，获取高度差用3s来除以高度差
+          this.lastUpdate = 0;
           this.basicData.blockHeight = number;
-        //   // this.getnowBlockList()
+          setTimeout(() => {
+            this.getnowBlockList();
+          }, 10000);
         }
       }
     },
@@ -418,8 +412,13 @@ export default {
         height: 44px;
         width: 25%;
         position: relative;
+        &:nth-child(4){
+          >span{
+            color: #1e42ed;
+          }
+        }
 
-        p {
+        >p {
           height: 17px;
           font-weight: 400;
           font-size: 12px;
@@ -427,13 +426,14 @@ export default {
           letter-spacing: 0;
           margin-bottom: 8px;
         }
-        span {
+        >span {
           height: 19px;
           font-weight: bold;
           font-size: 16px;
           color: rgba(20, 37, 62, 0.85);
           letter-spacing: 0;
           cursor: pointer;
+          transition: color .2s cubic-bezier(.645,.045,.355,1);
           &:hover {
             color: #1e42ed;
           }
@@ -620,6 +620,7 @@ export default {
       }
     }
   }
+  margin-bottom: 80px;
 }
 
 .barChart {
@@ -628,26 +629,21 @@ export default {
   margin-top: 24px;
 }
 
-::v-deep .input-with-select {
-  .el-input--suffix {
-    .el-input__inner {
-      width: 130px;
-      text-align: center;
-      padding: 0;
-    }
-  }
-  .el-input-group__append {
-    background: #1e42ec;
-    border: none;
-    color: #ffffff;
-  }
-}
-
 @media screen and (max-width: 598px) {
   #setting_Image {
     min-height: 200px;
     .content {
       height: 200px;
+    }
+    .banner {
+      display: none;
+    }
+
+    .inputVal {
+      margin: 0 10px;
+      .el-input__inner {
+        display: none;
+      }
     }
   }
   .pageMain {
@@ -684,7 +680,14 @@ export default {
           h3 {
             font-size: 12px !important;
           }
+          &:nth-child(6){
+            transform: translate(-25%,100%);
+            >span{
+              white-space: nowrap;
+            }
+          }
         }
+
       }
     }
 
@@ -710,20 +713,6 @@ export default {
       }
       .seeAll {
         width: 100%;
-      }
-    }
-  }
-
-  #setting_Image {
-    // padding-top: 60px;
-    .banner {
-      display: none;
-    }
-
-    .inputVal {
-      margin: 0 10px;
-      .el-input__inner {
-        display: none;
       }
     }
   }

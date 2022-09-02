@@ -4,11 +4,19 @@
       <div class="title">
         <h3>{{ languagePack.transactiondetails }}</h3>
         <p class="specialFont">
-          {{ Tx.hash }}
+          {{ Tx?Tx.hash:$route.params.hash }}
         </p>
         <div class="nextBtn">
-          <span @click="lastData" :style="{ cursor: waitResult ? 'wait' : 'pointer' }"><i class="el-icon-arrow-left"></i></span>
-          <span @click="nextData" :style="{ cursor: waitResult ? 'wait' : 'pointer' }"><i class="el-icon-arrow-right"></i></span>
+          <span
+            @click="lastData"
+            :style="{ cursor: waitResult ? 'wait' : 'pointer' }"
+            ><i class="el-icon-arrow-left"></i
+          ></span>
+          <span
+            @click="nextData"
+            :style="{ cursor: waitResult ? 'wait' : 'pointer' }"
+            ><i class="el-icon-arrow-right"></i
+          ></span>
         </div>
       </div>
 
@@ -115,6 +123,26 @@
               <span>{{ detailed.turnover | toMoney }} GHM</span>
             </div>
 
+            <!-- 当为实例化合约时 -->
+            <div class="column" v-if="dealType === 'MsgInstantiateContract'">
+              <p>{{ languagePack.executive }}：</p>
+              <span class="specialFont">{{ detailed.contract }}</span>
+            </div>
+            <div class="column" v-if="dealType === 'MsgInstantiateContract'">
+              <p>{{ languagePack.contract }}：</p>
+              <span>{{ detailed.contract }}</span>
+            </div>
+
+            <!-- 当为上传合约时 -->
+            <div class="column" v-if="dealType === 'MsgStoreCode'">
+              <p>{{ languagePack.executive }}：</p>
+              <span class="specialFont">{{ detailed.contract }}</span>
+            </div>
+            <div class="column" v-if="dealType === 'MsgStoreCode'">
+              <p>构建：</p>
+              <span>{{ detailed.perform }}</span>
+            </div>
+
             <div
               class="column"
               v-if="
@@ -142,9 +170,9 @@
               <p>{{ languagePack.Txstatus }}：</p>
               <span
                 :style="{
-                  color: Tx.status === 'success' ? '#55c499' : '#ED422B',
+                  color: detailed.status === 'success' ? '#55c499' : '#ED422B',
                 }"
-                >{{ Tx.status == "error" ? "失败" : "成功" }}</span
+                >{{ detailed.status == "error" ? "失败" : "成功" }}</span
               >
             </div>
             <div class="column">
@@ -185,12 +213,11 @@ export default {
       hashIndex: 0,
       detailed: {},
       dealType: "",
-      waitResult:false
+      waitResult: false,
     };
   },
   created() {
-    
-
+    console.log(this.$route);
     this.hashIndex = this.$route.params.index;
     const { hash, index } = this.$route.params;
     this.queryData(hash, index);
@@ -198,11 +225,16 @@ export default {
   },
   methods: {
     async queryData(hash, index) {
-      this.waitResult = true
-      const res = await getHashContent(hash[index].hash);
+      this.waitResult = true;
+      let res;
+      if (!Array.isArray(hash)) {
+        res = await getHashContent(hash);
+      } else {
+        res = await getHashContent(hash[index].hash);
+      }
       console.log("通过hash查找信息", res);
-      if(res){
-        this.waitResult = false
+      if (res) {
+        this.waitResult = false;
       }
       const {
         tx_response: { txhash, timestamp, height, gas_used, gas_wanted },
@@ -243,6 +275,13 @@ export default {
           obj.turnover = message.amount.amount;
           obj.validator_address = message.validator_dst_address;
           break;
+        case "MsgInstantiateContract":
+          obj.contract = message.sender;
+          break;
+        case "MsgStoreCode":
+          obj.contract = message.sender;
+          obj.perform = message.builder;
+          message
         default:
           break;
       }
@@ -356,6 +395,25 @@ export default {
 @media screen and (max-width: 598px) {
   .hashdetail {
     width: 100%;
+    .column{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      >p{
+        width: auto;
+      }
+    }
+    .title{
+      padding-left: 16px;
+      h3{
+        padding: 0;
+      }
+      p{
+        white-space: pre-wrap;
+        height: auto;
+        line-height: 1;
+        padding-bottom: 16px;
+      }
+    }
   }
   .nextBtn {
     position: relative !important;

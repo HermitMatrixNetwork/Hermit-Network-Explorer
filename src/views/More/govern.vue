@@ -55,7 +55,7 @@ export default {
 
 .governMain {
   width: 1280px;
-  margin: 0 auto;
+  margin: 0 auto 80px;
   &-title {
     height: 60px;
     font-weight: 500;

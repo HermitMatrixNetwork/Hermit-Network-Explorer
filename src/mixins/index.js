@@ -35,7 +35,7 @@ export default {
       this.$router.push({ name: 'hash_detail', params: { hash, index } })
     },
     queryDealtoAddress(address) {
-      this.$router.push({ path: '/address_detail', query: { address } })
+      this.$router.push({ path: '/address_detail', query: { address } }).catch(e=>{})
     },
     disposeTableType(arr) {
       if (!Array.isArray(arr)) return console.error('no Array');

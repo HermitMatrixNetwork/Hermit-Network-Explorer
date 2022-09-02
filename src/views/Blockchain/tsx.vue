@@ -300,7 +300,7 @@ export default {
 .main {
   width: 1280px;
   height: 732px;
-  margin: 0 auto;
+  margin: 0 auto 80px;
   background: #ffffff;
   border: 1px solid #e9eaef;
   box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
@@ -363,5 +363,22 @@ h3 {
   border-radius: 2px;
   padding: 0 4px;
   white-space: nowrap;
+}
+
+@media screen and (max-width: 598px) {
+  h3{
+    width: 100%;
+    text-indent: 16px;
+  }
+  .main{
+    width: 100%;
+    overflow: hidden;
+    .total_title{
+      width: 1280px;
+    }
+    .el-row--flex.is-justify-end {
+      justify-content:center;
+    }
+  }
 }
 </style>

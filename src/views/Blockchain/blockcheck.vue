@@ -55,7 +55,7 @@
         />
         <el-table-column :label="languagePack.proposer" width="160">
           <template slot-scope="scope">
-            <TableTooltip :content="scope.row.proposer_address"></TableTooltip>
+            <TableTooltip :content="scope.row.proposer_address" @click.native="toNode(scope.row.validator)"></TableTooltip>
           </template>
         </el-table-column>
         <el-table-column prop="gas_used" :label="languagePack.GasUsed" width="228px">
@@ -179,6 +179,9 @@ export default {
                 query: { height },
             });
         },
+        toNode(val){
+            this.$router.push({name:'node_detail',query:{address:val}})
+}
     },
     watch: {
         tableData(value) {
@@ -197,7 +200,7 @@ export default {
 .main {
   width: 1280px;
   height: 732px;
-  margin: 0 auto;
+  margin: 0 auto 80px;
   background: #ffffff;
   border: 1px solid #e9eaef;
   box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);

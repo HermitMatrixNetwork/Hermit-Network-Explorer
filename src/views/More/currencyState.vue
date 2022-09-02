@@ -1,7 +1,7 @@
 <template>
   <div class="pages">
     <div class="pages-main">
-      <BasicTitle :title="'上币说明'" :basicStyle="titleStyle">
+      <BasicTitle :title="languagePack.applytext01" :basicStyle="titleStyle">
         <template #message>
           <div class="textStyle">
             除了上述举例的图片，NFT还具有其他多种信息，最重要的就是NFT的编码，也就是Token
@@ -18,21 +18,26 @@
         </template>
       </BasicTitle>
 
-      <BasicTitle :title="'提交上币申请'" :basicStyle="formStyle">
+      <BasicTitle :title="languagePack.applytext02" :basicStyle="formStyle">
         <template #message>
           <div class="formBox">
-            <el-form ref="form" :model="form" label-width="100px">
-              <el-form-item label="联系人：" required>
-                <el-input v-model="form.user" placeholder="请输入"></el-input>
+            <el-form
+              ref="form"
+              :model="form"
+              :rules="rules"
+              label-width="190px"
+            >
+              <el-form-item :label="languagePack.applytext05 + '： '" prop="user">
+                <el-input v-model="form.user" :placeholder="languagePack.applytext06"></el-input>
               </el-form-item>
-              <el-form-item label="联系方式：" required>
+              <el-form-item :label="languagePack.applytext07 +'：'" prop="contact">
                 <el-input
                   v-model="form.contact"
-                  placeholder="请输入"
+                  :placeholder="languagePack.applytext08"
                 ></el-input>
               </el-form-item>
               <!--代币LOGO上传-->
-              <el-form-item label="代币LOGO：" required>
+              <el-form-item :label="languagePack.applytext09 + '：'">
                 <el-upload
                   action="#"
                   list-type="picture-card"
@@ -63,44 +68,44 @@
               </el-form-item>
 
               <!--表单-->
-              <el-form-item label="代币合约地址" required>
+              <el-form-item :label="languagePack.applytext11 + '：'" prop="contract_address">
                 <el-input
                   v-model="form.contract_address"
-                  placeholder="请输入"
+                  :placeholder="languagePack.applytext11"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="代币全称：" required>
+              <el-form-item :label="languagePack.applytext12 +'：'" prop="full_name">
                 <el-input
                   v-model="form.full_name"
-                  placeholder="请输入"
+                  :placeholder="languagePack.applytext13"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item label="代币简称：" required>
+              <el-form-item :label="languagePack.applytext014+'：'" prop="alias_name">
                 <el-input
                   v-model="form.alias_name"
-                  placeholder="请输入"
+                  :placeholder="languagePack.applytext15"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="发行总量：" required>
+              <el-form-item :label="languagePack.applytext016+'：'" prop="total_supply">
                 <el-input
                   v-model="form.total_supply"
-                  placeholder="请输入"
+                  :placeholder="languagePack.applytext17"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item label="流通总量：" required>
+              <el-form-item :label="languagePack.applytext18+'：'" prop="currency">
                 <el-input
                   v-model="form.currency"
-                  placeholder="请输入"
+                  :placeholder="languagePack.applytext19"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item label="代币描述：" required>
+              <el-form-item :label="languagePack.applytext20+'：'" prop="desc">
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 3, maxRows: 6 }"
-                  placeholder="请输入介绍信息"
+                  :placeholder="languagePack.applytext21"
                   v-model="form.desc"
                   maxlength="300"
                   show-word-limit
@@ -108,15 +113,15 @@
                 </el-input>
               </el-form-item>
 
-              <el-form-item label="官网：">
+              <el-form-item :label="languagePack.applytext23+'：'" class="unRequired">
                 <el-input
                   v-model="form.official"
-                  placeholder="请输入项目官网链接"
+                  :placeholder="languagePack.applytext24"
                 ></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">提交</el-button>
-                <el-button>重置</el-button>
+                <el-button type="primary" @click="onSubmit('form')">{{languagePack.applytext25}}</el-button>
+                <el-button @click="clearForm('form')">{{languagePack.applytext26}}</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -128,8 +133,91 @@
 
 <script>
 import axios from "axios";
+import mixins from "@/mixins";
 export default {
+  mixins:[mixins],
   data() {
+    let username = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("联系人不能为空"));
+      }
+      if (value.length > 20) {
+        return callback(new Error("联系人不超过20字"));
+      } else {
+        callback();
+      }
+    };
+    let usercontact = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("手机号不能为空"));
+      }
+      if (
+        !/^1((34[0-8])|(8\d{2})|(([35][0-35-9]|4[579]|66|7[35678]|9[1389])\d{1}))\d{7}$/.test(
+          value
+        )
+      ) {
+        return callback(new Error("手机格式不正确"));
+      } else {
+        callback();
+      }
+    };
+
+    let issuetotal = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("不能为空"));
+      }
+      if (!Number.isInteger(value * 1)) {
+        return callback(new Error("仅能填写数字"));
+      } else {
+        callback();
+      }
+    };
+
+    let descmessage = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("不能为空"));
+      }
+      if (value.length > 300) {
+        return callback(new Error("长度不超过300"));
+      } else {
+        callback();
+      }
+    };
+
+    let contract_address = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("地址不能为空"));
+      } else {
+        callback();
+      }
+    };
+
+    let full_name = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("输入不能为空"));
+      }
+      if (value.length > 20) {
+        return callback(new Error("不超过20字"));
+      } else {
+        callback();
+      }
+    };
+
+    let alias_name = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("输入不能为空"));
+      }
+      if (value.length > 10) {
+        return callback(new Error("不超过10个字"));
+      } else {
+        callback();
+      }
+    };
+    let logo = (rule,value,callback) => {
+      if(!value){
+        return callback(new Error('请上传图片'))
+      }
+    }
     return {
       titleStyle: {
         position: "relative",
@@ -140,26 +228,46 @@ export default {
         top: "32px",
       },
       form: {
-        user: "boxi666", //联系人
-        contact: "1234567", //电话
-        contract_address: "boxitoken111", //地址
-        full_name: "boxi666", //代币全称
-        alias_name: "boxi", //代币简称
-        total_supply: "8888888", //发行总量
-        currency: "8888888", //流通总量
-        desc: "text", //描述
-        official: "http://boxi666.com", //官网
+        user: "", //联系人boxi666
+        contact: "", //电话 1234567
+        contract_address: "", //地址 boxitoken111
+        full_name: "", //代币全称 boxi666
+        alias_name: "", //代币简称 boxi
+        total_supply: "", //发行总量 8888888
+        currency: "", //流通总量 8888888
+        desc: "", //描述 text
+        official: "", //官网 http://boxi666.com
       },
       dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,
       fileList: [],
       tokenLogo: "",
+      rules: {
+        user: [{ validator: username, trigger: "blur" }],
+        contact: [{ validator: usercontact, trigger: "blur" }],
+        total_supply: [{ validator: issuetotal, trigger: "blur" }],
+        currency: [{ validator: issuetotal, trigger: "blur" }],
+        desc: [{ validator: descmessage, trigger: "blur" }],
+        contract_address: [{ validator: contract_address, trigger: "blur" }],
+        full_name: [{validator:full_name,trigger:'blur'}],
+        alias_name: [{validator:alias_name,trigger:'blur'}],
+        logo:[{validator:logo,trigger:'change'}]
+      },
     };
   },
   methods: {
-    async onSubmit() {
+    async onSubmit(formName) {
       // console.log("submit!");
+      let status;
+      this.$refs[formName].validate((e) => {
+        if(!e){
+          return status = false
+        }else{
+          return status = true
+        }
+      });
+      if(!status) return
       const {
         user,
         contact,
@@ -183,10 +291,15 @@ export default {
         currency,
         desc,
         official,
-        order:1,
+        order: 1,
       };
-      const res = await axios.post(" http://localhost:8081/api/apply/apply",{...params});
-      console.log('提交结果',res);
+      const {data} = await axios.post(" http://localhost:8080/upload/apply/apply",{...params});
+      console.log('提交结果',data);
+      if(data.code === 7){
+        this.messageBox(data.msg,'error')
+      }else{
+        this.messageBox('提交成功','success')
+      }
     },
     upload() {},
     fileChange(file) {
@@ -204,7 +317,15 @@ export default {
       console.log(file);
       console.log(fileList);
     },
+    clearForm(formName) {
+      this.$refs[formName].resetFields();
+    },
   },
+  computed:{
+    languagePack(){
+      return this.$store.state.Language
+    }
+  }
 };
 </script>
 
@@ -214,11 +335,9 @@ export default {
 }
 .pages-main {
   width: 1280px;
-  margin: 0 auto;
+  margin: 0 auto 96px;
 }
 .textStyle {
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
   font-size: 12px;
   color: rgba(20, 37, 62, 0.85);
   line-height: 24px;
@@ -228,8 +347,7 @@ export default {
   position: relative;
   top: 32px;
   width: 460px;
-  margin: 0 auto;
-  padding-bottom: 80px;
+  margin: 0 auto 80px;
   .el-input__inner {
     height: 28px;
     background: #ffffff;
@@ -303,11 +421,27 @@ export default {
   border-radius: 2px !important;
 }
 
-@media screen and (max-width:598px) {
-  .pages-main{
+@media screen and (max-width: 598px) {
+  .pages-main {
     width: 100%;
-    .formBox{
+    .formBox {
       width: 100%;
+    }
+  }
+}
+
+::v-deep .el-form-item__label {
+  &::before {
+    content: "*";
+    color: #ed422b;
+    margin-right: 2px;
+    vertical-align: middle;
+  }
+}
+::v-deep .unRequired {
+  .el-form-item__label {
+    &::before {
+      content: "" !important;
     }
   }
 }

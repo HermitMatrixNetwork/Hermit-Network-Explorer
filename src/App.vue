@@ -27,9 +27,6 @@ export default {
     if(this.$route.path == '/hash_detail'){
       this.$router.replace('/home')
     }
-    if(this.$route.path == '/node_detail'){
-      this.$router.go(-1)
-    }
   },
   mounted() {},
   watch: {},

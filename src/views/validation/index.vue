@@ -1,23 +1,23 @@
 <template ref="test">
   <div class="validation">
     <div class="validationMain">
-      <h3 class="title">{{ languagePack.Validators }}</h3>
+      <h3 class="title">{{ languagePack.nodetext01 }}</h3>
 
       <div class="validation-column">
         <div class="column-item">
-          <BasicTitle :title="languagePack.nodeoverview">
+          <BasicTitle :title="languagePack.nodetext02">
             <template #message>
               <div class="messageBasic" style="height: 124px">
                 <div class="column">
-                  <p>{{ languagePack.totalnodes }}：</p>
-                  <span>{{ nodeList.length }}</span>
+                  <p>{{ languagePack.nodetext03 }}：</p>
+                  <span>{{ tableList.length }}</span>
                 </div>
                 <div class="column">
-                  <p>{{ languagePack.activenodes }}：</p>
+                  <p>{{ languagePack.nodetext04 }}：</p>
                   <span>{{ activeNode.length }}</span>
                 </div>
                 <div class="column">
-                  <p>{{ languagePack.candidatenodes }}：</p>
+                  <p>{{ languagePack.nodetext05 }}：</p>
                   <span>{{ candidate.length }}</span>
                 </div>
               </div>
@@ -25,19 +25,19 @@
           </BasicTitle>
         </div>
         <div class="column-item">
-          <BasicTitle :title="languagePack.Livestakesinformation">
+          <BasicTitle :title="languagePack.nodetext06">
             <template #message>
               <div class="messageBasic" style="height: 124px">
                 <div class="column">
-                  <p>{{ languagePack.TotalStakes }}：</p>
+                  <p>{{ languagePack.nodetext07 }}：</p>
                   <span>{{ pledgeMessage.pledgeNum | toMoney }} GHM</span>
                 </div>
                 <div class="column">
-                  <p>{{ languagePack.delegationaccepted }}：</p>
+                  <p>{{ languagePack.nodetext08 }}：</p>
                   <span>{{ pledgeMessage.issueNum | toMoney }} GHM</span>
                 </div>
                 <div class="column">
-                  <p>{{ languagePack.StakingRate }}：</p>
+                  <p>{{ languagePack.nodetext09 }}：</p>
                   <span> {{ pledgeMessage.Pledgerate }} %</span>
                 </div>
               </div>
@@ -52,9 +52,9 @@
             <div class="navs">
               <span
                 v-for="(item, index) in [
-                  languagePack.all,
-                  languagePack.Active,
-                  languagePack.candidate,
+                  languagePack.nodetext10,
+                  languagePack.nodetext11,
+                  languagePack.nodetext12,
                 ]"
                 :key="index"
                 :class="screenIndex == index ? 'navSelected' : ''"
@@ -65,7 +65,7 @@
 
             <!-- 表头搜索框 -->
             <el-input
-              :placeholder="languagePack.SearchbyValidators"
+              :placeholder="languagePack.nodetext13"
               v-model="searchValue"
             >
               <el-button slot="append" icon="el-icon-search"></el-button>
@@ -74,17 +74,17 @@
 
           <div class="right">
             <span @click="toGo('/punishmentNode')">{{
-              languagePack.punishmentnodes
+              languagePack.nodetext14
             }}</span>
-            <span @click="toGo('/historyNode')">{{
+            <!-- <span @click="toGo('/historyNode')">{{
               languagePack.VerifiedValidators
-            }}</span>
+            }}</span> -->
           </div>
         </div>
 
         <div class="validation-table-body">
           <el-table
-            :data="newNodeList"
+            :data="tableList"
             size="mini"
             height="612px"
             :row-style="{ height: '58px' }"
@@ -94,20 +94,20 @@
             v-loading="loading"
           >
             <el-table-column
-              :label="languagePack.Rank"
+              :label="languagePack.nodetext16"
               width="80"
               align="center"
               type="index"
             ></el-table-column>
-            <el-table-column :label="languagePack.nodename" width="160">
+            <el-table-column :label="languagePack.nodetext17" width="160">
               <template slot-scope="scope">
                 <div class="moniker">
                   <img src="@/assets/img/bottom-bar_github.png" alt="" />
-                  {{ scope.row.moniker }}
+                  {{ scope.row.validator_name }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.nodeaddress" width="180">
+            <el-table-column :label="languagePack.nodetext18" width="180">
               <template slot-scope="scope">
                 <p class="specialFont">
                   {{ scope.row.operator_address | sliceAddress }}
@@ -115,7 +115,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.statusactivecandidate"
+              :label="languagePack.nodetext19"
               width="88"
             >
               <template slot-scope="scope">
@@ -127,7 +127,7 @@
                       borderRadius: '6px',
                       marginRight: '6px',
                       background:
-                        scope.row.status == 'BONDED' ? '#55C499' : '#ED422B',
+                        scope.row.status == 'UNBONDING' ? '#ED422B' : '#55C499',
                     }"
                   />
                   {{
@@ -140,18 +140,27 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              :label="languagePack.thenumberofentrustedcontracts"
+            <!-- <el-table-column
+              :label="'总质押'"
               width="180"
               align="right"
             >
               <template slot-scope="scope">
                 <p>{{ scope.row.tokens | toMoney }} GHM</p>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
-              :label="languagePack.percentageofdelegationreward"
+              :label="languagePack.nodetext21"
               width="168"
+              align="right"
+            >
+              <template slot-scope="scope">
+                <div>{{ scope.row.delegate_tokens | toMoney }} GHM</div>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              :label="languagePack.nodetext22"
               align="right"
             >
               <template slot-scope="scope">
@@ -165,15 +174,15 @@
               </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.thenumberofdelegates"
-              width="110"
+              :label="languagePack.nodetext23"
+              align="right"
             >
               <template slot-scope="scope">
-                <p>{{ (1 - scope.row.commission) * 100 }} %</p>
+                <p>{{ scope.row.delegators }}</p>
               </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.activity"
+              :label="languagePack.nodetext24"
               width="120"
               align="right"
               prop="count"
@@ -183,9 +192,9 @@
               width="80"
               prop="active"
             ></el-table-column> -->
-            <el-table-column :label="languagePack.commission" align="center">
+            <el-table-column :label="languagePack.nodetext25" align="center">
               <template slot-scope="scope">
-                <p>{{ scope.row.commission * 100 }} %</p>
+                <p>{{ scope.row.commission_rate * 100 }} %</p>
               </template>
             </el-table-column>
           </el-table>
@@ -197,7 +206,6 @@
             :total="pagination"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page.sync="currentPage2"
             :page-sizes="[10, 25, 50]"
             :page-size="10"
           >
@@ -211,6 +219,7 @@
 <script>
 import { allValidationNode, validationEntrust } from "@/api/api.js";
 import { pledgeParameter, totalCirculation } from "@/api/home.js";
+import { getValidationList } from "@/api/validation.js";
 import mixin from "@/mixins";
 export default {
   mixins: [mixin],
@@ -218,9 +227,9 @@ export default {
     return {
       loading: true,
       searchValue: "",
-      currentPage2: 0,
       screenIndex: 0,
       pagination: 0,
+      tableList: [],
       pledgeMessage: {
         issueNum: 0,
         pledgeNum: 0,
@@ -228,54 +237,70 @@ export default {
       },
       nodeList: [],
       newNodeList: [],
-      activeNode: 0, //活跃节点数
-      candidate: 0, //候选节点数
+      activeNode: [], //活跃节点数
+      candidate: [], //候选节点数
+      page: {
+        currentPage: 0,
+        pageSize: 10,
+      },
     };
   },
   created() {
-    this.queryAllValidation();
+    // this.queryAllValidation();
     this.queryPledge();
+
+    const { currentPage, pageSize } = this.page;
+    this.getList(pageSize, currentPage);
   },
   mounted() {},
   methods: {
-    async queryAllValidation() {
-      const res = await allValidationNode();
-      console.log("获取所有验证节点信息", res);
-      let arr = [];
-      res.validators.forEach(async (item) => {
-        let {
-          description: { moniker },
-          status,
-          tokens,
-          jailed,
-          min_self_delegation,
-          operator_address,
-          commission,
-        } = item;
+    // async queryAllValidation() {
+    //   const res = await allValidationNode();
+    //   console.log("获取所有验证节点信息", res);
+    //   let arr = [];
+    //   res.validators.forEach(async (item) => {
+    //     let {
+    //       description: { moniker },
+    //       status,
+    //       tokens,
+    //       jailed,
+    //       min_self_delegation,
+    //       operator_address,
+    //       commission,
+    //     } = item;
 
-        // let a = await validationEntrust(operator_address);
-        // let delegateCount = a.delegation_responses.length;
-        arr.push({
-          moniker,
-          status: status.split("_").pop(),
-          tokens,
-          jailed,
-          operator_address,
-          commission: commission.commission_rates.rate,
-          min_self_delegation,
-        });
-      });
-      this.nodeList = arr.sort((a, b) => b.tokens - a.tokens);
-      this.delegateCount();
+    //     // let a = await validationEntrust(operator_address);
+    //     // let delegateCount = a.delegation_responses.length;
+    //     arr.push({
+    //       moniker,
+    //       status: status.split("_").pop(),
+    //       tokens,
+    //       jailed,
+    //       operator_address,
+    //       commission: commission.commission_rates.rate,
+    //       min_self_delegation,
+    //     });
+    //   });
+    //   this.nodeList = arr.sort((a, b) => b.tokens - a.tokens);
+    //   this.delegateCount();
 
+    //   this.activeNode = arr.filter((item) => item.status === "BONDED");
+    //   this.candidate = arr.filter((item) => item.status == "UNBONDING");
+
+    //   // console.log(this.nodeList);
+    //   setTimeout(() => {
+    //     this.newNodeList = JSON.parse(JSON.stringify(this.nodeList));
+    //     this.loading = false;
+    //   }, 3000);
+    // },
+    async getList(limit, index) {
+      const res = await getValidationList(limit, index);
+      console.log("中心化节点列表", res);
+      let arr = res.data.list;
+      this.tableList = arr;
+      arr.forEach((e) => (e.status = e.status.split("_").pop()));
       this.activeNode = arr.filter((item) => item.status === "BONDED");
-      this.candidate = arr.filter((item) => item.status == "UNBONDING");
-
-      // console.log(this.nodeList);
-      setTimeout(() => {
-        this.newNodeList = JSON.parse(JSON.stringify(this.nodeList));
-        this.loading = false;
-      }, 3000);
+      this.candidate = arr.filter((item) => item.status === "UNBONDING");
     },
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
@@ -295,7 +320,11 @@ export default {
     },
 
     TableClick(val) {
-      this.$router.push({ name: "node_detail", params: { basic: val } });
+      this.$router.push({
+        name: "node_detail",
+        query: { address: val.operator_address },
+      });
+      // console.log(val);
     },
     async queryPledge() {
       const pledge = await pledgeParameter(); //获取质押参数
@@ -306,7 +335,7 @@ export default {
         this.pledgeMessage.pledgeNum / this.pledgeMessage.issueNum
       ).toFixed(2); //质押率
 
-      console.log(pledge);
+      console.log(pledge, issueNum);
     },
     delegateCount() {
       this.nodeList.forEach(async (item) => {
@@ -321,13 +350,22 @@ export default {
       return this.$store.state.Language;
     },
   },
+  watch: {
+    tableList(val) {
+      if (Array.isArray(val)) {
+        this.loading = val.length === 0 ? true : false;
+      }else{
+        this.loading = false
+      }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .validationMain {
   width: 1280px;
-  margin: 0 auto;
+  margin: 0 auto 80px;
   .title {
     padding: 16px 0;
   }

@@ -1,26 +1,26 @@
 <template>
   <div class="contracts-main">
     <div class="main">
-      <div class="title">{{ languagePack.contract }}</div>
+      <div class="title">{{ languagePack.contracttext01 }}</div>
       <div class="contracts_basic">
         <div class="contracts_basic_item">
           <div class="icon"></div>
           <div class="explain">
-            <p>{{ languagePack.operation }}</p>
+            <p>{{ languagePack.contracttext02 }}</p>
             <h3>{{computeCount}}</h3>
           </div>
         </div>
         <div class="contracts_basic_item">
           <div class="icon"></div>
           <div class="explain">
-            <p>{{ languagePack.thenumberofusers }}</p>
+            <p>{{ languagePack.contracttext03 }}</p>
             <h3>{{userCount}}</h3>
           </div>
         </div>
         <div class="contracts_basic_item">
           <div class="icon"></div>
           <div class="explain">
-            <p>{{ languagePack.deployedcontracts }}</p>
+            <p>{{ languagePack.contracttext04 }}</p>
             <h3>$0.48</h3>
           </div>
         </div>
@@ -48,11 +48,11 @@
         >
           <el-table-column
             prop="contract_id"
-            :label="languagePack.contractID"
+            :label="languagePack.contracttext05"
             width="160"
           >
           </el-table-column>
-          <el-table-column :label="languagePack.contractname" width="548">
+          <el-table-column :label="languagePack.contracttext06" width="548">
             <template slot-scope="scope">
               <p class="specialFont" @click="toContractDetail(scope.row.contract_address)">
                 {{ scope.row.contract_lable }}
@@ -61,19 +61,19 @@
           </el-table-column>
           <el-table-column
             prop="compute_count"
-            :label="languagePack.operation"
+            :label="languagePack.contracttext07"
             width="160"
             align="right"
           >
           </el-table-column>
           <el-table-column
             prop="user_count"
-            :label="languagePack._thenumberofusers"
+            :label="languagePack.contracttext08"
             width="160"
             align="right"
           >
           </el-table-column>
-          <el-table-column :label="languagePack.TotalValueLocked" align="right">
+          <el-table-column :label="languagePack.contracttext09" align="right">
             <template slot-scope="scope">
               <div>
                 {{ scope.row.price }}
@@ -167,7 +167,7 @@ export default {
 <style lang="scss" scoped>
 .main {
   width: 1280px;
-  margin: 0 auto;
+  margin: 0 auto 80px;
   .title {
     height: 60px;
     line-height: 60px;

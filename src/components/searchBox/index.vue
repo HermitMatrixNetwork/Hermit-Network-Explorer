@@ -5,8 +5,17 @@
       v-model="searchVal"
       class="input-with-select"
     >
-      <el-select v-model="select" slot="prepend" :placeholder="languagePack.Filter">
-        <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.value"></el-option>
+      <el-select
+        v-model="select"
+        slot="prepend"
+        :placeholder="languagePack.Filter"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.label"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
       </el-select>
       <el-button
         slot="append"
@@ -53,23 +62,32 @@ export default {
         this.searchVal = "";
         return;
       }
+      if(!this.select){
+        this.messageBox('请选择搜索条件! ')
+        return
+      }
       switch (this.select * 1) {
         case 1:
-          this.queryDealtoHash(this.searchVal);
-          break;
-        case 2:
-          console.log("通过块搜索");
-          break;
-        case 3:
+          console.log("通过地址搜索");
           this.queryDealtoAddress(this.searchVal);
           break;
-        case 4:
+        case 2:
           console.log("通过token搜索");
+
+          break;
+        case 3:
+          console.log("通过hash搜索交易记录");
+          // this.queryDealtoAddress(this.searchVal);
+          this.queryDealtoHash(this.searchVal);
+          break;
+        case 4:
+          console.log("通过块搜索");
+          this.queryDealtoBlock(this.searchVal)
           break;
         default:
           break;
       }
-      this.searchVal = "";
+      // this.searchVal = "";
     },
   },
 };
@@ -91,13 +109,32 @@ export default {
     }
   }
   .el-input-group__append {
-    background: #1e42ec;
+    background: #1E42ED;
     border: none;
     color: #ffffff;
+    transition: background .2s cubic-bezier(.645,.045,.355,1) ;
+    &:hover{
+        background: #6E85F7;
+    }
+    &:active{
+        background: #0E31D6;
+    }
   }
 }
 
 ::v-deep .el-input-group__prepend {
   background: #ffffff !important;
+}
+
+::v-deep .input-with-select{
+  >input{
+    transition: border .2s cubic-bezier(.645,.045,.355,1);
+    &:hover{
+      border: 1px solid #5671F2;
+    }
+    &:focus{
+      border: 1px solid rgba(30,66,237);
+    }
+  }
 }
 </style>

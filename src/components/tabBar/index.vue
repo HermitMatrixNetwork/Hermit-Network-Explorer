@@ -16,31 +16,27 @@
 
       <div class="headernav" v-if="$route.path == '/home'">
         <div class="navs">
-          <router-link to="home" :class="$route.path == '/home'?'pathStyle':''">{{ languagePack.Home }}</router-link>
+          <router-link
+            to="home"
+            :class="$route.meta.ID == 1 ? 'pathStyle' : ''"
+            >{{ languagePack.headertext01 }}</router-link
+          >
           <el-dropdown @command="blockCommand">
             <span class="el-dropdown-link">
-              {{ languagePack.blockchain
-              }}<i class="el-icon-arrow-down el-icon--right"></i>
+              {{ languagePack.headertext02}}
+              <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="/blockchain">{{
-                languagePack.TopAccounts
-              }}</el-dropdown-item>
-              <el-dropdown-item command="/tsx" divided>{{
-                languagePack.viewTransactions
-              }}</el-dropdown-item>
-              <el-dropdown-item command="/blockcheck">{{
-                languagePack.viewBlock
-              }}</el-dropdown-item>
+              <el-dropdown-item command="/blockchain">{{languagePack.headertext03}}</el-dropdown-item>
+              <el-dropdown-item command="/tsx" divided>{{languagePack.headertext04}}</el-dropdown-item>
+              <el-dropdown-item command="/blockcheck">{{languagePack.headertext05}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <a @click="toGo('/contracts')">{{ languagePack.contract }}</a>
-          <a @click="toGo('/accounts')">{{ languagePack.account }}</a>
-          <a @click="toGo('/validation')">{{ languagePack.Validators }}</a>
+          <a @click="toGo('/contracts')">{{ languagePack.headertext06 }}</a>
+          <a @click="toGo('/accounts')">{{ languagePack.headertext07 }}</a>
+          <a @click="toGo('/validation')">{{ languagePack.headertext08 }}</a>
           <el-dropdown @command="blockCommand">
-            <span class="el-dropdown-link"
-              >{{ languagePack.Resources
-              }}<i class="el-icon-arrow-down el-icon--right"></i>
+            <span class="el-dropdown-link">{{ languagePack.headertext09}}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -54,8 +50,7 @@
           </el-dropdown>
           <el-dropdown @command="blockCommand">
             <span class="el-dropdown-link">
-              {{ languagePack.more
-              }}<i class="el-icon-arrow-down el-icon--right"></i>
+              {{ languagePack.headertext16}}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -71,7 +66,7 @@
         <div style="width: 1px; height: 24px; background: #f0f0f0" />
 
         <div class="langage hidden-sm-and-down">
-          <div @click="messageBox('暂未开放')">{{ languagePack.logIn }}</div>
+          <div @click="messageBox('暂未开放')">{{ languagePack.headertext22 }}</div>
           <img
             @click="messageBox('暂未开放')"
             src="../../assets/img/earths.png"
@@ -99,30 +94,33 @@
         <SearchBox :boxStyle="{ height: '50px' }"></SearchBox>
         <div>
           <div class="navs">
-            <router-link to="home">{{ languagePack.Home }}</router-link>
+            <router-link to="home">{{ languagePack.headertext01 }}</router-link>
             <el-dropdown @command="blockCommand">
-              <span class="el-dropdown-link">
-                {{ languagePack.blockchain
-                }}<i class="el-icon-arrow-down el-icon--right"></i>
+              <span class="el-dropdown-link" :class="$route.meta.ID == 2 ? 'pathStyle' : ''">
+                {{ languagePack.headertext02}}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="/blockchain">{{
-                  languagePack.TopAccounts
-                }}</el-dropdown-item>
-                <el-dropdown-item command="/tsx" divided>{{
-                  languagePack.viewTransactions
-                }}</el-dropdown-item>
-                <el-dropdown-item command="/blockcheck">{{
-                  languagePack.viewBlock
-                }}</el-dropdown-item>
+                <el-dropdown-item command="/blockchain">{{languagePack.headertext03}}</el-dropdown-item>
+                <el-dropdown-item command="/tsx" divided>{{languagePack.headertext04}}</el-dropdown-item>
+                <el-dropdown-item command="/blockcheck">{{languagePack.headertext05}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <a @click="toGo('/contracts')">{{ languagePack.contract }}</a>
-            <a @click="toGo('/accounts')">{{ languagePack.account }}</a>
-            <a @click="toGo('/validation')">{{ languagePack.Validators }}</a>
+            <a
+              @click="toGo('/contracts')"
+              :class="$route.meta.ID == 3 ? 'pathStyle' : ''"
+              >{{ languagePack.headertext06 }}</a
+            >
+            <a
+              @click="toGo('/accounts')"
+              :class="$route.meta.ID == 4 ? 'pathStyle' : ''"
+              >{{ languagePack.headertext07 }}</a
+            >
+            <a @click="toGo('/validation')" :class="$route.meta.ID == 5?'pathStyle':''">{{ languagePack.headertext08 }}</a>
             <el-dropdown @command="blockCommand">
-              <span class="el-dropdown-link"
-                >{{ languagePack.Resources
+              <span
+                class="el-dropdown-link"
+                :class="$route.meta.ID == 6 ? 'pathStyle' : ''"
+                >{{ languagePack.headertext09
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -136,8 +134,8 @@
               </el-dropdown-menu>
             </el-dropdown>
             <el-dropdown @command="blockCommand">
-              <span class="el-dropdown-link">
-                {{ languagePack.more
+              <span class="el-dropdown-link" :class="$route.meta.ID == 7?'pathStyle':''">
+                {{ languagePack.headertext16
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -153,7 +151,7 @@
           </div>
           <div style="width: 1px; height: 24px; background: #f0f0f0" />
           <div class="langage hidden-sm-and-down">
-            <div @click="messageBox('暂未开放')">{{ languagePack.logIn }}</div>
+            <div @click="messageBox('暂未开放')">{{ languagePack.headertext22 }}</div>
             <img
               @click="messageBox('暂未开放')"
               src="../../assets/img/earths.png"
@@ -178,6 +176,7 @@
         </div>
       </div>
 
+      <!-- 移动端导航栏 -->
       <el-drawer
         :append-to-body="true"
         :with-header="false"
@@ -285,35 +284,36 @@ export default {
     },
     morenavs() {
       const {
-        GovernableParameter,
-        DAOfundationAddress,
-        SubmitApplicattion,
-        RPCInformation,
-        faucet,
+        headertext17,
+        headertext18,
+        headertext19,
+        headertext20,
+        headertext21,
       } = this.languagePack;
       return [
-        { title: GovernableParameter, command: "/govern" },
-        { title: DAOfundationAddress, command: "/foundation", divided: true },
-        { title: SubmitApplicattion, command: "/currency_state" },
-        { title: RPCInformation, command: "/" },
-        { title: faucet, command: "/rpc" },
+        { title: headertext17, command: "/govern" },
+        { title: headertext18, command: "/foundation", divided: true },
+        { title: headertext19, command: "/currency_state" },
+        { title: headertext20, command: "/rpc" },
+        { title: headertext21, command: "/faucet" },
       ];
     },
     resourcesnavs() {
       const {
-        Whitepaper,
-        developerApi,
-        SDKdownload,
-        Tendermint,
-        IBC,contractCompiler,
+        headertext10,
+        headertext11,
+        headertext12,
+        headertext13,
+        headertext14,
+        headertext15,
       } = this.languagePack;
       return [
-        { title: Whitepaper, command: "/a" },
-        { title: developerApi, command: "/developapi", divided: true },
-        { title: SDKdownload, command: "/b" },
-        { title: Tendermint, command: "/c" },
-        { title: IBC, command: "/d" },
-        { title: contractCompiler, command: "/e" },
+        { title: headertext10, command: "/a" },
+        { title: headertext11, command: "/developapi", divided: true },
+        { title: headertext12, command: "/b" },
+        { title: headertext13, command: "/c" },
+        { title: headertext14, command: "/d" },
+        { title: headertext15, command: "/e" },
       ];
     },
   },
@@ -345,6 +345,9 @@ export default {
   line-height: 60px;
   align-items: center;
   justify-content: space-between;
+  .navs{
+    line-height: 60px;
+  }
 }
 
 .headernavM {
@@ -364,12 +367,12 @@ export default {
   }
 }
 
-::v-deep .navs {
+ .navs {
   display: flex;
   width: 510px;
   font-size: 14px;
   justify-content: space-around;
-  font-weight: 400;
+  line-height: 40px;
   text-align: center;
   a {
     display: block;
@@ -378,7 +381,7 @@ export default {
     text-align: center;
     color: rgba(20, 37, 62, 0.45);
   }
-  .el-dropdown {
+  .el-dropdown-link {
     color: rgba(20, 37, 62, 0.45);
     cursor: pointer;
   }
@@ -437,6 +440,11 @@ export default {
   }
 }
 
+.el-dropdown-link{
+  height: 100%;
+  display: block;  
+}
+
 @media screen and (max-width: 598px) {
   .centerStyle {
     width: 100%;
@@ -463,8 +471,8 @@ export default {
   }
 }
 
-.pathStyle{
+.pathStyle {
   font-weight: 600;
-  color: rgba(20,37,62,0.85) !important;
+  color: rgba(20, 37, 62, 0.85) !important;
 }
 </style>

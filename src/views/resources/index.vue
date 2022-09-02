@@ -68,7 +68,7 @@ export default {};
 
 <style lang="scss" scoped>
 .developMain {
-  margin: 0 auto;
+  margin: 0 auto 80px;
   width: 1280px;
   &-title {
     padding: 16px 0;

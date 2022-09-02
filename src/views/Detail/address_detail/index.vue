@@ -2,7 +2,7 @@
   <div class="address-detail">
     <div class="detail">
       <div class="detail-title">
-        {{ languagePack.address }}：{{ address
+        {{ languagePack.accounttext14 }}：{{ address
         }}<img src="@/assets/img/copy.png" @click="Copy(address)" />
         <el-popover placement="top" trigger="hover" popper-class="qrcodeStyle">
           <vueQr
@@ -18,22 +18,22 @@
       </div>
       <div class="basic-column">
         <div class="basic-column-item">
-          <BasicTitle :title="languagePack.overview">
+          <BasicTitle :title="languagePack.accounttext15">
             <template #message>
               <div
                 class="messageBasic column-basic"
                 style="justify-content: flex-start"
               >
                 <div class="column">
-                  <p>{{ languagePack.totalbalance }}：</p>
+                  <p>{{ languagePack.accounttext17 }}：</p>
                   <span>$ 131321313132</span>
                 </div>
                 <div class="column">
-                  <p>{{ languagePack.Price }}：</p>
+                  <p>{{ languagePack.accounttext18 }}：</p>
                   <span>86</span>
                 </div>
                 <div class="column">
-                  <p>{{ languagePack.thetotalnumberoftransactions }}：</p>
+                  <p>{{ languagePack.accounttext20 }}：</p>
                   <span>{{ account.tx_count }}</span>
                 </div>
               </div>
@@ -42,28 +42,28 @@
         </div>
 
         <div class="basic-column-item">
-          <BasicTitle :title="languagePack.details">
+          <BasicTitle :title="languagePack.accounttext21">
             <template #message>
               <div class="messageBasic column-basic">
                 <div class="column">
-                  <p>{{ languagePack.availablebalance }}：</p>
+                  <p>{{ languagePack.accounttext22 }}：</p>
                   <span>{{ account.balance | toMoney }} GHM</span>
                 </div>
                 <div class="column">
-                  <p>{{ languagePack.delegation }}：</p>
+                  <p>{{ languagePack.accounttext23 }}：</p>
                   <span>{{ account.delegate_amount }} GHM</span>
                 </div>
                 <div class="column">
-                  <p>{{ languagePack.receivereward }}：</p>
+                  <p>{{ languagePack.accounttext24 }}：</p>
                   <span>{{ account.rewards }} GHM</span>
                 </div>
 
                 <div class="column">
-                  <p>{{ languagePack.unbind }}：</p>
+                  <p>{{ languagePack.accounttext26 }}：</p>
                   <span>{{ account.withdraw_amount }}GHM</span>
                 </div>
                 <div class="column">
-                  <p>{{ languagePack.commission }}：</p>
+                  <p>{{ languagePack.accounttext27 }}：</p>
                   <span>0</span>
                 </div>
               </div>
@@ -147,7 +147,7 @@
                       </div>
                       <div
                         class="detailBox"
-                        @click="queryDealtoHash(scope.row.txhash)"
+                        @click="queryTxDetail(scope.$index)"
                       >
                         查看详情
                       </div>
@@ -163,22 +163,24 @@
             </el-table-column>
             <el-table-column
               prop="_id"
-              :label="languagePack.transactionhash"
+              :label="languagePack.accounttext29"
               width="180px"
             >
               <template slot-scope="scope">
-                <TableTooltip :content="scope.row._id">
-                  <template #icon>
+                <div class="specialFont" @click="queryTxDetail(scope.$index)">
+                  <el-tooltip effect="dark" content="交易失败" placement="top">
                     <img
                       src="@/assets/img/table_mistake.png"
                       v-if="scope.row.result === 'error'"
+                      @click.stop
                     />
-                  </template>
-                </TableTooltip>
+                  </el-tooltip>
+                  {{ scope.row._id | sliceAddress }}
+                </div>
               </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.Method"
+              :label="languagePack.accounttext30"
               width="100px"
               align="center"
             >
@@ -186,19 +188,18 @@
                 <div class="table_txOperate">{{ scope.row.type }}</div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.BlockHeight">
+            <el-table-column :label="languagePack.accounttext31">
               <template slot-scope="scope">
                 <div class="specialFont">{{ scope.row.height }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="timestamp" :label="languagePack.time">
+            <el-table-column prop="timestamp" :label="languagePack.accounttext32">
               <template slot-scope="scope">
                 <div>{{ scope.row.timestamp | jetlag }}</div>
               </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.Sender"
-              :show-overflow-tooltip="true"
+              :label="languagePack.accounttext33"
               width="150px"
             >
               <template slot-scope="scope">
@@ -219,14 +220,17 @@
             </el-table-column>
             <el-table-column
               prop="fuelTotal"
-              :label="languagePack.Recipient"
+              :label="languagePack.accounttext34"
               width="150px"
             >
               <template slot-scope="scope">
-                <TableTooltip :content="scope.row.targetAddress"></TableTooltip>
+                <TableTooltip
+                  :content="scope.row.targetAddress"
+                  @click.native="queryDealtoAddress(scope.row.targetAddress)"
+                ></TableTooltip>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.turnover">
+            <el-table-column :label="languagePack.accounttext35">
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.tx_amount | toMoney
@@ -234,7 +238,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.TransactionFee">
+            <el-table-column :label="languagePack.accounttext36">
               <template slot-scope="scope">
                 <div>{{ scope.row.fee | toMoney }}</div>
               </template>
@@ -302,6 +306,11 @@ export default {
       this.disposeTableType(arr);
       this.TxsList = arr;
       this.txtotal = txList.data.total;
+      if (Array.isArray(arr)) {
+        this.hashList = arr.map((item) => {
+          return { hash: item._id, status: item.result };
+        });
+      }
     },
     //分页
     handleSizeChange(val) {
@@ -313,6 +322,14 @@ export default {
       let { pageSize, currentPage } = this.page;
       this.TxsList = [];
       this.getTxList(pageSize, currentPage);
+    },
+    //查看交易详情
+    queryTxDetail(index) {
+      console.log(this.hashList, index);
+      this.$router.push({
+        name: "hash_detail",
+        params: { hash: this.hashList, index },
+      });
     },
   },
   computed: {
@@ -329,8 +346,18 @@ export default {
   },
   watch: {
     TxsList(value) {
-      if (!Array.isArray(value)) return (this.loading = false);
-      this.loading = value.length == 0 ? true : false;
+      // if (!Array.isArray(value)) return (this.loading = false);
+      if (Array.isArray(value)) {
+        this.loading = value.length == 0 ? true : false;
+      } else {
+        this.loading = false;
+      }
+    },
+    "$route.query"(val) {
+      this.address = this.$route.query.address;
+      this.getAccountMsg();
+      let { pageSize, currentPage } = this.page;
+      this.getTxList(pageSize, currentPage);
     },
   },
   components: { vueQr },
@@ -356,7 +383,7 @@ export default {
     color: rgba(20, 37, 62, 0.85);
 
     img {
-      margin-left:10px;
+      margin-left: 10px;
       cursor: pointer;
     }
   }
@@ -442,12 +469,11 @@ export default {
     .detail-table {
       width: 100%;
     }
-
   }
 }
 </style>
 <style>
-  .qrcodeStyle{
-    min-width: 80px !important;
-  }
+.qrcodeStyle {
+  min-width: 80px !important;
+}
 </style>

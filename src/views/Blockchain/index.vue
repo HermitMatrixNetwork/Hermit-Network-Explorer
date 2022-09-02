@@ -136,7 +136,7 @@ h3 {
 
 .main {
   width: 1280px;
-  margin: 0 auto;
+  margin: 0 auto 80px;
   // padding: 15px;
   height: 732px;
   background: #ffffff;

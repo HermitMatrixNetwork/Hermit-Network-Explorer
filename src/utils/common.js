@@ -93,6 +93,7 @@ export function debounce(func, wait) {
 //时间戳
 export function timeStamp(time) {
     if (!time) return '-'
+    // moment.locale('zh-cn')
     return moment(time).format('LLLL')
 }
 

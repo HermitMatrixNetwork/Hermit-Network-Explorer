@@ -1,14 +1,13 @@
 import * as echarts from "echarts";
 //柱状图
-let message = [
-  120, 200, 150, 80, 70, 110, 130, 10, 60, 120, 160, 140, 120, 200, 150, 80,
-  70, 110, 130, 10, 60, 120, 160, 140,
-];
+// let message = [
+//   120, 200, 150, 80, 70, 110, 130, 10, 60, 120, 160, 140, 120, 200, 150, 80,
+//   70, 110, 130, 10, 60, 120, 160, 140,
+// ];
+let message = [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
 export const bar = (element, data=[]) => {
 
-
-  // let chart1 = echarts.init(element);
-  // let chart2 = echarts.init(element[1]);
+  // console.log(element);
   // console.log('js接受到数据',message);
   message = [...data,...message]
   message.length = 24
@@ -63,7 +62,7 @@ export const bar = (element, data=[]) => {
       },
       extraCssText: "box-shadow: 0 0 rgba(0, 0, 0, 0.3);",
       formatter: function (params) {
-        // console.log(params);
+        console.log(params);
         return `<div style="color:'#1840EE';">#36346045/<span style="color:'#BDC8FA';">${
           typeof params.data == "number" ? params.data : params.data.value
         }s</span></div>`;
@@ -74,17 +73,6 @@ export const bar = (element, data=[]) => {
   element.setOption(option);
   // chart2.setOption(option);
 
-
-
-  // setInterval(() => {
-  //     message.shift()
-  //     let first = message[0]
-  //     message[0] = { value: first, itemStyle: { color: '#344358' } }
-  //     message.push(Math.floor(Math.random() * 200))
-  //     element.setOption(option);
-  // }, 3000)
-
-  // element.resize()
 };
 
 //折现图

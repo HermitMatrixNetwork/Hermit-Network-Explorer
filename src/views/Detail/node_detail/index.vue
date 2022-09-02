@@ -2,23 +2,52 @@
   <div class="address-detail">
     <div class="detail">
       <div class="detail-title">
-        {{ languagePack.Validators }}：{{ basic.moniker }}
+        {{ languagePack.nodetext01 }}：{{ basic.validator_name }}
       </div>
       <div class="detailColumn">
-        <BasicTitle :title="languagePack.details">
+        <BasicTitle :title="languagePack.nodetext26">
           <template #message>
-            <div class="detailColumn-basic">
-              <p>{{ languagePack.ElectedValidators }}</p>
-              <p>{{ languagePack.blockrate }}</p>
-              <p>{{ languagePack.blockratein24hours }}%</p>
-              <p>{{ languagePack.Livestakes }}.99%</p>
-              <p>{{ languagePack.accumulatedrewardfromsystem }}.99%</p>
-
-              <p>{{ languagePack.accumulatedrewardfromdelegation }}</p>
-              <p>{{ languagePack.availabledelegationreward }}</p>
-              <p>{{ languagePack.PrivateStakes }}</p>
-              <p>{{ languagePack.TotalStakes }}</p>
-              <p>{{ languagePack.acceptstakes }}</p>
+            <div class="detailColumn-basic messageBasic">
+              <div class="column">
+                <p>{{ languagePack.nodetext27 }}</p>
+              </div>
+              <div class="column">
+                <p>{{ languagePack.nodetext28 }}</p>
+              </div>
+              <div class="column">
+                <p>{{ languagePack.nodetext29 }}%</p>
+              </div>
+              <!-- 当前委托者数 -->
+              <div class="column">
+                <p>{{ languagePack.nodetext30 }}:</p>
+                <span>{{ basic.delegators }}</span>
+              </div>
+              <div class="column">
+                <!-- 累计系统奖励 -->
+                <p>{{ languagePack.nodetext31 }}:</p>
+                <span>{{ basic.total_system_reward | toMoney }} GHM</span>
+              </div>
+              <!-- 累计委托奖励 -->
+              <div class="column">
+                <p>{{ languagePack.nodetext32 }}:</p>
+                <span>{{ basic.total_delegate_reward | toMoney }} GHM</span>
+              </div>
+              <div class="column">
+                <p>{{ languagePack.nodetext33 }} :</p>
+                <span>{{ basic.outstanding_reward | toMoney }} GHM</span>
+              </div>
+              <div class="column">
+                <p>{{ languagePack.nodetext34 }}:</p>
+                <span>{{ basic.self_delegate_tokens | toMoney }} GHM</span>
+              </div>
+              <div class="column">
+                <p>{{ languagePack.nodetext35 }}:</p>
+                <span>{{ basic.tokens | toMoney }} GHM</span>
+              </div>
+              <div class="column">
+                <p>{{ languagePack.nodetext36 }}</p>
+                <span>{{ basic.delegate_tokens | toMoney }} GHM</span>
+              </div>
             </div>
           </template>
         </BasicTitle>
@@ -29,10 +58,10 @@
         <div class="detail-table-header">
           <span
             v-for="(item, index) in [
-              languagePack.nodeinformation,
-              languagePack.block,
-              languagePack.delegation,
-              languagePack.rewarddetails,
+              languagePack.nodetext42,
+              languagePack.nodetext37,
+              languagePack.nodetext49,
+              languagePack.nodetext55,
             ]"
             :class="selectNav == index ? 'selectLight' : ''"
             :key="index"
@@ -44,33 +73,38 @@
           <div class="basicMessage messageBasic" v-if="selectNav == 0">
             <div class="basicMessage-title">
               <img src="@/assets/img/bottom-bar_github.png" alt="" />
-              <h3>{{ basic.moniker }}</h3>
+              <h3>{{ basic.validator_name }}</h3>
             </div>
 
+            <!-- 节点ID
             <div class="column">
               <p>{{ languagePack.nodeid }}：</p>
               <span
                 >1d41e93a32abf8a9afd4de2a014b72512144a395fda0462f798f898f6f5a70f30b41b106bd73</span
               >
+            </div> -->
+
+            <!-- 操作地址 -->
+            <div class="column">
+              <p>{{ languagePack.nodetext44 }}：</p>
+              <span>{{ $route.query.address }}</span>
+            </div>
+
+            <!-- 奖励账户 -->
+            <div class="column">
+              <p>{{ languagePack.nodetext45 }}：</p>
+              <span>{{ basic.consen_addr }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.operationaddress }}：</p>
-              <span>035C0FDD9FBB94C2892D97BB1A6B0AE264BD3018</span>
-            </div>
-            <div class="column">
-              <p>{{ languagePack.rewardaccount }}：</p>
-              <span>ghm15urq2dtp9qce4fyc85m6upwm9xul3049772z73</span>
-            </div>
-            <div class="column">
-              <p>{{ languagePack.officialwebsite }}：</p>
+              <p>{{ languagePack.nodetext46 }}：</p>
               <span>{{ basic.website }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.identityauthenticationID }}：</p>
+              <p>{{ languagePack.nodetext47 }}：</p>
               <span class="specialFont">{{ basic.identity }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.descriptions }}：</p>
+              <p>{{ languagePack.nodetext48 }}：</p>
               <span>{{ basic.details }}</span>
             </div>
           </div>
@@ -78,7 +112,6 @@
           <!-- 已出区块 -->
           <el-table
             v-if="selectNav == 1"
-            style="width: 100%"
             size="mini"
             :row-style="{ height: '58px' }"
             :header-cell-class-name="'tableHeaderCellStyle'"
@@ -86,27 +119,32 @@
             :data="outblockTable"
           >
             <el-table-column
-              :label="languagePack.blocknumber"
+              :label="languagePack.nodetext37"
               prop="_id"
               width="240"
             >
               <template slot-scope="scope">
-                <div class="specialFont">{{ scope.row._id }}</div>
+                <div
+                  class="specialFont"
+                  @click="queryDealtoBlock(scope.row._id)"
+                >
+                  {{ scope.row._id }}
+                </div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.time" align="left">
+            <el-table-column :label="languagePack.nodetext38" align="left">
               <template slot-scope="scope">
                 <div>{{ scope.row.timestamp | timeStamp }}</div>
               </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.thenumberoftransactions"
+              :label="languagePack.nodetext39"
               prop="tx_count"
               width="318"
               align="right"
             >
             </el-table-column>
-            <el-table-column :label="languagePack.blockreward" align="right">
+            <el-table-column :label="languagePack.nodetext40" align="right">
               <template slot-scope="scope">
                 <div>{{ scope.row.coinbase }}</div>
               </template>
@@ -123,15 +161,20 @@
             :row-class-name="'tableRowStyle'"
             :data="delegationTable"
           >
-            <el-table-column :label="languagePack.delegate" width="240">
+            <el-table-column :label="languagePack.nodetext50" width="240">
               <template slot-scope="scope">
-                <div class="specialFont">
-                  {{ scope.row.delegator_address | sliceAddress }}
+                <div class="specialFont" style="width: 120px">
+                  <TableTooltip
+                    :content="scope.row.delegator_address"
+                    @click.native="
+                      queryDealtoAddress(scope.row.delegator_address)
+                    "
+                  ></TableTooltip>
                 </div>
               </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.delegationpercentage"
+              :label="languagePack.nodetext51"
               align="right"
             >
               <template slot-scope="scope">
@@ -143,23 +186,28 @@
               </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.lockeddelegation"
+              :label="languagePack.nodetext52"
               align="right"
             >
               <template slot-scope="scope">
                 <div>{{ scope.row.amount | toMoney }}</div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.undelegate" align="right">
-              <template>
-                <div>0</div>
+            <el-table-column :label="languagePack.nodetext53" align="right">
+              <template slot-scope="scope">
+                <div>{{ scope.row.redeem | toMoney }}</div>
               </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.statussucceededfailed"
+              :label="languagePack.nodetext54"
               align="right"
             >
-              <template slot-scope="scope"> 状态 </template>
+              <template>
+                <div style="display:flex;justify-content: flex-end;align-items: center">
+                  <div class="Txstatus" :style="{background: '#55C499'}" />
+                  success
+                </div>
+              </template>
             </el-table-column>
           </el-table>
 
@@ -174,39 +222,55 @@
             :data="rewardTable"
           >
             <el-table-column
-              :label="languagePack.transactionhash"
+              :label="languagePack.nodetext56"
               prop="txhash"
               width="240"
             >
               <template slot-scope="scope">
-                <div class="specialFont">
-                  {{ scope.row.txhash | sliceAddress }}
+                <div class="specialFont" @click="queryTxDetail(scope.$index)">
+                  {{ scope.row._id | sliceAddress }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.delegate" align="center">
+            <el-table-column :label="languagePack.nodetext57">
               <template slot-scope="scope">
-                <div class="dealType">
-                  {{ scope.row.type == "MsgSend" ? "转账" : scope.row.type }}
+                <div class="specialFont" style="width: 120px">
+                  <TableTooltip
+                    :content="scope.row.message.delegator_address"
+                    @click.native="
+                      queryDealtoAddress(scope.row.message.delegator_address)
+                    "
+                  ></TableTooltip>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.time">
+            <el-table-column :label="languagePack.nodetext58">
               <template slot-scope="scope">
-                <p class="specialFont">{{ scope.row.height | toMoney }}</p>
+                <p>{{ scope.row.timestamp | timeStamp }}</p>
+              </template>
+            </el-table-column>
+            <el-table-column :label="languagePack.nodetext59" align="right">
+              <template slot-scope="scope">
+                <div>{{ scope.row.tx_amount }}</div>
               </template>
             </el-table-column>
             <el-table-column
-              :label="languagePack.lockeddelegation"
-              prop="timestamp"
-            ></el-table-column>
-            <el-table-column
-              :label="languagePack.statussucceededfailed"
+              :label="languagePack.nodetext54"
               width="168"
             >
               <template slot-scope="scope">
-                <div class="specialFont">
-                  {{ scope.row.from_address | sliceAddress }}
+                <div class="statusStyle">
+                  <div
+                    :style="{
+                      width: '6px',
+                      height: '6px',
+                      borderRadius: '6px',
+                      marginRight: '6px',
+                      background:
+                        scope.row.result == 'success' ? '#55C499' : '#ED422B',
+                    }"
+                  />
+                  {{ scope.row.result == "success" ? "成功" : "失败" }}
                 </div>
               </template>
             </el-table-column>
@@ -236,13 +300,15 @@ import {
   validationNodeData,
   validationEntrust,
   getNodeRewardList,
+  validationBasic,
+  getUnbonding,
 } from "@/api/validation.js";
 
 export default {
   mixins: [mixin],
   data() {
     return {
-      selectNav: 2,
+      selectNav: 0,
       basic: {},
       page: {
         pageSize: 10,
@@ -251,43 +317,62 @@ export default {
       outblockTable: [],
       delegationTable: [],
       rewardTable: [],
+      hashList: [],
     };
   },
   created() {
-    this.basic = this.$route.params.basic;
-    console.log("路由里面的信息", this.basic);
-    const { operator_address } = this.basic;
+    // this.basic = this.$route.params.basic;
+    // console.log("路由里面的信息", this.basic);
+    // const { operator_address } = this.basic;
     const { pageSize, currentPage } = this.page;
-    this.getData(operator_address, pageSize, currentPage);
-
+    this.address = this.$route.query.address;
+    console.log(this.address);
+    this.getData(this.address, pageSize, currentPage);
     this.$loading();
   },
   methods: {
     async getData(address, limit, index) {
       const res = await Promise.all([
-        validationNodeData(address),
+        // validationNodeData(address),
+        validationBasic(address),
         validationEntrust(address),
         getNodeblockList(limit, index, address),
         getNodeRewardList(limit, index, address),
+        getUnbonding(address),
       ]);
       if (res) {
+        console.log("有数据");
         this.$loading().close();
       }
-
       console.log("节点基本信息", res[0]);
       console.log("节点委托信息列表", res[1]);
       console.log("节点出块", res[2]);
-
-      const {
-        description: { details, identity, website },
-        tokens,
-      } = res[0].validator;
-      this.basic = { ...this.basic, details, identity, website, tokens };
-
+      console.log("节点奖励", res[3]);
+      console.log("节点解绑信息", res[4]);
+      this.basic = res[0].data;
       //处理数组并赋值
       this.delegaTion(res[1].delegation_responses);
       this.outblockTable = res[2].data.list;
       this.rewardTable = res[3].data.list;
+      this.hashList = res[3].data.list.map((item) => {
+        return { hash: item._id, type: item.type, status: item.result };
+      });
+
+      let unbonds = res[4].unbonding_responses;
+
+      unbonds.forEach((item) => {
+        let bb = this.delegationTable.find(
+          (v) => v.delegator_address == item.delegator_address
+        );
+        if (bb) {
+          let num = 0;
+          item.entries.forEach((ee) => {
+            num += ee.balance * 1;
+          });
+          this.delegationTable[this.delegationTable.indexOf(bb)].redeem = num;
+        }
+      });
+      // console.log(this.delegationTable);
     },
     //委托列表
     delegaTion(arr) {
@@ -295,6 +380,13 @@ export default {
       arr.forEach((item) => {
         const { balance, delegation } = item;
         this.delegationTable.push({ ...balance, ...delegation });
+      });
+    },
+    queryTxDetail(index) {
+      console.log(this.hashList, index);
+      this.$router.replace({
+        name: "hash_detail",
+        params: { hash: this.hashList, index },
       });
     },
   },
@@ -310,7 +402,7 @@ export default {
 <style lang="scss" scoped>
 .detail {
   width: 1280px;
-  margin: 24px auto;
+  margin: 24px auto 80px;
   &-title {
     height: 68px;
     background: #ffffff;
@@ -337,11 +429,10 @@ export default {
       height: 200px;
       display: flex;
       flex-wrap: wrap;
-      > p {
+      .column {
         width: 50%;
-        height: 28px;
-        line-height: 28px;
-        margin-bottom: 16px;
+        height: 36px;
+        line-height: 36px;
         font-weight: 400;
         font-size: 12px;
         color: rgba(20, 37, 62, 0.85);
@@ -431,5 +522,22 @@ export default {
       width: 100%;
     }
   }
+
+  .detailColumn {
+    &-basic {
+      height: auto !important;
+      flex-wrap: nowrap !important;
+    }
+  }
+
+  .basicMessage {
+    > div {
+      white-space: inherit;
+    }
+  }
+}
+.statusStyle {
+  display: flex;
+  align-items: center;
 }
 </style>

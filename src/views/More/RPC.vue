@@ -10,41 +10,41 @@
         <div class="step">
           <el-steps :active="active">
             <el-step>
-              <div class="stepTitle" slot="title">链接钱包</div>
+              <div class="stepTitle" slot="title">{{languagePack.RPCtext08}}</div>
             </el-step>
             <el-step>
-              <div class="stepTitle" slot="title">添加网络</div>
+              <div class="stepTitle" slot="title">{{languagePack.RPCtext09}}</div>
             </el-step>
             <el-step>
-              <div class="stepTitle" slot="title">添加成功</div>
+              <div class="stepTitle" slot="title">{{languagePack.RPCtext10}}</div>
             </el-step>
           </el-steps>
         </div>
-        <BasicTitle :title="'隐士网络'">
+        <BasicTitle :title="languagePack.RPCtext01">
           <template #message>
             <div class="messageBasic">
               <div class="prompt">
                 <img src="@/assets/img/Close-Circle-Fill.png" alt="" />
-                请使用chrome浏览器安装Kpler进行操作。
+                {{languagePack.RPCtext11}}
               </div>
               <div class="column">
-                <p>网络链接网址：</p>
-                <span>https://xxxxx.xx.xx/rpc</span>
+                <p>{{languagePack.RPCtext02}}：</p>
+                <span>http://localhost:8080/rpc</span>
               </div>
               <div class="column">
-                <p>链号：</p>
+                <p>{{languagePack.RPCtext03}}：</p>
                 <span>{{ chainId }}</span>
               </div>
               <div class="column">
-                <p>符号：</p>
+                <p>{{languagePack.RPCtext04}}：</p>
                 <span>GHM</span>
               </div>
               <div class="column">
-                <p>浏览器网址：</p>
+                <p>{{languagePack.RPCtext05}}：</p>
                 <span>https://xxxxx.xx.xx</span>
               </div>
 
-              <button class="submit" @click="submit">连接到钱包</button>
+              <button class="submit" @click="submit">{{languagePack.RPCtext06}}</button>
             </div>
           </template>
         </BasicTitle>
@@ -85,6 +85,11 @@ export default {
       });
     },
   },
+  computed:{
+    languagePack(){
+      return this.$store.state.Language
+    }
+  }
 };
 </script>
 
@@ -99,7 +104,6 @@ export default {
   margin-top: 64px;
   margin-bottom: 141px;
   &-box {
-    height: 360px;
     .hint {
       height: 34px;
       font-weight: 400;
@@ -110,18 +114,18 @@ export default {
 }
 ::v-deep .step {
   height: 32px;
-  padding: 24px 64px 48px 0;
+  margin: 24px 64px 48px 0;
   .stepTitle {
     position: absolute;
     top: 0;
     left: 36px;
-    width: 64px;
     height: 32px;
     line-height: 32px;
     background: #f8fafb;
     font-weight: 500;
     font-size: 16px;
     color: rgba(20, 37, 62, 0.85);
+    white-space: nowrap;
   }
   .el-step__icon {
     width: 32px;
@@ -145,9 +149,9 @@ export default {
     border-radius: 2px;
     position: absolute;
     top: -16px;
-    width: 600px;
+    width: 632px;
     left: -17px;
-    height: 20px;
+    height: 32px;
     padding: 8px 16px;
     font-weight: 400;
     font-size: 12px;
@@ -160,7 +164,7 @@ export default {
     }
   }
   position: relative;
-  height: 160px;
+  height: 272px;
   padding: 32px 0 80px 0;
   .submit {
     width: 128px;

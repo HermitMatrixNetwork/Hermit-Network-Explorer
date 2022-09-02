@@ -1,166 +1,46 @@
+let top = {
+    En:{
+        'toptext01':'Top Accounts',
+        'toptext02':'top 1000 accounts of ghm balance',
+        'toptext03':'ranking',
+        'toptext04':'address',
+        'toptext05':'Name Tag',
+        'toptext06':'balance',
+        'toptext07':'percentage',
+        'toptext08':'transactions',
+    },
+    Cn:{
+        'toptext01':'',
+        'toptext02':'',
+        'toptext03':'排名',
+        'toptext04':'地址',
+        'toptext05':'标签',
+        'toptext06':'余额',
+        'toptext07':'百分比',
+        'toptext08':'交易次数',
+    },
+    Ct:{
+        'toptext01':'GHM的頂部賬戶',
+        'toptext02':'',
+        'toptext03':'排名',
+        'toptext04':'地址',
+        'toptext05':'標簽',
+        'toptext06':'余額',
+        'toptext07':'百分比',
+        'toptext08':'交易次數',
+    }
+}
+
+
+
 export const blockchainEn = {
-
-    /* 顶级账户 */
-    TopAccounts2: 'Top Accounts',
-    top1000accountsofghmbalance: `top <span style='color:#5671F2;'> 1000</span> accounts of ghm balance`,
-    First: 'First',
-    Last: 'Last',
-    Pagexofy: 'Page x（当前所在页码数） of y（所有records总数）',
-    pagex: 'page x ',
-    ranking: 'ranking',
-    address: 'address',
-    NameTag: ' Name Tag',
-    balance: 'balance',
-    percentage: 'percentage',
-    transactions: 'transactions',
-
-    /* 区块详情 */
-    block: 'block',
-    details: 'details',
-    blockheight: 'block height',
-    Amount: 'Amount',
-    blockhash: 'block hash',
-    parentblockhash: 'parent block hash',
-    proposer: 'proposer',
-    GasUsed: 'Gas Used',
-    GasLimit: 'Gas Limit',
-    transaction: 'transaction',
-    transactionhash: 'transaction hash',
-    operationtype: 'operation type',
-    time: 'time',
-    startaddress: 'start address',
-    targetaddress: 'target address',
-    transactionnumericalvalue: 'transaction numerical value',
-    TransactionFee: 'Transaction Fee',
-
-    /* 查看交易 */
-    transactions: 'transactions',
-    Atotalofxxxtransactionsfound: 'A total of xxx transactions found',
-    ShowingTheLast500kRecords: 'Showing The Last 500k Records',
-    transactionhash: 'transaction hash',
-    Method: 'Method',
-    BlockHeight: 'Block Height',
-    TimeStamp: 'TimeStamp',
-    Sender: 'Sender',
-    Recipient: 'Recipient',
-    turnover: 'turnover',
-    TransactionFee: 'Transaction Fee',
-    Meme: 'Meme',
-    Txstatus: 'status',
-    TransactionFee: 'Transaction Fee',
-    GasInformation: 'Gas Information',
-    GasUsed: 'Gas Used',
-    randomnumberposition: 'random number(position)',
-    seemore: 'more',
-
-    /* 交易详情 */
-    transactiondetails: 'transaction details',
-    contractexecution: 'contract execution',
-    executive: 'executive',
-    contract: 'contract',
-    Amounte: 'Amount',
-    TransactionFee: 'Transaction Fee',
-    meme: 'meme',
-    details: 'details',
-    Txstatus: 'status',
-    transactionhash: 'transaction hash',
-    blockheight: 'block height',
-    GasUsed: 'Gas Used',
-    GasLimit: 'Gas Limit',
-
-    sender: 'sender',
-    receiver: 'receiver',
-
-    receivereward: 'receive reward',
-    delegate: 'delegate',
-    receivedreward: 'received reward',
-    rewarddetails: 'reward details',
-
-    blockreward: 'block reward',
-    Age: 'Age'
 
 }
 
 export const blockchainCn = {
 
-    /* 顶级账户 */
-    TopAccounts2: 'GHM的顶级账户',
-    top1000accountsofghmbalance: `展示匿名币余额排名前<span style='color:#5671F2;'> 1000</span>的账户`,
-    First: '第一页',
-    Last: '尾页',
-    Pagexofy: 'x页里的第y页',
-    pagex: '显示 x 页',
-    ranking: '排名',
-    address: '地址',
-    NameTag: ' 标签',
-    balance: '余额',
-    percentage: '百分比',
-    transactions: '交易次数',
+}
 
-    /* 区块详情 */
-    block: '区块',
-    details: '详情信息',
-    blockheight: '区块高度',
-    TimeStamp: '时间戳',
-    Amount: '交易数',
-    blockhash: '区块哈希',
-    parentblockhash: '父区块哈希',
-    proposer: '提案人',
-    GasUsed: '燃料使用量',
-    GasLimit: '燃料总量',
-    transaction: '交易',
-    transactionhash: '交易哈希',
-    operationtype: '操作类型',
-    time: '时长',
-    startaddress: '发起地址',
-    targetaddress: '目标地址',
-    transactionnumericalvalue: '交易数值',
-    TransactionFee: '手续费',
+export const blockchainCnt = {
 
-    /* 查看交易 */
-    transactions: '交易',
-    Atotalofxxxtransactionsfound: '总共找到超过>x条交易记录',
-    ShowingTheLast500kRecords: '（仅显示最近500K记录）',
-    transactionhash: '交易哈希',
-    Method: '操作类型',
-    BlockHeight: '区块',
-    TimeStamp: '时长',
-    Sender: '发起地址',
-    Recipient: '目标地址',
-    turnover: '交易额',
-    TransactionFee: '手续费',
-    Meme: '附加信息',
-    Txstatus: '状态',
-    TransactionFee: ' 手续费',
-    GasInformation: ' 燃料信息',
-    GasUsed: ' x 燃料总量中实际消耗y燃料',
-    randomnumberposition: ' 随机数 （位置xx）',
-    seemore: ' 查看更多详情',
-
-    /* 交易详情 */
-    transactiondetails: '交易详情：',
-    contractexecution: '合约执行',
-    executive: '执行方',
-    contract: '合约',
-    Amounte: '交易额',
-    TransactionFee: '手续费',
-    meme: '备注',
-    details: '详细信息',
-    statussucceededfailed: '状态：成功/失败',
-    transactionhash: '交易哈希',
-    blockheight: '区块高度',
-    GasUsed: '燃料使用量',
-    GasLimit: '燃料总量',
-
-    sender: '发送方',
-    receiver: '接收方',
-
-    receivereward: '领取奖励',
-    delegate: '委托人',
-    receivedreward: '领取奖励数',
-    rewarddetails: '奖励明细',
-
-    blockreward: '出块奖励',
-
-    Age: '块龄'
 }

@@ -2,8 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/Home/index.vue'
 import Blockchain from '@/views/Blockchain/index.vue'
-import Accounts from '@/views/Accounts/index.vue'
-import More from '@/views/More/index.vue'
+import Accounts from '@/views/Accounts/accounts.vue'
+import Faucet from '@/views/More/faucet.vue'
 import Tsx from '@/views/Blockchain/tsx.vue'
 import Contracts from '@/views/Contracts/index.vue'
 import Addressdetail from '@/views/Detail/address_detail/index.vue'
@@ -31,47 +31,68 @@ const routes = [
   {
     path: '/home',
     component: Home,
-    meta:{
-      keepAlive:false
+    meta: {
+      keepAlive: false,
+      ID: 1
     }
   },
   {
     path: '/blockchain',
-    component: Blockchain
+    component: Blockchain,
+    meta: {
+      ID: 2
+    }
   },
   {
     path: '/blockcheck',
-    component: BlockCheck
+    component: BlockCheck,
+    meta: {
+      ID: 2
+    }
   },
   {
     path: '/accounts',
     component: Accounts,
     meta: {
-      keepAlive: true
+      keepAlive: true,
+      ID: 4
     }
   },
   {
     path: '/validation',
     component: Validation,
     meta: {
-      keepAlive: true
+      keepAlive: true,
+      ID: 5
     }
   },
   {
-    path: '/more',
-    component: More
+    path: '/faucet',
+    component: Faucet,
+    meta: {
+      ID: 7
+    }
   },
   {
     path: '/tsx',
-    component: Tsx
+    component: Tsx,
+    meta: {
+      ID: 2
+    }
   },
   {
     path: '/contracts',
-    component: Contracts
+    component: Contracts,
+    meta: {
+      ID: 3
+    }
   },
   {
     path: '/developapi',
-    component: Resources
+    component: Resources,
+    meta: {
+      ID: 6
+    }
   },
   {
     path: '/address_detail',
@@ -85,15 +106,24 @@ const routes = [
   },
   {
     path: '/currency_state',
-    component: currencyState
+    component: currencyState,
+    meta: {
+      ID: 7
+    }
   },
   {
     path: '/govern',
-    component: Govern
+    component: Govern,
+    meta: {
+      ID: 7
+    }
   },
   {
     path: '/foundation',
-    component: Foundation
+    component: Foundation,
+    meta: {
+      ID: 7
+    }
   },
   {
     path: '/hash_detail',
@@ -115,7 +145,10 @@ const routes = [
   },
   {
     path: '/rpc',
-    component: RPC
+    component: RPC,
+    meta: {
+      ID: 7
+    }
   },
   {
     path: '/contract_detail',

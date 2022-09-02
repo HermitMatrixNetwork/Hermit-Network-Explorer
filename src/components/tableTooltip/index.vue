@@ -3,6 +3,7 @@
     effect="dark"
     :content="content"
     :placement="placement"
+    :offset="offset"
     popper-class="tooltipStyle"
   >
     <div class="specialFont" :style="toolStyle">
@@ -25,6 +26,7 @@ export default {
       type: String,
       default: "top",
     },
+    offset:Number,
     toolStyle: Object,
   },
 };

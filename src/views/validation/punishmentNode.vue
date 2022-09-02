@@ -1,34 +1,41 @@
 <template>
   <div class="punishmentNode">
     <div class="punishment-main">
-      <div class="title">惩罚验证节点</div>
+      <div class="title">{{languagePack.nodetext61}}</div>
       <div class="punishment-main-table">
-        <div class="header">总共一个节点</div>
+        <div class="header">总共{{list.length}}个节点</div>
         <div class="tableBody">
           <el-table
             size="mini"
             height="612px"
             :data="list"
             :row-style="{ height: '58px' }"
+            :header-cell-class-name="'tableHeaderCellStyle'"
+            :row-class-name="'tableRowStyle'"
+            v-loading="loading"
           >
             <el-table-column
               type="index"
-              label="序号"
+              :label="languagePack.nodetext64"
               width="80"
               align="center"
             ></el-table-column>
             <el-table-column
-              label="名称"
+              :label="languagePack.nodetext65"
               width="178"
               prop="moniker"
-            ></el-table-column>
+            >
+            <template slot-scope="scope">
+              <div class="specialFont" @click="toNode(scope.row.operator_address)">{{scope.row.moniker}}</div>
+            </template>
+            </el-table-column>
             <el-table-column
-              label="委托数"
+              :label="languagePack.nodetext66"
               width="270"
               align="right"
             >
             <template slot-scope="scope">
-              <div>{{scope.row.tokens}} GHM </div>
+              <div>{{scope.row.tokens | toMoney}} GHM </div>
             </template>
             </el-table-column>
             <el-table-column
@@ -37,15 +44,15 @@
               align="right"
             >
             <template slot-scope="scope">
-              <div>0</div>
+              {{ scope.row.unbonding_height }}
             </template>
             </el-table-column>
-            <el-table-column label="锁定时间" width="200">
+            <el-table-column :label="languagePack.nodetext67" width="200">
               <template slot-scope="scope">
                 <div>{{ scope.row.unbonding_time }}</div>
               </template>
             </el-table-column>
-            <el-table-column label="解锁块高" align="right">
+            <el-table-column :label="languagePack.nodetext68" align="right">
               <template slot-scope="scope">
                 <div>{{ scope.row.unbonding_height }}</div>
               </template>
@@ -60,10 +67,13 @@
 
 <script>
 import { allValidationNode } from "@/api/api.js";
+import mixins from "@/mixins";
 export default {
+  mixins:[mixins],
   data() {
     return {
       list: [],
+      loading:true
     };
   },
   created() {},
@@ -78,16 +88,40 @@ export default {
         min_self_delegation,
         unbonding_time,
         unbonding_height,
+        operator_address
       } = e;
       this.list.push({
         moniker,
         tokens,
         min_self_delegation,
         unbonding_height,
-        unbonding_time:unbonding_time.split('.')[0].replace('T',' '),
+        operator_address,
+        unbonding_time:unbonding_time.split('.')[0].replace(/[A-Z]/g,' '),
       });
     });
+    setTimeout(()=>{
+      this.loading = false
+    },3000)
   },
+  methods:{
+    toNode(address){
+      this.$router.push({name:'node_detail',query:{address}})
+    }
+  },
+  watch:{
+    list(value){
+      if(Array.isArray(value)){
+        this.loading = value.length === 0 ? true:false;
+      }else{
+        this.loading = false
+      }
+    }
+  },
+  computed:{
+    languagePack(){
+      return this.$store.state.Language
+    }
+  }
 };
 </script>
 

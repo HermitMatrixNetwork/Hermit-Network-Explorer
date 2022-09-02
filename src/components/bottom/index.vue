@@ -51,9 +51,8 @@ export default {
 <style lang="scss" scoped>
 .bottom {
   position: relative;
-  margin-top: 80px;
   width: 100%;
-  height: 211px;
+  height: 210px;
   background: url("../../assets/img/bottom-bar_background.png");
   background-size: 100% 100%;
 

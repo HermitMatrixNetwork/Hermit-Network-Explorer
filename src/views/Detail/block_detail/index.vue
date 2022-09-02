@@ -191,7 +191,7 @@ export default {
   methods: {
     async getblockDetail(value) {
       const res = await queryBlockdetails(value * 1);
-      // console.log("区块信息", res);
+      console.log("区块信息", res);
 
       if (!res.data.block) {
         this.messageBox("暂未出块", "error");
@@ -336,13 +336,16 @@ export default {
 
 @media screen and (max-width: 598px) {
   .main {
-    width: 355px;
-    padding: 0 10px;
+    width: 100%;
     > div {
       width: 100%;
     }
-    .block_basic {
+    .block_title {
       width: 100%;
+      text-indent: 16px;
+    }
+    .block_basic {
+      width: 100% !important;
 
       .block_basic_content {
         padding: 12px;
@@ -351,6 +354,19 @@ export default {
     }
     .block_detail {
       width: 100%;
+    }
+  }
+
+  .basicStyle {
+    display: flex !important;
+    .column {
+      width: 100% !important;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      > p {
+        width: auto;
+      }
     }
   }
 }

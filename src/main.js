@@ -14,7 +14,6 @@ Vue.component('BasicTitle',BasicTitle)
 Vue.component('SearchBox',SearchBox)
 Vue.component('TableTooltip',TableTooltip)
 
-
 new Vue({
   router,
   store,
