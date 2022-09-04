@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h3>{{languagePack.TopAccounts2}}</h3>
+    <h3>{{languagePack.toptext01}}</h3>
     <main class="main">
-      <div class="table_title" v-html="languagePack.top1000accountsofghmbalance"></div>
+      <div class="table_title" v-html="languagePack.toptext02"></div>
       <el-table
         :data="tableData"
         size="mini"
@@ -14,27 +14,27 @@
       >
         <el-table-column
           type="index"
-          :label="languagePack.ranking"
+          :label="languagePack.toptext03"
           width="80px"
           align="center"
         />
-        <el-table-column prop="address" :label="languagePack.address" width="420">
+        <el-table-column prop="address" :label="languagePack.toptext04" width="420">
           <template slot-scope="scope">
             <div class="specialFont" @click="toDetail(scope.row.address)">
               {{ scope.row.address }}
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="tag" :label="languagePack.NameTag" />
-        <el-table-column :label="languagePack.balance" align="right">
+        <el-table-column prop="tag" :label="languagePack.toptext05" />
+        <el-table-column :label="languagePack.toptext06" align="right">
           <template slot-scope="scope">
             <div>{{ scope.row.balance | toMoney }} GHM</div>
           </template>
         </el-table-column>
-        <el-table-column prop="percentage" :label="languagePack.percentage" width="160" />
+        <el-table-column prop="percentage" :label="languagePack.toptext07" width="160" />
         <el-table-column
           prop="tx_count"
-          :label="languagePack.transactions"
+          :label="languagePack.toptext08"
           width="100px"
           align="right"
         />

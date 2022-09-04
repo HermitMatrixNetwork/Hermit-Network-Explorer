@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{ languagePack.transactions }}</h3>
+    <h3>{{ languagePack.txstext01 }}</h3>
     <main class="main">
       <el-row
         type="flex"
@@ -10,7 +10,7 @@
       >
         <div>
           总共寻获超过><span class="block_num">{{ totalNumber }}</span
-          >条交易（仅显示最新500K记录）
+          >条交易{{languagePack.txstext03}}
         </div>
         <el-pagination
           popper-class="popperSelect"
@@ -45,7 +45,7 @@
                 <div class="popoverBox">
                   <div class="popoverBox_content">
                     <div>
-                      {{ languagePack.Txstatus }}
+                      {{ languagePack.txstext13 }}
                     </div>
                     <div class="popStatus">
                       <div v-if="scope.row.result == 'success'">
@@ -61,7 +61,7 @@
 
                       <el-divider></el-divider>
                     </div>
-                    <div v-for="(item, index) in [...statusTitle,{title:'随机数'}]" :key="index">
+                    <div v-for="(item, index) in [...statusTitle,{title:languagePack.txstext17}]" :key="index">
                       <div>{{ item.title }}</div>
                       <span v-show="index === 0"
                         >{{ scope.row.fee | toMoney }} GHM ($0.00)</span
@@ -94,7 +94,7 @@
         </el-table-column>
         <el-table-column
           prop="_id"
-          :label="languagePack.transactionhash"
+          :label="languagePack.txstext04"
           width="180px"
         >
           <template slot-scope="scope">
@@ -111,7 +111,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          :label="languagePack.Method"
+          :label="languagePack.txstext05"
           width="100px"
           align="center"
         >
@@ -119,18 +119,18 @@
             <div class="table_txOperate">{{ scope.row.type }}</div>
           </template>
         </el-table-column>
-        <el-table-column :label="languagePack.BlockHeight">
+        <el-table-column :label="languagePack.txstext06">
           <template slot-scope="scope">
             <div class="specialFont" @click="toBlock(scope.row.height)">{{ scope.row.height }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="timestamp" :label="languagePack.TimeStamp">
+        <el-table-column prop="timestamp" :label="languagePack.txstext07">
           <template slot-scope="scope">
             <div>{{ scope.row.timestamp | jetlag }}</div>
           </template>
         </el-table-column>
         <el-table-column
-          :label="languagePack.Sender"
+          :label="languagePack.txstext08"
           :show-overflow-tooltip="true"
           width="150px"
         >
@@ -155,7 +155,7 @@
         </el-table-column>
         <el-table-column
           prop="fuelTotal"
-          :label="languagePack.Recipient"
+          :label="languagePack.txstext09"
           width="150px"
         >
           <template slot-scope="scope">
@@ -165,7 +165,7 @@
             ></TableTooltip>
           </template>
         </el-table-column>
-        <el-table-column :label="languagePack.turnover">
+        <el-table-column :label="languagePack.txstext10">
           <template slot-scope="scope">
             <div>
               {{ scope.row.tx_amount | toMoney
@@ -173,7 +173,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="languagePack.TransactionFee">
+        <el-table-column :label="languagePack.txstext11">
           <template slot-scope="scope">
             <div>{{ scope.row.fee | toMoney }}</div>
           </template>
@@ -283,9 +283,9 @@ export default {
     },
     statusTitle() {
       return [
-        { title: this.languagePack.TransactionFee + ":" },
-        { title: this.languagePack.GasInformation + ":" },
-        { title: this.languagePack.GasUsed + ":" },
+        { title: this.languagePack.txstext11 + ":" },
+        { title: this.languagePack.txstext15 + ":" },
+        { title: this.languagePack.txstext16 + ":" },
       ];
     },
   },

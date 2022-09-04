@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{languagePack.block}}</h3>
+    <h3>{{languagePack.blocktext01}}</h3>
     <main class="main">
       <el-row
         type="flex"
@@ -32,7 +32,7 @@
         :row-style="{ height: '58px !important' }"
         v-loading="loading"
       >
-        <el-table-column prop="_id" :label="languagePack.block" width="80px">
+        <el-table-column prop="_id" :label="languagePack.blocktext04" width="80px">
           <template slot-scope="scope">
             <div class="specialFont" @click="toBlockDetail(scope.row._id)">
               {{ scope.row._id }}
@@ -40,7 +40,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          :label="languagePack.Age"
+          :label="languagePack.blocktext05"
           width="150px"
         >
         <template slot-scope="scope">
@@ -49,16 +49,16 @@
         </el-table-column>
         <el-table-column
           prop="tx_count"
-          :label="languagePack.Amount"
+          :label="languagePack.blocktext06"
           width="120px"
           align="right"
         />
-        <el-table-column :label="languagePack.proposer" width="160">
+        <el-table-column :label="languagePack.blocktext07" width="160">
           <template slot-scope="scope">
             <TableTooltip :content="scope.row.proposer_address" @click.native="toNode(scope.row.validator)"></TableTooltip>
           </template>
         </el-table-column>
-        <el-table-column prop="gas_used" :label="languagePack.GasUsed" width="228px">
+        <el-table-column prop="gas_used" :label="languagePack.blocktext08" width="228px">
           <template slot-scope="scope">
             <el-progress
               :percentage="percenTage"
@@ -71,7 +71,7 @@
         </el-table-column>
         <el-table-column
           prop="gas_total"
-          :label="languagePack.GasLimit"
+          :label="languagePack.blocktext09"
           align="right"
         >
           <template slot-scope="scope">
@@ -80,7 +80,7 @@
         </el-table-column>
         <el-table-column
           prop="coinbase"
-          :label="languagePack.blockreward"
+          :label="languagePack.blocktext10"
           width="250px"
           align="right"
         />
