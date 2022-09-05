@@ -363,7 +363,7 @@ export default {
 <style lang="scss" scoped>
 .hashdetail {
   width: 1280px;
-  margin: 0 auto;
+  margin: 0 auto 80px;
   .title {
     padding: 16px 0;
     position: relative;

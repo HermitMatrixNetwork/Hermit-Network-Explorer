@@ -2,7 +2,7 @@ import {contractEn,contractCn,contractCt} from './contract'
 import {accountEn,accountCn,accountCt} from './account'
 import {validationEn,validationCn,validationCt} from './validation'
 import {blockchainEn,blockchainCn,blockchainCt} from './blockchain'
-import {moreEn,moreCn} from './more'
+import {moreEn,moreCn,moreCt} from './more'
 
 import { homeEn,homeCn,homeCt } from './home'
 
@@ -55,5 +55,6 @@ export const Language = [
         ...accountCt,
         ...validationCt,
         ...blockchainCt,
+        ...moreCt
     }
 ]

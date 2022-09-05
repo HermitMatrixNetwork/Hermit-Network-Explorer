@@ -8,7 +8,7 @@
       <el-select
         v-model="select"
         slot="prepend"
-        :placeholder="languagePack.Filter"
+        :placeholder="languagePack.hometext02"
       >
         <el-option
           v-for="item in options"
@@ -46,12 +46,12 @@ export default {
       return this.$store.state.Language;
     },
     options() {
-      const { address, Tokens, Hash, BlockHeight } = this.languagePack;
+      const { hometext03, hometext04, hometext05, hometext06 } = this.languagePack;
       return [
-        { label: address, value: "1" },
-        { label: Tokens, value: "2" },
-        { label: Hash, value: "3" },
-        { label: BlockHeight, value: "4" },
+        { label: hometext03, value: "1" },
+        { label: hometext04, value: "2" },
+        { label: hometext05, value: "3" },
+        { label: hometext06, value: "4" },
       ];
     },
   },

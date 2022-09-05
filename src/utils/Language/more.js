@@ -54,6 +54,34 @@ let apply = {
         'applytext24': '请填写项目官网地址',
         'applytext25': '提交',
         'applytext26': '重置',
+    },
+    Ct: {
+        'applytext01': '上幣說明',
+        'applytext02': '提交上幣申請',
+        'applytext03': '為必填項',
+        'applytext04': '基礎信息',
+        'applytext05': '聯繫人',
+        'applytext06': '請填寫聯繫人名稱',
+        'applytext07': '聯繫人方式',
+        'applytext08': '請填寫電話號碼',
+        'applytext09': '代幣logo',
+        'applytext10': '上傳圖片',
+        'applytext11': '代幣合約地址',
+        'applytext12': '代幣全稱',
+        'applytext13': '請填寫代幣全稱',
+        'applytext14': '簡稱',
+        'applytext15': '請填寫代幣簡稱',
+        'applytext16': '發行總量',
+        'applytext17': '請填寫代幣發行總量',
+        'applytext18': '流通總量',
+        'applytext19': '請填寫代幣流通總量',
+        'applytext20': '代幣描述',
+        'applytext21': '請輸入介紹信息',
+        'applytext22': '已輸入0/300',
+        'applytext23': '官網',
+        'applytext24': '請填寫項目官網地址',
+        'applytext25': '提交',
+        'applytext26': '重置',
     }
 }
 
@@ -99,6 +127,25 @@ let RPC = {
         'RPCtext17':'',
         'RPCtext18':'',
         'RPCtext19':'',
+    },
+    Ct:{
+        'RPCtext01':'隱士矩陣網絡',
+        'RPCtext02':'網絡鏈接URL',
+        'RPCtext03':'鏈ID',
+        'RPCtext04':'符號',
+        'RPCtext05':'瀏覽器URL',
+        'RPCtext06':'連接到錢包',
+        'RPCtext07':`"用戶用戶可以快速添加到他們的錢包和Web3 中間件提供商（如：Kpler）連接到正確的Chain ID 和
+        Network ID 以連接到正確的鏈；步驟："`,
+        'RPCtext08':'連接錢包',
+        'RPCtext09':'添加網絡',
+        'RPCtext10':'連接成功',
+        'RPCtext11':'*請使用chrome瀏覽器安裝Kpler進行操作。',
+        'RPCtext12':'錢包已連接',
+        'RPCtext13':'請到商店安裝Keplr插件',
+        'RPCtext14':'*只有谷歌瀏覽器才能使用keplr插件',
+        'RPCtext15':'立即安裝',
+        'RPCtext16':'請參照上方指引完成添加',
     }
 }
 
@@ -116,6 +163,13 @@ let faucet = {
         'faucettext03':'获取GHM测试币',
         'faucettext04':'提交获取测试币失败，请重试',
         'faucettext05':'提交获取测试币请求成功！',
+    },
+    Ct:{
+        'faucettext01':'測試幣領取',
+        'faucettext02':'請輸入錢包地址',
+        'faucettext03':'獲取GHM測試幣',
+        'faucettext04':'提交獲取測試幣失敗，請重試',
+        'faucettext05':'提交獲取測試幣請求成功！',
     }
 }
 
@@ -131,4 +185,10 @@ export const moreCn = {
     ...apply.Cn,
     ...RPC.Cn,
     ...faucet.Cn,
+}
+
+export const moreCt = {
+    ...apply.Ct,
+    ...RPC.Ct,
+    ...faucet.Ct,
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="block_title">
-      {{ languagePack.block }} ：#{{ commitHeight }}
+      {{ languagePack.blocktext11 }} ：#{{ commitHeight }}
       <div class="nextBtn">
         <span
           @click="nextData(-1)"
@@ -16,40 +16,40 @@
       </div>
     </div>
     <div class="block_basic">
-      <BasicTitle :title="languagePack.details">
+      <BasicTitle :title="languagePack.blocktext12">
         <template #message>
           <div class="basicStyle messageBasic">
             <div class="column">
-              <p>{{ languagePack.blockheight }}：</p>
+              <p>{{ languagePack.blocktext13 }}：</p>
               <span>{{ commitHeight }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.parentblockhash }}：</p>
+              <p>{{ languagePack.blocktext17 }}：</p>
               <span>{{ blockData.parent_hash }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.TimeStamp }}：</p>
+              <p>{{ languagePack.blocktext14 }}：</p>
               <span>{{ blockData.timestamp | timeStamp }} +UTC</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.proposer }}：</p>
+              <p>{{ languagePack.blocktext18 }}：</p>
               <span>{{ blockData.proposer_address }}</span>
             </div>
 
             <div class="column">
-              <p>{{ languagePack.Amount }}：</p>
+              <p>{{ languagePack.blocktext15 }}：</p>
               <span>{{ blockData.tx_count }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.GasUsed }}：</p>
+              <p>{{ languagePack.blocktext19 }}：</p>
               <span>{{ blockData.gas_used }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.blockhash }}：</p>
+              <p>{{ languagePack.blocktext16 }}：</p>
               <span>{{ blockData.hash }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.GasLimit }}：</p>
+              <p>{{ languagePack.blocktext20 }}：</p>
               <span>{{ blockData.gas_total }}</span>
             </div>
           </div>
@@ -58,7 +58,7 @@
     </div>
 
     <div class="block_detail">
-      <div class="block_detail_title">交易</div>
+      <div class="block_detail_title">{{languagePack.blocktext21}}</div>
       <el-table
         :data="tableData"
         size="mini"
@@ -67,7 +67,7 @@
         :row-class-name="'tableRowStyle'"
         v-loading="loading"
       >
-        <el-table-column :label="languagePack.transactionhash">
+        <el-table-column :label="languagePack.blocktext22">
           <template slot-scope="scope">
             <div class="specialFont">
               <el-tooltip effect="dark" content="交易失败" placement="top">
@@ -83,7 +83,7 @@
         </el-table-column>
         <el-table-column
           prop="operationType"
-          :label="languagePack.operationtype"
+          :label="languagePack.blocktext23"
           width="100px"
           align="center"
         >
@@ -91,18 +91,18 @@
             <div class="table_txOperate">{{ scope.row.type }}</div>
           </template>
         </el-table-column>
-        <el-table-column :label="languagePack.blockheight">
+        <el-table-column :label="languagePack.blocktext24">
           <template slot-scope="scope">
             <div class="specialFont">{{ scope.row.height }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="timestamp" :label="languagePack.time">
+        <el-table-column prop="timestamp" :label="languagePack.blocktext25">
           <template slot-scope="scope">
             <div>{{ scope.row.timestamp | jetlag }}</div>
           </template>
         </el-table-column>
         <el-table-column
-          :label="languagePack.startaddress"
+          :label="languagePack.blocktext26"
           :show-overflow-tooltip="true"
           width="150px"
         >
@@ -124,14 +124,14 @@
         </el-table-column>
         <el-table-column
           prop="fuelTotal"
-          :label="languagePack.targetaddress"
+          :label="languagePack.blocktext27"
           width="150px"
         >
           <template slot-scope="scope">
             <TableTooltip :content="scope.row.targetAddress"></TableTooltip>
           </template>
         </el-table-column>
-        <el-table-column :label="languagePack.transactionnumericalvalue">
+        <el-table-column :label="languagePack.blocktext28">
           <template slot-scope="scope">
             <div>
               {{ scope.row.tx_amount | toMoney
@@ -139,7 +139,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="languagePack.TransactionFee">
+        <el-table-column :label="languagePack.blocktext29">
           <template slot-scope="scope">
             <div>{{ scope.row.fee | toMoney }}</div>
           </template>
