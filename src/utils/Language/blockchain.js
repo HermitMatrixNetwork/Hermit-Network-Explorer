@@ -10,8 +10,8 @@ let top = {
         'toptext08':'transactions',
     },
     Cn:{
-        'toptext01':'',
-        'toptext02':'',
+        'toptext01':'GHM的顶部账户',
+        'toptext02':'（展示匿名币余额排名前1000的账户）',
         'toptext03':'排名',
         'toptext04':'地址',
         'toptext05':'标签',
@@ -21,7 +21,7 @@ let top = {
     },
     Ct:{
         'toptext01':'GHM的頂部賬戶',
-        'toptext02':'',
+        'toptext02':'（展示匿名幣余額排名前1000的賬戶）',
         'toptext03':'排名',
         'toptext04':'地址',
         'toptext05':'標簽',
