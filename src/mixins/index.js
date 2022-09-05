@@ -35,7 +35,7 @@ export default {
       this.$router.push({ name: 'hash_detail', params: { hash, index } })
     },
     queryDealtoAddress(address) {
-      this.$router.push({ path: '/address_detail', query: { address } }).catch(e=>{})
+      this.$router.push({ path: '/address_detail', query: { address } }).catch(e => { })
     },
     disposeTableType(arr) {
       if (!Array.isArray(arr)) return console.error('no Array');
@@ -81,6 +81,9 @@ export default {
           case "MsgStoreCode":
             item.type = "上传合约";
             break;
+          case 'MsgDelegate':
+            item.type = '委托';
+            break
           default:
             item.type = "";
             break;

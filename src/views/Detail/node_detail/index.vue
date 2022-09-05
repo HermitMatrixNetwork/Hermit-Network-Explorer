@@ -173,10 +173,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              :label="languagePack.nodetext51"
-              align="right"
-            >
+            <el-table-column :label="languagePack.nodetext51" align="right">
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.amount | toMoney }} ({{
@@ -185,10 +182,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              :label="languagePack.nodetext52"
-              align="right"
-            >
+            <el-table-column :label="languagePack.nodetext52" align="right">
               <template slot-scope="scope">
                 <div>{{ scope.row.amount | toMoney }}</div>
               </template>
@@ -198,13 +192,16 @@
                 <div>{{ scope.row.redeem | toMoney }}</div>
               </template>
             </el-table-column>
-            <el-table-column
-              :label="languagePack.nodetext54"
-              align="right"
-            >
+            <el-table-column :label="languagePack.nodetext54" align="right">
               <template>
-                <div style="display:flex;justify-content: flex-end;align-items: center">
-                  <div class="Txstatus" :style="{background: '#55C499'}" />
+                <div
+                  style="
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                  "
+                >
+                  <div class="Txstatus" :style="{ background: '#55C499' }" />
                   success
                 </div>
               </template>
@@ -254,10 +251,7 @@
                 <div>{{ scope.row.tx_amount }}</div>
               </template>
             </el-table-column>
-            <el-table-column
-              :label="languagePack.nodetext54"
-              width="168"
-            >
+            <el-table-column :label="languagePack.nodetext54" width="168">
               <template slot-scope="scope">
                 <div class="statusStyle">
                   <div
@@ -354,9 +348,11 @@ export default {
       this.delegaTion(res[1].delegation_responses);
       this.outblockTable = res[2].data.list;
       this.rewardTable = res[3].data.list;
-      this.hashList = res[3].data.list.map((item) => {
-        return { hash: item._id, type: item.type, status: item.result };
-      });
+      if (Array.isArray(res[3].data.list)) {
+        this.hashList = res[3].data.list.map((item) => {
+          return { hash: item._id, type: item.type, status: item.result };
+        });
+      }
 
       let unbonds = res[4].unbonding_responses;
 

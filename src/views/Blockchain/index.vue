@@ -31,7 +31,11 @@
             <div>{{ scope.row.balance | toMoney }} GHM</div>
           </template>
         </el-table-column>
-        <el-table-column prop="percentage" :label="languagePack.toptext07" width="160" />
+        <el-table-column prop="percentage" :label="languagePack.toptext07" width="160" >
+          <template slot-scope="scope">
+            <div>{{(scope.row.percentage * 100).toFixed(8)}} %</div>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="tx_count"
           :label="languagePack.toptext08"
@@ -112,7 +116,11 @@ export default {
   },
   watch: {
     tableData(value) {
-      this.loading = value.length == 0 ? true : false;
+      if (Array.isArray(value)) {
+        this.loading = this.tableData.length === 0 ? true : false;
+      } else {
+        this.loading = false;
+      }
     },
     deep: true,
   },
@@ -179,4 +187,13 @@ h3 {
   }
 }
 
+@media screen and (max-width:598px) {
+    h3{
+      width: 100%;
+      padding-left: 16px;
+    }
+    .main{
+      width: 100%;
+    }
+}
 </style>

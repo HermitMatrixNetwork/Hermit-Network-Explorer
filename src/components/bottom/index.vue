@@ -2,7 +2,12 @@
   <footer class="bottom">
     <div class="contact">
       <div class="bottom_logo">
-        <img src="../../assets/img/bottom-bar_logo.png" alt="" width="28" class="bottomLogo"/>
+        <img
+          src="../../assets/img/bottom-bar_logo.png"
+          alt=""
+          width="28"
+          class="bottomLogo"
+        />
         <!-- <img src="@/assets/img/bottom-bar_logo@2x.png" alt="" width="48" class="bottomLogoM"> -->
         <p>Powered by Hermit Matrix Network</p>
       </div>
@@ -12,28 +17,14 @@
           <p>微信公众号</p>
           <img src="../../assets/img/bottom-bar_qrcode.png" alt="" />
         </div>
-        <span>
-          <img src="../../assets/img/bottom-bar_telegram.png" alt="" />
-          <p>Telegram</p>
-        </span>
-        <span>
-          <img src="../../assets/img/bottom-bar_twitter.png" alt="" />
-          <p>twitter</p>
-        </span>
-        <span>
-          <img src="../../assets/img/bottom-bar_medium.png" alt="" />
-          <p>Medium</p>
-        </span>
-
-        <span>
-          <img src="../../assets/img/bottom-bar_github.png" alt="" />
-          <p>GitHub</p>
-        </span>
-
-        <span>
-          <img src="../../assets/img/bottom-bar_gitbook.png" alt="" />
-          <p>Gitbook</p>
-        </span>
+        <div
+          class="contact_ways_item"
+          v-for="item in contacts"
+          :key="item.label"
+        >
+          <img :src="item.icon" alt="" />
+          <p>{{ item.label }}</p>
+        </div>
       </div>
     </div>
     <div class="record">Hermit Matrix Network © 2022 (HGM)</div>
@@ -43,7 +34,30 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      contacts: [
+        {
+          label: "Telegram",
+          icon: require("@/assets/img/bottom-bar_telegram.png"),
+        },
+        {
+          label: "Twitter",
+          icon: require("@/assets/img/bottom-bar_twitter.png"),
+        },
+        {
+          label: "Medium",
+          icon: require("@/assets/img/bottom-bar_medium.png"),
+        },
+        {
+          label: "GitHub",
+          icon: require("@/assets/img/bottom-bar_github.png"),
+        },
+        {
+          label: "Gitbook",
+          icon: require("@/assets/img/bottom-bar_gitbook.png"),
+        },
+      ],
+    };
   },
 };
 </script>
@@ -63,7 +77,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom:1px solid #FFFFFF20 ;
+    border-bottom: 1px solid #ffffff20;
     .bottom_logo {
       display: flex;
       align-items: center;
@@ -72,7 +86,7 @@ export default {
       font-size: 20px;
       color: #ffffff;
       letter-spacing: 0;
-      >img{
+      > img {
         padding: 0 10px;
       }
     }
@@ -96,17 +110,20 @@ export default {
           padding-top: 8px;
           width: 80px;
         }
+        margin-right: 40px;
       }
-      img {
-        padding: 0 20px;
-        width: 32px;
+      &_item {
         cursor: pointer;
-      }
-      > span {
-        text-align: center;
-        font-weight: 400;
-        font-size: 12px;
         color: #ffffff;
+        font-size: 12px;
+        text-align: center;
+        width: 56px;
+        margin: 0 10px;
+        > img {
+          width: 32px;
+          margin-bottom: 5px;
+        }
+
       }
     }
   }
@@ -139,24 +156,24 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    .bottom_logo{
+    .bottom_logo {
       flex-direction: column;
       height: 100px !important;
       justify-content: space-between;
-      .bottomLogo{
+      .bottomLogo {
         display: none !important;
       }
-      >img{
+      > img {
         width: 36px;
       }
-      >p{
+      > p {
         font-size: 16px;
       }
     }
-    .contact_ways{
+    .contact_ways {
       width: 100% !important;
       justify-content: center !important;
-      .qrcode{
+      .qrcode {
         display: none !important;
       }
     }

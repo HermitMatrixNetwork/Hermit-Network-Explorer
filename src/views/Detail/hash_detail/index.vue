@@ -2,7 +2,7 @@
   <div>
     <div class="hashdetail">
       <div class="title">
-        <h3>{{ languagePack.transactiondetails }}</h3>
+        <h3>{{ languagePack.tsxtext20 }}</h3>
         <p class="specialFont">
           {{ Tx?Tx.hash:$route.params.hash }}
         </p>
@@ -28,21 +28,21 @@
           <div class="messageBasic" style="height: 160px">
             <!-- 当该笔交易为合约执行时 -->
             <div class="column" v-if="dealType === 'MsgExecuteContract'">
-              <p>{{ languagePack.executive }}：</p>
+              <p>{{ languagePack.tsxtext22 }}：</p>
               <span class="specialFont">{{ detailed.perform }}</span>
             </div>
             <div class="column" v-if="dealType === 'MsgExecuteContract'">
-              <p>{{ languagePack.contract }}：</p>
+              <p>{{ languagePack.tsxtext23 }}：</p>
               <span>{{ detailed.contract }}</span>
             </div>
 
             <!-- 当该笔交易为转账时 -->
             <div class="column" v-if="dealType === 'MsgSend'">
-              <p>{{ languagePack.sender }}：</p>
+              <p>{{ languagePack.tsxtext35 }}：</p>
               <span class="specialFont">{{ detailed.perform }}</span>
             </div>
             <div class="column" v-if="dealType === 'MsgSend'">
-              <p>{{ languagePack.receiver }}：</p>
+              <p>{{ languagePack.tsxtext36 }}：</p>
               <span>{{ detailed.toaddress }}</span>
             </div>
 
@@ -51,7 +51,7 @@
               class="column"
               v-if="dealType === 'MsgWithdrawDelegatorReward'"
             >
-              <p>{{ languagePack.delegate }}：</p>
+              <p>{{ languagePack.tsxtext41 }}：</p>
               <span class="specialFont">{{ detailed.delegator_address }}</span>
             </div>
 
@@ -59,7 +59,7 @@
               class="column"
               v-if="dealType === 'MsgWithdrawDelegatorReward'"
             >
-              <p>{{ languagePack.receivedreward }}：</p>
+              <p>{{ languagePack.tsxtext39 }}：</p>
               <span>{{ detailed.turnover | toMoney }} GHM</span>
             </div>
 
@@ -67,7 +67,7 @@
               class="column"
               v-if="dealType === 'MsgWithdrawDelegatorReward'"
             >
-              <p>{{ languagePack.rewarddetails }}：</p>
+              <p>{{ languagePack.tsxtext40 }}：</p>
               <span
                 >从验证节点{{ detailed.validator_address }}领取奖励{{
                   detailed.turnover | toMoney
@@ -83,7 +83,7 @@
                 dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'
               "
             >
-              <p>委托人：</p>
+              <p>{{languagePack.tsxtext41}}：</p>
               <span class="specialFont">{{ detailed.delegator_address }}</span>
             </div>
 
@@ -93,7 +93,7 @@
                 dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'
               "
             >
-              <p>验证节点：</p>
+              <p>{{languagePack.tsxtext42}}：</p>
               <span>{{ detailed.validator_address }} </span>
             </div>
 
@@ -103,39 +103,39 @@
                 dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'
               "
             >
-              <p>委托数量：</p>
+              <p>{{languagePack.tsxtext43}}：</p>
               <span>{{ detailed.turnover | toMoney }} GHM</span>
             </div>
 
             <!-- 当该笔交易为取消委托时 -->
             <div class="column" v-if="dealType === 'MsgUndelegate'">
-              <p>赎回人：</p>
+              <p>{{languagePack.tsxtext47}}：</p>
               <span class="specialFont">{{ detailed.delegator_address }}</span>
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
-              <p>验证节点：</p>
+              <p>{{languagePack.tsxtext48}}：</p>
               <span>{{ detailed.validator_address }} </span>
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
-              <p>赎回数量</p>
+              <p>{{languagePack.tsxtext49}}：</p>
               <span>{{ detailed.turnover | toMoney }} GHM</span>
             </div>
 
             <!-- 当为实例化合约时 -->
             <div class="column" v-if="dealType === 'MsgInstantiateContract'">
-              <p>{{ languagePack.executive }}：</p>
+              <p>{{ languagePack.tsxtext22 }}：</p>
               <span class="specialFont">{{ detailed.contract }}</span>
             </div>
             <div class="column" v-if="dealType === 'MsgInstantiateContract'">
-              <p>{{ languagePack.contract }}：</p>
+              <p>{{ languagePack.tsxtext23 }}：</p>
               <span>{{ detailed.contract }}</span>
             </div>
 
             <!-- 当为上传合约时 -->
             <div class="column" v-if="dealType === 'MsgStoreCode'">
-              <p>{{ languagePack.executive }}：</p>
+              <p>{{ languagePack.tsxtext22 }}：</p>
               <span class="specialFont">{{ detailed.contract }}</span>
             </div>
             <div class="column" v-if="dealType === 'MsgStoreCode'">
@@ -152,22 +152,22 @@
                 dealType !== 'MsgBeginRedelegate'
               "
             >
-              <p>{{ languagePack.Amount }}：</p>
+              <p>{{ languagePack.tsxtext24 }}：</p>
               <span>{{ detailed.turnover | toMoney }} GHM</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.TransactionFee }}：</p>
+              <p>{{ languagePack.tsxtext25 }}：</p>
               <span>{{ detailed.poundage | toMoney }} GHM</span>
             </div>
           </div>
         </template>
       </BasicTitle>
       <div style="height: 16px" />
-      <BasicTitle :title="languagePack.details">
+      <BasicTitle :title="languagePack.tsxtext27">
         <template #message>
           <div class="messageBasic" style="height: 250px">
             <div class="column">
-              <p>{{ languagePack.Txstatus }}：</p>
+              <p>{{ languagePack.tsxtext28 }}：</p>
               <span
                 :style="{
                   color: detailed.status === 'success' ? '#55c499' : '#ED422B',
@@ -176,23 +176,23 @@
               >
             </div>
             <div class="column">
-              <p>{{ languagePack.transactionhash }}：</p>
+              <p>{{ languagePack.tsxtext29 }}：</p>
               <span>{{ detailed.txhash }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.TimeStamp }}：</p>
+              <p>{{ languagePack.tsxtext30 }}：</p>
               <span>{{ detailed.timestamp | timeStamp }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.blockheight }}：</p>
+              <p>{{ languagePack.tsxtext31 }}：</p>
               <span style="color: #5671f2">{{ detailed.height }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.GasUsed }}：</p>
+              <p>{{ languagePack.tsxtext32 }}：</p>
               <span>{{ detailed.gas_used }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.GasLimit }}：</p>
+              <p>{{ languagePack.tsxtext33 }}：</p>
               <span>{{ detailed.gas_wanted }}</span>
             </div>
           </div>
@@ -323,25 +323,25 @@ export default {
     TxTitle() {
       switch (this.dealType) {
         case "MsgUndelegate":
-          return "赎回委托";
+          return this.languagePack.tsxtext46;
           break;
         case "MsgSend":
-          return "转账";
+          return this.languagePack.tsxtext34;
           break;
         case "MsgWithdrawDelegatorReward":
-          return "领取奖励";
+          return this.languagePack.tsxtext37;
           break;
         case "MsgDelegate":
-          return "委托";
+          return this.languagePack.tsxtext38;
           break;
         case "MsgBeginRedelegate":
           return "重新委托";
           break;
         case "MsgExecuteContract":
-          return "合约执行";
+          return this.languagePack.tsxtext21;
           break;
         case "vote":
-          return "投票";
+          return this.languagePack.tsxtext50;
           break;
         case "MsgSetWithdrawAddress":
           return "设置领奖地址";

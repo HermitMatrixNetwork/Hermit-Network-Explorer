@@ -7,14 +7,14 @@
           <div class="icon"></div>
           <div class="explain">
             <p>{{ languagePack.contracttext02 }}</p>
-            <h3>{{computeCount}}</h3>
+            <h3>{{ computeCount | toMoney }}</h3>
           </div>
         </div>
         <div class="contracts_basic_item">
           <div class="icon"></div>
           <div class="explain">
             <p>{{ languagePack.contracttext03 }}</p>
-            <h3>{{userCount}}</h3>
+            <h3>{{ userCount | toMoney }}</h3>
           </div>
         </div>
         <div class="contracts_basic_item">
@@ -54,7 +54,10 @@
           </el-table-column>
           <el-table-column :label="languagePack.contracttext06" width="548">
             <template slot-scope="scope">
-              <p class="specialFont" @click="toContractDetail(scope.row.contract_address)">
+              <p
+                class="specialFont"
+                @click="toContractDetail(scope.row.contract_address)"
+              >
                 {{ scope.row.contract_lable }}
               </p>
             </template>
@@ -76,7 +79,8 @@
           <el-table-column :label="languagePack.contracttext09" align="right">
             <template slot-scope="scope">
               <div>
-                {{ scope.row.price }}
+                <p>{{ scope.row.value }} GHM</p>
+                <p>$ 0.00</p>
               </div>
             </template>
           </el-table-column>
@@ -120,44 +124,52 @@ export default {
     async getData(limit) {
       const res = await getContract(limit);
       console.log("合约列表", res);
-      let arr = res.data.list;
-      arr.forEach((item) => {
-        item.user_count = Object.keys(item.user_count).length;
-      });
+      // let arr = res.data.list;
+      // arr.forEach((item) => {
+      //   item.user_count = Object.keys(item.user_count).length;
+      // });
       this.tableList = res.data.list;
       this.pagination = res.data.total;
     },
     handleSizeChange() {},
     handleCurrentChange() {},
-    toContractDetail(address){
+    toContractDetail(address) {
       // console.log(address);
-      this.$router.push({path:'/contract_detail',query:{address}})
-    }
+      this.$router.push({ path: "/contract_detail", query: { address } });
+    },
   },
   computed: {
     languagePack() {
       return this.$store.state.Language;
     },
     //计算总用户数量
-    userCount(){
-      let count = 0
-      this.tableList.forEach(item=>{
-        count += item.user_count
-      })
-      return count
+    userCount() {
+      let count = 0;
+      if (Array.isArray(this.tableList)) {
+        this.tableList.forEach((item) => {
+          count += item.user_count;
+        });
+      }
+      return count;
     },
     //计算总运算次数
-    computeCount(){
-      let count = 0
-      this.tableList.forEach(item=>{
-        count += item.compute_count
-      })
-      return count
-    }
+    computeCount() {
+      let count = 0;
+      if (Array.isArray(this.tableList)) {
+        this.tableList.forEach((item) => {
+          count += item.compute_count;
+        });
+      }
+      return count;
+    },
   },
   watch: {
     tableList(value) {
-      this.loading = value.length == 0 ? true : false;
+      if (Array.isArray(value)) {
+        this.loading = this.tableList.length === 0 ? true : false;
+      } else {
+        this.loading = false;
+      }
     },
     deep: true,
   },
@@ -292,4 +304,3 @@ export default {
   }
 }
 </style>
-

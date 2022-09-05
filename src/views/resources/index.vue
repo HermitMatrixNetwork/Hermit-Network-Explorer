@@ -16,44 +16,212 @@
           </p>
         </div>
 
-        <basicTitle :title="'接口名称'">
+        <basicTitle :title="'接口名称：获取区块列表'">
           <template #message>
-            <div class="developApi">
-              <p>
-                接口:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;0xdec4408f438b7beadeb04eaca031cad5131f7e8f4cdc45d0ebf1d29c019be3d9
-              </p>
-              <p>
-                接口解释:&emsp;&emsp;&emsp;&emsp;&emsp;除了上述举例的图片，NFT还具有其他多种信息，最重要的就是NFT的编码，也就是Token
-                ID
-              </p>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/blocklist</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取区块列表</span>
+              </div>
             </div>
           </template>
         </basicTitle>
 
-        <basicTitle :title="'接口名称'">
+        <basicTitle :title="'接口名称：获取区块详情'">
           <template #message>
-            <div class="developApi">
-              <p>
-                接口:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;0xdec4408f438b7beadeb04eaca031cad5131f7e8f4cdc45d0ebf1d29c019be3d9
-              </p>
-              <p>
-                接口解释:&emsp;&emsp;&emsp;&emsp;&emsp;除了上述举例的图片，NFT还具有其他多种信息，最重要的就是NFT的编码，也就是Token
-                ID
-              </p>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/blockdetails</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>通过区块高度获取区块详情</span>
+              </div>
             </div>
           </template>
         </basicTitle>
 
-        <basicTitle :title="'接口名称'">
+        <basicTitle :title="'接口名称：获取交易列表'">
           <template #message>
-            <div class="developApi">
-              <p>
-                接口:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;0xdec4408f438b7beadeb04eaca031cad5131f7e8f4cdc45d0ebf1d29c019be3d9
-              </p>
-              <p>
-                接口解释:&emsp;&emsp;&emsp;&emsp;&emsp;除了上述举例的图片，NFT还具有其他多种信息，最重要的就是NFT的编码，也就是Token
-                ID。最重要的就是NFT的编码，也就是Token最重要的就是NFT的编码，也就是Token
-              </p>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/txlist</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取交易列表</span>
+              </div>
+            </div>
+          </template>
+        </basicTitle>
+
+        <basicTitle :title="'接口名称：获取账号领取奖励的交易记录'">
+          <template #message>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/txwithdraw</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取交易列表</span>
+              </div>
+            </div>
+          </template>
+        </basicTitle>
+
+        <basicTitle :title="'接口名称：获取账号撤销委托的交易记录'">
+          <template #message>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/txundelegate</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取账号撤销委托的交易记录</span>
+              </div>
+            </div>
+          </template>
+        </basicTitle>
+
+        <basicTitle :title="'接口名称：获取合约的交易记录'">
+          <template #message>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/txcontract</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取合约的交易记录</span>
+              </div>
+            </div>
+          </template>
+        </basicTitle>
+
+        <basicTitle :title="'接口名称：获取账号的交易记录'">
+          <template #message>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/txaccount</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取账号的交易记录</span>
+              </div>
+            </div>
+          </template>
+        </basicTitle>
+
+        <basicTitle :title="'接口名称：获取top账号列表'">
+          <template #message>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/accountlist</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取top账号列表</span>
+              </div>
+            </div>
+          </template>
+        </basicTitle>
+
+        <basicTitle :title="'接口名称：获取账号的详细信息'">
+          <template #message>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/accountinfo</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取账号的详细信息</span>
+              </div>
+            </div>
+          </template>
+        </basicTitle>
+
+        <basicTitle :title="'接口名称：获取合约列表'">
+          <template #message>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/contractlist</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取合约列表</span>
+              </div>
+            </div>
+          </template>
+        </basicTitle>
+
+         <basicTitle :title="'接口名称：获取合约详细信息'">
+          <template #message>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/contractinfo</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取合约详细信息</span>
+              </div>
+            </div>
+          </template>
+        </basicTitle>
+
+         <basicTitle :title="'接口名称：获取节点详细信息'">
+          <template #message>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/nodeinfo</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取节点详细信息</span>
+              </div>
+            </div>
+          </template>
+        </basicTitle>
+
+         <basicTitle :title="'接口名称：获取原生代币供应量'">
+          <template #message>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://167.179.118.118:1317/cosmos/bank/v1beta1/supply/uGHM</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取原生代币供应量</span>
+              </div>
+            </div>
+          </template>
+        </basicTitle>
+
+         <basicTitle :title="'接口名称：获取合约列表'">
+          <template #message>
+            <div class="developApi messageBasic">
+              <div class="column">
+                <p>接口：</p>
+                <span>http://158.247.237.78:8181/browser/contractlist</span>
+              </div>
+              <div class="column">
+                <p>接口解释：</p>
+                <span>获取合约列表</span>
+              </div>
             </div>
           </template>
         </basicTitle>
@@ -112,20 +280,20 @@ export default {};
   }
 }
 
-@media screen and (max-width:598px) {
-  .developMain{
+@media screen and (max-width: 598px) {
+  .developMain {
     width: 100%;
-    &-title{
+    &-title {
       padding-left: 16px;
     }
-    .basic{
+    .basic {
       width: 100%;
       height: auto;
       padding: 0;
     }
   }
 
-  .developApi{
+  .developApi {
     height: 80px;
     justify-content: space-evenly;
   }

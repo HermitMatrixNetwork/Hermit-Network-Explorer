@@ -1,7 +1,7 @@
 <template>
   <div class="inputVal" :style="boxStyle">
     <el-input
-      :placeholder="languagePack.SearchBox"
+      :placeholder="languagePack.hometext07"
       v-model="searchVal"
       class="input-with-select"
     >
@@ -46,7 +46,8 @@ export default {
       return this.$store.state.Language;
     },
     options() {
-      const { hometext03, hometext04, hometext05, hometext06 } = this.languagePack;
+      const { hometext03, hometext04, hometext05, hometext06 } =
+        this.languagePack;
       return [
         { label: hometext03, value: "1" },
         { label: hometext04, value: "2" },
@@ -62,9 +63,9 @@ export default {
         this.searchVal = "";
         return;
       }
-      if(!this.select){
-        this.messageBox('请选择搜索条件! ')
-        return
+      if (!this.select) {
+        this.messageBox("请选择搜索条件! ");
+        return;
       }
       switch (this.select * 1) {
         case 1:
@@ -82,7 +83,7 @@ export default {
           break;
         case 4:
           console.log("通过块搜索");
-          this.queryDealtoBlock(this.searchVal)
+          this.queryDealtoBlock(this.searchVal);
           break;
         default:
           break;
@@ -103,21 +104,24 @@ export default {
       width: 130px;
       text-align: center;
       padding: 0;
-      font-weight: 500;
+      font-weight: bold;
       font-size: 14px;
-      color: rgba(20, 37, 62, 0.85);
+      &::placeholder {
+        color: #14253e !important;
+      }
+      
     }
   }
   .el-input-group__append {
-    background: #1E42ED;
+    background: #1e42ed;
     border: none;
     color: #ffffff;
-    transition: background .2s cubic-bezier(.645,.045,.355,1) ;
-    &:hover{
-        background: #6E85F7;
+    transition: background 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    &:hover {
+      background: #6e85f7;
     }
-    &:active{
-        background: #0E31D6;
+    &:active {
+      background: #0e31d6;
     }
   }
 }
@@ -126,15 +130,46 @@ export default {
   background: #ffffff !important;
 }
 
-::v-deep .input-with-select{
-  >input{
-    transition: border .2s cubic-bezier(.645,.045,.355,1);
-    &:hover{
-      border: 1px solid #5671F2;
+::v-deep .input-with-select {
+  > input {
+    transition: border 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    &:hover {
+      border: 1px solid #5671f2;
     }
-    &:focus{
-      border: 1px solid rgba(30,66,237);
+    &:focus {
+      border: 1px solid rgba(30, 66, 237);
     }
+  }
+}
+</style>
+
+<style lang="scss">
+.el-select-dropdown {
+  width: 130px;
+  margin: 0;
+  .popper__arrow {
+    display: none;
+  }
+  .el-scrollbar {
+    .el-select-dropdown__list {
+      .el-select-dropdown__item {
+        color: rgba(20, 37, 62, 0.45) !important;
+        height: 40px;
+        line-height: 40px;
+        &:hover {
+          background: #ecefff !important;
+          color: #1e42ed !important;
+        }
+      }
+    }
+  }
+}
+.el-popper {
+  margin: 0 !important;
+}
+.el-select__caret {
+  &::before {
+    content: "\e78f";
   }
 }
 </style>

@@ -21,22 +21,30 @@
             :class="$route.meta.ID == 1 ? 'pathStyle' : ''"
             >{{ languagePack.headertext01 }}</router-link
           >
-          <el-dropdown @command="blockCommand">
+          <el-dropdown @command="blockCommand" placement="bottom">
             <span class="el-dropdown-link">
-              {{ languagePack.headertext02}}
+              {{ languagePack.headertext02 }}
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="/blockchain">{{languagePack.headertext03}}</el-dropdown-item>
-              <el-dropdown-item command="/tsx" divided>{{languagePack.headertext04}}</el-dropdown-item>
-              <el-dropdown-item command="/blockcheck">{{languagePack.headertext05}}</el-dropdown-item>
+              <el-dropdown-item command="/blockchain">{{
+                languagePack.headertext03
+              }}</el-dropdown-item>
+              <el-dropdown-item command="/tsx" divided>{{
+                languagePack.headertext04
+              }}</el-dropdown-item>
+              <el-dropdown-item command="/blockcheck">{{
+                languagePack.headertext05
+              }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <a @click="toGo('/contracts')">{{ languagePack.headertext06 }}</a>
           <a @click="toGo('/accounts')">{{ languagePack.headertext07 }}</a>
           <a @click="toGo('/validation')">{{ languagePack.headertext08 }}</a>
-          <el-dropdown @command="blockCommand">
-            <span class="el-dropdown-link">{{ languagePack.headertext09}}<i class="el-icon-arrow-down el-icon--right"></i>
+          <el-dropdown @command="blockCommand" placement="bottom">
+            <span class="el-dropdown-link"
+              >{{ languagePack.headertext09
+              }}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -48,9 +56,10 @@
               >
             </el-dropdown-menu>
           </el-dropdown>
-          <el-dropdown @command="blockCommand">
+          <el-dropdown @command="blockCommand" placement="bottom">
             <span class="el-dropdown-link">
-              {{ languagePack.headertext16}}<i class="el-icon-arrow-down el-icon--right"></i>
+              {{ languagePack.headertext16
+              }}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -66,13 +75,15 @@
         <div style="width: 1px; height: 24px; background: #f0f0f0" />
 
         <div class="langage hidden-sm-and-down">
-          <div @click="messageBox('暂未开放')">{{ languagePack.headertext22 }}</div>
+          <div @click="messageBox('暂未开放')">
+            {{ languagePack.headertext22 }}
+          </div>
           <img
             @click="messageBox('暂未开放')"
             src="../../assets/img/earths.png"
             alt=""
           />
-          <el-dropdown @command="LanguageChange">
+          <el-dropdown @command="LanguageChange" placement="bottom">
             <span class="el-dropdown-link">
               {{ languageType[lang].type
               }}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -95,14 +106,24 @@
         <div>
           <div class="navs">
             <router-link to="home">{{ languagePack.headertext01 }}</router-link>
-            <el-dropdown @command="blockCommand">
-              <span class="el-dropdown-link" :class="$route.meta.ID == 2 ? 'pathStyle' : ''">
-                {{ languagePack.headertext02}}<i class="el-icon-arrow-down el-icon--right"></i>
+            <el-dropdown @command="blockCommand"  placement="bottom">
+              <span
+                class="el-dropdown-link"
+                :class="$route.meta.ID == 2 ? 'pathStyle' : ''"
+              >
+                {{ languagePack.headertext02
+                }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="/blockchain">{{languagePack.headertext03}}</el-dropdown-item>
-                <el-dropdown-item command="/tsx" divided>{{languagePack.headertext04}}</el-dropdown-item>
-                <el-dropdown-item command="/blockcheck">{{languagePack.headertext05}}</el-dropdown-item>
+              <el-dropdown-menu slot="dropdown" class="specialEldropdown" >
+                <el-dropdown-item command="/blockchain">{{
+                  languagePack.headertext03
+                }}</el-dropdown-item>
+                <el-dropdown-item command="/tsx" divided>{{
+                  languagePack.headertext04
+                }}</el-dropdown-item>
+                <el-dropdown-item command="/blockcheck">{{
+                  languagePack.headertext05
+                }}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
             <a
@@ -115,15 +136,19 @@
               :class="$route.meta.ID == 4 ? 'pathStyle' : ''"
               >{{ languagePack.headertext07 }}</a
             >
-            <a @click="toGo('/validation')" :class="$route.meta.ID == 5?'pathStyle':''">{{ languagePack.headertext08 }}</a>
-            <el-dropdown @command="blockCommand">
+            <a
+              @click="toGo('/validation')"
+              :class="$route.meta.ID == 5 ? 'pathStyle' : ''"
+              >{{ languagePack.headertext08 }}</a
+            >
+            <el-dropdown @command="blockCommand" placement="bottom">
               <span
                 class="el-dropdown-link"
                 :class="$route.meta.ID == 6 ? 'pathStyle' : ''"
                 >{{ languagePack.headertext09
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu slot="dropdown" class="specialEldropdown">
                 <el-dropdown-item
                   v-for="item in resourcesnavs"
                   :key="item.command"
@@ -133,12 +158,15 @@
                 >
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown @command="blockCommand">
-              <span class="el-dropdown-link" :class="$route.meta.ID == 7?'pathStyle':''">
+            <el-dropdown @command="blockCommand" placement="bottom">
+              <span
+                class="el-dropdown-link"
+                :class="$route.meta.ID == 7 ? 'pathStyle' : ''"
+              >
                 {{ languagePack.headertext16
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu slot="dropdown" class="specialEldropdown">
                 <el-dropdown-item
                   v-for="item in morenavs"
                   :key="item.command"
@@ -151,18 +179,20 @@
           </div>
           <div style="width: 1px; height: 24px; background: #f0f0f0" />
           <div class="langage hidden-sm-and-down">
-            <div @click="messageBox('暂未开放')">{{ languagePack.headertext22 }}</div>
+            <div @click="messageBox('暂未开放')">
+              {{ languagePack.headertext22 }}
+            </div>
             <img
               @click="messageBox('暂未开放')"
               src="../../assets/img/earths.png"
               alt=""
             />
-            <el-dropdown @command="LanguageChange">
+            <el-dropdown @command="LanguageChange" placement="bottom" >
               <span class="el-dropdown-link">
                 {{ languageType[lang].type
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu slot="dropdown" class="specialEldropdown">
                 <el-dropdown-item
                   v-for="item in languageType"
                   :key="item.type"
@@ -196,9 +226,9 @@
                 {{ item.title }}
               </p>
             </el-collapse-item>
-            <div>合约</div>
-            <div>账户</div>
-            <div>验证节点</div>
+            <div @click="toGo('/contracts')">合约</div>
+            <div @click="toGo('/accounts')">账户</div>
+            <div @click="toGo('/validation')">验证节点</div>
             <el-collapse-item title="资源">
               <p
                 v-for="item in resourcesnavs"
@@ -269,7 +299,7 @@ export default {
       this.messageBox("切换成功!", "success");
     },
     blockCommand(command) {
-      this.$router.push(command);
+      this.toGo(command)
     },
     onMenu() {
       console.log(1111);
@@ -317,6 +347,11 @@ export default {
       ];
     },
   },
+  watch:{
+    '$route'(value){
+      this.drawer = false
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -328,6 +363,7 @@ export default {
   font-size: 14px;
   color: rgba(20, 37, 62, 0.45);
   box-shadow: inset 0 -1px 0 0 #e9eaef;
+  z-index: 3333;
 }
 .centerStyle {
   margin: 0 auto;
@@ -345,7 +381,7 @@ export default {
   line-height: 60px;
   align-items: center;
   justify-content: space-between;
-  .navs{
+  .navs {
     line-height: 60px;
   }
 }
@@ -367,7 +403,7 @@ export default {
   }
 }
 
- .navs {
+.navs {
   display: flex;
   width: 510px;
   font-size: 14px;
@@ -385,10 +421,6 @@ export default {
     color: rgba(20, 37, 62, 0.45);
     cursor: pointer;
   }
-}
-
-::v-deep .el-dropdown-menu__item {
-  color: rgba(20, 37, 62, 0.45) !important;
 }
 
 .logo_style {
@@ -440,9 +472,9 @@ export default {
   }
 }
 
-.el-dropdown-link{
+.el-dropdown-link {
   height: 100%;
-  display: block;  
+  display: block;
 }
 
 @media screen and (max-width: 598px) {
@@ -474,5 +506,41 @@ export default {
 .pathStyle {
   font-weight: 600;
   color: rgba(20, 37, 62, 0.85) !important;
+}
+</style>
+<style lang="scss">
+.el-dropdown-menu {
+  width: 174px !important;
+  .el-dropdown-menu__item {
+    color: rgba(20, 37, 62, 0.45) !important;
+    line-height: 40px !important;
+    &:hover {
+      background: #ecefff !important;
+      font-size: 14px;
+      color: #1e42ed !important;
+    }
+  }
+  .popper__arrow {
+    display: none !important;
+  }
+}
+.el-dropdown {
+  .el-dropdown-link {
+    .el-icon-arrow-down {
+      transition: all 0.3s;
+      pointer-events: all;
+      
+      &::before {
+        content: "\e790";
+      }
+      &:hover {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+.specialEldropdown{
+  padding: 16px 0 10px !important;
 }
 </style>

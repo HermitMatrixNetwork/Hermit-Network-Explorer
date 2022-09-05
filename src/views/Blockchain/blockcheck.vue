@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{languagePack.blocktext01}}</h3>
+    <h3>{{ languagePack.blocktext01 }}</h3>
     <main class="main">
       <el-row
         type="flex"
@@ -32,20 +32,21 @@
         :row-style="{ height: '58px !important' }"
         v-loading="loading"
       >
-        <el-table-column prop="_id" :label="languagePack.blocktext04" width="80px">
+        <el-table-column
+          prop="_id"
+          :label="languagePack.blocktext04"
+          width="80px"
+        >
           <template slot-scope="scope">
             <div class="specialFont" @click="toBlockDetail(scope.row._id)">
               {{ scope.row._id }}
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          :label="languagePack.blocktext05"
-          width="150px"
-        >
-        <template slot-scope="scope">
-          <div>{{scope.row.timestamp | jetlag}}</div>
-        </template>
+        <el-table-column :label="languagePack.blocktext05" width="150px">
+          <template slot-scope="scope">
+            <div>{{ scope.row.timestamp | jetlag }}</div>
+          </template>
         </el-table-column>
         <el-table-column
           prop="tx_count"
@@ -55,10 +56,17 @@
         />
         <el-table-column :label="languagePack.blocktext07" width="160">
           <template slot-scope="scope">
-            <TableTooltip :content="scope.row.proposer_address" @click.native="toNode(scope.row.validator)"></TableTooltip>
+            <TableTooltip
+              :content="scope.row.proposer_address"
+              @click.native="toNode(scope.row.validator)"
+            ></TableTooltip>
           </template>
         </el-table-column>
-        <el-table-column prop="gas_used" :label="languagePack.blocktext08" width="228px">
+        <el-table-column
+          prop="gas_used"
+          :label="languagePack.blocktext08"
+          width="228px"
+        >
           <template slot-scope="scope">
             <el-progress
               :percentage="percenTage"
@@ -92,7 +100,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="page.currentPage + 1"
-          :page-sizes="[50,100]"
+          :page-sizes="[50, 100]"
           :page-size="page.pageSize"
           layout="prev, pager, next, sizes"
           :total="blockTotal"
@@ -108,91 +116,89 @@
 import { queryBlockList } from "@/api/blockchain";
 import mixins from "@/mixins";
 export default {
-    mixins: [mixins],
-    data() {
-        return {
-            blockTotal: 0,
-            tableData: [],
-            page: {
-                pageSize: 50,
-                currentPage: 0,
-            },
-            percenTage: 1,
-            loading: true,
-            timer: ""
+  mixins: [mixins],
+  data() {
+    return {
+      blockTotal: 0,
+      tableData: [],
+      page: {
+        pageSize: 50,
+        currentPage: 0,
+      },
+      percenTage: 1,
+      loading: true,
+      timer: "",
+    };
+  },
+  created() {
+    let { pageSize, currentPage } = this.page;
+    this.getBlockData(pageSize, currentPage);
+    // this.timer = setInterval(()=>this.getBlockData(this.page.pageSize, this.page.currentPage),3000)
+  },
+  mounted() {
+    // document.querySelector(".selected").style.color = "#1E42ED";
+  },
+  methods: {
+    // 指定进度条文字内容
+    format(val, val2) {
+      let num = Number(val);
+      let num2 = Number(val2);
+      let result = ((num / num2) * 100).toFixed(2);
+      if (result && result !== "NaN") {
+        this.percenTage = Number(result);
+        return () => {
+          return `${num} (${result})%`;
         };
-    },
-    created() {
-        let { pageSize, currentPage } = this.page;
-        this.getBlockData(pageSize, currentPage);
-        // this.timer = setInterval(()=>this.getBlockData(this.page.pageSize, this.page.currentPage),3000)
-    },
-    mounted() {
-        // document.querySelector(".selected").style.color = "#1E42ED";
-    },
-    methods: {
-        // 指定进度条文字内容
-        format(val, val2) {
-            let num = Number(val);
-            let num2 = Number(val2);
-            let result = ((num / num2) * 100).toFixed(2);
-            if (result && result !== "NaN") {
-                this.percenTage = Number(result);
-                return () => {
-                    return `${num} (${result})%`;
-                };
-            }
-            else {
-                return () => {
-                    return "0%";
-                };
-            }
-        },
-        // 获取区块数据
-        async getBlockData(limit, index) {
-            let { data } = await queryBlockList(limit, index);
-            // console.log("区块数据", data);
-            this.tableData = data.list;
-            this.blockTotal = data.total;
-        },
-        handleSizeChange(val) {
-            // let oul = document.querySelectorAll(".el-select-dropdown__list li");
-            // oul.forEach((item) => {
-            //   console.log(item.style.color);
-            //   item.style.color = "";
-            // });
-            // let oli = document.querySelector(".selected");
-            // oli.style.color = "#606266";
-            // document.querySelector(".hover").style.color = "#1E42ED";
-            this.tableData = [];
-            this.getBlockData((this.page.pageSize = val), (this.page.currentPage = 0));
-        },
-        handleCurrentChange(index) {
-            this.page.currentPage = index - 1;
-            let { pageSize, currentPage } = this.page;
-            this.tableData = [];
-            this.getBlockData(pageSize, currentPage);
-        },
-        toBlockDetail(height) {
-            this.$router.push({
-                path: "/block_detail",
-                query: { height },
-            });
-        },
-        toNode(val){
-            this.$router.push({name:'node_detail',query:{address:val}})
-}
-    },
-    watch: {
-        tableData(value) {
-            this.loading = value.length == 0 ? true : false;
-        },
-    },
-    computed:{
-      languagePack(){
-        return this.$store.state.Language
+      } else {
+        return () => {
+          return "0%";
+        };
       }
-    }
+    },
+    // 获取区块数据
+    async getBlockData(limit, index) {
+      let { data } = await queryBlockList(limit, index);
+      // console.log("区块数据", data);
+      this.tableData = data.list;
+      this.blockTotal = data.total;
+    },
+    handleSizeChange(val) {
+      this.tableData = [];
+      this.getBlockData(
+        (this.page.pageSize = val),
+        (this.page.currentPage = 0)
+      );
+    },
+    handleCurrentChange(index) {
+      this.page.currentPage = index - 1;
+      let { pageSize, currentPage } = this.page;
+      this.tableData = [];
+      this.getBlockData(pageSize, currentPage);
+    },
+    toBlockDetail(height) {
+      this.$router.push({
+        path: "/block_detail",
+        query: { height },
+      });
+    },
+    toNode(val) {
+      this.$router.push({ name: "node_detail", query: { address: val } });
+    },
+  },
+  watch: {
+    tableData(value) {
+      if (Array.isArray(value)) {
+        this.loading = this.tableData.length === 0 ? true : false;
+      } else {
+        this.loading = false;
+      }
+    },
+  },
+  computed: {
+    languagePack() {
+      return this.$store.state.Language;
+    },
+  },
 };
 </script>
 
@@ -261,5 +267,15 @@ h3 {
 
 ::v-deep .el-progress-bar__outer {
   width: 196px;
+}
+
+@media screen and (max-width: 598px) {
+  h3 {
+    width: 100%;
+    padding-left: 16px;
+  }
+  .main {
+    width: 100%;
+  }
 }
 </style>

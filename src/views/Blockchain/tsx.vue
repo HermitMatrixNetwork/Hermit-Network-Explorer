@@ -10,7 +10,7 @@
       >
         <div>
           总共寻获超过><span class="block_num">{{ totalNumber }}</span
-          >条交易{{languagePack.txstext03}}
+          >条交易{{ languagePack.txstext03 }}
         </div>
         <el-pagination
           popper-class="popperSelect"
@@ -61,7 +61,13 @@
 
                       <el-divider></el-divider>
                     </div>
-                    <div v-for="(item, index) in [...statusTitle,{title:languagePack.txstext17}]" :key="index">
+                    <div
+                      v-for="(item, index) in [
+                        ...statusTitle,
+                        { title: languagePack.txstext17 },
+                      ]"
+                      :key="index"
+                    >
                       <div>{{ item.title }}</div>
                       <span v-show="index === 0"
                         >{{ scope.row.fee | toMoney }} GHM ($0.00)</span
@@ -72,7 +78,7 @@
                         }}Gas<br />@0.0004GHM</span
                       >
                       <span v-show="index === 2">{{ scope.row.sequence }}</span>
-                      
+
                       <el-divider></el-divider>
                     </div>
                   </div>
@@ -121,7 +127,9 @@
         </el-table-column>
         <el-table-column :label="languagePack.txstext06">
           <template slot-scope="scope">
-            <div class="specialFont" @click="toBlock(scope.row.height)">{{ scope.row.height }}</div>
+            <div class="specialFont" @click="toBlock(scope.row.height)">
+              {{ scope.row.height }}
+            </div>
           </template>
         </el-table-column>
         <el-table-column prop="timestamp" :label="languagePack.txstext07">
@@ -129,11 +137,7 @@
             <div>{{ scope.row.timestamp | jetlag }}</div>
           </template>
         </el-table-column>
-        <el-table-column
-          :label="languagePack.txstext08"
-          :show-overflow-tooltip="true"
-          width="150px"
-        >
+        <el-table-column :label="languagePack.txstext08" width="150px">
           <template slot-scope="scope">
             <TableTooltip
               :content="scope.row.sender"
@@ -221,15 +225,6 @@ export default {
   mounted() {},
   methods: {
     handleSizeChange(val) {
-      let oul = document.querySelectorAll(".el-select-dropdown__list li");
-      oul.forEach((item) => {
-        console.log(item.style.color);
-        item.style.color = "";
-      });
-      let oli = document.querySelector(".selected");
-      oli.style.color = "#606266";
-      document.querySelector(".hover").style.color = "#1E42ED";
-
       this.tableData = [];
       this.getData((this.page.pageSize = val), (this.page.currentPage = 0));
     },
@@ -250,13 +245,13 @@ export default {
       let { data } = await queryTxList(limit, index);
       console.log("交易", data);
       let arr = data.list;
-
-      //为数组添加type属性
-      this.disposeTableType(arr);
-      this.hashList = arr.map((item) => {
-        return { hash: item._id, type: item.type, status: item.result };
-      });
-      // console.log(this.hashList);
+      if (Array.isArray(arr)) {
+        //为数组添加type属性
+        this.disposeTableType(arr);
+        this.hashList = arr.map((item) => {
+          return { hash: item._id, type: item.type, status: item.result };
+        });
+      }
       this.tableData = arr;
       this.totalNumber = data.total;
       //   this.tableData = data.list;
@@ -291,7 +286,11 @@ export default {
   },
   watch: {
     tableData(value) {
-      this.loading = value.length == 0 ? true : false;
+      if (Array.isArray(value)) {
+        this.loading = this.tableData.length === 0 ? true : false;
+      } else {
+        this.loading = false;
+      }
     },
   },
 };
@@ -366,18 +365,18 @@ h3 {
 }
 
 @media screen and (max-width: 598px) {
-  h3{
+  h3 {
     width: 100%;
     text-indent: 16px;
   }
-  .main{
+  .main {
     width: 100%;
     overflow: hidden;
-    .total_title{
+    .total_title {
       width: 1280px;
     }
     .el-row--flex.is-justify-end {
-      justify-content:center;
+      justify-content: center;
     }
   }
 }

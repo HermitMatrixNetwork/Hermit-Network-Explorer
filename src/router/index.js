@@ -32,7 +32,7 @@ const routes = [
     path: '/home',
     component: Home,
     meta: {
-      keepAlive: false,
+      keepAlive: true,
       ID: 1
     }
   },

@@ -48,7 +48,7 @@ export default {
 <style lang="scss" scoped>
 .foundationMain {
   width: 1280px;
-  margin: 0 auto;
+  margin: 0 auto 80px;
   .foundationBox {
     margin-top: 24px;
   }

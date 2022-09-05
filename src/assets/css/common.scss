@@ -1,15 +1,31 @@
 //分页器公共样式
 .el-pagination {
+  margin-right: 10px;
+  > button {
+    width: 28px !important;
+    height: 28px !important;
+    border: 1px solid #e9eaef !important;
+    border-radius: 2px !important;
+    padding: 0 !important;
+    margin: 0 4px !important;
+    >i{
+      &:hover{
+        color: #0e31d6 !important;
+      }
+    }
+    
+  }
   .el-pager {
     li {
       border: 1px solid #e9eaef !important;
       border-radius: 2px !important;
       margin: 0 4px !important;
-      font-family: PingFangSC-Regular;
       font-weight: 400;
       font-size: 12px;
       color: rgba(20, 37, 62, 0.85);
-
+      width: 28px;
+      height: 28px !important;
+      line-height: 28px !important;
       &:hover {
         color: #1e42ed !important;
       }
@@ -17,36 +33,25 @@
     li.active {
       color: #1e42ed !important;
       border: 1px solid #1e42ed !important;
-      border-radius: 2px !important;
     }
-
-    .btn-prev,
-    .btn-next {
-      width: 30px;
-      border: 1px solid #e9eaef !important;
-      border-radius: 2px !important;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      font-size: 12px;
+  }
+  .el-pagination__sizes {
+    width: 80px;
+    .el-select {
+      width: 80px;
       color: rgba(20, 37, 62, 0.85);
-
-      &:hover {
-        color: #1e42ed !important;
-      }
-    }
-
-    .btn-next {
-      width: 30px;
-      border: 1px solid #e9eaef !important;
-      border-radius: 2px !important;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      font-size: 12px;
-      color: rgba(20, 37, 62, 0.85);
-      padding-left: 6px !important;
-
-      &:hover {
-        color: #1e42ed !important;
+      > .el-input {
+        width: 100%;
+        > input {
+          font-size: 12px;
+          color: rgba(20, 37, 62, 0.85);
+          &:focus {
+            border-color: #0e31d6 !important;
+          }
+          &:hover {
+            border-color: #1e42ed !important;
+          }
+        }
       }
     }
   }
@@ -60,13 +65,12 @@
   line-height: 18px;
   cursor: pointer;
   white-space: nowrap;
-  transition: color .2s cubic-bezier(0.1,0.05,0.05,1) ;
+  transition: color 0.2s cubic-bezier(0.1, 0.05, 0.05, 1);
 }
 .specialFont:hover {
   color: #6e85f7 !important;
   text-decoration: underline;
 }
-
 
 //列表眼睛
 .tableEyeBackground {
@@ -79,10 +83,10 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  &:hover{
-    background: #D5D5E6;
+  &:hover {
+    background: #d5d5e6;
   }
-  img{
+  img {
     padding: 6px;
   }
 }
@@ -114,6 +118,7 @@
   border-radius: 2px;
   box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
     0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  z-index: 9999 !important;
 }
 
 .el-message__content {
@@ -173,19 +178,19 @@
         height: 14px;
         margin: 0 5px;
       }
-      span:last-child{
+      span:last-child {
         margin-left: 6px;
-        color: rgba(0, 0, 0, 0.25)
+        color: rgba(0, 0, 0, 0.25);
       }
     }
   }
-  &_title{
+  &_title {
     height: 28px;
     line-height: 28px;
   }
 }
 
-.el-divider--horizontal{
+.el-divider--horizontal {
   margin: 12px 0 !important;
 }
 
@@ -215,10 +220,9 @@
   }
 }
 
-
 //loading 样式
 .el-loading-spinner .path {
-  stroke:#1F40EC !important;
+  stroke: #1f40ec !important;
 }
 
 /* 文字提示弹窗样式 */
@@ -234,7 +238,6 @@
     0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
   border-radius: 2px;
 }
-
 
 //交易类型表格行内样式
 .table_txHash {
@@ -266,11 +269,10 @@
   white-space: nowrap;
 }
 
-
 //交易状态
-.Txstatus{
+.Txstatus {
   width: 6px;
-  height:6px;
+  height: 6px;
   border-radius: 6px;
   margin-right: 6px;
 }

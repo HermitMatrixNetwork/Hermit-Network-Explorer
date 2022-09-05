@@ -17,7 +17,7 @@
           </div>
           <div class="explain">
             <p>{{ item.title }}</p>
-            <h3>${{ item.price }}</h3>
+            <h3>${{ item.price }}<span :style="{color:item.updown>0?'#f23c24':'#55C499'}">{{item.updown}}</span></h3>
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@
           </div>
 
           <!--流通量-->
-          <div class="circulate">
+          <div class="circulate progress">
             <p>
               {{ languagePack.hometext16 }}
               <el-tooltip
@@ -78,13 +78,32 @@
                 (basicData.issueNum / 1e6).toFixed(2) + "M"
               }}
             </span>
-            <!-- <el-progress :percentage="circulationAndissueNum" text-inside></el-progress> -->
+            <el-progress
+              :percentage="
+                progressFormat(basicData.circulation, basicData.issueNum)
+              "
+              :stroke-width="8"
+              color="#1E42EDFF"
+              :show-text="false"
+            ></el-progress>
           </div>
 
           <!--质押率-->
-          <div>
+          <div class="progress">
             <p>{{ languagePack.hometext17 }}</p>
-            <span>{{ basicData.Pledgerate }}% /{{ basicData.issueNum }}</span>
+            <span
+              >{{ basicData.Pledgerate }}% /{{
+                (basicData.issueNum / 1e6).toFixed(2) + "M"
+              }}</span
+            >
+            <el-progress
+              :percentage="
+                progressFormat(basicData.Pledgerate, basicData.issueNum)
+              "
+              :stroke-width="8"
+              color="#1E42EDFF"
+              :show-text="false"
+            ></el-progress>
           </div>
 
           <!--地址数-->
@@ -136,19 +155,29 @@
         <!--查看所有验证节点-->
         <div class="topBlock">
           <div class="block-title">{{ languagePack.hometext24 }}</div>
-          <ul class="nodeInformation">
+          <!-- <div></div> -->
+          <ul
+            :class="[
+              'nodeInformation',
+              nodelist.length >= 10 ? 'animation_Node' : '',
+            ]"
+            v-for="i in 2"
+            :key="i"
+          >
             <li
               v-for="(item, index) in nodelist"
-              :key="item.operator_address"
+              :key="index"
               class="nodeInformation_item"
+              @click="queryDealtoNode(item.operator_address)"
             >
-              <div class="icon">top{{ index + 1 }}</div>
+              <div class="icon">Top{{ index + 1 }}</div>
               <div class="basic">
                 <p>{{ languagePack.hometext24 }}{{ index + 1 }}</p>
                 <p>{{ languagePack.hometext25 }}{{ item.tokens }}uGHM</p>
               </div>
               <div class="btnRate">
-                338.45% {{ languagePack.hometext26 }}
+                {{ item.commission.commission_rates.rate * 100 }}%
+                {{ languagePack.hometext26 }}
               </div>
             </li>
           </ul>
@@ -187,6 +216,7 @@ export default {
       timer: "",
       TPS: "",
       lastUpdate: 0,
+      percenTage: 0,
       nodelist: "", //当前验证节点列表
       basicData: {
         blockHeight: 0, //当前区块高度
@@ -253,6 +283,25 @@ export default {
       // this.Pledgerate = (this.pledgeNum / this.issueNum).toFixed(2);
       // console.log('总地址数量',res);
       const nodelist = await allValidationNode();
+      // this.nodelist = [
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+      //   ...nodelist.validators,
+
+      // ];
       this.nodelist = nodelist.validators;
       console.log("节点信息", nodelist);
     },
@@ -267,6 +316,15 @@ export default {
     queryDealtoNode(val) {
       this.$router.push({ name: "node_detail", query: { address: val } });
     },
+    progressFormat(a, b) {
+      let result = ((Number(a) / Number(b)) * 100).toFixed(2);
+      // if (isNaN(result) || result) return;
+      if (!isNaN(result)) {
+        return Number(result);
+      } else {
+        return 1;
+      }
+    },
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -275,22 +333,19 @@ export default {
     languagePack() {
       return this.$store.state.Language;
     },
-    circulationAndissueNum() {
-      return (this.circulation / this.issueNum) * 100;
-    },
     messageList() {
       const { hometext08, hometext09 } = this.languagePack;
       return [
         {
           title: hometext08,
           price: "0.48",
-          updown: "-5.29",
+          updown: '-5.29',
           icon: require("@/assets/img/home_icon1.png"),
         },
         {
           title: hometext09,
           price: "0.48",
-          updown: "",
+          updown: '+999.9',
           icon: require("@/assets/img/home_icon2.png"),
         },
       ];
@@ -389,7 +444,14 @@ export default {
           font-weight: Bold;
           font-size: 24px;
           color: rgba(20, 37, 62, 0.85);
-          letter-spacing: 0;
+          > span {
+            height: 22px;
+            font-family: PingFangSC-Regular;
+            color: #55c499;
+            font-size: 16px;
+            font-weight: 400;
+            padding-left: 6px;
+          }
         }
       }
     }
@@ -412,13 +474,13 @@ export default {
         height: 44px;
         width: 25%;
         position: relative;
-        &:nth-child(4){
-          >span{
+        &:nth-child(4) {
+          > span {
             color: #1e42ed;
           }
         }
 
-        >p {
+        > p {
           height: 17px;
           font-weight: 400;
           font-size: 12px;
@@ -426,14 +488,14 @@ export default {
           letter-spacing: 0;
           margin-bottom: 8px;
         }
-        >span {
+        > span {
           height: 19px;
           font-weight: bold;
           font-size: 16px;
           color: rgba(20, 37, 62, 0.85);
           letter-spacing: 0;
           cursor: pointer;
-          transition: color .2s cubic-bezier(.645,.045,.355,1);
+          transition: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
           &:hover {
             color: #1e42ed;
           }
@@ -520,11 +582,18 @@ export default {
     }
     .topBlock {
       overflow: hidden;
+      &:hover {
+        > ul {
+          animation-play-state: paused;
+        }
+      }
+      .animation_Node {
+        animation: sliding 10s linear infinite;
+        padding-top: 0 !important ;
+      }
       .nodeInformation {
-        height: 720px;
-        padding: 0 16px;
+        padding: 52px 16px 0;
         transform: translateY(-100%);
-        animation: sliding 5s linear infinite;
         &_item {
           width: 100%;
           height: 40px;
@@ -538,7 +607,6 @@ export default {
             line-height: 40px;
             border-radius: 50%;
             background: #f2f3f4;
-            font-family: DIN-Bold;
             font-weight: Bold;
             font-size: 12px;
             color: rgba(20, 37, 62, 0.85);
@@ -546,9 +614,7 @@ export default {
           }
         }
       }
-      ul:hover {
-        animation-play-state: paused;
-      }
+
       li:hover {
         cursor: pointer;
       }
@@ -557,7 +623,7 @@ export default {
           transform: translateY(-100%);
         }
         to {
-          transform: translateY(0%);
+          transform: translateY(0);
         }
       }
     }
@@ -674,20 +740,19 @@ export default {
         }
       }
       &-item {
-        padding: 0 12px !important;
+        padding: 0px 12px;
         > div {
           width: 50% !important;
           h3 {
             font-size: 12px !important;
           }
-          &:nth-child(6){
-            transform: translate(-25%,100%);
-            >span{
+          &:nth-child(6) {
+            transform: translate(-25%, 100%);
+            > span {
               white-space: nowrap;
             }
           }
         }
-
       }
     }
 
@@ -705,7 +770,7 @@ export default {
       }
       .topBlock {
         .nodeInformation {
-          padding: 0 12px !important;
+          padding: 52px 12px 0;
           .btnRate {
             right: 0;
           }
@@ -719,5 +784,14 @@ export default {
 }
 .blockHeight {
   cursor: pointer;
+}
+::v-deep .el-progress {
+  .el-progress-bar {
+    width: 220px !important;
+    margin-top: 6px;
+  }
+}
+.progress {
+  height: 60px !important;
 }
 </style>

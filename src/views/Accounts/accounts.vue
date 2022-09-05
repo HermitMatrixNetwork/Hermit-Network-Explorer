@@ -22,7 +22,8 @@
     </div>
     <div class="accounts_table">
       <div class="table_Tile">
-        {{languagePack.accounttext08}} <span style="color: #5671f2">{{ pagination }}</span> 位
+        {{ languagePack.accounttext08 }}
+        <span style="color: #5671f2">{{ pagination }}</span> 位
       </div>
       <el-table
         :data="accountslist"
@@ -127,7 +128,7 @@ export default {
   methods: {
     async getaccounts(pageSize, page) {
       const res = await queryAccountList(pageSize, page);
-      console.log('获取的数组',res.data.list);
+      console.log("获取的数组", res.data.list);
       this.accountslist = res.data.list;
       if (this.pagination == 0) return (this.pagination = res.data.total);
     },
@@ -141,7 +142,10 @@ export default {
     },
     handleSizeChange(value) {
       this.accountslist = [];
-      this.getaccounts((this.pageData.pageSize = value),(this.pageData.page = 0));      
+      this.getaccounts(
+        (this.pageData.pageSize = value),
+        (this.pageData.page = 0)
+      );
     },
     handleCurrentChange(val) {
       this.pageData.page = val - 1;
@@ -188,7 +192,11 @@ export default {
   },
   watch: {
     accountslist(value) {
-      this.loading = value.length == 0 ? true : false;
+      if (Array.isArray(value)) {
+        this.loading = this.accountslist.length === 0 ? true : false;
+      } else {
+        this.loading = false;
+      }
     },
     deep: true,
   },
