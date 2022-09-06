@@ -181,7 +181,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.tsxtext30 }}：</p>
-              <span>{{ detailed.timestamp | timeStamp }}</span>
+              <span>{{ detailed.timestamp | timeStamp }} +UTC</span>
             </div>
             <div class="column">
               <p>{{ languagePack.tsxtext31 }}：</p>
@@ -221,6 +221,7 @@ export default {
     this.hashIndex = this.$route.params.index;
     const { hash, index } = this.$route.params;
     this.queryData(hash, index);
+
     // console.log(pastTime("2022-06-20T07:40:39Z"));
   },
   methods: {

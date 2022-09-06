@@ -67,6 +67,7 @@
             <el-input
               :placeholder="languagePack.nodetext13"
               v-model="searchValue"
+              class="tableHeaderInput"
             >
               <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>
@@ -114,10 +115,7 @@
                 </p>
               </template>
             </el-table-column>
-            <el-table-column
-              :label="languagePack.nodetext19"
-              width="88"
-            >
+            <el-table-column :label="languagePack.nodetext19" width="88">
               <template slot-scope="scope">
                 <div class="stateColumn">
                   <div
@@ -159,24 +157,14 @@
               </template>
             </el-table-column>
 
-            <el-table-column
-              :label="languagePack.nodetext22"
-              align="right"
-            >
+            <el-table-column :label="languagePack.nodetext22" align="right">
               <template slot-scope="scope">
                 <p>
-                  {{
-                    (scope.row.tokens - scope.row.min_self_delegation * 1e5)
-                      | toMoney
-                  }}
-                  GHM
+                  {{ scope.row.delegate_reward_rate }} %
                 </p>
               </template>
             </el-table-column>
-            <el-table-column
-              :label="languagePack.nodetext23"
-              align="right"
-            >
+            <el-table-column :label="languagePack.nodetext23" align="right">
               <template slot-scope="scope">
                 <p>{{ scope.row.delegators }}</p>
               </template>
@@ -186,12 +174,11 @@
               width="120"
               align="right"
               prop="count"
-            ></el-table-column>
-            <!-- <el-table-column
-              label="活跃度"
-              width="80"
-              prop="active"
-            ></el-table-column> -->
+            >
+              <template slot-scope="scope">
+                <div>{{ (1 - scope.row.uptime) * 100 }}%</div>
+              </template>
+            </el-table-column>
             <el-table-column :label="languagePack.nodetext25" align="center">
               <template slot-scope="scope">
                 <p>{{ scope.row.commission_rate * 100 }} %</p>
@@ -354,8 +341,8 @@ export default {
     tableList(val) {
       if (Array.isArray(val)) {
         this.loading = val.length === 0 ? true : false;
-      }else{
-        this.loading = false
+      } else {
+        this.loading = false;
       }
     },
   },
@@ -463,12 +450,25 @@ export default {
     border: 1px solid #e9eaef;
     font-weight: 400;
     font-size: 12px;
-    color: rgba(20, 37, 62, 0.25);
     line-height: 20px;
   }
 }
 ::v-deep .el-input-group__append {
   padding: 0 6px;
+}
+::v-deep .tableHeaderInput {
+  > input {
+    &::placeholder {
+      color: rgba(20, 37, 62, 0.25);
+    }
+    transition: border-color 0.3s cubic-bezier(0, 0.82, 0.165, 1);
+    &:hover {
+      border-color: #5671f2;
+    }
+    &:focus {
+      border-color: #5671f2;
+    }
+  }
 }
 
 @media screen and (max-width: 598px) {

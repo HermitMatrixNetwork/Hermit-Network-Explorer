@@ -20,6 +20,7 @@ import PunishmentNode from '@/views/validation/punishmentNode.vue'
 import HistoryNode from '@/views/validation/historyNode.vue'
 import RPC from '@/views/More/RPC.vue'
 import ContractDetail from '@/views/Contracts/detail.vue'
+import Errordetail from '@/views/Detail/error_detail.vue'
 
 Vue.use(VueRouter)
 
@@ -153,6 +154,10 @@ const routes = [
   {
     path: '/contract_detail',
     component: ContractDetail
+  },
+  {
+    path: '/error_detail',
+    component: Errordetail
   }
 ]
 

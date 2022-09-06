@@ -241,7 +241,7 @@ export default {};
   &-title {
     padding: 16px 0;
     height: 60px;
-    font-weight: 500;
+    font-weight: bold;
     font-size: 20px;
     color: rgba(20, 37, 62, 0.85);
   }
@@ -252,7 +252,6 @@ export default {};
     .basic {
       width: 1280px;
       height: 216px;
-      font-weight: 400;
       font-size: 12px;
       color: rgba(20, 37, 62, 0.85);
       line-height: 24px;
@@ -296,6 +295,11 @@ export default {};
   .developApi {
     height: 80px;
     justify-content: space-evenly;
+    .column{
+      >p{
+        width: auto;
+      }
+    }
   }
 }
 </style>

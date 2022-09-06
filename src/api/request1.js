@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Loading, Message } from 'element-ui'
 import { http1 } from './index'
-
+import router from '@/router'
 // Loading控制器
 // const loading = {
 //   loadCount: 0,
@@ -63,6 +63,7 @@ service.interceptors.response.use(
 		if (res && res.code === 0) {
 			return res
 		} else {
+			router.replace('/error_detail')
 			Message.error(res.msg)
 			return Promise.reject(res.msg)
 		}
@@ -71,6 +72,7 @@ service.interceptors.response.use(
 		console.log(error)
 		// loading.closeLoading()
 		const msg = error.Message !== undefined ? error.Message : ''
+		// console.log(1111111111111);
 		Message({
 			message: '网络错误' + msg,
 			type: 'error',

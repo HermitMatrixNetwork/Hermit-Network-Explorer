@@ -21,7 +21,7 @@
           <div class="icon"></div>
           <div class="explain">
             <p>{{ languagePack.contracttext04 }}</p>
-            <h3>$0.48</h3>
+            <h3>{{pagination}}</h3>
           </div>
         </div>
       </div>
@@ -52,13 +52,23 @@
             width="160"
           >
           </el-table-column>
-          <el-table-column :label="languagePack.contracttext06" width="548">
+          <el-table-column :label="languagePack.contracttext06" >
             <template slot-scope="scope">
               <p
                 class="specialFont"
                 @click="toContractDetail(scope.row.contract_address)"
               >
                 {{ scope.row.contract_lable }}
+              </p>
+            </template>
+          </el-table-column>
+           <el-table-column :label="'合约地址'" >
+            <template slot-scope="scope">
+              <p
+                class="specialFont"
+                @click="toContractDetail(scope.row.contract_address)"
+              >
+                {{ scope.row.contract_address }}
               </p>
             </template>
           </el-table-column>

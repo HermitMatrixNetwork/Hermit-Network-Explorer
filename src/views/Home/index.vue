@@ -444,6 +444,7 @@ export default {
           font-weight: Bold;
           font-size: 24px;
           color: rgba(20, 37, 62, 0.85);
+          white-space: nowrap;
           > span {
             height: 22px;
             font-family: PingFangSC-Regular;
@@ -740,7 +741,7 @@ export default {
         }
       }
       &-item {
-        padding: 0px 12px;
+        padding: 0px 12px !important;
         > div {
           width: 50% !important;
           h3 {

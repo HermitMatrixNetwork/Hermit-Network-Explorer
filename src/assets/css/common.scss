@@ -56,6 +56,11 @@
     }
   }
 }
+@media screen and (max-width:598px) {
+    .el-pagination{
+      margin: 0;
+    }
+}
 
 //地址样式字体
 .specialFont {

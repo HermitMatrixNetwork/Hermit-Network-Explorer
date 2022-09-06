@@ -12,10 +12,12 @@
                 <p>{{ languagePack.nodetext27 }}</p>
               </div>
               <div class="column">
-                <p>{{ languagePack.nodetext28 }}</p>
+                <p>{{ languagePack.nodetext28 }}:</p>
+                <span>{{(1 - basic.uptime)*100}}%</span>
               </div>
               <div class="column">
-                <p>{{ languagePack.nodetext29 }}%</p>
+                <p>{{ languagePack.nodetext29 }}:</p>
+                <span>{{(1 - basic.uptime)*100}}%</span>
               </div>
               <!-- 当前委托者数 -->
               <div class="column">

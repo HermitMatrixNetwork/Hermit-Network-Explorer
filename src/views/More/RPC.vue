@@ -122,7 +122,7 @@ export default {
     height: 32px;
     line-height: 32px;
     background: #f8fafb;
-    font-weight: 500;
+    font-weight: bold;
     font-size: 16px;
     color: rgba(20, 37, 62, 0.85);
     white-space: nowrap;

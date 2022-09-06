@@ -106,7 +106,7 @@
         <div>
           <div class="navs">
             <router-link to="home">{{ languagePack.headertext01 }}</router-link>
-            <el-dropdown @command="blockCommand"  placement="bottom">
+            <el-dropdown @command="blockCommand" placement="bottom">
               <span
                 class="el-dropdown-link"
                 :class="$route.meta.ID == 2 ? 'pathStyle' : ''"
@@ -114,7 +114,7 @@
                 {{ languagePack.headertext02
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-              <el-dropdown-menu slot="dropdown" class="specialEldropdown" >
+              <el-dropdown-menu slot="dropdown" class="specialEldropdown">
                 <el-dropdown-item command="/blockchain">{{
                   languagePack.headertext03
                 }}</el-dropdown-item>
@@ -179,16 +179,19 @@
           </div>
           <div style="width: 1px; height: 24px; background: #f0f0f0" />
           <div class="langage hidden-sm-and-down">
-            <div @click="messageBox('暂未开放')">
+            <div @click="messageBox(languagePack.prompttext01)">
               {{ languagePack.headertext22 }}
             </div>
             <img
-              @click="messageBox('暂未开放')"
+              @click="messageBox(languagePack.prompttext01)"
               src="../../assets/img/earths.png"
               alt=""
             />
-            <el-dropdown @command="LanguageChange" placement="bottom" >
-              <span class="el-dropdown-link">
+            <el-dropdown @command="LanguageChange" placement="bottom">
+              <span
+                class="el-dropdown-link"
+                style="height: 40px; line-height: 40px"
+              >
                 {{ languageType[lang].type
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
@@ -296,10 +299,10 @@ export default {
       localStorage.setItem("language", val);
       // 调用mutation中的方法，通过本地存储切换语言
       this.$store.commit("CHANGE_LANGUAGE");
-      this.messageBox("切换成功!", "success");
+      this.messageBox(this.languagePack.prompttext04, "success");
     },
     blockCommand(command) {
-      this.toGo(command)
+      this.toGo(command);
     },
     onMenu() {
       console.log(1111);
@@ -347,11 +350,11 @@ export default {
       ];
     },
   },
-  watch:{
-    '$route'(value){
-      this.drawer = false
-    }
-  }
+  watch: {
+    $route(value) {
+      this.drawer = false;
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -478,6 +481,9 @@ export default {
 }
 
 @media screen and (max-width: 598px) {
+  .tabBar{
+    z-index: 1 ;
+  }
   .centerStyle {
     width: 100%;
     padding: 0 10px;
@@ -511,6 +517,7 @@ export default {
 <style lang="scss">
 .el-dropdown-menu {
   width: 174px !important;
+  white-space: nowrap;
   .el-dropdown-menu__item {
     color: rgba(20, 37, 62, 0.45) !important;
     line-height: 40px !important;
@@ -525,22 +532,23 @@ export default {
   }
 }
 .el-dropdown {
+  &:hover {
+    .el-icon-arrow-down {
+      transform: rotate(180deg);
+    }
+  }
   .el-dropdown-link {
     .el-icon-arrow-down {
       transition: all 0.3s;
       pointer-events: all;
-      
       &::before {
         content: "\e790";
-      }
-      &:hover {
-        transform: rotate(180deg);
       }
     }
   }
 }
 
-.specialEldropdown{
+.specialEldropdown {
   padding: 16px 0 10px !important;
 }
 </style>

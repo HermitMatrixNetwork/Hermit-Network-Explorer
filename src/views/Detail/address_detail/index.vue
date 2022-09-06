@@ -1,6 +1,6 @@
 <template>
   <div class="address-detail">
-    <div class="detail">
+    <div class="detail" v-if="!unQuerydata">
       <div class="detail-title">
         {{ languagePack.accounttext14 }}：{{ address
         }}<img src="@/assets/img/copy.png" @click="Copy(address)" />
@@ -260,6 +260,7 @@
         </div>
       </div>
     </div>
+    <div v-else><h1>没有数据</h1></div>
   </div>
 </template>
 
@@ -273,6 +274,7 @@ export default {
   data() {
     return {
       loading: true,
+      unQuerydata:false,
       address: "",
       txtotal: 0,
       TxsList: [],
@@ -287,6 +289,7 @@ export default {
   created() {
     this.address = this.$route.query.address;
     this.getAccountMsg();
+    
 
     let { pageSize, currentPage } = this.page;
     this.getTxList(pageSize, currentPage);
@@ -294,6 +297,10 @@ export default {
   methods: {
     async getAccountMsg() {
       const res = await queryAccountInfo(this.address);
+      // if(res.code == 7){
+      //   console.log('没有数据');
+      //   return this.unQuerydata = true
+      // }
       console.log("账户基本信息", res);
       this.account = res.data;
     },
@@ -475,5 +482,6 @@ export default {
 <style>
 .qrcodeStyle {
   min-width: 80px !important;
+  z-index: 3336 !important;
 }
 </style>

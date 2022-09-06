@@ -32,7 +32,7 @@ export default {
     queryDealtoHash(hash, index) {
       // this.$router.push({path:'/hash_detail',query:{hash}})
       // console.log(hash,index);
-      this.$router.push({ name: 'hash_detail', params: { hash, index } })
+      this.$router.push({ name: 'hash_detail', params: { hash, index } }).catch(e=>{})
     },
     queryDealtoAddress(address) {
       this.$router.push({ path: '/address_detail', query: { address } }).catch(e => { })

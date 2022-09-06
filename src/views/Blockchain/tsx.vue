@@ -105,7 +105,7 @@
         >
           <template slot-scope="scope">
             <div class="specialFont" @click="queryTxDetail(scope.$index)">
-              <el-tooltip effect="dark" content="交易失败" placement="top">
+              <el-tooltip effect="dark" :content='languagePack.prompttext05' placement="top">
                 <img
                   src="@/assets/img/table_mistake.png"
                   v-if="scope.row.result === 'error'"

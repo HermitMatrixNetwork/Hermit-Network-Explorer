@@ -90,7 +90,7 @@ export default {
       }
       // this.searchVal = "";
     },
-  },
+  }
 };
 </script>
 
@@ -146,6 +146,7 @@ export default {
 <style lang="scss">
 .el-select-dropdown {
   width: 130px;
+  z-index: 3334 !important;
   margin: 0;
   .popper__arrow {
     display: none;
