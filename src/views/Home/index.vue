@@ -392,22 +392,11 @@ export default {
     async lastUpdate(value) {
       if (value % 3 === 0) {
         const number = await this.getnowBlockHeight();
+        /* 判断是否出块，有出块就更新列表，重新渲染图表 */
         if (number !== this.basicData.blockHeight) {
-          // console.log("调用更新");
-          // let arr = [];
-          // arr.length = number - this.basicData.blockHeight;
-          // for (let i = 0; i < arr.length; i++) {
-          //   arr[i] = this.lastUpdate / arr.length;
-          // }
-          // this.lastUpdate = 0
-          // bar(this.charts, arr);
-
-          //   //当块的高度发生变化，就调用获取最新数组，and更新柱状图，获取高度差用3s来除以高度差
           this.lastUpdate = 0;
           this.basicData.blockHeight = number;
-          // setTimeout(() => {
           this.getnowBlockList();
-          // }, 10000);
         }
       }
     },

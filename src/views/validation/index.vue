@@ -77,9 +77,6 @@
             <span @click="toGo('/punishmentNode')">{{
               languagePack.nodetext14
             }}</span>
-            <!-- <span @click="toGo('/historyNode')">{{
-              languagePack.VerifiedValidators
-            }}</span> -->
           </div>
         </div>
 
@@ -153,7 +150,7 @@
               align="right"
             >
               <template slot-scope="scope">
-                <div>{{ scope.row.delegate_tokens | toMoney }} GHM</div>
+                <div>{{ scope.row.delegate_tokens/1e6 }} GHM</div>
               </template>
             </el-table-column>
 

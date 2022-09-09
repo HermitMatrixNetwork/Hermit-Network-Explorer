@@ -11,31 +11,27 @@
 
 
 
-## Project setup
+### 安装依赖
 ```
 yarn install
 or
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 项目运行
 ```
 yarn serve
 or
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 打包
 ```
 yarn build
 or
 npm run build
 ```
 
-### Lints and fixes files
-```
-yarn lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://github.com/HermitMatrixNetwork/web-browser).
+### 项目地址
+[web-browser](https://github.com/HermitMatrixNetwork/web-browser)

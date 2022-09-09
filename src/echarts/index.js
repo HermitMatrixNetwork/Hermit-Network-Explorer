@@ -11,6 +11,7 @@ export const blockBar = (element, data = []) => {
   let txOption = {}
   for (let i = 1; i < data.length; i++) {
     heightmsg.push(data[i - 1].height)
+    /* 通过时间戳 计算相邻块的时间差，每个块的出块时长与之对应 */
     timearr.push(new Date(data[i - 1].timestamp).getTime() - new Date(data[i].timestamp).getTime())
     txs.push(data[i - 1].tx)
   }

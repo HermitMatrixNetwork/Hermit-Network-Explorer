@@ -60,7 +60,7 @@ export default {
   methods: {
     searchBtn() {
       if (!this.searchVal.trim()) {
-        this.messageBox("输入不能为空！ ");
+        this.messageBox(this.languagePack.prompttext06);
         this.searchVal = "";
         return;
       }

@@ -94,33 +94,12 @@ export function getTokenContent(data) {    //合约地址
 }
 
 
-
-
-
-
-
 export function allValidationNode() {     //获取所有验证节点
     return Service({
         url: '/cosmos/staking/v1beta1/validators',
         method: 'GET'
     })
 }
-
-
-
-
-
-
-
-
-export function newestBlocks() {
-    // return Service({
-    //     url:`/block_search?query=10&page=1`,
-    //     method:'GET'
-    // })
-}
-//各个节点的具体信息
-// export function 
 
 //查询地址的交易信息
 export function getAddressTxs(data) {
@@ -132,7 +111,6 @@ export function getAddressTxs(data) {
         }
     })
 }
-
 
 //查询历史验证节点
 export function queryHistoryNode() {
