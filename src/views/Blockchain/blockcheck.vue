@@ -56,10 +56,7 @@
         />
         <el-table-column :label="languagePack.blocktext07" width="160">
           <template slot-scope="scope">
-            <TableTooltip
-              :content="scope.row.proposer_address"
-              @click.native="toNode(scope.row.validator)"
-            ></TableTooltip>
+            <div  @click="toNode(scope.row.validator)" class="specialFont">{{scope.row.proposer_address | sliceAddress}}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -68,12 +65,15 @@
           width="228px"
         >
           <template slot-scope="scope">
+            <p style="line-height:16px;color: #14253E;">{{scope.row.gas_used | toMoney}}
+                <span style="color:#14253E45"> ( {{percentage(scope.row.gas_used,scope.row.gas_total)}} %)</span>            
+            </p>
             <el-progress
-              :percentage="percenTage"
+              :percentage="percentage(scope.row.gas_used,scope.row.gas_total)"
               :width="196"
               :stroke-width="6"
               color="#1E42EDFF"
-              :format="format(scope.row.gas_used, scope.row.gas_total)"
+              :show-text="false"
             ></el-progress>
           </template>
         </el-table-column>
@@ -198,6 +198,15 @@ export default {
     languagePack() {
       return this.$store.state.Language;
     },
+    percentage(){
+      return function(use,total){
+        if(isNaN(use/total)){
+          return 0
+        }else{
+          return ((use/total)*100).toFixed(2)
+        }
+      }
+    }
   },
 };
 </script>

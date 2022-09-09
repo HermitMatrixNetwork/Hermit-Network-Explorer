@@ -4,7 +4,7 @@
       <div class="title">
         <h3>{{ languagePack.tsxtext20 }}</h3>
         <p class="specialFont">
-          {{ Tx?Tx.hash:$route.params.hash }}
+          {{ detailed.txhash }}
         </p>
         <div class="nextBtn">
           <span
@@ -29,7 +29,7 @@
             <!-- 当该笔交易为合约执行时 -->
             <div class="column" v-if="dealType === 'MsgExecuteContract'">
               <p>{{ languagePack.tsxtext22 }}：</p>
-              <span class="specialFont">{{ detailed.perform }}</span>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
             </div>
             <div class="column" v-if="dealType === 'MsgExecuteContract'">
               <p>{{ languagePack.tsxtext23 }}：</p>
@@ -39,7 +39,7 @@
             <!-- 当该笔交易为转账时 -->
             <div class="column" v-if="dealType === 'MsgSend'">
               <p>{{ languagePack.tsxtext35 }}：</p>
-              <span class="specialFont">{{ detailed.perform }}</span>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
             </div>
             <div class="column" v-if="dealType === 'MsgSend'">
               <p>{{ languagePack.tsxtext36 }}：</p>
@@ -52,7 +52,7 @@
               v-if="dealType === 'MsgWithdrawDelegatorReward'"
             >
               <p>{{ languagePack.tsxtext41 }}：</p>
-              <span class="specialFont">{{ detailed.delegator_address }}</span>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)">{{ detailed.delegator_address }}</span>
             </div>
 
             <div
@@ -84,7 +84,7 @@
               "
             >
               <p>{{languagePack.tsxtext41}}：</p>
-              <span class="specialFont">{{ detailed.delegator_address }}</span>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)">{{ detailed.delegator_address }}</span>
             </div>
 
             <div
@@ -110,7 +110,7 @@
             <!-- 当该笔交易为取消委托时 -->
             <div class="column" v-if="dealType === 'MsgUndelegate'">
               <p>{{languagePack.tsxtext47}}：</p>
-              <span class="specialFont">{{ detailed.delegator_address }}</span>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)">{{ detailed.delegator_address }}</span>
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
@@ -136,12 +136,23 @@
             <!-- 当为上传合约时 -->
             <div class="column" v-if="dealType === 'MsgStoreCode'">
               <p>{{ languagePack.tsxtext22 }}：</p>
-              <span class="specialFont">{{ detailed.contract }}</span>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
             </div>
             <div class="column" v-if="dealType === 'MsgStoreCode'">
               <p>构建：</p>
               <span>{{ detailed.perform }}</span>
             </div>
+
+            <!-- 当为设置领奖地址时 -->
+            <div class="column" v-if="dealType === 'MsgSetWithdrawAddress'">
+              <p>质押地址：</p>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
+            </div>
+            <div class="column" v-if="dealType === 'MsgSetWithdrawAddress'">
+              <p>领奖地址：</p>
+              <span>{{ detailed.perform }}</span>
+            </div>
+
 
             <div
               class="column"
@@ -157,7 +168,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.tsxtext25 }}：</p>
-              <span>{{ detailed.poundage | toMoney }} GHM</span>
+              <span>{{ (detailed.poundage/1e6) }} GHM</span>
             </div>
           </div>
         </template>
@@ -170,9 +181,9 @@
               <p>{{ languagePack.tsxtext28 }}：</p>
               <span
                 :style="{
-                  color: detailed.status === 'success' ? '#55c499' : '#ED422B',
+                  color: (TxStatus?TxStatus:QtxStatus) == 'success' ? '#55c499' : '#ED422B',
                 }"
-                >{{ detailed.status == "error" ? "失败" : "成功" }}</span
+                >{{ (TxStatus?TxStatus:QtxStatus) == "success" ? languagePack.prompttext02 : languagePack.prompttext03 }}</span
               >
             </div>
             <div class="column">
@@ -185,7 +196,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.tsxtext31 }}：</p>
-              <span style="color: #5671f2">{{ detailed.height }}</span>
+              <span class="specialFont" @click="queryDealtoBlock(detailed.height)">{{ detailed.height }}</span>
             </div>
             <div class="column">
               <p>{{ languagePack.tsxtext32 }}：</p>
@@ -204,7 +215,6 @@
 
 <script>
 import mixin from "@/mixins";
-import { pastTime, debounce } from "@/utils/common.js";
 import { getHashContent } from "@/api/api.js";
 export default {
   mixins: [mixin],
@@ -214,6 +224,7 @@ export default {
       detailed: {},
       dealType: "",
       waitResult: false,
+      QtxStatus:'success',
     };
   },
   created() {
@@ -221,15 +232,13 @@ export default {
     this.hashIndex = this.$route.params.index;
     const { hash, index } = this.$route.params;
     this.queryData(hash, index);
-
-    // console.log(pastTime("2022-06-20T07:40:39Z"));
   },
   methods: {
-    async queryData(hash, index) {
+    async queryData(hash, index,status) {
       this.waitResult = true;
       let res;
       if (!Array.isArray(hash)) {
-        res = await getHashContent(hash);
+        res = await getHashContent(hash.hash);
       } else {
         res = await getHashContent(hash[index].hash);
       }
@@ -238,10 +247,14 @@ export default {
         this.waitResult = false;
       }
       const {
-        tx_response: { txhash, timestamp, height, gas_used, gas_wanted },
+        tx_response: { txhash, timestamp, height, gas_used, gas_wanted,events },
         tx: { auth_info, body },
       } = res;
       let message = body.messages[0];
+      //如果没有交易状态或者交易状态为undifind时通过events来判断交易状态
+      if(!this.TxStatus){
+        this.queryStatus(events)
+      }
       this.dealType = message["@type"].split(".").pop();
       // console.log(auth_info,body);
       let obj = {
@@ -282,13 +295,15 @@ export default {
         case "MsgStoreCode":
           obj.contract = message.sender;
           obj.perform = message.builder;
-          message
+          break
+          case 'MsgSetWithdrawAddress':
+            obj.contract = message.delegator_address
+            obj.perform = message.withdraw_address
         default:
           break;
       }
       this.detailed = {
         perform: "",
-        status: "",
         txhash,
         timestamp,
         height,
@@ -304,21 +319,43 @@ export default {
       this.hashIndex--;
     },
     nextData() {
+      // this.$router.push({query:{hash:false}})
       if (this.hashIndex == this.$route.params.hash.length - 1) return;
       this.hashIndex++;
     },
+    queryStatus(arr){
+      let arr2 = arr.map(e=>{
+        return e.attributes.map(i=>{
+          return i.index
+        })
+      })
+      if(!arr2.flat().indexOf(false)){
+        this.QtxStatus = 'error'
+      }
+    }
   },
   watch: {
     hashIndex(value) {
+      // if(value)
       const { hash } = this.$route.params;
       this.queryData(hash, value);
     },
+    '$route.query':{
+      handler(val){
+        this.queryData(val.hash)
+      },
+      deep:true
+    }
   },
   computed: {
     languagePack() {
       return this.$store.state.Language;
     },
     Tx() {
+      let {hash} = this.$route.query
+      if(hash){
+        return hash
+      }
       return this.$route.params.hash[this.hashIndex];
     },
     TxTitle() {
@@ -357,6 +394,15 @@ export default {
           break;
       }
     },
+    TxStatus(){
+      let {hash} = this.$route.params
+      if(Array.isArray(hash)){
+        return hash[this.hashIndex].status
+      }else{
+        return hash.status
+      }
+      
+    }
   },
 };
 </script>

@@ -76,14 +76,17 @@ export function pastTime(timestamp) {
 }
 
 // 防抖函数
-export function debounce(func, wait) {
+export function debounce() {
     let timeout;
-    return function () {
+    return function (func, wait) {
         let context = this;
         let args = arguments;
 
-        if (timeout) clearTimeout(timeout);
-
+        if (timeout){
+            clearTimeout(timeout);
+            timeout = null
+        } 
+        
         timeout = setTimeout(() => {
             func.apply(context, args)
         }, wait);

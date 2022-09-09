@@ -287,8 +287,9 @@ export default {
   .basicStyle{
     display: flex !important;
     .column{
-      >span{
-        word-break: break-all;
+      width: 100%;
+      >p{
+        width: auto;
       }
     }
   }

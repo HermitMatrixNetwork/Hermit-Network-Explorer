@@ -27,15 +27,13 @@
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="/blockchain">{{
-                languagePack.headertext03
-              }}</el-dropdown-item>
-              <el-dropdown-item command="/tsx" divided>{{
-                languagePack.headertext04
-              }}</el-dropdown-item>
-              <el-dropdown-item command="/blockcheck">{{
-                languagePack.headertext05
-              }}</el-dropdown-item>
+              <el-dropdown-item
+                v-for="item in blocknavs"
+                :key="item.command"
+                :divided="item.divided"
+                :command="item.command"
+                >{{ item.title }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <a @click="toGo('/contracts')">{{ languagePack.headertext06 }}</a>
@@ -115,15 +113,13 @@
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown" class="specialEldropdown">
-                <el-dropdown-item command="/blockchain">{{
-                  languagePack.headertext03
-                }}</el-dropdown-item>
-                <el-dropdown-item command="/tsx" divided>{{
-                  languagePack.headertext04
-                }}</el-dropdown-item>
-                <el-dropdown-item command="/blockcheck">{{
-                  languagePack.headertext05
-                }}</el-dropdown-item>
+                <el-dropdown-item
+                  v-for="item in blocknavs"
+                  :key="item.command"
+                  :divided="item.divided"
+                  :command="item.command"
+                  >{{ item.title }}</el-dropdown-item
+                >
               </el-dropdown-menu>
             </el-dropdown>
             <a
@@ -218,9 +214,9 @@
         size="45%"
       >
         <div class="drawerMemu">
-          <div @click="toGo('/home')">主页</div>
+          <div @click="toGo('/home')">{{ languagePack.headertext01 }}</div>
           <el-collapse v-model="activeNames" accordion>
-            <el-collapse-item title="区块链">
+            <el-collapse-item :title="languagePack.headertext02">
               <p
                 v-for="item in blocknavs"
                 :key="item.title"
@@ -229,10 +225,16 @@
                 {{ item.title }}
               </p>
             </el-collapse-item>
-            <div @click="toGo('/contracts')">合约</div>
-            <div @click="toGo('/accounts')">账户</div>
-            <div @click="toGo('/validation')">验证节点</div>
-            <el-collapse-item title="资源">
+            <div @click="toGo('/contracts')">
+              {{ languagePack.headertext06 }}
+            </div>
+            <div @click="toGo('/accounts')">
+              {{ languagePack.headertext07 }}
+            </div>
+            <div @click="toGo('/validation')">
+              {{ languagePack.headertext08 }}
+            </div>
+            <el-collapse-item :title="languagePack.headertext09">
               <p
                 v-for="item in resourcesnavs"
                 :key="item.title"
@@ -241,7 +243,7 @@
                 {{ item.title }}
               </p>
             </el-collapse-item>
-            <el-collapse-item title="更多">
+            <el-collapse-item :title="languagePack.headertext16">
               <p
                 v-for="item in morenavs"
                 :key="item.title"
@@ -263,6 +265,7 @@
         </div>
       </el-drawer>
     </div>
+    <div class="placeholderTab" style="display: none" />
   </div>
 </template>
 
@@ -280,11 +283,6 @@ export default {
         { type: "English", id: 0 },
         { type: "简体中文", id: 1 },
         { type: "繁体中文", id: 2 },
-      ],
-      blocknavs: [
-        { title: "顶级账户", command: "/blockchain" },
-        { title: "查看Txns", command: "/tsx", divided: true },
-        { title: "查看区块", command: "/blockcheck" },
       ],
     };
   },
@@ -347,6 +345,14 @@ export default {
         { title: headertext13, command: "/c" },
         { title: headertext14, command: "/d" },
         { title: headertext15, command: "/e" },
+      ];
+    },
+    blocknavs() {
+      const { headertext03, headertext04, headertext05 } = this.languagePack;
+      return [
+        { title: headertext03, command: "/blockchain" },
+        { title: headertext04, command: "/tsx", divided: true },
+        { title: headertext05, command: "/blockcheck" },
       ];
     },
   },
@@ -481,21 +487,29 @@ export default {
 }
 
 @media screen and (max-width: 598px) {
-  .tabBar{
-    z-index: 1 ;
-  }
-  .centerStyle {
-    width: 100%;
-    padding: 0 10px;
-    height: 60px !important;
-    .headernav {
-      display: none;
-    }
-    .headernavM {
-      display: none;
+  .tabBar {
+    z-index: 1;
+    .centerStyle {
+      position: fixed;
+      background: #ffffff;
+      width: 100%;
+      padding: 0 10px;
       height: 60px !important;
+      justify-content: space-between;
+      .headernav {
+        display: none;
+      }
+      .headernavM {
+        display: none;
+        height: 60px !important;
+      }
+    }
+    .placeholderTab{
+      display: block !important;
+      height: 60px;
     }
   }
+
   .logo_style {
     width: 200px;
     height: 30px;

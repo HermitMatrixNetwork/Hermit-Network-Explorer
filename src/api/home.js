@@ -1,4 +1,5 @@
 import { Service } from "./request"
+import service1 from './request1'
 
 export function allAdresQuantity() {     //总地址数量
     return Service({
@@ -34,5 +35,12 @@ export function getLatestBlock() {    //获取最新出块
     return Service({
         url: '/blocks/latest',
         method: 'GET'
+    })
+}
+
+export function getbanner() {   
+    return service1({
+        url: '/upload/message/get_banner',
+        method: 'get'
     })
 }

@@ -30,15 +30,21 @@ export default {
       });
     },
     queryDealtoHash(hash, index) {
-      // this.$router.push({path:'/hash_detail',query:{hash}})
-      // console.log(hash,index);
-      this.$router.push({ name: 'hash_detail', params: { hash, index } }).catch(e=>{})
+      let path = this.$route.path
+      if(path==='/hash_detail'){
+        this.$router.replace({ query: { hash},params:{...this.$store.params} }).catch(e => { })
+        return 
+      }
+      this.$router.push({ name: 'hash_detail', params: { hash, index } }).catch(e => { })
     },
     queryDealtoAddress(address) {
+      if(this.$route.path == '/hash_detail'){
+        return this.$router.replace({ path: '/address_detail', query: { address } }).catch(e => { })
+      }
       this.$router.push({ path: '/address_detail', query: { address } }).catch(e => { })
     },
     disposeTableType(arr) {
-      if (!Array.isArray(arr)) return console.error('no Array');
+      if (!Array.isArray(arr)) return ;
       arr.forEach((item) => {
         switch (item.operate) {
           case "MsgExecuteContract":
@@ -56,7 +62,7 @@ export default {
             item.type = "赎回交易";
             break;
           case "MsgSend":
-            item.type = "发送";
+            item.type = "转账";
             item.targetAddress = item.message.to_address;
             break;
           case "MsgSetWithdrawAddress":
@@ -91,8 +97,16 @@ export default {
       });
       // console.log(arr);
     },
+    //查找块
     queryDealtoBlock(height) {
-      this.$router.push({ path: '/block_detail', query: { height } })
+      let path = this.$route.path
+      if (path === "/block_detail") {
+        return this.$router.replace({ query: { height, status: 0 } }).catch(e => { })
+      }
+      if (path === '/hash_detail') {
+        return this.$router.replace({ path: '/block_detail', query: { height } }).catch(e => { })
+      }
+      this.$router.push({ path: '/block_detail', query: { height } }).catch(e => { })
     }
   },
   filters: {
@@ -101,5 +115,10 @@ export default {
     timeStamp,
     jetlag
   },
+  computed:{
+    // languagePack(){
+    //   return this.$store.state.Language
+    // }
+  }
 };
 

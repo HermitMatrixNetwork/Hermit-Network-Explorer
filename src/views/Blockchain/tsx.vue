@@ -82,10 +82,7 @@
                       <el-divider></el-divider>
                     </div>
                   </div>
-                  <div
-                    class="detailBox"
-                    @click="queryDealtoHash(scope.row.txhash)"
-                  >
+                  <div class="detailBox" @click="queryTxDetail(scope.$index)">
                     查看详情
                   </div>
                 </div>
@@ -105,7 +102,11 @@
         >
           <template slot-scope="scope">
             <div class="specialFont" @click="queryTxDetail(scope.$index)">
-              <el-tooltip effect="dark" :content='languagePack.prompttext05' placement="top">
+              <el-tooltip
+                effect="dark"
+                :content="languagePack.prompttext05"
+                placement="top"
+              >
                 <img
                   src="@/assets/img/table_mistake.png"
                   v-if="scope.row.result === 'error'"
@@ -179,7 +180,7 @@
         </el-table-column>
         <el-table-column :label="languagePack.txstext11">
           <template slot-scope="scope">
-            <div>{{ scope.row.fee | toMoney }}</div>
+            <div>{{ (scope.row.fee/10e6)}}</div>
           </template>
         </el-table-column>
       </el-table>

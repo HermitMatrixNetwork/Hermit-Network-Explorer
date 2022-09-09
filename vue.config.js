@@ -36,8 +36,7 @@ module.exports = defineConfig({
     }
   },
   devServer: {
-    port:8080,
-    host: 'localhost',
+    port:8888,
     open:true,
     https:false,
     proxy: {  //代理服务器
@@ -52,7 +51,7 @@ module.exports = defineConfig({
         target:'http://158.247.237.78:8888',
         pathRewrite: {'^/upload':''},
         logLevel:'debug'
-      }
+      },
     }
   }
 })

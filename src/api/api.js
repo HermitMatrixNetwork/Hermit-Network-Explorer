@@ -1,19 +1,6 @@
 import { Service } from "./request"
 import service1 from "./request1"
 
-/*export function getConfigsByProductId(productId) {
-    return Service({
-        url: '/cosmos/auth/v1beta1/accounts',
-        params: { productId: productId }
-    })
-}
-
-export function addNewAndroidPlugin(data) {
-    return Service({
-        url: '/manager/addAndroidPlguin',
-        data: JSON.stringify(data)
-    })
-}*/
 
 export function getAllaccounts(page, pageSize) {  //返回所有现有账户
     return Service({

@@ -180,4 +180,15 @@ export default {
     cursor: pointer;
   }
 }
+
+@media screen and (max-width:598px) {
+    .rpcmain{
+      width: 100%;
+      padding: 10px;
+    }
+    .prompt{
+      width: calc(100vw - 20px) !important;
+
+    }
+}
 </style>

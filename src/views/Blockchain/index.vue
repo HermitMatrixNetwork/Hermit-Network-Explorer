@@ -1,48 +1,58 @@
 <template>
   <div>
-    <h3>{{languagePack.toptext01}}</h3>
+    <h3>{{ languagePack.toptext01 }}</h3>
     <main class="main">
       <div class="table_title" v-html="languagePack.toptext02"></div>
-      <el-table
-        :data="tableData"
-        size="mini"
-        height="612px"
-        :row-style="{ height: '58px'}"
-        :header-cell-class-name="'tableHeaderCellStyle'"
-        :row-class-name="'tableRowStyle'"
-        v-loading="loading"
-      >
-        <el-table-column
-          type="index"
-          :label="languagePack.toptext03"
-          width="80px"
-          align="center"
-        />
-        <el-table-column prop="address" :label="languagePack.toptext04" width="420">
-          <template slot-scope="scope">
-            <div class="specialFont" @click="toDetail(scope.row.address)">
-              {{ scope.row.address }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="tag" :label="languagePack.toptext05" />
-        <el-table-column :label="languagePack.toptext06" align="right">
-          <template slot-scope="scope">
-            <div>{{ scope.row.balance | toMoney }} GHM</div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="percentage" :label="languagePack.toptext07" width="160" >
-          <template slot-scope="scope">
-            <div>{{(scope.row.percentage * 100).toFixed(8)}} %</div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="tx_count"
-          :label="languagePack.toptext08"
-          width="100px"
-          align="right"
-        />
-      </el-table>
+      <div class="table_body">
+        <el-table
+          :data="tableData"
+          size="mini"
+          height="612px"
+          :row-style="{ height: '58px' }"
+          :header-cell-class-name="'tableHeaderCellStyle'"
+          :row-class-name="'tableRowStyle'"
+          v-loading="loading"
+        >
+          <el-table-column
+            type="index"
+            :label="languagePack.toptext03"
+            width="80px"
+            align="center"
+          />
+          <el-table-column
+            prop="address"
+            :label="languagePack.toptext04"
+            width="420"
+          >
+            <template slot-scope="scope">
+              <div class="specialFont" @click="toDetail(scope.row.address)">
+                {{ scope.row.address }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="tag" :label="languagePack.toptext05" />
+          <el-table-column :label="languagePack.toptext06" align="right">
+            <template slot-scope="scope">
+              <div>{{ scope.row.balance | toMoney }} GHM</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="percentage"
+            :label="languagePack.toptext07"
+            width="160"
+          >
+            <template slot-scope="scope">
+              <div>{{ (scope.row.percentage * 100).toFixed(8) }} %</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="tx_count"
+            :label="languagePack.toptext08"
+            width="100px"
+            align="right"
+          />
+        </el-table>
+      </div>
       <el-row type="flex" justify="end" align="middle" style="height: 60px">
         <el-pagination
           small
@@ -124,11 +134,11 @@ export default {
     },
     deep: true,
   },
-  computed:{
-    languagePack(){
-      return this.$store.state.Language
-    }
-  }
+  computed: {
+    languagePack() {
+      return this.$store.state.Language;
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -164,36 +174,21 @@ h3 {
       margin: 0 3px;
     }
   }
-
-  .table_box {
-    height: 600px;
-    background: #ffffff;
-    border: 1px solid #e9eaef;
-    box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
-    border-radius: 4px;
-
-    .table_title {
-      font-weight: bold;
-      font-size: 12px;
-      color: rgba(20, 37, 62, 0.85);
-      padding-left: 16px;
-      //   height: 60px;
-      //   line-height: 60px;
-      span {
-        color: #5671f2ff;
-        margin: 0 3px;
-      }
+  .table_body {
+    overflow: auto;
+    > div {
+      min-width: 1200px;
     }
   }
 }
 
-@media screen and (max-width:598px) {
-    h3{
-      width: 100%;
-      padding-left: 16px;
-    }
-    .main{
-      width: 100%;
-    }
+@media screen and (max-width: 598px) {
+  h3 {
+    width: 100%;
+    padding-left: 16px;
+  }
+  .main {
+    width: 100%;
+  }
 }
 </style>

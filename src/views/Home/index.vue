@@ -4,7 +4,9 @@
       <div class="content">
         <SearchBox></SearchBox>
         <div class="banner">
-          {{ lastUpdate.toFixed(1) }}
+          <a :href="banner.link" target="_blank"
+            ><img :src="banner.url" alt=""
+          /></a>
         </div>
       </div>
     </div>
@@ -17,7 +19,13 @@
           </div>
           <div class="explain">
             <p>{{ item.title }}</p>
-            <h3>${{ item.price }}<span :style="{color:item.updown>0?'#f23c24':'#55C499'}">{{item.updown}}</span></h3>
+            <h3>
+              ${{ item.price
+              }}<span
+                :style="{ color: item.updown > 0 ? '#f23c24' : '#55C499' }"
+                >{{ item.updown }}</span
+              >
+            </h3>
           </div>
         </div>
       </div>
@@ -26,11 +34,19 @@
         <div class="block-chart">
           <div class="outBlockTime">
             {{ languagePack.hometext10 }}
-            <div class="barChart" />
+            <div
+              class="barChart"
+              @mouseover="chartsAnimation = false"
+              @mouseleave="chartsAnimation = true"
+            />
           </div>
           <div class="outBlockNum">
             {{ languagePack.hometext11 }}
-            <div class="barChart" />
+            <div
+              class="barChart txbarChart"
+              @mouseover="chartsAnimation = false"
+              @mouseleave="chartsAnimation = true"
+            />
           </div>
         </div>
 
@@ -41,9 +57,9 @@
             <span>{{ basicData.blockHeight }}</span>
           </div>
           <!--当前出块节点-->
-          <div>
+          <div @click="queryDealtoNode(basicData.latestNode.address)">
             <p>{{ languagePack.hometext13 }}</p>
-            <span>{{ basicData.latestNode }}</span>
+            <span>{{ basicData.latestNode.moniker }}</span>
           </div>
 
           <!--累计交易笔数-->
@@ -193,19 +209,20 @@
 </template>
 
 <script>
-import { bar } from "@/echarts/index.js";
+import { blockBar } from "@/echarts/index.js";
 import * as echarts from "echarts";
-import { allValidationNode, getAddressTxs } from "@/api/api.js";
+import { allValidationNode } from "@/api/api.js";
 import {
   getLatestBlock,
   allAdresQuantity,
   pledgeParameter,
   totalCirculation,
   querylatestNodeMessage,
+  getbanner,
 } from "@/api/home.js";
-import { queryBlockList } from "@/api/blockchain.js";
+import { queryBlockList, queryTxList } from "@/api/blockchain.js";
 import mixin from "@/mixins";
-import { numAdd } from "@/utils/common.js";
+import { mapState } from "vuex";
 
 export default {
   mixins: [mixin],
@@ -233,19 +250,28 @@ export default {
                         仓的Token为所有锁仓状态的Token，包含当前委托
                         或处于绑定解锁期的锁仓状态的Token。`,
       blockList: [],
+      banner: {},
+      chartsAnimation: true,
     };
   },
   async created() {
     this.basicData.blockHeight = await this.getnowBlockHeight();
-    // this.timer = setInterval(() => {
-    //   this.lastUpdate++;
-    // }, 1000);
     this.getBlockMsg();
     this.getnowBlockList();
+    let {
+      data: {
+        banner: {
+          photos: { photos },
+        },
+      },
+    } = await getbanner();
+    this.banner = photos[0];
   },
   mounted() {
-    this.charts = echarts.init(document.querySelector(".barChart"));
-    bar(this.charts);
+    this.charts = {
+      block: echarts.init(document.querySelector(".barChart")),
+      txcharts: echarts.init(document.querySelector(".txbarChart")),
+    };
   },
   methods: {
     //获取当前区块高度
@@ -256,33 +282,29 @@ export default {
     //获取数据
     async getBlockMsg() {
       const res = await allAdresQuantity(); //总地址数
-      const issueNum = await totalCirculation(); //获取总发行量
-      const pledgeNum = await pledgeParameter(); //获取质押参数
-      const latestNode = await querylatestNodeMessage();
-      // const detailNum = await getAddressTxs(`message.module = 'bank'`);  //获取交易信息
-      // this.totalNum = res.pagination.total; //总地址数量
-      // this.issueNum = issueNum.supply[0].amount;
-      // this.pledgeNum = pledgeNum.params.historical_entries; //质押参数
-      //  流通量 = 总发行量 -  质押量
-      // this.circulation = this.issueNum - this.pledgeNum;
+      const { supply } = await totalCirculation(); //获取总发行量
+      const {
+        params: { historical_entries },
+      } = await pledgeParameter(); //获取质押参数
+      const { validators } = await allValidationNode();
+      console.log("节点", await querylatestNodeMessage());
+      const {
+        data: { total },
+      } = await queryTxList(10, 1); //获取交易数量
 
       this.basicData = {
         ...this.basicData,
         totalNum: res.pagination.total, //总地址数量
-        issueNum: issueNum.supply[0].amount, //总发行量
-        pledgeNum: pledgeNum.params.historical_entries, //质押参数
-        circulation:
-          issueNum.supply[0].amount - pledgeNum.params.historical_entries, //流通量 = 总发行量 - 质押量
-        Pledgerate: (
-          pledgeNum.params.historical_entries / issueNum.supply[0].amount
-        ).toFixed(2), //质押率
-        latestNode: latestNode.default_node_info.moniker, //最新出块节点
-        detailNum: 63,
+        issueNum: supply[0].amount, //总发行量
+        pledgeNum: historical_entries, //质押参数
+        circulation: supply[0].amount - historical_entries, //流通量 = 总发行量 - 质押量
+        Pledgerate: (historical_entries / supply[0].amount).toFixed(2), //质押率
+        latestNode: {
+          moniker: validators[0].description.moniker,
+          address: validators[0].operator_address,
+        }, //最新出块节点
+        detailNum: total,
       };
-      //质押率
-      // this.Pledgerate = (this.pledgeNum / this.issueNum).toFixed(2);
-      // console.log('总地址数量',res);
-      const nodelist = await allValidationNode();
       // this.nodelist = [
       //   ...nodelist.validators,
       //   ...nodelist.validators,
@@ -300,25 +322,29 @@ export default {
       //   ...nodelist.validators,
       //   ...nodelist.validators,
       //   ...nodelist.validators,
-
       // ];
-      this.nodelist = nodelist.validators;
-      console.log("节点信息", nodelist);
+      this.nodelist = validators;
     },
     //实时出块区块
     async getnowBlockList() {
       const {
         data: { list },
-      } = await queryBlockList(10, 0);
-      console.log("最新的出块区块", list);
+      } = await queryBlockList(20, 0);
+      // console.log("最新的出块区块", list);
       this.blockList = list;
+      let echartList = list.map((e) => {
+        return { height: e._id, timestamp: e.timestamp, tx: e.tx_count };
+      });
+      if (this.chartsAnimation) {
+        // console.log('调用出块动画');
+        blockBar(this.charts, echartList);
+      }
     },
     queryDealtoNode(val) {
       this.$router.push({ name: "node_detail", query: { address: val } });
     },
     progressFormat(a, b) {
       let result = ((Number(a) / Number(b)) * 100).toFixed(2);
-      // if (isNaN(result) || result) return;
       if (!isNaN(result)) {
         return Number(result);
       } else {
@@ -326,26 +352,32 @@ export default {
       }
     },
   },
-  beforeDestroy() {
+  activated() {
+    this.timer = setInterval(() => {
+      this.lastUpdate++;
+    }, 1000);
+  },
+  deactivated() {
     clearInterval(this.timer);
   },
   computed: {
-    languagePack() {
-      return this.$store.state.Language;
-    },
+    ...mapState({
+      languagePack: (state) => state.Language,
+      tokenPrice: (state) => state.tokenPrice,
+    }),
     messageList() {
       const { hometext08, hometext09 } = this.languagePack;
       return [
         {
           title: hometext08,
-          price: "0.48",
-          updown: '-5.29',
+          price: this.tokenPrice,
+          updown: "-5.29",
           icon: require("@/assets/img/home_icon1.png"),
         },
         {
           title: hometext09,
           price: "0.48",
-          updown: '+999.9',
+          updown: "+999.9",
           icon: require("@/assets/img/home_icon2.png"),
         },
       ];
@@ -362,20 +394,20 @@ export default {
         const number = await this.getnowBlockHeight();
         if (number !== this.basicData.blockHeight) {
           // console.log("调用更新");
-          let arr = [];
-          arr.length = number - this.basicData.blockHeight;
-          for (let i = 0; i < arr.length; i++) {
-            arr[i] = this.lastUpdate / arr.length;
-          }
+          // let arr = [];
+          // arr.length = number - this.basicData.blockHeight;
+          // for (let i = 0; i < arr.length; i++) {
+          //   arr[i] = this.lastUpdate / arr.length;
+          // }
           // this.lastUpdate = 0
-          bar(this.charts, arr);
+          // bar(this.charts, arr);
 
           //   //当块的高度发生变化，就调用获取最新数组，and更新柱状图，获取高度差用3s来除以高度差
           this.lastUpdate = 0;
           this.basicData.blockHeight = number;
-          setTimeout(() => {
-            this.getnowBlockList();
-          }, 10000);
+          // setTimeout(() => {
+          this.getnowBlockList();
+          // }, 10000);
         }
       }
     },
@@ -393,6 +425,7 @@ export default {
   background-size: 100% 100%;
   .content {
     max-width: 1280px;
+    min-width: 1000px;
     height: 277px;
     margin: 0 auto;
     display: flex;
@@ -404,6 +437,12 @@ export default {
     height: 140px;
     background: #515151;
     border-radius: 8px;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 140px;
+      cursor: pointer;
+    }
   }
 }
 
@@ -475,6 +514,7 @@ export default {
         height: 44px;
         width: 25%;
         position: relative;
+        white-space: nowrap;
         &:nth-child(4) {
           > span {
             color: #1e42ed;
@@ -701,6 +741,7 @@ export default {
     min-height: 200px;
     .content {
       height: 200px;
+      min-width: 100% !important;
     }
     .banner {
       display: none;
@@ -788,7 +829,7 @@ export default {
 }
 ::v-deep .el-progress {
   .el-progress-bar {
-    width: 220px !important;
+    width: 200px !important;
     margin-top: 6px;
   }
 }

@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       searchVal: "",
-      select: "",
+      select: 0,
     };
   },
   computed: {
@@ -46,13 +46,14 @@ export default {
       return this.$store.state.Language;
     },
     options() {
-      const { hometext03, hometext04, hometext05, hometext06 } =
+      const { hometext02, hometext03, hometext04, hometext05, hometext06 } =
         this.languagePack;
       return [
-        { label: hometext03, value: "1" },
-        { label: hometext04, value: "2" },
-        { label: hometext05, value: "3" },
-        { label: hometext06, value: "4" },
+        { label: hometext02, value: 0 },
+        { label: hometext03, value: 1 },
+        { label: hometext04, value: 2 },
+        { label: hometext05, value: 3 },
+        { label: hometext06, value: 4 },
       ];
     },
   },
@@ -63,34 +64,49 @@ export default {
         this.searchVal = "";
         return;
       }
-      if (!this.select) {
-        this.messageBox("请选择搜索条件! ");
-        return;
+      if (this.select === 0) {
+        this.filtersSearchValue(this.searchVal);
       }
+      console.log(1111111111);
+      console.log(this.select);
+      let value = this.searchVal.replace(/\s+/g, "");
       switch (this.select * 1) {
         case 1:
           console.log("通过地址搜索");
-          this.queryDealtoAddress(this.searchVal);
+          this.queryDealtoAddress(value);
           break;
         case 2:
           console.log("通过token搜索");
-
+          console.log(this.select);
           break;
         case 3:
           console.log("通过hash搜索交易记录");
           // this.queryDealtoAddress(this.searchVal);
-          this.queryDealtoHash(this.searchVal);
+          this.queryDealtoHash({
+            hash: value,
+            random: Math.floor(Math.random() * 10000),
+          });
           break;
         case 4:
           console.log("通过块搜索");
-          this.queryDealtoBlock(this.searchVal);
+          this.queryDealtoBlock(value);
           break;
         default:
           break;
       }
-      // this.searchVal = "";
+      this.searchVal = "";
     },
-  }
+    filtersSearchValue(string) {
+      console.log("begain");
+      if (string.includes("ghm1")) {
+        this.select = 1;
+      } else if (!isNaN(string)) {
+        this.select = 4;
+      } else {
+        this.select = 3;
+      }
+    },
+  },
 };
 </script>
 
@@ -109,7 +125,6 @@ export default {
       &::placeholder {
         color: #14253e !important;
       }
-      
     }
   }
   .el-input-group__append {

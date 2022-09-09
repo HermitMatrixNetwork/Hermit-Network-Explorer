@@ -4,7 +4,8 @@ import { Language } from '@/utils/Language/index.js'
 Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
-        Language: {}
+        Language: {},
+        tokenPrice: 10,
     },
     mutations: {
         CHANGE_LANGUAGE(state) {

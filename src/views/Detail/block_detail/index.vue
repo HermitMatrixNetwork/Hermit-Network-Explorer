@@ -58,104 +58,119 @@
     </div>
 
     <div class="block_detail">
-      <div class="block_detail_title">{{languagePack.blocktext21}}</div>
-      <el-table
-        :data="tableData"
-        size="mini"
-        height="612px"
-        :header-cell-class-name="'tableHeaderCellStyle'"
-        :row-class-name="'tableRowStyle'"
-        v-loading="loading"
-      >
-        <el-table-column :label="languagePack.blocktext22">
-          <template slot-scope="scope">
-            <div class="specialFont">
-              <el-tooltip effect="dark" content="交易失败" placement="top">
+      <div class="block_detail_title">{{ languagePack.blocktext21 }}</div>
+      <div class="table_body">
+        <el-table
+          :data="tableData"
+          size="mini"
+          :header-cell-class-name="'tableHeaderCellStyle'"
+          :row-class-name="'tableRowStyle'"
+          v-loading="loading"
+        >
+          <el-table-column :label="languagePack.blocktext22">
+            <template slot-scope="scope">
+              <div
+                class="specialFont"
+                @click="
+                  queryDealtoHash({
+                    hash: scope.row._id,
+                    status: scope.row.result,
+                  })
+                "
+              >
+                <el-tooltip effect="dark" content="交易失败" placement="top">
+                  <img
+                    src="@/assets/img/table_mistake.png"
+                    v-if="scope.row.result === 'error'"
+                    @click.stop
+                  />
+                </el-tooltip>
+                {{ scope.row._id | sliceAddress }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="operationType"
+            :label="languagePack.blocktext23"
+            width="100px"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <div class="table_txOperate">{{ scope.row.type }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column :label="languagePack.blocktext24">
+            <template slot-scope="scope">
+              <div class="specialFont">{{ scope.row.height }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="timestamp" :label="languagePack.blocktext25">
+            <template slot-scope="scope">
+              <div>{{ scope.row.timestamp | jetlag }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            :label="languagePack.blocktext26"
+            :show-overflow-tooltip="true"
+            width="150px"
+          >
+            <template slot-scope="scope">
+              <TableTooltip
+                :content="scope.row.sender"
+                @click.native="queryDealtoAddress(scope.row.sender)"
+              ></TableTooltip>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" width="56px">
+            <template slot-scope="scope">
+              <div>
                 <img
-                  src="@/assets/img/table_mistake.png"
-                  v-if="scope.row.result === 'error'"
-                  @click.stop
+                  src="@/assets/img/table_transmit.png"
+                  alt=""
+                  v-if="scope.row.result !== 'error'"
                 />
-              </el-tooltip>
-              {{ scope.row._id | sliceAddress }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="operationType"
-          :label="languagePack.blocktext23"
-          width="100px"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <div class="table_txOperate">{{ scope.row.type }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column :label="languagePack.blocktext24">
-          <template slot-scope="scope">
-            <div class="specialFont">{{ scope.row.height }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="timestamp" :label="languagePack.blocktext25">
-          <template slot-scope="scope">
-            <div>{{ scope.row.timestamp | jetlag }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="languagePack.blocktext26"
-          :show-overflow-tooltip="true"
-          width="150px"
-        >
-          <template slot-scope="scope">
-            <TableTooltip :content="scope.row.sender"></TableTooltip>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" width="56px">
-          <template slot-scope="scope">
-            <div>
-              <img
-                src="@/assets/img/table_transmit.png"
-                alt=""
-                v-if="scope.row.result !== 'error'"
-              />
-              <span v-else class="table_txfail">self</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="fuelTotal"
-          :label="languagePack.blocktext27"
-          width="150px"
-        >
-          <template slot-scope="scope">
-            <TableTooltip :content="scope.row.targetAddress"></TableTooltip>
-          </template>
-        </el-table-column>
-        <el-table-column :label="languagePack.blocktext28">
-          <template slot-scope="scope">
-            <div>
-              {{ scope.row.tx_amount | toMoney
-              }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column :label="languagePack.blocktext29">
-          <template slot-scope="scope">
-            <div>{{ scope.row.fee | toMoney }}</div>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-row type="flex" justify="end">
+                <span v-else class="table_txfail">self</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="fuelTotal"
+            :label="languagePack.blocktext27"
+            width="150px"
+          >
+            <template slot-scope="scope">
+              <TableTooltip
+                :content="scope.row.targetAddress"
+                @click.native="queryDealtoAddress(scope.row.targetAddress)"
+              ></TableTooltip>
+            </template>
+          </el-table-column>
+          <el-table-column :label="languagePack.blocktext28">
+            <template slot-scope="scope">
+              <div>
+                {{ scope.row.tx_amount | toMoney
+                }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column :label="languagePack.blocktext29">
+            <template slot-scope="scope">
+              <div>{{ scope.row.fee / 1e6 }}</div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <el-row type="flex" justify="end" align="middle" style="height: 60px">
         <el-pagination
           popper-class="popperSelect"
           small
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
           :page-sizes="[10, 25, 50]"
           :page-size="10"
           layout="prev, pager, next, sizes"
-          :total="100"
+          :total="tableData ? tableData.length : 0"
+          hide-on-single-page
         >
         </el-pagination>
       </el-row>
@@ -175,7 +190,10 @@ export default {
       commitHeight: 0,
       blockHight: 0,
       tableData: [],
-      currentPage: 1,
+      page: {
+        currentPage: 0,
+        pageSize: 10,
+      },
       blockData: {},
       loading: true,
       waitResult: false,
@@ -185,9 +203,7 @@ export default {
     this.commitHeight = this.blockHight = this.$route.query.height;
     this.getblockDetail(this.commitHeight);
   },
-  mounted() {
-    document.querySelector(".selected").style.color = "#1E42ED";
-  },
+  mounted() {},
   methods: {
     async getblockDetail(value) {
       const res = await queryBlockdetails(value * 1);
@@ -195,28 +211,20 @@ export default {
 
       if (!res.data.block) {
         this.messageBox("暂未出块", "error");
+        setTimeout(() => {
+          this.$router.replace("/home");
+        });
         return false;
       }
       this.blockData = res.data.block;
       let arr = res.data.txs;
       this.disposeTableType(arr);
       this.tableData = arr;
-
       return true;
-      // console.log(this.tableData);
     },
 
-    handleSizeChange() {
-      let oul = document.querySelectorAll(".el-select-dropdown__list li");
-      oul.forEach((item) => (item.style.color = ""));
-      let oli = document.querySelector(".selected");
-      oli.style.color = "#606266";
-      document.querySelector(".hover").style.color = "#1E42ED";
-    },
-
-    handleCurrentChange() {
-      console.log("11");
-    },
+    handleSizeChange(val) {},
+    handleCurrentChange(index) {},
     nextData(num) {
       this.waitResult = true;
       let number = (this.blockHight = this.blockHight * 1);
@@ -224,7 +232,7 @@ export default {
       this.getblockDetail(this.blockHight).then((res) => {
         if (res) {
           this.commitHeight = this.blockHight;
-          this.$router.push({ query: { height: this.blockHight } });
+          this.$router.replace({ query: { height: this.blockHight } });
         } else {
           this.blockHight = number;
         }
@@ -241,6 +249,12 @@ export default {
     tableData(value) {
       if (!Array.isArray(value)) return (this.loading = false);
       this.loading = value.length == 0 ? true : false;
+    },
+    "$route.query"(val) {
+      if (val.status) {
+        this.commitHeight = this.blockHight = val.height;
+        this.getblockDetail(this.commitHeight);
+      }
     },
   },
 };
@@ -298,9 +312,9 @@ export default {
   }
 
   .block_detail {
-    margin-top: 16px;
+    margin: 16px 0 80px;
     width: 1280px;
-    height: 732px;
+    // height: 732px;
     background: #ffffff;
     border: 1px solid #e9eaef;
     box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
@@ -315,6 +329,12 @@ export default {
       color: rgba(20, 37, 62, 0.85);
       letter-spacing: 0;
       padding-left: 16px;
+    }
+    .table_body{
+      overflow: auto;
+      >div{
+        min-width: 1200px;
+      }
     }
   }
 }

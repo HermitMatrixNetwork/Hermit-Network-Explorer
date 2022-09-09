@@ -1,6 +1,6 @@
 <template>
   <div class="address-detail">
-    <div class="detail" v-if="!unQuerydata">
+    <div class="detail">
       <div class="detail-title">
         {{ languagePack.accounttext14 }}：{{ address
         }}<img src="@/assets/img/copy.png" @click="Copy(address)" />
@@ -30,7 +30,7 @@
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext18 }}：</p>
-                  <span>86</span>
+                  <span>$ {{($store.state.tokenPrice * account.balance) | toMoney}}</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext20 }}：</p>
@@ -51,7 +51,7 @@
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext23 }}：</p>
-                  <span>{{ account.delegate_amount }} GHM</span>
+                  <span>{{ account.delegate_amount | toMoney}} GHM</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext24 }}：</p>
@@ -60,7 +60,7 @@
 
                 <div class="column">
                   <p>{{ languagePack.accounttext26 }}：</p>
-                  <span>{{ account.withdraw_amount }}GHM</span>
+                  <span>{{ account.withdraw_amount }} GHM</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext27 }}：</p>
@@ -260,7 +260,6 @@
         </div>
       </div>
     </div>
-    <div v-else><h1>没有数据</h1></div>
   </div>
 </template>
 
@@ -274,7 +273,6 @@ export default {
   data() {
     return {
       loading: true,
-      unQuerydata:false,
       address: "",
       txtotal: 0,
       TxsList: [],
@@ -297,10 +295,6 @@ export default {
   methods: {
     async getAccountMsg() {
       const res = await queryAccountInfo(this.address);
-      // if(res.code == 7){
-      //   console.log('没有数据');
-      //   return this.unQuerydata = true
-      // }
       console.log("账户基本信息", res);
       this.account = res.data;
     },
@@ -309,7 +303,6 @@ export default {
       console.log("账户交易列表", txList);
       let arr = txList.data.list;
 
-      // if(!arr) return
       this.disposeTableType(arr);
       this.TxsList = arr;
       this.txtotal = txList.data.total;
@@ -345,9 +338,9 @@ export default {
     },
     statusTitle() {
       return [
-        { title: this.languagePack.TransactionFee + ":" },
-        { title: this.languagePack.GasInformation + ":" },
-        { title: this.languagePack.GasUsed + ":" },
+        { title: this.languagePack.accounttext36 + ":" },
+        { title: this.languagePack.txstext15 + ":" },
+        { title: this.languagePack.txstext16 + ":" },
       ];
     },
   },

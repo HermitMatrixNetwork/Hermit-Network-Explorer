@@ -1,20 +1,24 @@
 import * as echarts from "echarts";
-//柱状图
-// let message = [
-//   120, 200, 150, 80, 70, 110, 130, 10, 60, 120, 160, 140, 120, 200, 150, 80,
-//   70, 110, 130, 10, 60, 120, 160, 140,
-// ];
-let message = [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
-export const bar = (element, data=[]) => {
+import { debounce } from '@/utils/common.js'
+let newdebounce = debounce()
+export const blockBar = (element, data = []) => {
 
-  // console.log(element);
-  // console.log('js接受到数据',message);
-  message = [...data,...message]
-  message.length = 24
-  let value = message[0];
-  message[0] = { value: value, itemStyle: { color: "#344358" } };
-
-  var option = {
+  let { block, txcharts } = element
+  let heightmsg = []
+  let timearr = []
+  let txs = []
+  let blockOption = {}
+  let txOption = {}
+  for (let i = 1; i < data.length; i++) {
+    heightmsg.push(data[i - 1].height)
+    timearr.push(new Date(data[i - 1].timestamp).getTime() - new Date(data[i].timestamp).getTime())
+    txs.push(data[i - 1].tx)
+  }
+  // console.log(txs, heightmsg);
+  timearr = [...timearr, 3000]
+  timearr[0] = { value: timearr[0], itemStyle: { color: '#000000' } }
+  txs[0] = { value: txs[0], itemStyle: { color: '#000000' } }
+  blockOption = {
     grid: {
       left: "0",
       right: "0",
@@ -23,7 +27,7 @@ export const bar = (element, data=[]) => {
     },
     xAxis: {
       type: "category",
-      data: [],
+      data: heightmsg,
       show: false,
       boundaryGap: true,
     },
@@ -31,21 +35,6 @@ export const bar = (element, data=[]) => {
       type: "value",
       show: false,
     },
-    series: [
-      {
-        data: message,
-        type: "bar",
-        barWidth: "8px",
-        itemStyle: {
-          normal: {
-            color: "#DDE0E3",
-          },
-          emphasis: {
-            color: "#1E42ED",
-          },
-        },
-      },
-    ],
     color: "#DDE0E3",
     tooltip: {
       show: true,
@@ -62,17 +51,108 @@ export const bar = (element, data=[]) => {
       },
       extraCssText: "box-shadow: 0 0 rgba(0, 0, 0, 0.3);",
       formatter: function (params) {
-        console.log(params);
-        return `<div style="color:'#1840EE';">#36346045/<span style="color:'#BDC8FA';">${
-          typeof params.data == "number" ? params.data : params.data.value
-        }s</span></div>`;
+        return `<div style="color:'#1840EE';">#${params.name}/<span style="color:'#BDC8FA';">${typeof params.data == "number" ? params.data / 1e3 : params.data.value / 1e3
+          }s</span></div>`;
       },
     },
+    series: {
+      data: timearr,
+      type: "bar",
+      barWidth: "8px",
+      itemStyle: {
+        // normal: {
+        //   color: "#DDE0E3",
+        // },
+        emphasis: {
+          color: "#1E42ED",
+        },
+      },
+    }
   };
-  // echarts.connect([chart1, chart2]);
-  element.setOption(option);
-  // chart2.setOption(option);
 
+  txOption = {
+    grid: {
+      left: "0",
+      right: "0",
+      bottom: "0",
+      top: "0",
+    },
+    xAxis: {
+      type: "category",
+      data: heightmsg,
+      show: false,
+      boundaryGap: true,
+      default:'auto',
+    },
+    yAxis: {
+      type: "value",
+      show: false,
+    },
+    color: "#DDE0E3",
+    tooltip: {
+      show: true,
+      trigger: "item",
+      position: "top",
+      backgroundColor: "transparent",
+      borderColor: "transparent",
+      padding: 0,
+      textStyle: {
+        color: "#5671F2",
+        fontStyle: "normal",
+        fontWeight: "normal",
+        fontSize: 12,
+      },
+      extraCssText: "box-shadow: 0 0 rgba(0, 0, 0, 0.3);",
+      formatter: function (params) {
+        return `<div style="color:'#1840EE';">#${params.name}/<span style="color:'#BDC8FA';">${typeof params.data == "number" ? params.data : params.data.value
+          } Txn</span></div>`;
+      },
+    },
+    series: {
+      data: txs,
+      type: "bar",
+      barWidth: "8px",
+      barMinHeight:'10',
+      itemStyle: {
+        // normal: {
+        //   color: "#DDE0E3",
+        // },
+        emphasis: {
+          color: "#1E42ED",
+        },
+      },
+    }
+  };
+
+
+  block.setOption(blockOption);
+  txcharts.setOption(txOption)
+  echarts.connect([block, txcharts]);
+
+  block.on('mouseover', function (event) {
+    if(txs[event.dataIndex].itemStyle) return
+    newdebounce(function () {
+      txs[event.dataIndex] = { value: txs[event.dataIndex], itemStyle: { color: '#1E42ED' } }
+      txcharts.setOption(txOption)
+    })
+
+    // console.log(newdebounce);
+  })
+  block.on('mouseout', function (event) {
+    if(!txs[event.dataIndex].itemStyle) return
+    newdebounce(function () {
+      txs[event.dataIndex] = txs[event.dataIndex].value
+      txcharts.setOption(txOption)
+    })
+  })
+  txcharts.on('mouseover', function (event) {
+    timearr[event.dataIndex] = { value: timearr[event.dataIndex], itemStyle: { color: '#1E42ED' } }
+    block.setOption(blockOption)
+  })
+  txcharts.on('mouseout', function (event) {
+    timearr[event.dataIndex] = timearr[event.dataIndex].value
+    block.setOption(blockOption)
+  })
 };
 
 //折现图

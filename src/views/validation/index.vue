@@ -103,7 +103,7 @@
             <el-table-column :label="languagePack.nodetext17" width="160">
               <template slot-scope="scope">
                 <div class="moniker">
-                  <img src="@/assets/img/bottom-bar_github.png" alt="" />
+                  <img src="@/assets/img/bottom-bar_logo.png" alt="" />
                   {{ scope.row.validator_name }}
                 </div>
               </template>
@@ -241,45 +241,6 @@ export default {
   },
   mounted() {},
   methods: {
-    // async queryAllValidation() {
-    //   const res = await allValidationNode();
-    //   console.log("获取所有验证节点信息", res);
-    //   let arr = [];
-    //   res.validators.forEach(async (item) => {
-    //     let {
-    //       description: { moniker },
-    //       status,
-    //       tokens,
-    //       jailed,
-    //       min_self_delegation,
-    //       operator_address,
-    //       commission,
-    //     } = item;
-
-    //     // let a = await validationEntrust(operator_address);
-    //     // let delegateCount = a.delegation_responses.length;
-    //     arr.push({
-    //       moniker,
-    //       status: status.split("_").pop(),
-    //       tokens,
-    //       jailed,
-    //       operator_address,
-    //       commission: commission.commission_rates.rate,
-    //       min_self_delegation,
-    //     });
-    //   });
-    //   this.nodeList = arr.sort((a, b) => b.tokens - a.tokens);
-    //   this.delegateCount();
-
-    //   this.activeNode = arr.filter((item) => item.status === "BONDED");
-    //   this.candidate = arr.filter((item) => item.status == "UNBONDING");
-
-    //   // console.log(this.nodeList);
-    //   setTimeout(() => {
-    //     this.newNodeList = JSON.parse(JSON.stringify(this.nodeList));
-    //     this.loading = false;
-    //   }, 3000);
-    // },
     async getList(limit, index) {
       const res = await getValidationList(limit, index);
       console.log("中心化节点列表", res);
@@ -323,14 +284,7 @@ export default {
       ).toFixed(2); //质押率
 
       console.log(pledge, issueNum);
-    },
-    delegateCount() {
-      this.nodeList.forEach(async (item) => {
-        const res = await validationEntrust(item.operator_address);
-        item.count = res.delegation_responses.length;
-        // console.log('委托数',res);
-      });
-    },
+    }
   },
   computed: {
     languagePack() {

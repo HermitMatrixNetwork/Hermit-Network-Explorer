@@ -71,10 +71,10 @@
             >{{ item }}</span
           >
         </div>
-        <div class="detail-table-body">
+        <div class="detail-table-body" :style="{minWidth:selectNav !== 0?'1000px':''}">
           <div class="basicMessage messageBasic" v-if="selectNav == 0">
             <div class="basicMessage-title">
-              <img src="@/assets/img/bottom-bar_github.png" alt="" />
+              <img src="@/assets/img/bottom-bar_logo.png" alt="" />
               <h3>{{ basic.validator_name }}</h3>
             </div>
 
@@ -444,6 +444,7 @@ export default {
     border: 1px solid #e9eaef;
     box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
     border-radius: 4px;
+    overflow: auto;
     &-header,
     &-bottom {
       height: 52px;
@@ -529,10 +530,12 @@ export default {
   }
 
   .basicMessage {
+    max-width: 100vw !important;
     > div {
       white-space: inherit;
     }
   }
+  
 }
 .statusStyle {
   display: flex;
