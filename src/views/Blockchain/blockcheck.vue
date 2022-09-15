@@ -18,6 +18,7 @@
           :current-page="page.currentPage + 1"
           @current-change="handleCurrentChange"
           layout="prev, pager, next"
+          :page-size="page.pageSize"
           :total="blockTotal"
           hide-on-single-page
         >
@@ -87,11 +88,14 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="coinbase"
           :label="languagePack.blocktext10"
           width="250px"
           align="right"
-        />
+        >
+        <template slot-scope="scope">
+          <div>{{ scope.row.coinbase/1e6}}</div>
+        </template>
+      </el-table-column>
       </el-table>
       <el-row type="flex" justify="end" align="middle" style="height: 60px">
         <el-pagination

@@ -27,16 +27,15 @@
         <div class="column-item">
           <BasicTitle :title="languagePack.nodetext06">
             <template #message>
-              <div class="messageBasic" style="height: 124px">
+              <div
+                class="messageBasic"
+                style="height: 124px; justify-content: flex-start"
+              >
                 <div class="column">
                   <p>{{ languagePack.nodetext07 }}：</p>
-                  <span>{{ pledgeMessage.pledgeNum | toMoney }} GHM</span>
+                  <span>{{ totalEntrust }} GHM</span>
                 </div>
-                <div class="column">
-                  <p>{{ languagePack.nodetext08 }}：</p>
-                  <span>{{ pledgeMessage.issueNum | toMoney }} GHM</span>
-                </div>
-                <div class="column">
+                <div class="column" style="margin: 16px 0">
                   <p>{{ languagePack.nodetext09 }}：</p>
                   <span> {{ pledgeMessage.Pledgerate }} %</span>
                 </div>
@@ -69,7 +68,7 @@
               v-model="searchValue"
               class="tableHeaderInput"
             >
-              <el-button slot="append" icon="el-icon-search"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="searchNode"></el-button>
             </el-input>
           </div>
 
@@ -88,7 +87,6 @@
             :row-style="{ height: '58px' }"
             :header-cell-class-name="'validationTableHeader'"
             :row-class-name="'tableRowStyle'"
-            @row-click="TableClick"
             v-loading="loading"
           >
             <el-table-column
@@ -107,7 +105,7 @@
             </el-table-column>
             <el-table-column :label="languagePack.nodetext18" width="180">
               <template slot-scope="scope">
-                <p class="specialFont">
+                <p class="specialFont" @click="TableClick(scope.row)">
                   {{ scope.row.operator_address | sliceAddress }}
                 </p>
               </template>
@@ -150,15 +148,13 @@
               align="right"
             >
               <template slot-scope="scope">
-                <div>{{ scope.row.delegate_tokens/1e6 }} GHM</div>
+                <div>{{ scope.row.delegate_tokens / 1e6 }} GHM</div>
               </template>
             </el-table-column>
 
             <el-table-column :label="languagePack.nodetext22" align="right">
               <template slot-scope="scope">
-                <p>
-                  {{ scope.row.delegate_reward_rate }} %
-                </p>
+                <p>{{ scope.row.delegate_reward_rate }} %</p>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext23" align="right">
@@ -220,7 +216,6 @@ export default {
         Pledgerate: 0,
       },
       nodeList: [],
-      newNodeList: [],
       activeNode: [], //活跃节点数
       candidate: [], //候选节点数
       page: {
@@ -242,7 +237,7 @@ export default {
       const res = await getValidationList(limit, index);
       console.log("中心化节点列表", res);
       let arr = res.data.list;
-      this.tableList = arr;
+      this.tableList = this.nodeList = arr;
       arr.forEach((e) => (e.status = e.status.split("_").pop()));
       this.activeNode = arr.filter((item) => item.status === "BONDED");
       this.candidate = arr.filter((item) => item.status === "UNBONDING");
@@ -254,14 +249,20 @@ export default {
       // console.log(`当前页: ${val}`);
     },
     navBtn(index) {
-      this.screenIndex = index;
-      if (index == 0)
-        return (this.newNodeList = JSON.parse(JSON.stringify(this.nodeList)));
-      this.newNodeList = this.nodeList.filter((item) => {
-        return index == 1
-          ? item.status == "BONDED"
-          : item.status == "UNBONDING";
-      });
+      this.screenIndex = index
+      switch (index) {
+        case 0:
+          this.tableList = this.nodeList
+          break;
+        case 1:
+          this.tableList = this.activeNode
+          break;
+        case 2:
+          this.tableList = this.candidate
+          break;
+        default:
+          break;
+      }
     },
 
     TableClick(val) {
@@ -269,7 +270,6 @@ export default {
         name: "node_detail",
         query: { address: val.operator_address },
       });
-      // console.log(val);
     },
     async queryPledge() {
       const pledge = await pledgeParameter(); //获取质押参数
@@ -281,11 +281,23 @@ export default {
       ).toFixed(2); //质押率
 
       console.log(pledge, issueNum);
+    },
+    searchNode(){
+      this.tableList = this.nodeList.filter(item=>{
+        return item.validator_name.includes(this.searchValue)
+      })
     }
   },
   computed: {
     languagePack() {
       return this.$store.state.Language;
+    },
+    totalEntrust() {
+      let num = 0;
+      this.tableList.forEach((item) => {
+        num += item.tokens;
+      });
+      return num / 1e6;
     },
   },
   watch: {
@@ -295,6 +307,9 @@ export default {
       } else {
         this.loading = false;
       }
+      setTimeout(()=>{
+        this.loading = false
+      },1500)
     },
   },
 };

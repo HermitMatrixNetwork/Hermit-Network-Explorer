@@ -52,8 +52,7 @@ export const blockBar = (element, data = []) => {
       },
       extraCssText: "box-shadow: 0 0 rgba(0, 0, 0, 0.3);",
       formatter: function (params) {
-        return `<div style="color:'#1840EE';">#${params.name}/<span style="color:'#BDC8FA';">${typeof params.data == "number" ? params.data / 1e3 : params.data.value / 1e3
-          }s</span></div>`;
+        return `<div style="color:'#1840EE';">#${params.name}/<span style="color:'#BDC8FA';">3s</span></div>`;
       },
     },
     series: {

@@ -14,7 +14,7 @@
           v-loading="loading"
         >
           <el-table-column
-            type="index"
+            prop="rank"
             :label="languagePack.toptext03"
             width="80px"
             align="center"
@@ -33,7 +33,7 @@
           <el-table-column prop="tag" :label="languagePack.toptext05" />
           <el-table-column :label="languagePack.toptext06" align="right">
             <template slot-scope="scope">
-              <div>{{ scope.row.balance | toMoney }} GHM</div>
+              <div>{{ scope.row.balance / 1e6 }} GHM</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -78,44 +78,43 @@ export default {
   data() {
     return {
       tableData: [],
+      allData:[],
       page: {
         pageSize: 10,
-        currentPage: 0,
+        currentPage: 1,
       },
       pagination: 0,
       loading: true,
     };
   },
   mounted() {
-    document.querySelector(".selected").style.color = "#1E42ED";
+    // document.querySelector(".selected").style.color = "#1E42ED";
   },
   created() {
     let { pageSize, currentPage } = this.page;
-    this.getData(pageSize, currentPage);
+    this.getData(0, 0);
   },
   methods: {
     handleSizeChange(val) {
-      let oul = document.querySelectorAll(".el-select-dropdown__list li");
-      oul.forEach((item) => (item.style.color = ""));
-      let oli = document.querySelector(".selected");
-      oli.style.color = "#606266";
-      document.querySelector(".hover").style.color = "#1E42ED";
-
-      this.tableData = [];
-      this.getData((this.page.pageSize = val), (this.page.currentPage = 0));
+      this.page.pageSize = val
+      this.tableData = this.allData.slice(0,val);
     },
 
     handleCurrentChange(index) {
       this.page.currentPage = index - 1;
       let { pageSize, currentPage } = this.page;
-      this.tableData = [];
-      this.getData(pageSize, currentPage);
+      this.tableData = this.allData.slice(currentPage*pageSize,currentPage*pageSize+pageSize);
+      // this.getData(pageSize, currentPage);
     },
 
     async getData(limit, index) {
       let { data } = await queryAccountList(limit, index);
       // console.log("顶级账户", data);
-      this.tableData = data.list;
+      this.allData = data.list
+      this.allData.forEach((item,index)=>{
+        item.rank = index + 1
+      })
+      this.tableData =  this.allData.slice(0,10);
       if (this.pagination == 0) return (this.pagination = data.total);
     },
 

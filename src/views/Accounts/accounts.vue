@@ -35,11 +35,14 @@
         v-loading="loading"
       >
         <el-table-column
-          type="index"
           :label="languagePack.accounttext09"
           width="80px"
           align="center"
-        />
+        >
+        <template slot-scope="scope">
+          <div>{{scope.row.rank}}</div>
+        </template>
+      </el-table-column>
         <el-table-column
           prop="address"
           :label="languagePack.accounttext10"
@@ -58,7 +61,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            <div>{{ scope.row.balance | toMoney }} GHM</div>
+            <div>{{ scope.row.balance/1e6 }} GHM</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -99,6 +102,7 @@ export default {
   data() {
     return {
       accountslist: [],
+      allData:[],
       amountnum: "",
       currentPage: 0,
       navIndex: 0,
@@ -106,14 +110,14 @@ export default {
       loading: true,
       pagination: 0,
       pageData: {
-        page: 0,
+        page: 1,
         pageSize: 10,
       },
     };
   },
   created() {
     const { page, pageSize } = this.pageData;
-    this.getaccounts(pageSize, page);
+    this.getaccounts(0, 0);
     this.amountNumber();
   },
   mounted() {
@@ -129,7 +133,9 @@ export default {
     async getaccounts(pageSize, page) {
       const res = await queryAccountList(pageSize, page);
       console.log("获取的数组", res.data.list);
-      this.accountslist = res.data.list;
+      this.allData = res.data.list
+      this.allData.forEach((item,index)=>item.rank = index+1)
+      this.accountslist = this.allData.slice(0,10)
       if (this.pagination == 0) return (this.pagination = res.data.total);
     },
     //获取uGHM的总的供应量
@@ -141,17 +147,24 @@ export default {
       this.$router.push({ path: "address_detail", query: { address } });
     },
     handleSizeChange(value) {
-      this.accountslist = [];
-      this.getaccounts(
-        (this.pageData.pageSize = value),
-        (this.pageData.page = 0)
-      );
+      // this.accountslist = [];
+      // this.getaccounts(
+      //   (this.pageData.pageSize = value),
+      //   (this.pageData.page = 0)
+      // );
+
+      this.pageData.pageSize = value
+      this.accountslist = this.allData.slice(0,value);
     },
     handleCurrentChange(val) {
+      // this.pageData.page = val - 1;
+      // let { pageSize, page } = this.pageData;
+      // this.accountslist = [];
+      // this.getaccounts(pageSize, page);
+
       this.pageData.page = val - 1;
       let { pageSize, page } = this.pageData;
-      this.accountslist = [];
-      this.getaccounts(pageSize, page);
+      this.accountslist = this.allData.slice(page*pageSize,page*pageSize+pageSize);
     },
     chartsChange(index) {
       this.navIndex = index;
@@ -220,14 +233,14 @@ export default {
     display: flex;
     justify-content: space-between;
     .navs {
-      font-weight: 500;
+      font-weight: bold;
       font-size: 12px;
       color: rgba(0, 0, 0, 0.65);
       line-height: 20px;
       > span {
         padding: 4px 8px;
         border: 1px solid #e9eaef;
-        cursor: pointer;
+        cursor: default;
         &:hover {
           color: #5671f2;
           border: 1px solid #5671f2;

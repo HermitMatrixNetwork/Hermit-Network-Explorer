@@ -25,7 +25,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取区块列表</span>
+                <div>获取区块列表</div>
               </div>
             </div>
           </template>
@@ -40,7 +40,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>通过区块高度获取区块详情</span>
+                <div>通过区块高度获取区块详情</div>
               </div>
             </div>
           </template>
@@ -55,7 +55,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取交易列表</span>
+                <div>获取交易列表</div>
               </div>
             </div>
           </template>
@@ -70,7 +70,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取交易列表</span>
+                <div>获取交易列表</div>
               </div>
             </div>
           </template>
@@ -85,7 +85,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取账号撤销委托的交易记录</span>
+                <div>获取账号撤销委托的交易记录</div>
               </div>
             </div>
           </template>
@@ -100,7 +100,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取合约的交易记录</span>
+                <div>获取合约的交易记录</div>
               </div>
             </div>
           </template>
@@ -115,7 +115,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取账号的交易记录</span>
+                <div>获取账号的交易记录</div>
               </div>
             </div>
           </template>
@@ -130,7 +130,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取top账号列表</span>
+                <div>获取top账号列表</div>
               </div>
             </div>
           </template>
@@ -145,7 +145,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取账号的详细信息</span>
+                <div>获取账号的详细信息</div>
               </div>
             </div>
           </template>
@@ -160,7 +160,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取合约列表</span>
+                <div>获取合约列表</div>
               </div>
             </div>
           </template>
@@ -175,7 +175,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取合约详细信息</span>
+                <div>获取合约详细信息</div>
               </div>
             </div>
           </template>
@@ -190,7 +190,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取节点详细信息</span>
+                <div>获取节点详细信息</div>
               </div>
             </div>
           </template>
@@ -205,7 +205,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取原生代币供应量</span>
+                <div>获取原生代币供应量</div>
               </div>
             </div>
           </template>
@@ -220,7 +220,7 @@
               </div>
               <div class="column">
                 <p>接口解释：</p>
-                <span>获取合约列表</span>
+                <div>获取合约列表</div>
               </div>
             </div>
           </template>
@@ -265,7 +265,6 @@ export default {};
 }
 
 .developApi {
-  height: 72px;
   font-weight: 400;
   font-size: 12px;
   color: rgba(20, 37, 62, 0.85);
@@ -276,6 +275,19 @@ export default {};
   p {
     height: 28px;
     line-height: 28px;
+  }
+  .column{
+    white-space:normal;
+    display: flex;
+    height: auto;    
+    >p{
+      flex-shrink: 0;
+      // padding: 0;
+    }
+    >div{
+      line-height: 28px;
+      padding: 4px 0;
+    }
   }
 }
 

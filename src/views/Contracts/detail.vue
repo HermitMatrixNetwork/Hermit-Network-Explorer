@@ -22,7 +22,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext14 }}：</p>
-              <span>{{contractData.contract_id}}</span>
+              <span>{{ contractData.contract_id }}</span>
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext20 }}：</p>
@@ -30,7 +30,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext15 }}：</p>
-              <span>0x9BF4001d307dFd62B26A2F1307ee0C0307632d59</span>
+              <!-- <span>0x9BF4001d307dFd62B26A2F1307ee0C0307632d59</span> -->
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext21 }}：</p>
@@ -38,9 +38,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext16 }}：</p>
-              <span
-                >FA824C4504F21FC59250DA0CDF549DD392FD862BAF2689D246A07B9E941F04A9</span
-              >
+              <!-- <span>FA824C4504F21FC59250DA0CDF549DD392FD862BAF2689D246A07B9E941F04A9</span> -->
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext22 }}：</p>
@@ -56,7 +54,8 @@
 
       <div class="contracts_table">
         <div class="contracts_table_title">
-          {{ languagePack.contracttext23 }} {{ languagePack.contracttext24 }}
+          {{ languagePack.contracttext23 }} {{ languagePack.contracttext24
+          }}<span> {{ txtotal }} </span>
         </div>
         <el-table
           height="612px"
@@ -73,13 +72,15 @@
             width="570"
           >
             <template slot-scope="scope">
-              <div class="specialFont" @click="toaddress(scope.row.sender)">{{ scope.row.sender }}</div>
+              <div class="specialFont" @click="toaddress(scope.row.sender)">
+                {{ scope.row.sender }}
+              </div>
             </template>
           </el-table-column>
           <el-table-column :label="languagePack.contracttext26" width="430">
             <template slot-scope="scope">
               <p>
-                {{ scope.row.timestamp | timeStamp}}
+                {{ scope.row.timestamp | timeStamp }}
               </p>
             </template>
           </el-table-column>
@@ -106,7 +107,9 @@
           </el-table-column>
           <el-table-column :label="'操作'" align="center">
             <template slot-scope="scope">
-              <div class="tableDetail" @click="tohash(scope.$index)">{{languagePack.contracttext28}}</div>
+              <div class="tableDetail" @click="tohash(scope.$index)">
+                {{ languagePack.contracttext28 }}
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -141,12 +144,12 @@ export default {
       pageSize: 10,
       page: 0,
       txtotal: 0,
-      hashList:[]
+      hashList: [],
     };
   },
   created() {
     this.queryContract();
-    this.queryTx(this.pageSize, this.page)
+    this.queryTx(this.pageSize, this.page);
   },
   methods: {
     async queryContract() {
@@ -160,10 +163,13 @@ export default {
       const txlist = await getContractTx(pageSize, page, address);
       console.log(txlist);
       this.tableList = txlist.data.list;
-      this.hashList = txlist.data.list.map(item=>{
-        return {hash:item._id,status:item.result}
-      })
-      if(this.txtotal !== 0) return
+      if (this.tableList) {
+        this.hashList = txlist.data.list.map((item) => {
+          return { hash: item._id, status: item.result };
+        });
+      }
+
+      if (this.txtotal !== 0) return;
       this.txtotal = txlist.data.total;
     },
     handleSizeChange(val) {
@@ -175,12 +181,15 @@ export default {
       this.tableList = [];
       this.queryTx(this.pageSize, this.page);
     },
-    tohash(index){
-      this.$router.push({name:'hash_detail',params:{hash:this.hashList,index}})
+    tohash(index) {
+      this.$router.push({
+        name: "hash_detail",
+        params: { hash: this.hashList, index },
+      });
     },
-    toaddress(address){
-      this.$router.push({path:'/address_detail',query:{address}})
-    }
+    toaddress(address) {
+      this.$router.push({ path: "/address_detail", query: { address } });
+    },
   },
   computed: {
     languagePack() {
@@ -274,21 +283,20 @@ export default {
   cursor: pointer;
 }
 
-
-@media screen and (max-width:598px) {
-  .PageStructure{
+@media screen and (max-width: 598px) {
+  .PageStructure {
     width: 100%;
   }
 
-  .contracts_table{
+  .contracts_table {
     width: 100%;
   }
 
-  .basicStyle{
+  .basicStyle {
     display: flex !important;
-    .column{
+    .column {
       width: 100%;
-      >p{
+      > p {
         width: auto;
       }
     }

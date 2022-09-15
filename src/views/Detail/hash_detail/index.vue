@@ -2,9 +2,9 @@
   <div>
     <div class="hashdetail">
       <div class="title">
-        <h3>{{ languagePack.tsxtext20 }}</h3>
-        <p class="specialFont">
-          {{ detailed.txhash }}
+        <h3>{{ languagePack.txstext20 }}</h3>
+        <p>
+          <span class="specialFont">{{ detailed.txhash }}</span>
         </p>
         <div class="nextBtn">
           <span
@@ -28,22 +28,34 @@
           <div class="messageBasic" style="height: 160px">
             <!-- 当该笔交易为合约执行时 -->
             <div class="column" v-if="dealType === 'MsgExecuteContract'">
-              <p>{{ languagePack.tsxtext22 }}：</p>
-              <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
+              <p>{{ languagePack.txstext22 }}：</p>
+              <span
+                class="specialFont"
+                @click="queryDealtoAddress(detailed.perform)"
+                >{{ detailed.perform }}</span
+              >
             </div>
             <div class="column" v-if="dealType === 'MsgExecuteContract'">
-              <p>{{ languagePack.tsxtext23 }}：</p>
-              <span>{{ detailed.contract }}</span>
+              <p>{{ languagePack.txstext23 }}：</p>
+              <span class="specialFont">{{ detailed.contract }}</span>
             </div>
 
             <!-- 当该笔交易为转账时 -->
             <div class="column" v-if="dealType === 'MsgSend'">
-              <p>{{ languagePack.tsxtext35 }}：</p>
-              <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
+              <p>{{ languagePack.txstext35 }}：</p>
+              <span
+                class="specialFont"
+                @click="queryDealtoAddress(detailed.perform)"
+                >{{ detailed.perform }}</span
+              >
             </div>
             <div class="column" v-if="dealType === 'MsgSend'">
-              <p>{{ languagePack.tsxtext36 }}：</p>
-              <span>{{ detailed.toaddress }}</span>
+              <p>{{ languagePack.txstext36 }}：</p>
+              <span
+                class="specialFont"
+                @click="queryDealtoAddress(detailed.toaddress)"
+                >{{ detailed.toaddress }}</span
+              >
             </div>
 
             <!-- 当该笔交易为领取奖励时 -->
@@ -51,28 +63,34 @@
               class="column"
               v-if="dealType === 'MsgWithdrawDelegatorReward'"
             >
-              <p>{{ languagePack.tsxtext41 }}：</p>
-              <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)">{{ detailed.delegator_address }}</span>
-            </div>
-
-            <div
-              class="column"
-              v-if="dealType === 'MsgWithdrawDelegatorReward'"
-            >
-              <p>{{ languagePack.tsxtext39 }}：</p>
-              <span>{{ detailed.turnover | toMoney }} GHM</span>
-            </div>
-
-            <div
-              class="column"
-              v-if="dealType === 'MsgWithdrawDelegatorReward'"
-            >
-              <p>{{ languagePack.tsxtext40 }}：</p>
+              <p>{{ languagePack.txstext41 }}：</p>
               <span
-                >从验证节点{{ detailed.validator_address }}领取奖励{{
-                  detailed.turnover | toMoney
-                }}
-                GHM</span
+                class="specialFont"
+                @click="queryDealtoAddress(detailed.delegator_address)"
+                >{{ detailed.delegator_address }}</span
+              >
+            </div>
+
+            <div
+              class="column"
+              v-if="dealType === 'MsgWithdrawDelegatorReward'"
+            >
+              <p>{{ languagePack.txstext39 }}：</p>
+              <span>{{ detailed.turnover/1e6}} GHM</span>
+            </div>
+
+            <div
+              class="column"
+              v-if="dealType === 'MsgWithdrawDelegatorReward'"
+            >
+              <p>{{ languagePack.txstext40 }}：</p>
+              <span
+                >从验证节点
+                <span
+                  class="specialFont"
+                  @click="queryDealtoNode(detailed.validator_address)"
+                  >{{ detailed.validator_address }} </span
+                >领取奖励{{ detailed.turnover/1e6}} GHM</span
               >
             </div>
 
@@ -83,8 +101,12 @@
                 dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'
               "
             >
-              <p>{{languagePack.tsxtext41}}：</p>
-              <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)">{{ detailed.delegator_address }}</span>
+              <p>{{ languagePack.txstext41 }}：</p>
+              <span
+                class="specialFont"
+                @click="queryDealtoAddress(detailed.delegator_address)"
+                >{{ detailed.delegator_address }}</span
+              >
             </div>
 
             <div
@@ -93,7 +115,7 @@
                 dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'
               "
             >
-              <p>{{languagePack.tsxtext42}}：</p>
+              <p>{{ languagePack.txstext42 }}：</p>
               <span>{{ detailed.validator_address }} </span>
             </div>
 
@@ -103,40 +125,50 @@
                 dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'
               "
             >
-              <p>{{languagePack.tsxtext43}}：</p>
-              <span>{{ detailed.turnover | toMoney }} GHM</span>
+              <p>{{ languagePack.txstext43 }}：</p>
+              <span
+                >{{ detailed.turnover ? detailed.turnover / 1e6 : 0 }} GHM</span
+              >
             </div>
 
             <!-- 当该笔交易为取消委托时 -->
             <div class="column" v-if="dealType === 'MsgUndelegate'">
-              <p>{{languagePack.tsxtext47}}：</p>
-              <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)">{{ detailed.delegator_address }}</span>
+              <p>{{ languagePack.txstext47 }}：</p>
+              <span
+                class="specialFont"
+                @click="queryDealtoAddress(detailed.delegator_address)"
+                >{{ detailed.delegator_address }}</span
+              >
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
-              <p>{{languagePack.tsxtext48}}：</p>
+              <p>{{ languagePack.txstext48 }}：</p>
               <span>{{ detailed.validator_address }} </span>
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
-              <p>{{languagePack.tsxtext49}}：</p>
+              <p>{{ languagePack.txstext49 }}：</p>
               <span>{{ detailed.turnover | toMoney }} GHM</span>
             </div>
 
             <!-- 当为实例化合约时 -->
             <div class="column" v-if="dealType === 'MsgInstantiateContract'">
-              <p>{{ languagePack.tsxtext22 }}：</p>
+              <p>{{ languagePack.txstext22 }}：</p>
               <span class="specialFont">{{ detailed.contract }}</span>
             </div>
             <div class="column" v-if="dealType === 'MsgInstantiateContract'">
-              <p>{{ languagePack.tsxtext23 }}：</p>
+              <p>{{ languagePack.txstext23 }}：</p>
               <span>{{ detailed.contract }}</span>
             </div>
 
             <!-- 当为上传合约时 -->
             <div class="column" v-if="dealType === 'MsgStoreCode'">
-              <p>{{ languagePack.tsxtext22 }}：</p>
-              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
+              <p>{{ languagePack.txstext22 }}：</p>
+              <span
+                class="specialFont"
+                @click="queryDealtoAddress(detailed.contract)"
+                >{{ detailed.contract }}</span
+              >
             </div>
             <div class="column" v-if="dealType === 'MsgStoreCode'">
               <p>构建：</p>
@@ -146,13 +178,16 @@
             <!-- 当为设置领奖地址时 -->
             <div class="column" v-if="dealType === 'MsgSetWithdrawAddress'">
               <p>质押地址：</p>
-              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
+              <span
+                class="specialFont"
+                @click="queryDealtoAddress(detailed.contract)"
+                >{{ detailed.contract }}</span
+              >
             </div>
             <div class="column" v-if="dealType === 'MsgSetWithdrawAddress'">
               <p>领奖地址：</p>
               <span>{{ detailed.perform }}</span>
             </div>
-
 
             <div
               class="column"
@@ -163,47 +198,60 @@
                 dealType !== 'MsgBeginRedelegate'
               "
             >
-              <p>{{ languagePack.tsxtext24 }}：</p>
-              <span>{{ detailed.turnover | toMoney }} GHM</span>
+              <p>{{ languagePack.txstext24 }}：</p>
+              <span
+                >{{ detailed.turnover ? detailed.turnover / 1e6 : 0 }} GHM</span
+              >
             </div>
             <div class="column">
-              <p>{{ languagePack.tsxtext25 }}：</p>
-              <span>{{ (detailed.poundage/1e6) }} GHM</span>
+              <p>{{ languagePack.txstext25 }}：</p>
+              <span>{{ detailed.poundage / 1e6 }} GHM</span>
             </div>
           </div>
         </template>
       </BasicTitle>
       <div style="height: 16px" />
-      <BasicTitle :title="languagePack.tsxtext27">
+      <BasicTitle :title="languagePack.txstext27">
         <template #message>
           <div class="messageBasic" style="height: 250px">
             <div class="column">
-              <p>{{ languagePack.tsxtext28 }}：</p>
+              <p>{{ languagePack.txstext28 }}：</p>
               <span
                 :style="{
-                  color: (TxStatus?TxStatus:QtxStatus) == 'success' ? '#55c499' : '#ED422B',
+                  color:
+                    (TxStatus ? TxStatus : QtxStatus) == 'success'
+                      ? '#55c499'
+                      : '#ED422B',
                 }"
-                >{{ (TxStatus?TxStatus:QtxStatus) == "success" ? languagePack.prompttext02 : languagePack.prompttext03 }}</span
+                >{{
+                  (TxStatus ? TxStatus : QtxStatus) == "success"
+                    ? languagePack.prompttext02
+                    : languagePack.prompttext03
+                }}</span
               >
             </div>
             <div class="column">
-              <p>{{ languagePack.tsxtext29 }}：</p>
+              <p>{{ languagePack.txstext29 }}：</p>
               <span>{{ detailed.txhash }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.tsxtext30 }}：</p>
-              <span>{{ detailed.timestamp | timeStamp }} +UTC</span>
+              <p>{{ languagePack.txstext30 }}：</p>
+              <span>{{ detailed.timestamp }} +UTC</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.tsxtext31 }}：</p>
-              <span class="specialFont" @click="queryDealtoBlock(detailed.height)">{{ detailed.height }}</span>
+              <p>{{ languagePack.txstext31 }}：</p>
+              <span
+                class="specialFont"
+                @click="queryDealtoBlock(detailed.height)"
+                >{{ detailed.height }}</span
+              >
             </div>
             <div class="column">
-              <p>{{ languagePack.tsxtext32 }}：</p>
+              <p>{{ languagePack.txstext32 }}：</p>
               <span>{{ detailed.gas_used }}</span>
             </div>
             <div class="column">
-              <p>{{ languagePack.tsxtext33 }}：</p>
+              <p>{{ languagePack.txstext33 }}：</p>
               <span>{{ detailed.gas_wanted }}</span>
             </div>
           </div>
@@ -220,21 +268,23 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      hashIndex: 0,
+      hashIndex: JSON.parse(sessionStorage.getItem("hashList")).index || 0,
       detailed: {},
       dealType: "",
       waitResult: false,
-      QtxStatus:'success',
+      QtxStatus: "success",
+      hashList: JSON.parse(sessionStorage.getItem("hashList")).hashList || [],
     };
   },
   created() {
-    console.log(this.$route);
-    this.hashIndex = this.$route.params.index;
-    const { hash, index } = this.$route.params;
-    this.queryData(hash, index);
+    if (this.$route.query.hash) {
+      console.log(this.$route.query.hash);
+      return this.queryData(JSON.parse(this.$route.query.hash));
+    }
+    this.queryData(this.hashList, this.hashIndex);
   },
   methods: {
-    async queryData(hash, index,status) {
+    async queryData(hash, index, status) {
       this.waitResult = true;
       let res;
       if (!Array.isArray(hash)) {
@@ -247,13 +297,21 @@ export default {
         this.waitResult = false;
       }
       const {
-        tx_response: { txhash, timestamp, height, gas_used, gas_wanted,events },
+        tx_response: {
+          txhash,
+          timestamp,
+          height,
+          gas_used,
+          gas_wanted,
+          events,
+          logs
+        },
         tx: { auth_info, body },
       } = res;
       let message = body.messages[0];
       //如果没有交易状态或者交易状态为undifind时通过events来判断交易状态
-      if(!this.TxStatus){
-        this.queryStatus(events)
+      if (!this.TxStatus) {
+        this.queryStatus(events);
       }
       this.dealType = message["@type"].split(".").pop();
       // console.log(auth_info,body);
@@ -273,6 +331,7 @@ export default {
         case "MsgWithdrawDelegatorReward":
           obj.delegator_address = message.delegator_address;
           obj.validator_address = message.validator_address;
+          obj.turnover = logs[0].events[0].attributes.pop().value.replace(/[a-zA-Z]/g,'')
           break;
         case "MsgDelegate":
           obj.delegator_address = message.delegator_address;
@@ -295,17 +354,17 @@ export default {
         case "MsgStoreCode":
           obj.contract = message.sender;
           obj.perform = message.builder;
-          break
-          case 'MsgSetWithdrawAddress':
-            obj.contract = message.delegator_address
-            obj.perform = message.withdraw_address
+          break;
+        case "MsgSetWithdrawAddress":
+          obj.contract = message.delegator_address;
+          obj.perform = message.withdraw_address;
         default:
           break;
       }
       this.detailed = {
         perform: "",
         txhash,
-        timestamp,
+        timestamp:timestamp.replace(/[A-Z]/g,' '),
         height,
         gas_used,
         gas_wanted,
@@ -316,70 +375,76 @@ export default {
 
     lastData() {
       if (this.hashIndex == 0) return;
-      this.hashIndex--;
+      sessionStorage.setItem(
+        "hashList",
+        JSON.stringify({ hashList: this.hashList, index: --this.hashIndex })
+      );
     },
     nextData() {
-      // this.$router.push({query:{hash:false}})
-      if (this.hashIndex == this.$route.params.hash.length - 1) return;
-      this.hashIndex++;
+      if (this.hashIndex == this.hashList.length - 1) return;
+      sessionStorage.setItem(
+        "hashList",
+        JSON.stringify({ hashList: this.hashList, index: ++this.hashIndex })
+      );
     },
-    queryStatus(arr){
-      let arr2 = arr.map(e=>{
-        return e.attributes.map(i=>{
-          return i.index
-        })
-      })
-      if(!arr2.flat().indexOf(false)){
-        this.QtxStatus = 'error'
+    queryStatus(arr) {
+      let arr2 = arr.map((e) => {
+        return e.attributes.map((i) => {
+          return i.index;
+        });
+      });
+      if (!arr2.flat().indexOf(false)) {
+        this.QtxStatus = "error";
       }
-    }
+    },
+    queryDealtoNode(val) {
+      this.$router.push({ name: "node_detail", query: { address: val } });
+    },
   },
   watch: {
     hashIndex(value) {
       // if(value)
       const { hash } = this.$route.params;
-      this.queryData(hash, value);
+      if (hash) {
+        this.queryData(hash, value);
+      } else {
+        this.queryData(this.hashList, value);
+      }
     },
-    '$route.query':{
-      handler(val){
-        this.queryData(val.hash)
+    "$route.query": {
+      handler(val) {
+        console.log("通过query");
+        this.queryData(JSON.parse(val.hash));
       },
-      deep:true
-    }
+      deep: true,
+    },
   },
   computed: {
     languagePack() {
       return this.$store.state.Language;
     },
-    Tx() {
-      let {hash} = this.$route.query
-      if(hash){
-        return hash
-      }
-      return this.$route.params.hash[this.hashIndex];
-    },
     TxTitle() {
       switch (this.dealType) {
         case "MsgUndelegate":
-          return this.languagePack.tsxtext46;
+          return this.languagePack.txstext46;
           break;
         case "MsgSend":
-          return this.languagePack.tsxtext34;
+          return this.languagePack.txstext34;
           break;
         case "MsgWithdrawDelegatorReward":
-          return this.languagePack.tsxtext37;
+          return this.languagePack.txstext37;
           break;
         case "MsgDelegate":
-          return this.languagePack.tsxtext38;
+          return this.languagePack.txstext38;
           break;
         case "MsgBeginRedelegate":
           return "重新委托";
           break;
         case "MsgExecuteContract":
-          return this.languagePack.tsxtext21;
+          return this.languagePack.txstext21;
           break;
         case "vote":
-          return this.languagePack.tsxtext50;
+          return this.languagePack.txstext50;
           break;
         case "MsgSetWithdrawAddress":
           return "设置领奖地址";
@@ -394,15 +459,18 @@ export default {
           break;
       }
     },
-    TxStatus(){
-      let {hash} = this.$route.params
-      if(Array.isArray(hash)){
-        return hash[this.hashIndex].status
-      }else{
-        return hash.status
-      }
-      
-    }
+    TxStatus() {
+      // let { hash } = this.$route.params;
+      // if (hash) {
+      //   if (Array.isArray(hash)) {
+      //     return hash[this.hashIndex].status;
+      //   } else {
+      //     return hash.status;
+      //   }
+      // } else {
+      return this.hashList[this.hashIndex].status;
+      // }
+    },
   },
 };
 </script>
@@ -442,19 +510,19 @@ export default {
 @media screen and (max-width: 598px) {
   .hashdetail {
     width: 100%;
-    .column{
+    .column {
       overflow: hidden;
       text-overflow: ellipsis;
-      >p{
+      > p {
         width: auto;
       }
     }
-    .title{
+    .title {
       padding-left: 16px;
-      h3{
+      h3 {
         padding: 0;
       }
-      p{
+      p {
         white-space: pre-wrap;
         height: auto;
         line-height: 1;

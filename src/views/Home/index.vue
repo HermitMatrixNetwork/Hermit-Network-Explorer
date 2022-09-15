@@ -2,11 +2,9 @@
   <div class="Home">
     <div id="setting_Image">
       <div class="content">
-        <SearchBox></SearchBox>
+        <SearchBox :currentHeight="basicData.blockHeight"></SearchBox>
         <div class="banner">
-          <a :href="banner.link" target="_blank"
-            ><img :src="banner.url" alt=""
-          /></a>
+          <a :href="banner.link" target="_blank"><img :src="banner.url" alt=""/></a>
         </div>
       </div>
     </div>
@@ -20,7 +18,7 @@
           <div class="explain">
             <p>{{ item.title }}</p>
             <h3>
-              ${{ item.price
+              {{ item.price
               }}<span
                 :style="{ color: item.updown > 0 ? '#f23c24' : '#55C499' }"
                 >{{ item.updown }}</span
@@ -52,20 +50,20 @@
 
         <div class="newest-data-item">
           <!--当前区块高度-->
-          <div @click="queryDealtoBlock(basicData.blockHeight)">
+          <div class="canClick">
             <p>{{ languagePack.hometext12 }}</p>
-            <span>{{ basicData.blockHeight }}</span>
+            <span @click="queryDealtoBlock(basicData.blockHeight)">{{ basicData.blockHeight }}</span>
           </div>
           <!--当前出块节点-->
-          <div @click="queryDealtoNode(basicData.latestNode.address)">
+          <div class="canClick">
             <p>{{ languagePack.hometext13 }}</p>
-            <span>{{ basicData.latestNode.moniker }}</span>
+            <span @click="queryDealtoNode(basicData.latestNode.address)">{{ basicData.latestNode.moniker }}</span>
           </div>
 
           <!--累计交易笔数-->
-          <div @click="toGo('/tsx')">
+          <div class="canClick">
             <p>{{ languagePack.hometext14 }}</p>
-            <span>{{ basicData.detailNum }}</span>
+            <span @click="toGo('/tsx')">{{ basicData.detailNum }}</span>
           </div>
 
           <!--10秒内平均TPS/瞬时最高TPS-->
@@ -90,8 +88,8 @@
               /{{ languagePack.hometext29 }}
             </p>
             <span>
-              {{ (basicData.circulation / 1e6).toFixed(2) + "M" }}/{{
-                (basicData.issueNum / 1e6).toFixed(2) + "M"
+              {{ (basicData.circulation / 1e6) + "M" }}/{{
+                (basicData.issueNum / 1e6) + "M"
               }}
             </span>
             <el-progress
@@ -189,7 +187,7 @@
               <div class="icon">Top{{ index + 1 }}</div>
               <div class="basic">
                 <p>{{ languagePack.hometext24 }}{{ index + 1 }}</p>
-                <p>{{ languagePack.hometext25 }}{{ item.tokens }}uGHM</p>
+                <p>{{ languagePack.hometext25 }}{{ item.tokens / 1e6}} GHM</p>
               </div>
               <div class="btnRate">
                 {{ item.commission.commission_rates.rate * 100 }}%
@@ -305,25 +303,25 @@ export default {
         }, //最新出块节点
         detailNum: total,
       };
-      // this.nodelist = [
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      //   ...nodelist.validators,
-      // ];
-      this.nodelist = validators;
+      this.nodelist = [
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+        ...validators,
+      ];
+      // this.nodelist = validators;
     },
     //实时出块区块
     async getnowBlockList() {
@@ -340,9 +338,7 @@ export default {
         blockBar(this.charts, echartList);
       }
     },
-    queryDealtoNode(val) {
-      this.$router.push({ name: "node_detail", query: { address: val } });
-    },
+    
     progressFormat(a, b) {
       let result = ((Number(a) / Number(b)) * 100).toFixed(2);
       if (!isNaN(result)) {
@@ -371,13 +367,13 @@ export default {
         {
           title: hometext08,
           price: this.tokenPrice,
-          updown: "-5.29",
+          updown: "",
           icon: require("@/assets/img/home_icon1.png"),
         },
         {
           title: hometext09,
-          price: "0.48",
-          updown: "+999.9",
+          price: "0.00",
+          updown: "",
           icon: require("@/assets/img/home_icon2.png"),
         },
       ];
@@ -498,7 +494,11 @@ export default {
       height: 180px;
       display: flex;
       flex-wrap: wrap;
-
+      .canClick{
+        >span{
+          cursor: pointer;
+        }
+      }
       div {
         height: 44px;
         width: 25%;
@@ -524,7 +524,6 @@ export default {
           font-size: 16px;
           color: rgba(20, 37, 62, 0.85);
           letter-spacing: 0;
-          cursor: pointer;
           transition: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
           &:hover {
             color: #1e42ed;
@@ -591,7 +590,7 @@ export default {
         width: 100%;
         position: absolute;
         bottom: 0;
-        z-index: 999;
+        z-index: 9;
         height: 56px;
         background: #ffffff;
         box-shadow: inset 0 1px 0 0 #e9eaef;

@@ -32,10 +32,10 @@ export default {
     queryDealtoHash(hash, index) {
       let path = this.$route.path
       if(path==='/hash_detail'){
-        this.$router.replace({ query: { hash},params:{...this.$store.params} }).catch(e => { })
+        this.$router.replace({ query: { hash:JSON.stringify(hash)}}).catch(e => { })
         return 
       }
-      this.$router.push({ name: 'hash_detail', params: { hash, index } }).catch(e => { })
+      this.$router.push({ name: 'hash_detail', query: { hash:JSON.stringify(hash) } }).catch(e => { })
     },
     queryDealtoAddress(address) {
       if(this.$route.path == '/hash_detail'){
@@ -107,7 +107,10 @@ export default {
         return this.$router.replace({ path: '/block_detail', query: { height } }).catch(e => { })
       }
       this.$router.push({ path: '/block_detail', query: { height } }).catch(e => { })
-    }
+    },
+    queryDealtoNode(val) {
+      this.$router.push({ name: "node_detail", query: { address: val } });
+    },
   },
   filters: {
     toMoney,

@@ -344,7 +344,7 @@ export default {
         { title: headertext12, command: "/b" },
         { title: headertext13, command: "/c" },
         { title: headertext14, command: "/d" },
-        { title: headertext15, command: "/e" },
+        { title: headertext15, command: "/compile" },
       ];
     },
     blocknavs() {

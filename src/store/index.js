@@ -5,7 +5,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         Language: {},
-        tokenPrice: 10,
+        tokenPrice: 0,
     },
     mutations: {
         CHANGE_LANGUAGE(state) {

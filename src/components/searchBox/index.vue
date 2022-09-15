@@ -34,6 +34,9 @@ export default {
     boxStyle: {
       type: Object,
     },
+    currentHeight: {
+      type: Number | String,
+    },
   },
   data() {
     return {
@@ -67,8 +70,6 @@ export default {
       if (this.select === 0) {
         this.filtersSearchValue(this.searchVal);
       }
-      console.log(1111111111);
-      console.log(this.select);
       let value = this.searchVal.replace(/\s+/g, "");
       switch (this.select * 1) {
         case 1:
@@ -80,15 +81,16 @@ export default {
           console.log(this.select);
           break;
         case 3:
-          console.log("通过hash搜索交易记录");
-          // this.queryDealtoAddress(this.searchVal);
+          // console.log("通过hash搜索交易记录");
           this.queryDealtoHash({
             hash: value,
             random: Math.floor(Math.random() * 10000),
           });
           break;
         case 4:
-          console.log("通过块搜索");
+          // console.log("通过块搜索");
+          if (value > this.currentHeight)
+            return this.messageBox("暂未出块", "error");
           this.queryDealtoBlock(value);
           break;
         default:
@@ -102,8 +104,10 @@ export default {
         this.select = 1;
       } else if (!isNaN(string)) {
         this.select = 4;
-      } else {
+      } else if (string.length === 64) {
         this.select = 3;
+      } else {
+        this.messageBox(this.languagePack.prompttext07,'error')
       }
     },
   },

@@ -12,7 +12,9 @@ let prompt = {
         'prompttext03':'fail',
         'prompttext04':'Successfully switched over',
         'prompttext05':'Transaction failure',
-        'prompttext06':'Input cannot be empty!'
+        'prompttext06':'Input cannot be empty!',
+        'prompttext07':'Search not found',
+        'prompttext08':'back home'
     },
     Cn:{
         'prompttext01':'暂未开放',
@@ -20,7 +22,9 @@ let prompt = {
         'prompttext03':'失败',
         'prompttext04':'切换成功',
         'prompttext05':'交易失败',
-        'prompttext06':'输入不能为空!'
+        'prompttext06':'输入不能为空!',
+        'prompttext07':'查询失败',
+        'prompttext08':'返回首页'
 
     },
     Ct:{
@@ -29,7 +33,10 @@ let prompt = {
         'prompttext03':'失敗',
         'prompttext04':'切換成功',
         'prompttext05':'交易失敗',
-        'prompttext06':'輸入不能為空!'
+        'prompttext06':'輸入不能為空!',
+        'prompttext07':'查询失败',
+        'prompttext08':'返回首页',
+
     }
 }
 

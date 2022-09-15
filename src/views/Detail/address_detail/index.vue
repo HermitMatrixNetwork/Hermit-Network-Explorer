@@ -26,11 +26,17 @@
               >
                 <div class="column">
                   <p>{{ languagePack.accounttext17 }}：</p>
-                  <span>$ 131321313132</span>
+                  <span>{{TotalBalance(account.balance,account.delegate_amount,account.withdraw_amount,account.unbonding)/1e6}} GHM</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext18 }}：</p>
-                  <span>$ {{($store.state.tokenPrice * account.balance) | toMoney}}</span>
+                  <span
+                    >$
+                    {{
+                      (($store.state.tokenPrice * account.balance) / 1e6)
+                        | toMoney
+                    }}</span
+                  >
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext20 }}：</p>
@@ -47,15 +53,20 @@
               <div class="messageBasic column-basic">
                 <div class="column">
                   <p>{{ languagePack.accounttext22 }}：</p>
-                  <span>{{ account.balance | toMoney }} GHM</span>
+                  <span>{{ account.balance / 1e6 }} GHM</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext23 }}：</p>
-                  <span>{{ account.delegate_amount | toMoney}} GHM</span>
+                  <span>{{ account.delegate_amount / 1e6 }} GHM</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext24 }}：</p>
-                  <span>{{ account.rewards }} GHM</span>
+                  <span
+                    >{{
+                      account.rewards !== "null" ? account.rewards : 0
+                    }}
+                    GHM</span
+                  >
                 </div>
 
                 <div class="column">
@@ -64,7 +75,7 @@
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext27 }}：</p>
-                  <span>0</span>
+                  <span>{{ account.unbonding / 1e6 }}</span>
                 </div>
               </div>
             </template>
@@ -110,9 +121,7 @@
                     <div class="popoverBox">
                       <div class="popoverBox_content">
                         <div class="popoverBox_title">
-                          {{
-                            languagePack.statussucceededfailedxxblocksconfirmed
-                          }}
+                          {{languagePack.txstext13}}
                         </div>
                         <div class="popStatus">
                           <div v-if="scope.row.result == 'success'">
@@ -193,15 +202,15 @@
                 <div class="specialFont">{{ scope.row.height }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="timestamp" :label="languagePack.accounttext32">
+            <el-table-column
+              prop="timestamp"
+              :label="languagePack.accounttext32"
+            >
               <template slot-scope="scope">
                 <div>{{ scope.row.timestamp | jetlag }}</div>
               </template>
             </el-table-column>
-            <el-table-column
-              :label="languagePack.accounttext33"
-              width="150px"
-            >
+            <el-table-column :label="languagePack.accounttext33" width="150px">
               <template slot-scope="scope">
                 <TableTooltip :content="scope.row.sender"></TableTooltip>
               </template>
@@ -233,14 +242,14 @@
             <el-table-column :label="languagePack.accounttext35">
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.tx_amount | toMoney
+                  {{ scope.row.tx_amount / 1e6
                   }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
                 </div>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.accounttext36">
               <template slot-scope="scope">
-                <div>{{ scope.row.fee | toMoney }}</div>
+                <div>{{ scope.row.fee / 1e6 }}</div>
               </template>
             </el-table-column>
           </el-table>
@@ -287,7 +296,6 @@ export default {
   created() {
     this.address = this.$route.query.address;
     this.getAccountMsg();
-    
 
     let { pageSize, currentPage } = this.page;
     this.getTxList(pageSize, currentPage);
@@ -326,10 +334,8 @@ export default {
     //查看交易详情
     queryTxDetail(index) {
       console.log(this.hashList, index);
-      this.$router.push({
-        name: "hash_detail",
-        params: { hash: this.hashList, index },
-      });
+      sessionStorage.setItem('hashList',JSON.stringify({hashList:this.hashList,index}))
+      this.$router.push({name: "hash_detail"});
     },
   },
   computed: {
@@ -343,6 +349,13 @@ export default {
         { title: this.languagePack.txstext16 + ":" },
       ];
     },
+    TotalBalance(){
+      return function(...args){
+        return args.reduce((a,b)=>{
+          return a+b
+        })
+      }
+    }
   },
   watch: {
     TxsList(value) {

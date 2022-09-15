@@ -24,9 +24,9 @@ export default {
     this.$store.commit("CHANGE_LANGUAGE", 123);
     // console.log(this.$route);
 
-    if(this.$route.path == '/hash_detail'){
-      this.$router.replace('/home')
-    }
+    // if(this.$route.path == '/hash_detail'){
+    //   this.$router.replace('/home')
+    // }
   },
   mounted() {},
   watch: {},

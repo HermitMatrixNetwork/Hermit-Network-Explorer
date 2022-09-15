@@ -81,13 +81,13 @@
                 ></el-input>
               </el-form-item>
 
-              <el-form-item :label="languagePack.applytext014+'：'" prop="alias_name">
+              <el-form-item :label="languagePack.applytext14+'：'" prop="alias_name">
                 <el-input
                   v-model="form.alias_name"
                   :placeholder="languagePack.applytext15"
                 ></el-input>
               </el-form-item>
-              <el-form-item :label="languagePack.applytext016+'：'" prop="total_supply">
+              <el-form-item :label="languagePack.applytext16+'：'" prop="total_supply">
                 <el-input
                   v-model="form.total_supply"
                   :placeholder="languagePack.applytext17"

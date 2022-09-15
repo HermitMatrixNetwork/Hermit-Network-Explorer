@@ -9,8 +9,8 @@
         justify="space-between"
       >
         <div>
-          总共寻获超过><span class="block_num">{{ totalNumber }}</span
-          >条交易{{ languagePack.txstext03 }}
+          {{languagePack.txstext02}}<span class="block_num">{{ totalNumber }}</span
+          >{{languagePack.txstext19}} ( {{ languagePack.txstext03 }} )
         </div>
         <el-pagination
           popper-class="popperSelect"
@@ -44,40 +44,37 @@
               >
                 <div class="popoverBox">
                   <div class="popoverBox_content">
-                    <div>
+                    <div style="height:28px;line-height:28px;">
                       {{ languagePack.txstext13 }}
                     </div>
                     <div class="popStatus">
                       <div v-if="scope.row.result == 'success'">
                         <img src="@/assets/img/deal_succeed@2x.png" /><span
-                          >成功</span
+                          >{{languagePack.prompttext02}}</span
                         ><span>(X个区块确认)</span>
                       </div>
                       <div v-else>
                         <img src="@/assets/img/deal_lose@2x.png" /><span
-                          >失败</span
+                          >{{languagePack.prompttext03}}</span
                         ><span>(X个区块确认)</span>
                       </div>
 
                       <el-divider></el-divider>
                     </div>
                     <div
-                      v-for="(item, index) in [
-                        ...statusTitle,
-                        { title: languagePack.txstext17 },
-                      ]"
+                      v-for="(item, index) in statusTitle"
                       :key="index"
                     >
-                      <div>{{ item.title }}</div>
+                      <div style="height:28px;line-height:28px;">{{ item.title }}</div>
                       <span v-show="index === 0"
-                        >{{ scope.row.fee | toMoney }} GHM ($0.00)</span
+                        >{{ scope.row.fee/1e6 }} GHM ($0.00)</span
                       >
                       <span v-show="index === 1"
                         >{{ scope.row.gas_wanted | toMoney }}Gas总量中实际消耗{{
                           scope.row.gas_used | toMoney
                         }}Gas<br />@0.0004GHM</span
                       >
-                      <span v-show="index === 2">{{ scope.row.sequence }}</span>
+                      <span v-show="index === 2">957820（位置154）</span>
 
                       <el-divider></el-divider>
                     </div>
@@ -86,11 +83,7 @@
                     查看详情
                   </div>
                 </div>
-                <img
-                  slot="reference"
-                  src="@/assets/img/table_eye_nor.png"
-                  style="vertical-align: middle"
-                />
+                <img slot="reference" src="@/assets/img/table_eye_nor.png" />
               </el-popover>
             </div>
           </template>
@@ -172,15 +165,15 @@
         </el-table-column>
         <el-table-column :label="languagePack.txstext10">
           <template slot-scope="scope">
-            <div>
-              {{ scope.row.tx_amount | toMoney
-              }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
+            <div v-if="!isNaN(scope.row.tx_amount)">
+              {{ scope.row.tx_amount / 1e6}} GHM
             </div>
+            <div v-else>-</div>
           </template>
         </el-table-column>
         <el-table-column :label="languagePack.txstext11">
           <template slot-scope="scope">
-            <div>{{ (scope.row.fee/10e6)}}</div>
+            <div>{{ (scope.row.fee/1e6)}}</div>
           </template>
         </el-table-column>
       </el-table>
@@ -235,13 +228,6 @@ export default {
       this.tableData = [];
       this.getData(pageSize, currentPage);
     },
-
-    showDetail() {
-      let obtn = document.querySelectorAll(".el-button");
-      // console.log('obtn', obtn);
-      // obtn.forEach(item => item.style.backgroundColor = '#fff')
-    },
-
     async getData(limit, index) {
       let { data } = await queryTxList(limit, index);
       console.log("交易", data);
@@ -260,11 +246,8 @@ export default {
     },
     queryTxDetail(index) {
       console.log(this.hashList, index);
-      this.$router.push({
-        name: "hash_detail",
-        params: { hash: this.hashList, index },
-      });
-      // console.log(index);
+      this.$router.push({name: "hash_detail"});
+      sessionStorage.setItem('hashList',JSON.stringify({hashList:this.hashList,index}))
     },
     toAddress(address) {
       this.$router.push({ path: "/address_detail", query: { address } });
@@ -281,7 +264,7 @@ export default {
       return [
         { title: this.languagePack.txstext11 + ":" },
         { title: this.languagePack.txstext15 + ":" },
-        { title: this.languagePack.txstext16 + ":" },
+        { title: this.languagePack.txstext17 + ":" },
       ];
     },
   },

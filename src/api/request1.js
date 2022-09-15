@@ -5,7 +5,7 @@ import router from '@/router'
 // 创建axios 实例
 const service = axios.create({
 	baseURL: '',
-	timeout: 100000, // 请求超时时间
+	timeout: 10000, // 请求超时时间
 	headers: {
 		'Content-Type': 'application/json;charset=UTF-8',
 	},
@@ -31,10 +31,10 @@ service.interceptors.response.use(
 		const res = response.data
 		if (res && res.code === 0) {
 			return res
-		} else {
+		} else if(res.code === 7){
 			router.replace('/error_detail')
-			Message.error(res.msg)
-			return Promise.reject(res.msg)
+			// Message.error('查询失败')
+			// return Promise.reject(res.msg)
 		}
 	},
 	(error) => {

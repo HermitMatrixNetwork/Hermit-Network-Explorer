@@ -1,14 +1,15 @@
 <template>
   <div>
     <div class="PageStructure">
-      <h3>Search not found</h3>
-      <button @click="toGo('/home')">back home</button>
+      <h3>{{languagePack.prompttext07}}</h3>
+      <button @click="toGo('/home')">{{languagePack.prompttext08}}</button>
     </div>
   </div>
 </template>
 
 <script>
 import mixins from "@/mixins";
+import {mapState} from 'vuex'
 export default {
   mixins: [mixins],
   data() {
@@ -18,7 +19,11 @@ export default {
   mounted() {
     
   },
-
+  computed:{
+    ...mapState({
+      languagePack:state=>state.Language
+    })
+  }
 };
 </script>
 

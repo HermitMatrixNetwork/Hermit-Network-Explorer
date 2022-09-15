@@ -13,11 +13,11 @@
               </div>
               <div class="column">
                 <p>{{ languagePack.nodetext28 }}:</p>
-                <span>{{(1 - basic.uptime)*100}}%</span>
+                <span>{{ (1 - basic.uptime) * 100 }}%</span>
               </div>
               <div class="column">
                 <p>{{ languagePack.nodetext29 }}:</p>
-                <span>{{(1 - basic.uptime)*100}}%</span>
+                <span>{{ (1 - basic.uptime) * 100 }}%</span>
               </div>
               <!-- 当前委托者数 -->
               <div class="column">
@@ -27,28 +27,28 @@
               <div class="column">
                 <!-- 累计系统奖励 -->
                 <p>{{ languagePack.nodetext31 }}:</p>
-                <span>{{ basic.total_system_reward | toMoney }} GHM</span>
+                <span>{{ basic.total_system_reward / 1e6 }} GHM</span>
               </div>
               <!-- 累计委托奖励 -->
               <div class="column">
                 <p>{{ languagePack.nodetext32 }}:</p>
-                <span>{{ basic.total_delegate_reward | toMoney }} GHM</span>
+                <span>{{ basic.total_delegate_reward / 1e6 }} GHM</span>
               </div>
               <div class="column">
                 <p>{{ languagePack.nodetext33 }} :</p>
-                <span>{{ basic.outstanding_reward | toMoney }} GHM</span>
+                <span>{{ basic.outstanding_reward / 1e6 }} GHM</span>
               </div>
               <div class="column">
                 <p>{{ languagePack.nodetext34 }}:</p>
-                <span>{{ basic.self_delegate_tokens | toMoney }} GHM</span>
+                <span>{{ basic.self_delegate_tokens / 1e6 }} GHM</span>
               </div>
               <div class="column">
                 <p>{{ languagePack.nodetext35 }}:</p>
-                <span>{{ basic.tokens | toMoney }} GHM</span>
+                <span>{{ basic.tokens / 1e6 }} GHM</span>
               </div>
               <div class="column">
                 <p>{{ languagePack.nodetext36 }}</p>
-                <span>{{ basic.delegate_tokens | toMoney }} GHM</span>
+                <span>{{ basic.delegate_tokens / 1e6 }} GHM</span>
               </div>
             </div>
           </template>
@@ -71,7 +71,10 @@
             >{{ item }}</span
           >
         </div>
-        <div class="detail-table-body" :style="{minWidth:selectNav !== 0?'1000px':''}">
+        <div
+          class="detail-table-body"
+          :style="{ minWidth: selectNav !== 0 ? '1000px' : '' }"
+        >
           <div class="basicMessage messageBasic" v-if="selectNav == 0">
             <div class="basicMessage-title">
               <img src="@/assets/img/bottom-bar_logo.png" alt="" />
@@ -119,6 +122,7 @@
             :header-cell-class-name="'tableHeaderCellStyle'"
             :row-class-name="'tableRowStyle'"
             :data="outblockTable"
+            v-loading="blockloading"
           >
             <el-table-column
               :label="languagePack.nodetext37"
@@ -136,7 +140,7 @@
             </el-table-column>
             <el-table-column :label="languagePack.nodetext38" align="left">
               <template slot-scope="scope">
-                <div>{{ scope.row.timestamp | timeStamp }}</div>
+                <div>{{ scope.row.timestamp.split(".")[0] }} UTC</div>
               </template>
             </el-table-column>
             <el-table-column
@@ -148,7 +152,7 @@
             </el-table-column>
             <el-table-column :label="languagePack.nodetext40" align="right">
               <template slot-scope="scope">
-                <div>{{ scope.row.coinbase }}</div>
+                <div>{{ scope.row.coinbase / 1e6 }}</div>
               </template>
             </el-table-column>
           </el-table>
@@ -178,20 +182,20 @@
             <el-table-column :label="languagePack.nodetext51" align="right">
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.amount | toMoney }} ({{
-                    (scope.row.amount / basic.tokens).toFixed(2)
+                  {{ scope.row.amount / 1e6 }} ({{
+                    ((scope.row.amount / basic.tokens) * 100).toFixed(2)
                   }}%)
                 </div>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext52" align="right">
               <template slot-scope="scope">
-                <div>{{ scope.row.amount | toMoney }}</div>
+                <div>{{ scope.row.amount / 1e6 }}</div>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext53" align="right">
               <template slot-scope="scope">
-                <div>{{ scope.row.redeem | toMoney }}</div>
+                <div>{{ scope.row.redeem ? scope.row.redeem / 1e6 : 0 }}</div>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext54" align="right">
@@ -204,7 +208,7 @@
                   "
                 >
                   <div class="Txstatus" :style="{ background: '#55C499' }" />
-                  success
+                  {{ languagePack.prompttext02 }}
                 </div>
               </template>
             </el-table-column>
@@ -218,7 +222,8 @@
             :row-style="{ height: '58px' }"
             :header-cell-class-name="'tableHeaderCellStyle'"
             :row-class-name="'tableRowStyle'"
-            :data="rewardTable"
+            :data="rewardTable.list"
+            v-loading="rewardloading"
           >
             <el-table-column
               :label="languagePack.nodetext56"
@@ -245,12 +250,14 @@
             </el-table-column>
             <el-table-column :label="languagePack.nodetext58">
               <template slot-scope="scope">
-                <p>{{ scope.row.timestamp | timeStamp }}</p>
+                <p>{{ scope.row.timestamp.replace(/[A-Z]/g, " ") }} UTC</p>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext59" align="right">
               <template slot-scope="scope">
-                <div>{{ scope.row.tx_amount }}</div>
+                <div>
+                  {{ scope.row.tx_amount !== "null" ? scope.row.tx_amount : 0 }}
+                </div>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext54" width="168">
@@ -266,23 +273,39 @@
                         scope.row.result == 'success' ? '#55C499' : '#ED422B',
                     }"
                   />
-                  {{ scope.row.result == "success" ? "成功" : "失败" }}
+                  {{
+                    scope.row.result == "success"
+                      ? languagePack.prompttext02
+                      : languagePack.prompttext03
+                  }}
                 </div>
               </template>
             </el-table-column>
           </el-table>
         </div>
         <div class="detail-table-bottom" v-if="selectNav !== 0">
-          <!-- <el-pagination
+          <el-pagination
+            v-if="selectNav === 1"
             small
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
+            @size-change="blockSizeChange"
+            @current-change="blockCurrentChange"
+            :current-page="page.currentPage+1"
             :page-sizes="[10, 25, 50]"
-            :page-size="pageSize"
+            :page-size="10"
             layout="prev, pager, next, sizes"
-            :total="pagination"
-          ></el-pagination> -->
+            :total="5000"
+          ></el-pagination>
+          <el-pagination
+            v-if="selectNav === 3"
+            small
+            @size-change="rewardSizeChange"
+            @current-change="rewardCurrentChange"
+            :current-page="rewardPage.currentPage+1"
+            :page-sizes="[10, 25, 50]"
+            :page-size="10"
+            layout="prev, pager, next, sizes"
+            :total="rewardTable.total"
+          ></el-pagination>
         </div>
       </div>
     </div>
@@ -312,8 +335,17 @@ export default {
       },
       outblockTable: [],
       delegationTable: [],
-      rewardTable: [],
+      rewardTable: {
+        list: [],
+        total: 0,
+      },
       hashList: [],
+      blockloading: false,
+      rewardloading: false,
+      rewardPage: {
+        pageSize: 10,
+        currentPage: 0,
+      },
     };
   },
   created() {
@@ -349,7 +381,7 @@ export default {
       //处理数组并赋值
       this.delegaTion(res[1].delegation_responses);
       this.outblockTable = res[2].data.list;
-      this.rewardTable = res[3].data.list;
+      this.rewardTable = res[3].data;
       if (Array.isArray(res[3].data.list)) {
         this.hashList = res[3].data.list.map((item) => {
           return { hash: item._id, type: item.type, status: item.result };
@@ -382,10 +414,53 @@ export default {
     },
     queryTxDetail(index) {
       console.log(this.hashList, index);
-      this.$router.replace({
-        name: "hash_detail",
-        params: { hash: this.hashList, index },
-      });
+      sessionStorage.setItem(
+        "hashList",
+        JSON.stringify({ hashList: this.hashList, index })
+      );
+      this.$router.replace({ name: "hash_detail" });
+    },
+    async blockSizeChange(value) {
+      this.blockloading = true;
+      this.page.pageSize = value;
+      let { pageSize, currentPage } = this.page;
+      let {
+        data: { list },
+      } = await getNodeblockList(pageSize, 0, this.address);
+      this.outblockTable = list;
+      setTimeout(() => (this.blockloading = false));
+    },
+    async blockCurrentChange(value) {
+      this.blockloading = true;
+      this.page.currentPage = value - 1;
+      let { pageSize, currentPage } = this.page;
+      let {
+        data: { list },
+      } = await getNodeblockList(pageSize, currentPage, this.address);
+      this.outblockTable = list;
+      setTimeout(() => (this.blockloading = false));
+    },
+
+    async rewardSizeChange(value) {
+      this.rewardloading = true;
+      this.rewardPage.pageSize = value;
+      let { pageSize, currentPage } = this.rewardPage;
+      let {
+        data: { list },
+      } = await getNodeRewardList(pageSize, 0, this.address);
+      this.rewardTable.list = list;
+      setTimeout(() => (this.rewardloading = false),500);
+    },
+    async rewardCurrentChange(value) {
+      this.rewardloading = true;
+      
+      this.rewardPage.currentPage = value - 1;
+      let { pageSize, currentPage } = this.rewardPage;
+      let {
+        data: { list },
+      } = await getNodeRewardList(pageSize, currentPage, this.address);
+      this.rewardTable.list = list;
+      setTimeout(() => (this.rewardloading = false),500);
     },
   },
   computed: {
@@ -491,6 +566,11 @@ export default {
         color: #5671f2;
       }
     }
+    &-bottom {
+      display: flex;
+      justify-content: end;
+      align-items: center;
+    }
   }
 }
 
@@ -535,7 +615,6 @@ export default {
       white-space: inherit;
     }
   }
-  
 }
 .statusStyle {
   display: flex;

@@ -163,13 +163,16 @@ link:'Read more about the governance implications of the <span>transfer subspace
   .governBox {
     width: 100%;
     display: flex;
-    flex-direction: column;
+    // flex-direction: column;
+    flex-wrap: wrap;
     justify-content: space-between;
 
     &-item {
       position: relative;
-      width: 100%;
-      min-width: 1200px;
+      // width: 100%;
+      width: 33%;
+      overflow: auto;
+      // min-width: 1200px;
       height: auto;
       background: #ffffff;
       border: 1px solid #e9eaef;

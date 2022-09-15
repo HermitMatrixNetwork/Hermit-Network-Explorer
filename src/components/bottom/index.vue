@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="record">Hermit Matrix Network © 2022 (HGM)</div>
+    <div class="record">Hermit Matrix Network © 2022 (GHM)</div>
   </footer>
 </template>
 

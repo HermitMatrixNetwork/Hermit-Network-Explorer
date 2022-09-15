@@ -25,7 +25,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext17 }}：</p>
-              <span>{{ blockData.parent_hash }}</span>
+              <span style="color:#5671F2;cursor: pointer;" @click="nextData(-1)">{{ blockData.parent_hash }}</span>
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext14 }}：</p>
@@ -33,7 +33,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext18 }}：</p>
-              <span>{{ blockData.proposer_address }}</span>
+              <span style="color:#5671F2;cursor: pointer;" @click="queryDealtoNode(blockData.validator)">{{ blockData.proposer_address }}</span>
             </div>
 
             <div class="column">
@@ -42,7 +42,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext19 }}：</p>
-              <span>{{ blockData.gas_used }}</span>
+              <span>{{ blockData.gas_used }}<span style="color:#14253E45" v-if="blockData.gas_total"> ({{(blockData.gas_used/blockData.gas_total*100).toFixed(2)}} %)</span></span>
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext16 }}：</p>
@@ -65,6 +65,7 @@
           size="mini"
           :header-cell-class-name="'tableHeaderCellStyle'"
           :row-class-name="'tableRowStyle'"
+          :row-style="{ height: '58px !important' }"
           v-loading="loading"
         >
           <el-table-column :label="languagePack.blocktext22">
@@ -101,7 +102,7 @@
           </el-table-column>
           <el-table-column :label="languagePack.blocktext24">
             <template slot-scope="scope">
-              <div class="specialFont">{{ scope.row.height }}</div>
+              <div>{{ scope.row.height }}</div>
             </template>
           </el-table-column>
           <el-table-column prop="timestamp" :label="languagePack.blocktext25">
@@ -148,7 +149,7 @@
           <el-table-column :label="languagePack.blocktext28">
             <template slot-scope="scope">
               <div>
-                {{ scope.row.tx_amount | toMoney
+                {{ scope.row.tx_amount /1e6
                 }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
               </div>
             </template>
@@ -170,7 +171,6 @@
           :page-size="10"
           layout="prev, pager, next, sizes"
           :total="tableData ? tableData.length : 0"
-          hide-on-single-page
         >
         </el-pagination>
       </el-row>
@@ -211,9 +211,6 @@ export default {
 
       if (!res.data.block) {
         this.messageBox("暂未出块", "error");
-        setTimeout(() => {
-          this.$router.replace("/home");
-        });
         return false;
       }
       this.blockData = res.data.block;
