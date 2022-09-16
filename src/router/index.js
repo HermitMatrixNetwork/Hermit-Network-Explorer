@@ -56,7 +56,7 @@ const routes = [
     path: '/accounts',
     component: Accounts,
     meta: {
-      keepAlive: true,
+      keepAlive: false,
       ID: 4
     }
   },

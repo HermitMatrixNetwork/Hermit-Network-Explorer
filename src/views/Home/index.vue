@@ -2,7 +2,11 @@
   <div class="Home">
     <div id="setting_Image">
       <div class="content">
-        <SearchBox :currentHeight="basicData.blockHeight"></SearchBox>
+        <div class="leftContent">
+          <div class="bannerPrompt">区块浏览器</div>
+          <SearchBox :currentHeight="basicData.blockHeight"></SearchBox>
+          <a href="http://www.baidu.com" target="_blank" class="link">活动：此处可插入广告语进行引导 跳转按钮 跳转网页</a>
+        </div>
         <div class="banner">
           <a :href="banner.link" target="_blank"><img :src="banner.url" alt=""/></a>
         </div>
@@ -52,12 +56,16 @@
           <!--当前区块高度-->
           <div class="canClick">
             <p>{{ languagePack.hometext12 }}</p>
-            <span @click="queryDealtoBlock(basicData.blockHeight)">{{ basicData.blockHeight }}</span>
+            <span @click="queryDealtoBlock(basicData.blockHeight)">{{
+              basicData.blockHeight
+            }}</span>
           </div>
           <!--当前出块节点-->
           <div class="canClick">
             <p>{{ languagePack.hometext13 }}</p>
-            <span @click="queryDealtoNode(basicData.latestNode.address)">{{ basicData.latestNode.moniker }}</span>
+            <span @click="queryDealtoNode(basicData.latestNode.address)">{{
+              basicData.latestNode.moniker
+            }}</span>
           </div>
 
           <!--累计交易笔数-->
@@ -88,8 +96,8 @@
               /{{ languagePack.hometext29 }}
             </p>
             <span>
-              {{ (basicData.circulation / 1e6) + "M" }}/{{
-                (basicData.issueNum / 1e6) + "M"
+              {{ basicData.circulation / 1e6 + "M" }}/{{
+                basicData.issueNum / 1e6 + "M"
               }}
             </span>
             <el-progress
@@ -112,7 +120,7 @@
             >
             <el-progress
               :percentage="
-                progressFormat(basicData.Pledgerate, basicData.issueNum)
+                progressFormat(basicData.pledgeNum, basicData.issueNum)
               "
               :stroke-width="8"
               color="#1E42EDFF"
@@ -187,7 +195,7 @@
               <div class="icon">Top{{ index + 1 }}</div>
               <div class="basic">
                 <p>{{ languagePack.hometext24 }}{{ index + 1 }}</p>
-                <p>{{ languagePack.hometext25 }}{{ item.tokens / 1e6}} GHM</p>
+                <p>{{ languagePack.hometext25 }}{{ item.tokens / 1e6 }} GHM</p>
               </div>
               <div class="btnRate">
                 {{ item.commission.commission_rates.rate * 100 }}%
@@ -216,6 +224,7 @@ import {
   pledgeParameter,
   totalCirculation,
   querylatestNodeMessage,
+  pledgeTotal,
   getbanner,
 } from "@/api/home.js";
 import { queryBlockList, queryTxList } from "@/api/blockchain.js";
@@ -229,6 +238,7 @@ export default {
     return {
       select: "1",
       timer: "",
+      time2: "",
       TPS: "",
       lastUpdate: 0,
       percenTage: 0,
@@ -282,46 +292,29 @@ export default {
       const res = await allAdresQuantity(); //总地址数
       const { supply } = await totalCirculation(); //获取总发行量
       const {
-        params: { historical_entries },
-      } = await pledgeParameter(); //获取质押参数
+        pool: { bonded_tokens },
+      } = await pledgeTotal(); //获取质押参数
       const { validators } = await allValidationNode();
-      console.log("节点", await querylatestNodeMessage());
+      // console.log("节点", await querylatestNodeMessage());
       const {
         data: { total },
       } = await queryTxList(10, 1); //获取交易数量
-
+      let newValidatoes = validators.reverse();
       this.basicData = {
         ...this.basicData,
         totalNum: res.pagination.total, //总地址数量
         issueNum: supply[0].amount, //总发行量
-        pledgeNum: historical_entries, //质押参数
-        circulation: supply[0].amount - historical_entries, //流通量 = 总发行量 - 质押量
-        Pledgerate: (historical_entries / supply[0].amount).toFixed(2), //质押率
+        pledgeNum: bonded_tokens, //质押参数
+        circulation: supply[0].amount - bonded_tokens, //流通量 = 总发行量 - 质押量
+        Pledgerate: ((bonded_tokens / supply[0].amount) * 100).toFixed(2), //质押率
         latestNode: {
-          moniker: validators[0].description.moniker,
-          address: validators[0].operator_address,
+          moniker: newValidatoes[0].description.moniker,
+          address: newValidatoes[0].operator_address,
         }, //最新出块节点
         detailNum: total,
       };
-      this.nodelist = [
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-        ...validators,
-      ];
-      // this.nodelist = validators;
+
+      this.nodelist = newValidatoes;
     },
     //实时出块区块
     async getnowBlockList() {
@@ -338,7 +331,7 @@ export default {
         blockBar(this.charts, echartList);
       }
     },
-    
+
     progressFormat(a, b) {
       let result = ((Number(a) / Number(b)) * 100).toFixed(2);
       if (!isNaN(result)) {
@@ -347,14 +340,32 @@ export default {
         return 1;
       }
     },
+
+    async updateNode() {
+      const { validators } = await allValidationNode();
+      const {
+        data: { total },
+      } = await queryTxList(10, 1); //获取交易数量
+      let newValidators = validators.reverse();
+      this.basicData.detailNum = total;
+      this.basicData.latestNode = {
+        moniker: newValidators[0].description.moniker,
+        address: newValidators[0].operator_address,
+      };
+      this.nodelist = newValidators;
+    },
   },
   activated() {
     this.timer = setInterval(() => {
       this.lastUpdate++;
     }, 1000);
+    this.time2 = setInterval(() => {
+      this.getBlockMsg();
+    }, 10000);
   },
   deactivated() {
     clearInterval(this.timer);
+    clearInterval(this.time2);
   },
   computed: {
     ...mapState({
@@ -416,6 +427,21 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .bannerPrompt {
+      height: 28px;
+      font-weight: 600;
+      font-size: 20px;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+    .link {
+      height: 17px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.85);
+      margin-top: 16px;
+      display: block;
+      cursor: pointer;
+    }
   }
   .banner {
     width: 300px;
@@ -460,7 +486,7 @@ export default {
           font-weight: 400;
           font-size: 12px;
           color: rgba(20, 37, 62, 0.45);
-          letter-spacing: 0;
+          white-space: nowrap;
         }
         h3 {
           height: 29px;
@@ -494,8 +520,8 @@ export default {
       height: 180px;
       display: flex;
       flex-wrap: wrap;
-      .canClick{
-        >span{
+      .canClick {
+        > span {
           cursor: pointer;
         }
       }

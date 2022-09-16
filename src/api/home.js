@@ -15,6 +15,15 @@ export function pledgeParameter() {      //质押参数  实时质押信息
     })
 }
 
+//总的质押参数
+export function pledgeTotal(){ 
+    return Service({
+        url:'/cosmos/staking/v1beta1/pool',
+        method:'GET'
+    })
+}
+
+
 export function totalCirculation() {     //总发行量
     return Service({
         url: '/cosmos/bank/v1beta1/supply',

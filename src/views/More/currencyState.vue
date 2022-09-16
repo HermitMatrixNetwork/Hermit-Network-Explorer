@@ -134,6 +134,7 @@
 <script>
 import axios from "axios";
 import mixins from "@/mixins";
+import {sumbitToken} from '@/api/api.js'
 export default {
   mixins:[mixins],
   data() {
@@ -293,10 +294,9 @@ export default {
         official,
         order: 1,
       };
-      const {data} = await axios.post(" http://localhost:8080/upload/apply/apply",{...params});
-      console.log('提交结果',data);
-      if(data.code === 7){
-        this.messageBox(data.msg,'error')
+      const {code,msg} = await sumbitToken(params)
+      if(code === 7){
+        this.messageBox(msg,'error')
       }else{
         this.messageBox('提交成功','success')
       }

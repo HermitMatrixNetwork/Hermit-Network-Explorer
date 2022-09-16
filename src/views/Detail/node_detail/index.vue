@@ -121,7 +121,7 @@
             :row-style="{ height: '58px' }"
             :header-cell-class-name="'tableHeaderCellStyle'"
             :row-class-name="'tableRowStyle'"
-            :data="outblockTable"
+            :data="outblockTable.list"
             v-loading="blockloading"
           >
             <el-table-column
@@ -293,7 +293,7 @@
             :page-sizes="[10, 25, 50]"
             :page-size="10"
             layout="prev, pager, next, sizes"
-            :total="5000"
+            :total="outblockTable.total>5000?5000:outblockTable.total"
           ></el-pagination>
           <el-pagination
             v-if="selectNav === 3"
@@ -333,7 +333,7 @@ export default {
         pageSize: 10,
         currentPage: 0,
       },
-      outblockTable: [],
+      outblockTable: {},
       delegationTable: [],
       rewardTable: {
         list: [],
@@ -380,7 +380,7 @@ export default {
       this.basic = res[0].data;
       //处理数组并赋值
       this.delegaTion(res[1].delegation_responses);
-      this.outblockTable = res[2].data.list;
+      this.outblockTable = res[2].data;
       this.rewardTable = res[3].data;
       if (Array.isArray(res[3].data.list)) {
         this.hashList = res[3].data.list.map((item) => {
@@ -552,6 +552,7 @@ export default {
         padding: 4px 8px;
         border: 1px solid rgba(0, 0, 0, 0.15);
         border-right: 0;
+        white-space: nowrap;
         cursor: pointer;
         &:nth-child(1) {
           border-radius: 2px 0 0 2px;

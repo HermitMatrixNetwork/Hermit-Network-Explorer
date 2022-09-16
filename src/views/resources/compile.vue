@@ -39,6 +39,7 @@ export default {};
       font-size: 14px;
       color: rgba(20, 37, 62, 0.85);
       line-height: 22px;
+      text-align: left;
     }
   }
 }

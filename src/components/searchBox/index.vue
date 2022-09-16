@@ -28,6 +28,9 @@
 
 <script>
 import mixin from "@/mixins";
+import { queryAccountInfo } from "@/api/account.js";
+import { getHashContent } from "@/api/api.js";
+import { queryBlockdetails } from "@/api/blockchain.js";
 export default {
   mixins: [mixin],
   props: {
@@ -61,7 +64,7 @@ export default {
     },
   },
   methods: {
-    searchBtn() {
+    async searchBtn() {
       if (!this.searchVal.trim()) {
         this.messageBox(this.languagePack.prompttext06);
         this.searchVal = "";
@@ -73,29 +76,38 @@ export default {
       let value = this.searchVal.replace(/\s+/g, "");
       switch (this.select * 1) {
         case 1:
-          console.log("通过地址搜索");
-          this.queryDealtoAddress(value);
+          if (!value.includes("ghm1")) {
+            break;
+          }
+          var result = await queryAccountInfo(value);
+          if (result.code === 0) return this.queryDealtoAddress(value);
           break;
         case 2:
-          console.log("通过token搜索");
           console.log(this.select);
           break;
         case 3:
-          // console.log("通过hash搜索交易记录");
-          this.queryDealtoHash({
-            hash: value,
-            random: Math.floor(Math.random() * 10000),
-          });
+          if (value.length !== 64) break;
+          var {
+            tx_response: { code },
+          } = await getHashContent(value);
+          if (code === 0) {
+            return this.queryDealtoHash({
+              hash: value,
+              random: Math.floor(Math.random() * 10000),
+            });
+          }
           break;
         case 4:
-          // console.log("通过块搜索");
-          if (value > this.currentHeight)
-            return this.messageBox("暂未出块", "error");
-          this.queryDealtoBlock(value);
+          if (isNaN(value)) break;
+          var {
+            data: { block },
+          } = await queryBlockdetails(Number(value));
+          if (block) return this.queryDealtoBlock(value);
           break;
         default:
           break;
       }
+      this.messageBox(this.languagePack.prompttext07, "error");
       this.searchVal = "";
     },
     filtersSearchValue(string) {
@@ -107,7 +119,6 @@ export default {
       } else if (string.length === 64) {
         this.select = 3;
       } else {
-        this.messageBox(this.languagePack.prompttext07,'error')
       }
     },
   },

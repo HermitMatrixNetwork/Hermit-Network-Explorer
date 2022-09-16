@@ -10,7 +10,7 @@
               <div class="messageBasic" style="height: 124px">
                 <div class="column">
                   <p>{{ languagePack.nodetext03 }}：</p>
-                  <span>{{ tableList.length }}</span>
+                  <span>{{ nodeList.length }}</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.nodetext04 }}：</p>
@@ -37,7 +37,9 @@
                 </div>
                 <div class="column" style="margin: 16px 0">
                   <p>{{ languagePack.nodetext09 }}：</p>
-                  <span> {{ pledgeMessage.Pledgerate }} %</span>
+                  <span>
+                    {{ (totalEntrust / pledgeMessage.issueNum) * 100 }} %</span
+                  >
                 </div>
               </div>
             </template>
@@ -68,7 +70,11 @@
               v-model="searchValue"
               class="tableHeaderInput"
             >
-              <el-button slot="append" icon="el-icon-search" @click="searchNode"></el-button>
+              <el-button
+                slot="append"
+                icon="el-icon-search"
+                @click="searchNode"
+              ></el-button>
             </el-input>
           </div>
 
@@ -148,7 +154,7 @@
               align="right"
             >
               <template slot-scope="scope">
-                <div>{{ scope.row.delegate_tokens / 1e6 }} GHM</div>
+                <div>{{ scope.row.tokens / 1e6 }} GHM</div>
               </template>
             </el-table-column>
 
@@ -197,7 +203,6 @@
 </template>
 
 <script>
-import { allValidationNode, validationEntrust } from "@/api/api.js";
 import { pledgeParameter, totalCirculation } from "@/api/home.js";
 import { getValidationList } from "@/api/validation.js";
 import mixin from "@/mixins";
@@ -249,16 +254,16 @@ export default {
       // console.log(`当前页: ${val}`);
     },
     navBtn(index) {
-      this.screenIndex = index
+      this.screenIndex = index;
       switch (index) {
         case 0:
-          this.tableList = this.nodeList
+          this.tableList = this.nodeList;
           break;
         case 1:
-          this.tableList = this.activeNode
+          this.tableList = this.activeNode;
           break;
         case 2:
-          this.tableList = this.candidate
+          this.tableList = this.candidate;
           break;
         default:
           break;
@@ -274,19 +279,32 @@ export default {
     async queryPledge() {
       const pledge = await pledgeParameter(); //获取质押参数
       const issueNum = await totalCirculation(); //获取总发行量
-      this.pledgeMessage.issueNum = issueNum.supply[0].amount;
+      this.pledgeMessage.issueNum = issueNum.supply[0].amount / 1e6;
       this.pledgeMessage.pledgeNum = pledge.params.historical_entries; //质押参数
       this.pledgeMessage.Pledgerate = (
         this.pledgeMessage.pledgeNum / this.pledgeMessage.issueNum
       ).toFixed(2); //质押率
 
-      console.log(pledge, issueNum);
+      console.log("获取质押参数", pledge, "获取总发行量", issueNum);
     },
-    searchNode(){
-      this.tableList = this.nodeList.filter(item=>{
-        return item.validator_name.includes(this.searchValue)
-      })
-    }
+    searchNode() {
+      if (this.screenIndex === 0) {
+        this.tableList = this.nodeList.filter((item) => {
+          return item.validator_name.includes(this.searchValue);
+        });
+      }
+      if (this.screenIndex === 1) {
+        this.tableList = this.activeNode.filter((item) => {
+          return item.validator_name.includes(this.searchValue);
+        });
+      }
+      if (this.screenIndex === 2) {
+        this.tableList = this.candidate.filter((item) => {
+          return item.validator_name.includes(this.searchValue);
+        });
+      }
+      
+    },
   },
   computed: {
     languagePack() {
@@ -307,9 +325,9 @@ export default {
       } else {
         this.loading = false;
       }
-      setTimeout(()=>{
-        this.loading = false
-      },1500)
+      setTimeout(() => {
+        this.loading = false;
+      }, 1500);
     },
   },
 };

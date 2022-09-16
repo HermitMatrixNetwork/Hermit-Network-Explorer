@@ -134,5 +134,12 @@ export function queryAccountList(limit, index) {
     })
 }
 
-
+//提交上币申请
+export function sumbitToken(data){
+    return service1({
+        url:'/upload/apply/apply',
+        method:'POST',
+        data
+    })
+}
 

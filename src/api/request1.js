@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { Loading, Message } from 'element-ui'
 import { http1 } from './index'
-import router from '@/router'
 // 创建axios 实例
 const service = axios.create({
 	baseURL: '',
@@ -27,15 +26,7 @@ service.interceptors.request.use(
 // response 拦截器
 service.interceptors.response.use(
 	(response) => {
-		// loading.closeLoading()
-		const res = response.data
-		if (res && res.code === 0) {
-			return res
-		} else if(res.code === 7){
-			router.replace('/error_detail')
-			// Message.error('查询失败')
-			// return Promise.reject(res.msg)
-		}
+		return response.data
 	},
 	(error) => {
 		console.log(error)

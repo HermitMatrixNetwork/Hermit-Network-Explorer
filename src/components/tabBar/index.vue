@@ -300,6 +300,10 @@ export default {
       this.messageBox(this.languagePack.prompttext04, "success");
     },
     blockCommand(command) {
+      if (command === "/whitebook")
+        return window.open(
+          "http://158.247.237.78:8888/uploads/file/098f6bcd4621d373cade4e832627b4f6_20220915065306.pdf"
+        );
       this.toGo(command);
     },
     onMenu() {
@@ -339,7 +343,7 @@ export default {
         headertext15,
       } = this.languagePack;
       return [
-        { title: headertext10, command: "/a" },
+        { title: headertext10, command: "/whitebook" },
         { title: headertext11, command: "/developapi", divided: true },
         { title: headertext12, command: "/b" },
         { title: headertext13, command: "/c" },
@@ -504,7 +508,7 @@ export default {
         height: 60px !important;
       }
     }
-    .placeholderTab{
+    .placeholderTab {
       display: block !important;
       height: 60px;
     }

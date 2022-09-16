@@ -39,6 +39,23 @@ let prompt = {
 
     }
 }
+let time = {
+    En:{
+        'timetext01':'s ago',
+        'timetext02':'m ago',
+        'timetext03':'h ago',
+        'timetext04':'day ago',
+    },
+    Cn:{
+        'timetext01':'秒前',
+        'timetext02':'分前',
+        'timetext03':'时前',
+        'timetext04':'天前',
+    },
+    Ct:{
+
+    }
+}
 
 export const Language = [
     //English
@@ -60,7 +77,8 @@ export const Language = [
 
         /* 更多 */
         ...moreEn,
-        ...prompt.En
+        ...prompt.En,
+        ...time.En
     },
     //中文简体
     {
@@ -81,7 +99,9 @@ export const Language = [
 
          /* 更多 */
          ...moreCn,
-        ...prompt.Cn
+        ...prompt.Cn,
+        ...time.Cn
+
 
     },
     //中文繁体

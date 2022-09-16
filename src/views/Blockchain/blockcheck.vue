@@ -46,7 +46,7 @@
         </el-table-column>
         <el-table-column :label="languagePack.blocktext05" width="150px">
           <template slot-scope="scope">
-            <div>{{ scope.row.timestamp | jetlag }}</div>
+            <div>{{ TimeStamp(scope.row.timestamp) }}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -207,10 +207,11 @@ export default {
         if(isNaN(use/total)){
           return 0
         }else{
-          return ((use/total)*100).toFixed(2)
+          return ((use/total)*100).toFixed(2) * 1
         }
       }
-    }
+    },
+    
   },
 };
 </script>

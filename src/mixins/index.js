@@ -119,9 +119,26 @@ export default {
     jetlag
   },
   computed:{
-    // languagePack(){
-    //   return this.$store.state.Language
-    // }
+    languagePack(){
+      return this.$store.state.Language
+    },
+    TimeStamp(){
+      return function(value){
+        var nowTime = Date.parse(new Date())
+        var oldTime = Date.parse(new Date(value))
+        var times = (nowTime-oldTime)/1000
+        if(times<60){
+          return `${times}${this.languagePack.timetext01}`
+        }else if(times>60&&times<3600){
+          return Math.trunc(times/60) + this.languagePack.timetext02
+        }else if(times>3600&&times<(3600*24)){
+          return Math.trunc(times/3600) + this.languagePack.timetext03
+        }else if(times>(3600*24)){
+          return Math.trunc(times/(3600*24)) + this.languagePack.timetext04
+        }
+        
+      }
+    }
   }
 };
 
