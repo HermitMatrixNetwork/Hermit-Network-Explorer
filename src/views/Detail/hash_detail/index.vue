@@ -134,16 +134,12 @@
             <!-- 当该笔交易为取消委托时 -->
             <div class="column" v-if="dealType === 'MsgUndelegate'">
               <p>{{ languagePack.txstext47 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoAddress(detailed.delegator_address)"
-                >{{ detailed.delegator_address }}</span
-              >
+              <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)" >{{ detailed.delegator_address }}</span>
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
               <p>{{ languagePack.txstext48 }}：</p>
-              <span>{{ detailed.validator_address }} </span>
+              <span class="specialFont" @click="queryDealtoNode(detailed.validator_address)">{{ detailed.validator_address }} </span>
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
@@ -186,7 +182,7 @@
             </div>
             <div class="column" v-if="dealType === 'MsgSetWithdrawAddress'">
               <p>领奖地址：</p>
-              <span>{{ detailed.perform }}</span>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
             </div>
 
             <div

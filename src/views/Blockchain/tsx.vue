@@ -80,7 +80,7 @@
                     </div>
                   </div>
                   <div class="detailBox" @click="queryTxDetail(scope.$index)">
-                    查看详情
+                    {{languagePack.prompttext10}}
                   </div>
                 </div>
                 <img slot="reference" src="@/assets/img/table_eye_nor.png" />
@@ -112,7 +112,7 @@
         </el-table-column>
         <el-table-column
           :label="languagePack.txstext05"
-          width="100px"
+          width="110px"
           align="center"
         >
           <template slot-scope="scope">
@@ -126,9 +126,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="timestamp" :label="languagePack.txstext07">
+        <el-table-column :label="languagePack.txstext07">
           <template slot-scope="scope">
-            <div>{{ scope.row.timestamp | jetlag }}</div>
+            <div>{{ TimeStamp(scope.row.timestamp) }}</div>
           </template>
         </el-table-column>
         <el-table-column :label="languagePack.txstext08" width="150px">

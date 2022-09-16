@@ -66,8 +66,8 @@
           width="228px"
         >
           <template slot-scope="scope">
-            <p style="line-height:16px;color: #14253E;">{{scope.row.gas_used | toMoney}}
-                <span style="color:#14253E45"> ( {{percentage(scope.row.gas_used,scope.row.gas_total)}} %)</span>            
+            <p style="line-height:16px;color: #86909C;">{{scope.row.gas_used | toMoney}}
+                <span style="color:#86909C45"> ( {{percentage(scope.row.gas_used,scope.row.gas_total)}} %)</span>            
             </p>
             <el-progress
               :percentage="percentage(scope.row.gas_used,scope.row.gas_total)"
@@ -129,7 +129,6 @@ export default {
         pageSize: 50,
         currentPage: 0,
       },
-      percenTage: 1,
       loading: true,
       timer: "",
     };
@@ -143,22 +142,6 @@ export default {
     // document.querySelector(".selected").style.color = "#1E42ED";
   },
   methods: {
-    // 指定进度条文字内容
-    format(val, val2) {
-      let num = Number(val);
-      let num2 = Number(val2);
-      let result = ((num / num2) * 100).toFixed(2);
-      if (result && result !== "NaN") {
-        this.percenTage = Number(result);
-        return () => {
-          return `${num} (${result})%`;
-        };
-      } else {
-        return () => {
-          return "0%";
-        };
-      }
-    },
     // 获取区块数据
     async getBlockData(limit, index) {
       let { data } = await queryBlockList(limit, index);
@@ -207,7 +190,7 @@ export default {
         if(isNaN(use/total)){
           return 0
         }else{
-          return ((use/total)*100).toFixed(2) * 1
+          return Number(((use/total)*100).toFixed(2))
         }
       }
     },

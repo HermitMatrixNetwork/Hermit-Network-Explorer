@@ -66,7 +66,7 @@ export default {
   methods: {
     submit() {
       if (!window.keplr) {
-        return this.messageBox("请使用chrome浏览器安装Kpler进行操作!", "error");
+        return this.messageBox(this.languagePack.RPCtext11, "error");
       }
       keplr.enable(this.chainId);
 
@@ -108,7 +108,7 @@ export default {
       height: 34px;
       font-weight: 400;
       font-size: 12px;
-      color: rgba(20, 37, 62, 0.45);
+      color: #86909C;
     }
   }
 }

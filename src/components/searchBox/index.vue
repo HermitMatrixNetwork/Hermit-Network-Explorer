@@ -184,7 +184,7 @@ export default {
   .el-scrollbar {
     .el-select-dropdown__list {
       .el-select-dropdown__item {
-        color: rgba(20, 37, 62, 0.45) !important;
+        color: #86909C !important;
         height: 40px;
         line-height: 40px;
         &:hover {

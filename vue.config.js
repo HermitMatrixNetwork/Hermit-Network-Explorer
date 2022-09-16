@@ -35,6 +35,7 @@ module.exports = defineConfig({
       }
     }
   },
+  publicPath:'./',
   devServer: {
     port:8888,
     open:true,
@@ -43,14 +44,15 @@ module.exports = defineConfig({
       '/api': {
         target: 'http://158.247.237.78:8181',
         pathRewrite: { '^/api': '' },
-        logLevel: "debug"
+        logLevel: "debug",
         // ws: true,
-        // changeOrigin: true
+        changeOrigin: true
       },
       '/upload':{
         target:'http://158.247.237.78:8888',
         pathRewrite: {'^/upload':''},
-        logLevel:'debug'
+        logLevel:'debug',
+        changeOrigin: true
       },
     }
   }

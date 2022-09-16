@@ -219,7 +219,7 @@ export default {
           height: 17px;
           font-weight: 400;
           font-size: 12px;
-          color: rgba(20, 37, 62, 0.45);
+          color: #86909C;
           letter-spacing: 0;
         }
         h3 {

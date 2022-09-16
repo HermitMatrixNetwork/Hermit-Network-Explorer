@@ -42,7 +42,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext19 }}：</p>
-              <span>{{ blockData.gas_used }}<span style="color:#14253E45" v-if="blockData.gas_total"> ({{(blockData.gas_used/blockData.gas_total*100).toFixed(2)}} %)</span></span>
+              <span>{{ blockData.gas_used }}<span style="color:#86909C45" v-if="blockData.gas_total"> ({{(blockData.gas_used/blockData.gas_total*100).toFixed(2)}} %)</span></span>
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext16 }}：</p>
@@ -79,7 +79,7 @@
                   })
                 "
               >
-                <el-tooltip effect="dark" content="交易失败" placement="top">
+                <el-tooltip effect="dark" :content="languagePack.prompttext05" placement="top">
                   <img
                     src="@/assets/img/table_mistake.png"
                     v-if="scope.row.result === 'error'"
@@ -93,7 +93,7 @@
           <el-table-column
             prop="operationType"
             :label="languagePack.blocktext23"
-            width="100px"
+            width="110px"
             align="center"
           >
             <template slot-scope="scope">

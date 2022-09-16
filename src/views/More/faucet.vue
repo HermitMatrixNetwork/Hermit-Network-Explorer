@@ -66,7 +66,7 @@ export default {
     border-radius: 2px;
     outline: none;
     font-size: 12px;
-    color: #14253E;
+    color: #86909C;
     line-height: 20px;
     text-indent: 8px;
     margin: 40px 0;

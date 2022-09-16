@@ -1,27 +1,27 @@
 let header = {
     En: {
         'headertext01': 'Home',
-        'headertext02': 'blockchain',
+        'headertext02': 'Blockchain',
         'headertext03': 'Top Accounts',
-        'headertext04': 'view transactions',
-        'headertext05': 'view block',
-        'headertext06': 'contract',
-        'headertext07': 'account',
+        'headertext04': 'View transactions',
+        'headertext05': 'View block',
+        'headertext06': 'Contract',
+        'headertext07': 'Account',
         'headertext08': 'Validators',
         'headertext09': 'Resources',
         'headertext10': 'Whitepaper',
-        'headertext11': 'developer api',
+        'headertext11': 'Developer api',
         'headertext12': 'SDK download',
         'headertext13': 'Tendermint',
         'headertext14': 'IBC',
-        'headertext15': 'contract compiler',
-        'headertext16': 'more',
+        'headertext15': 'Contract compiler',
+        'headertext16': 'More',
         'headertext17': 'Governable Parameter',
         'headertext18': 'DAO fundation address',
         'headertext19': 'Submit Applicattion',
         'headertext20': 'RPC information',
         'headertext21': 'faucet',
-        'headertext22': 'log in',
+        'headertext22': 'Login',
         'headertext23': 'Main Net',
         'headertext24': 'Test Net',
     },
@@ -109,7 +109,10 @@ let obj = {
         'hometext27': 'Rank x',
         'hometext28': 'All Validators',
         'hometext29': 'Total Supply',
-        'hometext30': '',
+        'hometext30': `The amount of Token in the hands of the public circulating in real time in the market. 
+        Real-time circulation supply = total circulation-Token of locked positions. Where the Token of the 
+        locked warehouse is the Token of all locked positions, including the current delegate or the Token 
+        in the locked state during the binding unlocking period.`,
     },
     Cn: {
         'hometext01': '隐士区块浏览器',
@@ -141,7 +144,9 @@ let obj = {
         'hometext27': ' 排名x',
         'hometext28': '查看所有验证节点',
         'hometext29': '总发行量',
-        'hometext30': '',
+        'hometext30': `在市场上实时流通的、公众手中的Token数量。
+        实时流通供应量 = 总发行量 - 锁仓的Token 
+        其中，锁仓的Token为所有锁仓状态的Token，包含当前委托或处于绑定解锁期的锁仓状态的Token。`,
     },
     Ct: {
         'hometext01': '隱士區塊瀏覽器',
@@ -173,7 +178,9 @@ let obj = {
         'hometext27': ' 排名x',
         'hometext28': '查看所有驗證節點',
         'hometext29': '總發行量',
-        'hometext30': '',
+        'hometext30': `在市场上实时流通的、公众手中的Token数量。
+        实时流通供应量 = 总发行量 - 锁仓的Token 
+        其中，锁仓的Token为所有锁仓状态的Token，包含当前委托或处于绑定解锁期的锁仓状态的Token。`,
     }
 }
 

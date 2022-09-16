@@ -73,11 +73,11 @@
         <div style="width: 1px; height: 24px; background: #f0f0f0" />
 
         <div class="langage hidden-sm-and-down">
-          <div @click="messageBox('暂未开放')">
+          <div @click="messageBox(languagePack.prompttext01)">
             {{ languagePack.headertext22 }}
           </div>
           <img
-            @click="messageBox('暂未开放')"
+            @click="messageBox(languagePack.prompttext01)"
             src="../../assets/img/earths.png"
             alt=""
           />
@@ -289,7 +289,8 @@ export default {
   created() {
     this.lang = localStorage.getItem("language") || 0;
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     LanguageChange(val) {
       if (this.lang === val) return;
@@ -300,10 +301,10 @@ export default {
       this.messageBox(this.languagePack.prompttext04, "success");
     },
     blockCommand(command) {
-      if (command === "/whitebook")
-        return window.open(
-          "http://158.247.237.78:8888/uploads/file/098f6bcd4621d373cade4e832627b4f6_20220915065306.pdf"
-        );
+      if (command === "/whitebook") {
+        window.open(window.location.origin+"/whitepaper.html");
+        return;
+      }
       this.toGo(command);
     },
     onMenu() {
@@ -374,7 +375,7 @@ export default {
   position: relative;
   width: 100%;
   font-size: 14px;
-  color: rgba(20, 37, 62, 0.45);
+  color: #86909C;
   box-shadow: inset 0 -1px 0 0 #e9eaef;
   z-index: 3333;
 }
@@ -428,10 +429,10 @@ export default {
     overflow: hidden;
     cursor: pointer;
     text-align: center;
-    color: rgba(20, 37, 62, 0.45);
+    color: #86909C;
   }
   .el-dropdown-link {
-    color: rgba(20, 37, 62, 0.45);
+    color: #86909C;
     cursor: pointer;
   }
 }
@@ -492,7 +493,7 @@ export default {
 
 @media screen and (max-width: 598px) {
   .tabBar {
-    z-index: 1;
+    z-index: 12;
     .centerStyle {
       position: fixed;
       background: #ffffff;
@@ -537,7 +538,7 @@ export default {
   width: 174px !important;
   white-space: nowrap;
   .el-dropdown-menu__item {
-    color: rgba(20, 37, 62, 0.45) !important;
+    color: #86909C !important;
     line-height: 40px !important;
     &:hover {
       background: #ecefff !important;
@@ -552,7 +553,7 @@ export default {
 .el-dropdown {
   &:hover {
     .el-icon-arrow-down {
-      transform: rotate(180deg);
+      // transform: rotate(180deg);
     }
   }
   .el-dropdown-link {

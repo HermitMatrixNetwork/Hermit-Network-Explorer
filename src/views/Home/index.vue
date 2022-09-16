@@ -3,7 +3,7 @@
     <div id="setting_Image">
       <div class="content">
         <div class="leftContent">
-          <div class="bannerPrompt">区块浏览器</div>
+          <div class="bannerPrompt">{{languagePack.hometext01}}</div>
           <SearchBox :currentHeight="basicData.blockHeight"></SearchBox>
           <a href="http://www.baidu.com" target="_blank" class="link">活动：此处可插入广告语进行引导 跳转按钮 跳转网页</a>
         </div>
@@ -85,9 +85,8 @@
             <p>
               {{ languagePack.hometext16 }}
               <el-tooltip
-                class="item"
                 effect="dark"
-                :content="circulateTooltip"
+                :content="languagePack.hometext30"
                 placement="top-start"
                 popper-class="circulateTooltipStyle"
               >
@@ -96,8 +95,8 @@
               /{{ languagePack.hometext29 }}
             </p>
             <span>
-              {{ basicData.circulation / 1e6 + "M" }}/{{
-                basicData.issueNum / 1e6 + "M"
+              {{ basicData.circulation / 1e12 + "M" }}/{{
+                basicData.issueNum / 1e12 + "M"
               }}
             </span>
             <el-progress
@@ -115,7 +114,7 @@
             <p>{{ languagePack.hometext17 }}</p>
             <span
               >{{ basicData.Pledgerate }}% /{{
-                (basicData.issueNum / 1e6).toFixed(2) + "M"
+                (basicData.issueNum / 1e12) + "M"
               }}</span
             >
             <el-progress
@@ -154,7 +153,7 @@
                   }}</span>
                   <span
                     style="color: rgba(20, 37, 62, 0.85); padding-left: 24px"
-                    >{{ languagePack.hometext20 }}</span
+                    >{{ languagePack.hometext20 }} </span
                   >
                   <span @click="queryDealtoNode(item.validator)">{{
                     item.proposer_address | sliceAddress
@@ -253,10 +252,6 @@ export default {
         issueNum: "",
         pledgeNum: "",
       },
-      circulateTooltip: `在市场上实时流通的、公众手中的Token数量。实时
-                        流通供应量 = 总发行量 - 锁仓的Token 其中，锁
-                        仓的Token为所有锁仓状态的Token，包含当前委托
-                        或处于绑定解锁期的锁仓状态的Token。`,
       blockList: [],
       banner: {},
       chartsAnimation: true,
@@ -306,7 +301,7 @@ export default {
         issueNum: supply[0].amount, //总发行量
         pledgeNum: bonded_tokens, //质押参数
         circulation: supply[0].amount - bonded_tokens, //流通量 = 总发行量 - 质押量
-        Pledgerate: ((bonded_tokens / supply[0].amount) * 100).toFixed(2), //质押率
+        Pledgerate: ((bonded_tokens / supply[0].amount) * 100).toFixed(1), //质押率
         latestNode: {
           moniker: newValidatoes[0].description.moniker,
           address: newValidatoes[0].operator_address,
@@ -485,7 +480,7 @@ export default {
           height: 17px;
           font-weight: 400;
           font-size: 12px;
-          color: rgba(20, 37, 62, 0.45);
+          color: #86909C;
           white-space: nowrap;
         }
         h3 {
@@ -540,7 +535,7 @@ export default {
           height: 17px;
           font-weight: 400;
           font-size: 12px;
-          color: rgba(20, 37, 62, 0.45);
+          color: #86909C;
           letter-spacing: 0;
           margin-bottom: 8px;
         }
@@ -573,7 +568,7 @@ export default {
     padding: 40px 64px;
     display: flex;
     font-size: 12px;
-    color: rgba(20, 37, 62, 0.45);
+    color: #86909C;
     div {
       flex: 1;
       height: 100%;
@@ -713,7 +708,7 @@ export default {
       border-radius: 1px 4px 4px 1px 0;
       font-weight: bold;
       font-size: 12px;
-      color: rgba(20, 37, 62, 0.45);
+      color: #86909C;
       letter-spacing: 0;
       text-align: center;
       line-height: 28px;
@@ -737,7 +732,7 @@ export default {
       }
       p:nth-child(2) {
         height: 17px;
-        color: rgba(20, 37, 62, 0.45);
+        color: #86909C;
       }
     }
   }
@@ -756,13 +751,17 @@ export default {
     .content {
       height: 200px;
       min-width: 100% !important;
+      .leftContent{
+        width: 100%;
+        padding: 0 10px;
+      }
     }
     .banner {
       display: none;
     }
 
     .inputVal {
-      margin: 0 10px;
+      width: auto;
       .el-input__inner {
         display: none;
       }
@@ -849,5 +848,11 @@ export default {
 }
 .progress {
   height: 60px !important;
+}
+
+</style>
+<style>
+  .circulateTooltipStyle{
+  height: auto;
 }
 </style>

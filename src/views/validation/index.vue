@@ -499,7 +499,7 @@ export default {
   .cell {
     white-space: nowrap !important;
     font-size: 12px;
-    color: rgba(20, 37, 62, 0.45);
+    color: #86909C;
   }
 }
 </style>

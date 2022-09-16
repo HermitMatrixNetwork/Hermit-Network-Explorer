@@ -26,7 +26,17 @@
               >
                 <div class="column">
                   <p>{{ languagePack.accounttext17 }}：</p>
-                  <span>{{TotalBalance(account.balance,account.delegate_amount,account.withdraw_amount,account.unbonding)/1e6}} GHM</span>
+                  <span
+                    >{{
+                      TotalBalance(
+                        account.balance,
+                        account.delegate_amount,
+                        account.withdraw_amount,
+                        account.unbonding
+                      ) / 1e6
+                    }}
+                    GHM</span
+                  >
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext18 }}：</p>
@@ -112,55 +122,63 @@
               <template slot-scope="scope">
                 <div class="tableEyeBackground">
                   <el-popover
-                placement="right-start"
-                :offset="50"
-                :visible-arrow="true"
-                width="300px"
-                trigger="click"
-              >
-                <div class="popoverBox">
-                  <div class="popoverBox_content">
-                    <div style="height:28px;line-height:28px;">
-                      {{ languagePack.txstext13 }}
-                    </div>
-                    <div class="popStatus">
-                      <div v-if="scope.row.result == 'success'">
-                        <img src="@/assets/img/deal_succeed@2x.png" /><span
-                          >{{languagePack.prompttext02}}</span
-                        ><span>(X个区块确认)</span>
-                      </div>
-                      <div v-else>
-                        <img src="@/assets/img/deal_lose@2x.png" /><span
-                          >{{languagePack.prompttext03}}</span
-                        ><span>(X个区块确认)</span>
-                      </div>
+                    placement="right-start"
+                    :offset="50"
+                    :visible-arrow="true"
+                    width="300px"
+                    trigger="click"
+                  >
+                    <div class="popoverBox">
+                      <div class="popoverBox_content">
+                        <div style="height: 28px; line-height: 28px">
+                          {{ languagePack.txstext13 }}
+                        </div>
+                        <div class="popStatus">
+                          <div v-if="scope.row.result == 'success'">
+                            <img src="@/assets/img/deal_succeed@2x.png" /><span
+                              >{{ languagePack.prompttext02 }}</span
+                            ><span>(X个区块确认)</span>
+                          </div>
+                          <div v-else>
+                            <img src="@/assets/img/deal_lose@2x.png" /><span>{{
+                              languagePack.prompttext03
+                            }}</span
+                            ><span>(X个区块确认)</span>
+                          </div>
 
-                      <el-divider></el-divider>
-                    </div>
-                    <div
-                      v-for="(item, index) in statusTitle"
-                      :key="index"
-                    >
-                      <div style="height:28px;line-height:28px;">{{ item.title }}</div>
-                      <span v-show="index === 0"
-                        >{{ scope.row.fee/1e6 }} GHM ($0.00)</span
-                      >
-                      <span v-show="index === 1"
-                        >{{ scope.row.gas_wanted | toMoney }}Gas总量中实际消耗{{
-                          scope.row.gas_used | toMoney
-                        }}Gas<br />@0.0004GHM</span
-                      >
-                      <span v-show="index === 2">957820（位置154）</span>
+                          <el-divider></el-divider>
+                        </div>
+                        <div v-for="(item, index) in statusTitle" :key="index">
+                          <div style="height: 28px; line-height: 28px">
+                            {{ item.title }}
+                          </div>
+                          <span v-show="index === 0"
+                            >{{ scope.row.fee / 1e6 }} GHM ($0.00)</span
+                          >
+                          <span v-show="index === 1"
+                            >{{
+                              scope.row.gas_wanted | toMoney
+                            }}Gas总量中实际消耗{{
+                              scope.row.gas_used | toMoney
+                            }}Gas<br />@0.0004GHM</span
+                          >
+                          <span v-show="index === 2">957820（位置154）</span>
 
-                      <el-divider></el-divider>
+                          <el-divider></el-divider>
+                        </div>
+                      </div>
+                      <div
+                        class="detailBox"
+                        @click="queryTxDetail(scope.$index)"
+                      >
+                        {{ languagePack.prompttext10 }}
+                      </div>
                     </div>
-                  </div>
-                  <div class="detailBox" @click="queryTxDetail(scope.$index)">
-                    查看详情
-                  </div>
-                </div>
-                <img slot="reference" src="@/assets/img/table_eye_nor.png" />
-              </el-popover>
+                    <img
+                      slot="reference"
+                      src="@/assets/img/table_eye_nor.png"
+                    />
+                  </el-popover>
                 </div>
               </template>
             </el-table-column>
@@ -171,7 +189,11 @@
             >
               <template slot-scope="scope">
                 <div class="specialFont" @click="queryTxDetail(scope.$index)">
-                  <el-tooltip effect="dark" content="交易失败" placement="top">
+                  <el-tooltip
+                    effect="dark"
+                    :content="languagePack.prompttext05"
+                    placement="top"
+                  >
                     <img
                       src="@/assets/img/table_mistake.png"
                       v-if="scope.row.result === 'error'"
@@ -193,7 +215,12 @@
             </el-table-column>
             <el-table-column :label="languagePack.accounttext31">
               <template slot-scope="scope">
-                <div class="specialFont" @click="queryDealtoBlock(scope.row.height)">{{ scope.row.height }}</div>
+                <div
+                  class="specialFont"
+                  @click="queryDealtoBlock(scope.row.height)"
+                >
+                  {{ scope.row.height }}
+                </div>
               </template>
             </el-table-column>
             <el-table-column
@@ -221,15 +248,16 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="fuelTotal"
-              :label="languagePack.accounttext34"
-              width="150px"
-            >
+            <el-table-column :label="languagePack.accounttext34" width="150px">
               <template slot-scope="scope">
                 <TableTooltip
+                  v-if="scope.row.targetAddress"
                   :content="scope.row.targetAddress"
                   @click.native="queryDealtoAddress(scope.row.targetAddress)"
+                ></TableTooltip>
+                <TableTooltip
+                  v-else
+                  :content="scope.row.message.validator_address"
                 ></TableTooltip>
               </template>
             </el-table-column>
@@ -270,6 +298,7 @@
 import { queryAccountInfo, queryAccountTx } from "@/api/account.js";
 import mixin from "@/mixins";
 import vueQr from "vue-qr";
+import { data } from 'autoprefixer';
 export default {
   name: "addressDetail",
   mixins: [mixin],
@@ -301,13 +330,17 @@ export default {
       this.account = res.data;
     },
     async getTxList(limit, index) {
-      const txList = await queryAccountTx(limit, index, this.address);
-      console.log("账户交易列表", txList);
-      let arr = txList.data.list.reverse();
-
-      this.disposeTableType(arr);
+      const {
+        data: { list, total },
+      } = await queryAccountTx(limit, index, this.address);
+      console.log("账户交易列表", list);
+      let arr;
+      if (list) {
+        arr = list.reverse();
+        this.disposeTableType(arr);
+      }
       this.TxsList = arr;
-      this.txtotal = txList.data.total;
+      this.txtotal = total;
       if (Array.isArray(arr)) {
         this.hashList = arr.map((item) => {
           return { hash: item._id, status: item.result };
@@ -328,8 +361,11 @@ export default {
     //查看交易详情
     queryTxDetail(index) {
       console.log(this.hashList, index);
-      sessionStorage.setItem('hashList',JSON.stringify({hashList:this.hashList,index}))
-      this.$router.push({name: "hash_detail"});
+      sessionStorage.setItem(
+        "hashList",
+        JSON.stringify({ hashList: this.hashList, index })
+      );
+      this.$router.push({ name: "hash_detail" });
     },
   },
   computed: {
@@ -343,13 +379,13 @@ export default {
         { title: this.languagePack.txstext17 + ":" },
       ];
     },
-    TotalBalance(){
-      return function(...args){
-        return args.reduce((a,b)=>{
-          return a+b
-        })
-      }
-    }
+    TotalBalance() {
+      return function (...args) {
+        return args.reduce((a, b) => {
+          return a + b;
+        });
+      };
+    },
   },
   watch: {
     TxsList(value) {

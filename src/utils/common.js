@@ -2,7 +2,7 @@ import { Message } from 'element-ui'
 import moment from 'moment';
 
 //复制文本
-export function copy(text) {
+export function copy(text,hint) {
     let visl_dom_inp = document.createElement('textarea'),
         dom = null,
         res = null,
@@ -18,7 +18,7 @@ export function copy(text) {
     if (res) {
         _message = {
             type: 'success',
-            message: '复制成功'
+            message: hint
         };
     } else {
         _message = {

@@ -7,14 +7,16 @@ import { homeEn,homeCn,homeCt } from './home'
 
 let prompt = {
     En:{
-        'prompttext01':'Not open for the time being',
+        'prompttext01':'Under development',
         'prompttext02':'success',
         'prompttext03':'fail',
         'prompttext04':'Successfully switched over',
         'prompttext05':'Transaction failure',
         'prompttext06':'Input cannot be empty!',
         'prompttext07':'Search not found',
-        'prompttext08':'back home'
+        'prompttext08':'back home',
+        'prompttext09':'Copy successfully!',
+        'prompttext10':'Check the details',
     },
     Cn:{
         'prompttext01':'暂未开放',
@@ -24,7 +26,9 @@ let prompt = {
         'prompttext05':'交易失败',
         'prompttext06':'输入不能为空!',
         'prompttext07':'查询失败',
-        'prompttext08':'返回首页'
+        'prompttext08':'返回首页',
+        'promottext09':'复制成功!',
+        'prompttext10':'查看详情',
 
     },
     Ct:{
@@ -36,24 +40,29 @@ let prompt = {
         'prompttext06':'輸入不能為空!',
         'prompttext07':'查询失败',
         'prompttext08':'返回首页',
+        'promottext09':'復制成功!',
+        'prompttext10':'查看詳情',
 
     }
 }
 let time = {
     En:{
-        'timetext01':'s ago',
-        'timetext02':'m ago',
-        'timetext03':'h ago',
-        'timetext04':'day ago',
+        'timetext01':' secs ago',
+        'timetext02':' mins ago',
+        'timetext03':' h ago',
+        'timetext04':' day ago',
     },
     Cn:{
-        'timetext01':'秒前',
-        'timetext02':'分前',
-        'timetext03':'时前',
-        'timetext04':'天前',
+        'timetext01':' 秒 前',
+        'timetext02':' 分钟 前',
+        'timetext03':' 小时 前',
+        'timetext04':' 天 前',
     },
     Ct:{
-
+        'timetext01':' 秒 前',
+        'timetext02':' 分钟 前',
+        'timetext03':' 小時 前',
+        'timetext04':' 天 前',
     }
 }
 
@@ -112,6 +121,7 @@ export const Language = [
         ...validationCt,
         ...blockchainCt,
         ...moreCt,
-        ...prompt.Ct
+        ...prompt.Ct,
+        ...time.Ct
     }
 ]
