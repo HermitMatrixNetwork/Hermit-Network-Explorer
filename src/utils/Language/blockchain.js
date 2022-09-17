@@ -11,7 +11,7 @@ let top = {
         'toptext08': 'transactions',
     },
     Cn: {
-        'toptext01': 'GHM的顶部账户',
+        'toptext01': 'GHM的顶級账户',
         'toptext02': '展示GHM币余额排名前1000账户',
         'toptext03': '排名',
         'toptext04': '地址',
@@ -21,7 +21,7 @@ let top = {
         'toptext08': '交易次数',
     },
     Ct: {
-        'toptext01': 'GHM的頂部賬戶',
+        'toptext01': 'GHM的頂級賬戶',
         'toptext02': '展示GHM幣余額排名前1000賬戶',
         'toptext03': '排名',
         'toptext04': '地址',
@@ -52,7 +52,9 @@ let txs = {
         'txstext16': 'Gas Used',
         'txstext17': 'random number',
         'txstext18': 'more',
-        'txstext19': ' transactions found'
+        'txstext19': ' transactions found',
+        
+
     }, Cn: {
         'txstext01': '交易',
         'txstext02': '总共找到超过>',
@@ -72,7 +74,8 @@ let txs = {
         'txstext16': 'x 燃料总量中实际消耗y燃料',
         'txstext17': '随机数',
         'txstext18': '查看更多详情',
-        'txstext19': '条交易记录'
+        'txstext19': '条交易记录',
+        
     }, Ct: {
         'txstext01': '交易',
         'txstext02': '總共找到超過>',
@@ -92,16 +95,17 @@ let txs = {
         'txstext16': 'x 燃料總量中實際消耗y燃料',
         'txstext17': '隨機數',
         'txstext18': '查看更多詳情',
-        'txstext19':'條交易記錄'
+        'txstext19': '條交易記錄',
+       
     },
 }
 
 let block = {
     En: {
         'blocktext01': 'block',
-        'blocktext02': 'xx blocks in total',
+        'blocktext02': 'Total of',
         'blocktext03': 'x',
-        'blocktext04': 'block',
+        'blocktext04': 'blocks',
         'blocktext05': 'Age',
         'blocktext06': 'the number of transactions',
         'blocktext07': 'proposer',
@@ -111,9 +115,9 @@ let block = {
     },
     Cn: {
         'blocktext01': '区块',
-        'blocktext02': '总共xx个区块',
+        'blocktext02': '总共',
         'blocktext03': '显示x条',
-        'blocktext04': '区块',
+        'blocktext04': '个区块',
         'blocktext05': '块龄',
         'blocktext06': '交易数',
         'blocktext07': '提案人',
@@ -125,7 +129,7 @@ let block = {
         'blocktext01': '區塊',
         'blocktext02': '總共xx個區塊',
         'blocktext03': '顯示x條',
-        'blocktext04': '區塊',
+        'blocktext04': '個區塊',
         'blocktext05': '塊齡',
         'blocktext06': '交易數',
         'blocktext07': '提案人',
@@ -236,6 +240,12 @@ let txs_detail = {
         'txstext50': 'vote',
         'txstext51': 'operation address',
         'txstext52': 'Validators',
+        'txstext53': 'Pledge address',
+        'txstext54': 'award address',
+        'txstext55': 'Set the address for receiving the award',
+        'txstext56': 'Instantiated contract',
+        'txstext57': 'Upload contract',
+        'txstext58': 'Re-entrust'
     },
     Cn: {
         'txstext20': '交易详情：',
@@ -271,6 +281,12 @@ let txs_detail = {
         'txstext50': '投票',
         'txstext51': '操作地址',
         'txstext52': '验证节点',
+        'txstext53': '质押地址',
+        'txstext54': '领奖地址',
+        'txstext55': '设置领奖地址',
+        'txstext56': '实例化合约',
+        'txstext57': '上传合约',
+        'txstext58': '重新委托'
     },
     Ct: {
         //合约执行
@@ -307,6 +323,12 @@ let txs_detail = {
         'txstext50': '投票',
         'txstext51': '操作地址',
         'txstext52': '驗證節點',
+        'txstext53': '質押地址',
+        'txstext54': '領獎地址',
+        'txstext55': '設置領獎地址',
+        'txstext56': '實例化合約',
+        'txstext57': '上傳合約',
+        'txstext58': '重新委托'
     }
 }
 

@@ -131,10 +131,10 @@
                   />
                   {{
                     scope.row.status == "BONDED"
-                      ? "活跃中"
+                      ? languagePack.nodetext11
                       : scope.row.status == "UNBONDING"
-                      ? "候选中"
-                      : "共识中"
+                      ? languagePack.nodetext12
+                      : languagePack.nodetext13
                   }}
                 </div>
               </template>

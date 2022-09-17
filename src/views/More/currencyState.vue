@@ -37,7 +37,7 @@
                 ></el-input>
               </el-form-item>
               <!--代币LOGO上传-->
-              <el-form-item :label="languagePack.applytext09 + '：'">
+              <el-form-item :label="languagePack.applytext09 + '：'" >
                 <el-upload
                   action="#"
                   list-type="picture-card"
@@ -46,6 +46,7 @@
                   :file-list="fileList"
                   :on-change="fileChange"
                   :http-request="upload"
+                  accept=".png"
                 >
                   <i slot="default" class="el-icon-plus"></i>
                   <div slot="file" slot-scope="{ file }">
@@ -64,6 +65,7 @@
                       </span>
                     </span>
                   </div>
+                  <div slot="tip" class="el-upload__tip">推荐：尺寸256 像素 x 256 像素，背景透明</div>
                 </el-upload>
               </el-form-item>
 
@@ -140,24 +142,24 @@ export default {
   data() {
     let username = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("联系人不能为空"));
+        return callback(new Error(this.languagePack.applytext28));
       }
       if (value.length > 20) {
-        return callback(new Error("联系人不超过20字"));
+        return callback(new Error(this.languagePack.applytext29));
       } else {
         callback();
       }
     };
     let usercontact = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("手机号不能为空"));
+        return callback(new Error(this.languagePack.applytext30));
       }
       if (
         !/^1((34[0-8])|(8\d{2})|(([35][0-35-9]|4[579]|66|7[35678]|9[1389])\d{1}))\d{7}$/.test(
           value
         )
       ) {
-        return callback(new Error("手机格式不正确"));
+        return callback(new Error(this.languagePack.applytext31));
       } else {
         callback();
       }
@@ -165,10 +167,10 @@ export default {
 
     let issuetotal = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("不能为空"));
+        return callback(new Error(this.languagePack.applytext27));
       }
       if (!Number.isInteger(value * 1)) {
-        return callback(new Error("仅能填写数字"));
+        return callback(new Error(this.languagePack.applytext32));
       } else {
         callback();
       }
@@ -176,7 +178,7 @@ export default {
 
     let descmessage = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("不能为空"));
+        return callback(new Error(this.languagePack.applytext27));
       }
       if (value.length > 300) {
         return callback(new Error("长度不超过300"));
@@ -187,7 +189,7 @@ export default {
 
     let contract_address = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("地址不能为空"));
+        return callback(new Error(this.languagePack.applytext27));
       } else {
         callback();
       }
@@ -195,7 +197,7 @@ export default {
 
     let full_name = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("输入不能为空"));
+        return callback(new Error(this.languagePack.applytext27));
       }
       if (value.length > 20) {
         return callback(new Error("不超过20字"));
@@ -206,7 +208,7 @@ export default {
 
     let alias_name = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("输入不能为空"));
+        return callback(new Error(this.languagePack.applytext27));
       }
       if (value.length > 10) {
         return callback(new Error("不超过10个字"));

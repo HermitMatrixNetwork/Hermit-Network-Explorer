@@ -17,6 +17,9 @@ let prompt = {
         'prompttext08':'back home',
         'prompttext09':'Copy successfully!',
         'prompttext10':'Check the details',
+        'prompttext11':'No data available for the time being',
+        'prompttext12':'The number of new users',
+
     },
     Cn:{
         'prompttext01':'暂未开放',
@@ -27,8 +30,11 @@ let prompt = {
         'prompttext06':'输入不能为空!',
         'prompttext07':'查询失败',
         'prompttext08':'返回首页',
-        'promottext09':'复制成功!',
+        'prompttext09':'复制成功!',
         'prompttext10':'查看详情',
+        'prompttext11':'暂无数据',
+        'prompttext12':'新增用户数',
+
 
     },
     Ct:{
@@ -40,8 +46,10 @@ let prompt = {
         'prompttext06':'輸入不能為空!',
         'prompttext07':'查询失败',
         'prompttext08':'返回首页',
-        'promottext09':'復制成功!',
+        'prompttext09':'復制成功!',
         'prompttext10':'查看詳情',
+        'prompttext11':'暫無數據',
+        'prompttext12':'新增用戶數',
 
     }
 }
@@ -49,7 +57,7 @@ let time = {
     En:{
         'timetext01':' secs ago',
         'timetext02':' mins ago',
-        'timetext03':' h ago',
+        'timetext03':' hr ago',
         'timetext04':' day ago',
     },
     Cn:{

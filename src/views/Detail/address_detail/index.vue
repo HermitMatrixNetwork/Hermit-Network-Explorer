@@ -31,6 +31,7 @@
                       TotalBalance(
                         account.balance,
                         account.delegate_amount,
+                        !isNaN(account.rewards)?account.rewards:0,
                         account.withdraw_amount,
                         account.unbonding
                       ) / 1e6
@@ -73,7 +74,7 @@
                   <p>{{ languagePack.accounttext24 }}：</p>
                   <span
                     >{{
-                      account.rewards !== "null" ? account.rewards : 0
+                      (account.rewards !== "null" ? account.rewards : 0)/1e6
                     }}
                     GHM</span
                   >
@@ -81,7 +82,7 @@
 
                 <div class="column">
                   <p>{{ languagePack.accounttext26 }}：</p>
-                  <span>{{ account.withdraw_amount }} GHM</span>
+                  <span>{{ account.withdraw_amount/1e6 }} GHM</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext27 }}：</p>
@@ -118,6 +119,7 @@
             :row-style="{ height: '58px !important' }"
             v-loading="loading"
           >
+          <div slot="empty">{{languagePack.prompttext11}}</div>
             <el-table-column width="48">
               <template slot-scope="scope">
                 <div class="tableEyeBackground">

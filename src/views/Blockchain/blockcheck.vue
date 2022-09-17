@@ -9,8 +9,8 @@
         justify="space-between"
       >
         <div>
-          总共<span class="block_num">{{ blockTotal }}</span
-          >个区块
+          {{languagePack.blocktext02}}<span class="block_num">{{ blockTotal }}</span
+          >{{languagePack.blocktext04}}
         </div>
         <el-pagination
           popper-class="popperSelect"
@@ -21,6 +21,7 @@
           :page-size="page.pageSize"
           :total="blockTotal"
           hide-on-single-page
+          :pager-count="5"
         >
         </el-pagination>
       </el-row>
@@ -35,7 +36,7 @@
       >
         <el-table-column
           prop="_id"
-          :label="languagePack.blocktext04"
+          :label="languagePack.blocktext01"
           width="80px"
         >
           <template slot-scope="scope">
@@ -109,6 +110,8 @@
           layout="prev, pager, next, sizes"
           :total="blockTotal"
           hide-on-single-page
+          :pager-count="5"
+
         >
         </el-pagination>
       </el-row>

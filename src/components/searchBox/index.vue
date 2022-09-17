@@ -80,7 +80,11 @@ export default {
             break;
           }
           var result = await queryAccountInfo(value);
-          if (result.code === 0) return this.queryDealtoAddress(value);
+          if (result.code === 0){
+            this.queryDealtoAddress(value);
+            this.searchVal = ""
+            return 
+          }
           break;
         case 2:
           console.log(this.select);
@@ -90,11 +94,13 @@ export default {
           var {
             tx_response: { code },
           } = await getHashContent(value);
-          if (code === 0) {
-            return this.queryDealtoHash({
+          if (code !== 3) {
+            this.queryDealtoHash({
               hash: value,
               random: Math.floor(Math.random() * 10000),
             });
+            this.searchVal = ''
+            return 
           }
           break;
         case 4:
@@ -102,7 +108,11 @@ export default {
           var {
             data: { block },
           } = await queryBlockdetails(Number(value));
-          if (block) return this.queryDealtoBlock(value);
+          if (block){
+            this.queryDealtoBlock(value);
+            this.searchVal = ""
+            return 
+          }
           break;
         default:
           break;

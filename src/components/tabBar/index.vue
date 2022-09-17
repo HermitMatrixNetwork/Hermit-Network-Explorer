@@ -238,7 +238,7 @@
               <p
                 v-for="item in resourcesnavs"
                 :key="item.title"
-                @click="toGo(item.command)"
+                @click="blockCommand(item.command)"
               >
                 {{ item.title }}
               </p>
@@ -298,6 +298,7 @@ export default {
       localStorage.setItem("language", val);
       // 调用mutation中的方法，通过本地存储切换语言
       this.$store.commit("CHANGE_LANGUAGE");
+      
       this.messageBox(this.languagePack.prompttext04, "success");
     },
     blockCommand(command) {

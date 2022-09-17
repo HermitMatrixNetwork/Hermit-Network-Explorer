@@ -25,7 +25,7 @@ let node = {
         'nodetext23': 'the number of delegates',
         'nodetext24': 'activity',
         'nodetext25': 'commission',
-        'nodetext26': '',
+        'nodetext26': 'consensus',
     },
     Cn: {
         'nodetext01': '验证节点',
@@ -53,7 +53,7 @@ let node = {
         'nodetext23': '委托者数',
         'nodetext24': '活跃度',
         'nodetext25': '佣金',
-        'nodetext26': '',
+        'nodetext26': '共识中',
     },
     Ct: {
         'nodetext01': '驗證節點',
@@ -81,6 +81,7 @@ let node = {
         'nodetext23': '委托者數',
         'nodetext24': '活躍度',
         'nodetext25': '傭金',
+        'nodetext26': '共實中',
 
     }
 }
@@ -156,7 +157,7 @@ let node_detail = {
         'nodetext56': '交易哈希',
         'nodetext57': '委托者',
         'nodetext58': '领取时间',
-        'nodetext59': '委托领取数量',
+        'nodetext59': '委托数量奖励',
         'nodetext60': '',
     },
     Ct: {
@@ -193,7 +194,7 @@ let node_detail = {
         'nodetext56': '交易哈希',
         'nodetext57': '委托者',
         'nodetext58': '領取時間',
-        'nodetext59': '委托領取數量',
+        'nodetext59': '委托數量獎勵',
         'nodetext60': '',
     }
 }

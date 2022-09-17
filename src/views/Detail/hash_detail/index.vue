@@ -6,7 +6,7 @@
         <p>
           <span class="specialFont">{{ detailed.txhash }}</span>
         </p>
-        <div class="nextBtn">
+        <div class="nextBtn" v-if="hashList.length">
           <span
             @click="lastData"
             :style="{ cursor: waitResult ? 'wait' : 'pointer' }"
@@ -76,7 +76,7 @@
               v-if="dealType === 'MsgWithdrawDelegatorReward'"
             >
               <p>{{ languagePack.txstext39 }}：</p>
-              <span>{{ detailed.turnover/1e6}} GHM</span>
+              <span>{{ detailed.turnover / 1e6 }} GHM</span>
             </div>
 
             <div
@@ -90,7 +90,7 @@
                   class="specialFont"
                   @click="queryDealtoNode(detailed.validator_address)"
                   >{{ detailed.validator_address }} </span
-                >领取奖励{{ detailed.turnover/1e6}} GHM</span
+                >领取奖励{{ detailed.turnover / 1e6 }} GHM</span
               >
             </div>
 
@@ -134,12 +134,20 @@
             <!-- 当该笔交易为取消委托时 -->
             <div class="column" v-if="dealType === 'MsgUndelegate'">
               <p>{{ languagePack.txstext47 }}：</p>
-              <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)" >{{ detailed.delegator_address }}</span>
+              <span
+                class="specialFont"
+                @click="queryDealtoAddress(detailed.delegator_address)"
+                >{{ detailed.delegator_address }}</span
+              >
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
               <p>{{ languagePack.txstext48 }}：</p>
-              <span class="specialFont" @click="queryDealtoNode(detailed.validator_address)">{{ detailed.validator_address }} </span>
+              <span
+                class="specialFont"
+                @click="queryDealtoNode(detailed.validator_address)"
+                >{{ detailed.validator_address }}
+              </span>
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
@@ -173,7 +181,7 @@
 
             <!-- 当为设置领奖地址时 -->
             <div class="column" v-if="dealType === 'MsgSetWithdrawAddress'">
-              <p>质押地址：</p>
+              <p>{{ languagePack.txstext53 }}：</p>
               <span
                 class="specialFont"
                 @click="queryDealtoAddress(detailed.contract)"
@@ -181,8 +189,12 @@
               >
             </div>
             <div class="column" v-if="dealType === 'MsgSetWithdrawAddress'">
-              <p>领奖地址：</p>
-              <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
+              <p>{{ languagePack.txstext54 }}：</p>
+              <span
+                class="specialFont"
+                @click="queryDealtoAddress(detailed.perform)"
+                >{{ detailed.perform }}</span
+              >
             </div>
 
             <div
@@ -264,12 +276,16 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      hashIndex: JSON.parse(sessionStorage.getItem("hashList")).index || 0,
+      hashIndex: sessionStorage.getItem("hashList")
+        ? JSON.parse(sessionStorage.getItem("hashList")).index
+        : false,
       detailed: {},
       dealType: "",
       waitResult: false,
       QtxStatus: "success",
-      hashList: JSON.parse(sessionStorage.getItem("hashList")).hashList || [],
+      hashList: sessionStorage.getItem("hashList")
+        ? JSON.parse(sessionStorage.getItem("hashList")).hashList
+        : [],
     };
   },
   created() {
@@ -300,7 +316,7 @@ export default {
           gas_used,
           gas_wanted,
           events,
-          logs
+          logs,
         },
         tx: { auth_info, body },
       } = res;
@@ -327,7 +343,9 @@ export default {
         case "MsgWithdrawDelegatorReward":
           obj.delegator_address = message.delegator_address;
           obj.validator_address = message.validator_address;
-          obj.turnover = logs[0].events[0].attributes.pop().value.replace(/[a-zA-Z]/g,'')
+          obj.turnover = logs[0].events[0].attributes
+            .pop()
+            .value.replace(/[a-zA-Z]/g, "");
           break;
         case "MsgDelegate":
           obj.delegator_address = message.delegator_address;
@@ -360,7 +378,7 @@ export default {
       this.detailed = {
         perform: "",
         txhash,
-        timestamp:timestamp.replace(/[A-Z]/g,' '),
+        timestamp: timestamp.replace(/[A-Z]/g, " "),
         height,
         gas_used,
         gas_wanted,
@@ -434,7 +452,7 @@ export default {
           return this.languagePack.txstext38;
           break;
         case "MsgBeginRedelegate":
-          return "重新委托";
+          return this.languagePack.txstext58;
           break;
         case "MsgExecuteContract":
           return this.languagePack.txstext21;
@@ -443,31 +461,29 @@ export default {
           return this.languagePack.txstext50;
           break;
         case "MsgSetWithdrawAddress":
-          return "设置领奖地址";
+          return this.languagePack.txstext55;
           break;
         case "MsgInstantiateContract":
-          return "实例化合约";
+          return this.languagePack.txstext56;
           break;
         case "MsgStoreCode":
-          return "上传合约";
+          return this.languagePack.txstext57;
           break;
         default:
           break;
       }
     },
     TxStatus() {
-      // let { hash } = this.$route.params;
-      // if (hash) {
-      //   if (Array.isArray(hash)) {
-      //     return hash[this.hashIndex].status;
-      //   } else {
-      //     return hash.status;
-      //   }
-      // } else {
-      return this.hashList[this.hashIndex].status;
-      // }
+      if (this.hashIndex) {
+        return this.hashList[this.hashIndex].status;
+      }else{
+        return false
+      }
     },
   },
+  beforeDestroy(){
+    this.$router.push({query:null}).catch(e=>{})
+  }
 };
 </script>
 

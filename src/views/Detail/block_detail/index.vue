@@ -68,6 +68,7 @@
           :row-style="{ height: '58px !important' }"
           v-loading="loading"
         >
+        <div slot="empty">{{languagePack.prompttext11}}</div>
           <el-table-column :label="languagePack.blocktext22">
             <template slot-scope="scope">
               <div

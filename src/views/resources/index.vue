@@ -288,6 +288,10 @@ export default {};
       line-height: 28px;
       padding: 4px 0;
     }
+    >span{
+      line-height: 28px;
+      padding: 4px 0;
+    }
   }
 }
 

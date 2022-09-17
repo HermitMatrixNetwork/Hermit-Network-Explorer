@@ -21,13 +21,17 @@
           <div class="icon"></div>
           <div class="explain">
             <p>{{ languagePack.contracttext04 }}</p>
-            <h3>{{pagination}}</h3>
+            <h3>{{ pagination }}</h3>
           </div>
         </div>
       </div>
       <div class="contracts_table">
         <div class="contracts_table_title">
-          <p>总共 <span style="color: #5671f2">1,081,774 </span>个区块</p>
+          <p>
+            {{ languagePack.contracttext29 }}
+            <span style="color: #5671f2">{{ this.pagination }} </span
+            >{{ languagePack.contracttext30 }}
+          </p>
           <el-pagination
             small
             @current-change="handleCurrentChange"
@@ -46,13 +50,15 @@
           :row-class-name="'tableRowStyle'"
           v-loading="loading"
         >
+          <!-- 表格空状态 -->
+          <div slot="empty">{{languagePack.prompttext11}}</div>
           <el-table-column
             prop="contract_id"
             :label="languagePack.contracttext05"
             width="160"
           >
           </el-table-column>
-          <el-table-column :label="languagePack.contracttext06" >
+          <el-table-column :label="languagePack.contracttext06">
             <template slot-scope="scope">
               <p
                 class="specialFont"
@@ -62,7 +68,7 @@
               </p>
             </template>
           </el-table-column>
-           <el-table-column :label="'合约地址'" >
+          <el-table-column :label="languagePack.contracttext12">
             <template slot-scope="scope">
               <p
                 class="specialFont"
@@ -219,7 +225,7 @@ export default {
           height: 17px;
           font-weight: 400;
           font-size: 12px;
-          color: #86909C;
+          color: #86909c;
           letter-spacing: 0;
         }
         h3 {

@@ -81,8 +81,8 @@ let header = {
 let obj = {
     En: {
         'hometext01': 'Block Explorer',
-        'hometext02': 'Filter',
-        'hometext03': 'address',
+        'hometext02': 'All Filters',
+        'hometext03': 'Addresses',
         'hometext04': 'Tokens',
         'hometext05': 'Hash',
         'hometext06': 'Block Height',
@@ -118,7 +118,7 @@ let obj = {
         'hometext01': '隐士区块浏览器',
         'hometext02': '所有过滤条件',
         'hometext03': '地址',
-        'hometext04': '货币',
+        'hometext04': '代币',
         'hometext05': '哈希',
         'hometext06': '区块号',
         'hometext07': '搜索Token/hash/address/block',
@@ -152,7 +152,7 @@ let obj = {
         'hometext01': '隱士區塊瀏覽器',
         'hometext02': '所有過濾條件',
         'hometext03': '地址',
-        'hometext04': '貨幣',
+        'hometext04': '代幣',
         'hometext05': '哈希',
         'hometext06': '區塊號',
         'hometext07': '搜索Token/hash/address/block',

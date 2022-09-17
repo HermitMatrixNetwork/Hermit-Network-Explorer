@@ -57,8 +57,8 @@ let contract_detail = {
         'contracttext26':'operation time',
         'contracttext27':'status',
         'contracttext28':'details',
-        'contracttext29':'',
-        'contracttext30':'',
+        'contracttext29':'Total found',
+        'contracttext30':'Contracts',
     },
     Cn:{
         'contracttext11':'合约信息',
@@ -79,8 +79,8 @@ let contract_detail = {
         'contracttext26':'操作时间',
         'contracttext27':'状态',
         'contracttext28':'详情',
-        'contracttext29':'',
-        'contracttext30':'',
+        'contracttext29':'总共找到',
+        'contracttext30':'个合约',
     },
     Ct:{
         'contracttext11':'合約信息',
@@ -101,8 +101,8 @@ let contract_detail = {
         'contracttext26':'操作時間',
         'contracttext27':'狀態',
         'contracttext28':'詳情',
-        'contracttext29':'',
-        'contracttext30':'',
+        'contracttext29':'總共找到',
+        'contracttext30':'個合約',
     }
 }
 

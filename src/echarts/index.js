@@ -52,7 +52,8 @@ export const blockBar = (element, data = []) => {
       },
       extraCssText: "box-shadow: 0 0 rgba(0, 0, 0, 0.3);",
       formatter: function (params) {
-        return `<div style="color:'#1840EE';">#${params.name}/<span style="color:'#BDC8FA';">3s</span></div>`;
+        return `<div style="color:'#1840EE';">#${params.name}/<span style="color:'#BDC8FA';">${typeof params.data == "number" ? params.data / 1e3 : params.data.value / 1e3
+          }s</span></div>`;
       },
     },
     series: {
@@ -156,7 +157,7 @@ export const blockBar = (element, data = []) => {
 };
 
 //折现图
-export const line = (element, message) => {
+export const line = (element, message,prompt='The number of new users') => {
   // var chartDom = document.querySelector(classname);
   // var myChart = echarts.init(chartDom);
   // console.log('渲染');
@@ -172,7 +173,7 @@ export const line = (element, message) => {
     },
     tooltip: {
       show: true,
-      formatter: `新增用户数：{c}`,
+      formatter: `${prompt}：{c}`,
       padding: 12,
       backgroundColor: "rgba(0,0,0,0.85)",
       textStyle: {

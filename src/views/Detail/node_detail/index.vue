@@ -124,6 +124,7 @@
             :data="outblockTable.list"
             v-loading="blockloading"
           >
+            <div slot="empty">{{ languagePack.prompttext11 }}</div>
             <el-table-column
               :label="languagePack.nodetext37"
               prop="_id"
@@ -167,6 +168,7 @@
             :row-class-name="'tableRowStyle'"
             :data="delegationTable"
           >
+            <div slot="empty">{{ languagePack.prompttext11 }}</div>
             <el-table-column :label="languagePack.nodetext50" width="240">
               <template slot-scope="scope">
                 <div class="specialFont" style="width: 120px">
@@ -225,6 +227,7 @@
             :data="rewardTable.list"
             v-loading="rewardloading"
           >
+            <div slot="empty">{{ languagePack.prompttext11 }}</div>
             <el-table-column
               :label="languagePack.nodetext56"
               prop="txhash"
@@ -289,22 +292,24 @@
             small
             @size-change="blockSizeChange"
             @current-change="blockCurrentChange"
-            :current-page="page.currentPage+1"
+            :current-page="page.currentPage + 1"
             :page-sizes="[10, 25, 50]"
             :page-size="10"
             layout="prev, pager, next, sizes"
-            :total="outblockTable.total>5000?5000:outblockTable.total"
+            :total="outblockTable.total > 5000 ? 5000 : outblockTable.total"
+            :pager-count="5"
           ></el-pagination>
           <el-pagination
             v-if="selectNav === 3"
             small
             @size-change="rewardSizeChange"
             @current-change="rewardCurrentChange"
-            :current-page="rewardPage.currentPage+1"
+            :current-page="rewardPage.currentPage + 1"
             :page-sizes="[10, 25, 50]"
             :page-size="10"
             layout="prev, pager, next, sizes"
             :total="rewardTable.total"
+            :pager-count="5"
           ></el-pagination>
         </div>
       </div>
@@ -336,7 +341,6 @@ export default {
       outblockTable: {},
       delegationTable: [],
       rewardTable: {
-        list: [],
         total: 0,
       },
       hashList: [],
@@ -382,6 +386,7 @@ export default {
       this.delegaTion(res[1].delegation_responses);
       this.outblockTable = res[2].data;
       this.rewardTable = res[3].data;
+      this.rewardTable.list.reverse();
       if (Array.isArray(res[3].data.list)) {
         this.hashList = res[3].data.list.map((item) => {
           return { hash: item._id, type: item.type, status: item.result };
@@ -449,18 +454,18 @@ export default {
         data: { list },
       } = await getNodeRewardList(pageSize, 0, this.address);
       this.rewardTable.list = list;
-      setTimeout(() => (this.rewardloading = false),500);
+      setTimeout(() => (this.rewardloading = false), 500);
     },
     async rewardCurrentChange(value) {
       this.rewardloading = true;
-      
+
       this.rewardPage.currentPage = value - 1;
       let { pageSize, currentPage } = this.rewardPage;
       let {
         data: { list },
       } = await getNodeRewardList(pageSize, currentPage, this.address);
       this.rewardTable.list = list;
-      setTimeout(() => (this.rewardloading = false),500);
+      setTimeout(() => (this.rewardloading = false), 500);
     },
   },
   computed: {

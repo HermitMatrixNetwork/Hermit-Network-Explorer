@@ -8,25 +8,22 @@
           <a href="http://www.baidu.com" target="_blank" class="link">活动：此处可插入广告语进行引导 跳转按钮 跳转网页</a>
         </div>
         <div class="banner">
-          <a :href="banner.link" target="_blank"><img :src="banner.url" alt=""/></a>
+          <a href="http://www.baidu.com" target="_blank"><img src="@/assets/img/home_banner.png" alt=""/></a>
         </div>
       </div>
     </div>
 
     <div class="pageMain">
       <div class="block-message">
-        <div v-for="item in messageList" :key="item.title" class="block-item">
+        <div v-for="(item,index) in messageList" :key="index" class="block-item">
           <div class="blockicon">
             <img :src="item.icon" alt="" />
           </div>
           <div class="explain">
             <p>{{ item.title }}</p>
-            <h3>
-              {{ item.price
-              }}<span
-                :style="{ color: item.updown > 0 ? '#f23c24' : '#55C499' }"
-                >{{ item.updown }}</span
-              >
+            <h3 v-if="index === 0">$ {{item.price}}<span :style="{ color: item.updown > 0 ? '#f23c24' : '#55C499' }">{{ item.updown }}</span>
+            </h3>
+            <h3 v-else>{{ item.price}} M<span :style="{ color: item.updown > 0 ? '#f23c24' : '#55C499' }">{{ item.updown }}</span>
             </h3>
           </div>
         </div>
@@ -261,14 +258,14 @@ export default {
     this.basicData.blockHeight = await this.getnowBlockHeight();
     this.getBlockMsg();
     this.getnowBlockList();
-    let {
-      data: {
-        banner: {
-          photos: { photos },
-        },
-      },
-    } = await getbanner();
-    this.banner = photos[0];
+    // let {
+    //   data: {
+    //     banner: {
+    //       photos: { photos },
+    //     },
+    //   },
+    // } = await getbanner();
+    // this.banner = photos[0];
   },
   mounted() {
     this.charts = {
@@ -390,6 +387,7 @@ export default {
       let num1 = value[0].tx_count;
       let num2 = value[1].tx_count;
       this.TPS = num1 + num2 + " / " + (num1 > num2 ? num1 : num2);
+      // console.log(num1,num2,'TPS',this.TPS);
     },
     async lastUpdate(value) {
       if (value % 3 === 0) {

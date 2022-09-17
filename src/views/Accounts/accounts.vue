@@ -124,7 +124,7 @@ export default {
     let arr = [600, 1000, 800, 900, 450, 600, 920, 450, 890, 860, 400, 650];
     const chart = document.querySelector(".line_chart");
     this.lineChart = echarts.init(chart);
-    line(this.lineChart, arr);
+    line(this.lineChart, arr,this.languagePack.prompttext12);
   },
   filters: {
     toMoney,
@@ -172,20 +172,22 @@ export default {
         case 0:
           line(
             this.lineChart,
-            [600, 1000, 800, 900, 450, 600, 920, 450, 890, 860, 400, 650]
+            [600, 1000, 800, 900, 450, 600, 920, 450, 890, 860, 400, 650],
+            this.languagePack.prompttext12
           );
           break;
         case 1:
-          line(this.lineChart, [1, 2, 3, 4, 5, 6, 7]);
+          line(this.lineChart, [1, 2, 3, 4, 5, 6, 7],this.languagePack.prompttext12);
 
           break;
         case 2:
-          line(this.lineChart, [7, 6, 5, 4, 3, 2, 1]);
+          line(this.lineChart, [7, 6, 5, 4, 3, 2, 1],this.languagePack.prompttext12);
           break;
         case 3:
           line(
             this.lineChart,
-            [14, 2, 8, 16, 21, 3, 15, 17, 9, 13, 27, 5, 12, 8, 9, 11, 13]
+            [14, 2, 8, 16, 21, 3, 15, 17, 9, 13, 27, 5, 12, 8, 9, 11, 13],
+            this.languagePack.prompttext12
           );
           break;
         default:

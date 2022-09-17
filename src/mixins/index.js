@@ -11,7 +11,7 @@ export default {
   methods: {
     Copy(val) {
       //复制
-      copy(val,this.languagePack.promottext09);
+      copy(val,this.languagePack.prompttext09);
     },
     toGo(path) {
       this.$router.push({ path }).catch(e => { });
@@ -138,7 +138,7 @@ export default {
         }
         
       }
-    }
+    },
   }
 };
 

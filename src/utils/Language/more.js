@@ -26,6 +26,12 @@ let apply = {
         'applytext24': 'please enter the official website address of your programme',
         'applytext25': 'submit',
         'applytext26': 'reset',
+        'applytext27': 'The input cannot be empty',
+        'applytext28': 'Contact cannot be empty',
+        'applytext29': 'Contact person no more than 20 words',
+        'applytext30': 'The mobile number cannot be empty.',
+        'applytext31': 'Incorrect format of mobile phone',
+        'applytext32': 'You can only fill in numbers.',
     },
     Cn: {
         'applytext01': '上币说明',
@@ -54,6 +60,13 @@ let apply = {
         'applytext24': '请填写项目官网地址',
         'applytext25': '提交',
         'applytext26': '重置',
+        'applytext27': '输入不能为空',
+        'applytext28': '联系人不能为空',
+        'applytext29': '联系人不超过20字',
+        'applytext30': '手机号不能为空',
+        'applytext31': '手机格式不正确',
+        'applytext32': '仅能填写数字',
+
     },
     Ct: {
         'applytext01': '上幣說明',
@@ -82,6 +95,13 @@ let apply = {
         'applytext24': '請填寫項目官網地址',
         'applytext25': '提交',
         'applytext26': '重置',
+        'applytext27': '輸入不能爲空',
+        'applytext28': '聯係人不能爲空',
+        'applytext29': '聯係人不超過20個字',
+        'applytext30': '手機號不能爲空',
+        'applytext31': '手機格式不正確',
+        'applytext32': '僅能填寫數字',
+
     }
 }
 

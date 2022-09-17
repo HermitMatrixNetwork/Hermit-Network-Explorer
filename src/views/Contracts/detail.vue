@@ -66,6 +66,7 @@
           :row-style="{ height: '58px' }"
           v-loading="loading"
         >
+        <div slot="empty">{{languagePack.prompttext11}}</div>
           <el-table-column
             prop="ID"
             :label="languagePack.contracttext25"
