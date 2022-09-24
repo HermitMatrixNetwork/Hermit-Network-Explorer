@@ -6,7 +6,8 @@
         <div class="governBox-item" v-for="(item, index) in list" :key="index">
           <h4 class="title">{{ item.title }}</h4>
           <p class="content" v-text="item.data"></p>
-          <a href="https://hub.cosmos.network/main/governance/params-change/staking.html" target="_" class="link" v-html="item.link"></a>
+          <p class="link"></p>
+          <!-- <a href="https://hub.cosmos.network/main/governance/params-change/staking.html" target="_" class="link" v-html="item.link"></a> -->
         </div>
       </div>
     </div>

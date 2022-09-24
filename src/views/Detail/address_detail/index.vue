@@ -178,7 +178,8 @@
                     </div>
                     <img
                       slot="reference"
-                      src="@/assets/img/table_eye_nor.png"
+                      src="@/assets/img/table_eye_nor@2x.png"
+                      width="14"
                     />
                   </el-popover>
                 </div>
@@ -197,8 +198,9 @@
                     placement="top"
                   >
                     <img
-                      src="@/assets/img/table_mistake.png"
+                      src="@/assets/img/table_mistake@2x.png"
                       v-if="scope.row.result === 'error'"
+                      width="14"
                       @click.stop
                     />
                   </el-tooltip>
@@ -230,7 +232,7 @@
               :label="languagePack.accounttext32"
             >
               <template slot-scope="scope">
-                <div>{{ scope.row.timestamp | jetlag }}</div>
+                <div>{{ TimeStamp(scope.row.timestamp)  }}</div>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.accounttext33" width="150px">
@@ -242,9 +244,10 @@
               <template slot-scope="scope">
                 <div>
                   <img
-                    src="@/assets/img/table_transmit.png"
+                    src="@/assets/img/table_transmit@2x.png"
                     alt=""
                     v-if="scope.row.result !== 'error'"
+                    width="20"
                   />
                   <span v-else class="table_txfail">self</span>
                 </div>
@@ -266,7 +269,7 @@
             <el-table-column :label="languagePack.accounttext35">
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.tx_amount / 1e6
+                  {{ isNaN(scope.row.tx_amount)?0:scope.row.tx_amount / 1e6
                   }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
                 </div>
               </template>
@@ -288,7 +291,6 @@
             :page-size="page.pageSize"
             layout="prev, pager, next, sizes"
             :total="txtotal"
-            hide-on-single-page
           ></el-pagination>
         </div>
       </div>

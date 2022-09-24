@@ -11,7 +11,7 @@ let top = {
         'toptext08': 'transactions',
     },
     Cn: {
-        'toptext01': 'GHM的顶級账户',
+        'toptext01': 'GHM的顶级账户',
         'toptext02': '展示GHM币余额排名前1000账户',
         'toptext03': '排名',
         'toptext04': '地址',
@@ -127,7 +127,7 @@ let block = {
     },
     Ct: {
         'blocktext01': '區塊',
-        'blocktext02': '總共xx個區塊',
+        'blocktext02': '總共',
         'blocktext03': '顯示x條',
         'blocktext04': '個區塊',
         'blocktext05': '塊齡',

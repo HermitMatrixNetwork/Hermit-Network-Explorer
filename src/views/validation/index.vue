@@ -38,7 +38,7 @@
                 <div class="column" style="margin: 16px 0">
                   <p>{{ languagePack.nodetext09 }}：</p>
                   <span>
-                    {{ (totalEntrust / pledgeMessage.issueNum) * 100 }} %</span
+                    {{ (totalEntrust*100 / pledgeMessage.issueNum) }} %</span
                   >
                 </div>
               </div>
@@ -104,7 +104,7 @@
             <el-table-column :label="languagePack.nodetext17" width="160">
               <template slot-scope="scope">
                 <div class="moniker">
-                  <img src="@/assets/img/bottom-bar_logo.png" alt="" />
+                  <img src="@/assets/img/bottom-bar_logo@2x.png" alt="" />
                   {{ scope.row.validator_name }}
                 </div>
               </template>
@@ -139,15 +139,6 @@
                 </div>
               </template>
             </el-table-column>
-            <!-- <el-table-column
-              :label="'总质押'"
-              width="180"
-              align="right"
-            >
-              <template slot-scope="scope">
-                <p>{{ scope.row.tokens | toMoney }} GHM</p>
-              </template>
-            </el-table-column> -->
             <el-table-column
               :label="languagePack.nodetext21"
               width="168"
@@ -183,6 +174,7 @@
                 <p>{{ scope.row.commission_rate * 100 }} %</p>
               </template>
             </el-table-column>
+            <div slot="empty">{{ languagePack.prompttext11 }}</div>
           </el-table>
         </div>
         <div class="validation-table-bottom">
@@ -303,7 +295,6 @@ export default {
           return item.validator_name.includes(this.searchValue);
         });
       }
-      
     },
   },
   computed: {
@@ -499,7 +490,7 @@ export default {
   .cell {
     white-space: nowrap !important;
     font-size: 12px;
-    color: #86909C;
+    color: #86909c;
   }
 }
 </style>

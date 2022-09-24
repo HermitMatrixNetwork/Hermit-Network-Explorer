@@ -42,7 +42,8 @@ const routes = [
     path: '/blockchain',
     component: Blockchain,
     meta: {
-      ID: 2
+      ID: 2,
+      keepAlive:true,
     }
   },
   {

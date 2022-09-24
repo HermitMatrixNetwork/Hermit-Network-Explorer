@@ -57,7 +57,7 @@ export default {
       return [
         { label: hometext02, value: 0 },
         { label: hometext03, value: 1 },
-        { label: hometext04, value: 2 },
+        // { label: hometext04, value: 2 },
         { label: hometext05, value: 3 },
         { label: hometext06, value: 4 },
       ];
@@ -86,9 +86,9 @@ export default {
             return 
           }
           break;
-        case 2:
-          console.log(this.select);
-          break;
+        // case 2:
+        //   console.log(this.select);
+        //   break;
         case 3:
           if (value.length !== 64) break;
           var {

@@ -1,9 +1,13 @@
 <template>
   <div class="punishmentNode">
     <div class="punishment-main">
-      <div class="title">{{languagePack.nodetext61}}</div>
+      <div class="title">{{ languagePack.nodetext61 }}</div>
       <div class="punishment-main-table">
-        <div class="header">总共{{list.length}}个节点</div>
+        <div class="header">
+          {{ languagePack.nodetext62 }}
+          <span style="color: #5671f2">{{ list.length }}</span>
+          {{ languagePack.nodetext63 }}
+        </div>
         <div class="tableBody">
           <el-table
             size="mini"
@@ -14,6 +18,7 @@
             :row-class-name="'tableRowStyle'"
             v-loading="loading"
           >
+            <div slot="empty">{{ languagePack.prompttext11 }}</div>
             <el-table-column
               type="index"
               :label="languagePack.nodetext64"
@@ -25,27 +30,32 @@
               width="178"
               prop="moniker"
             >
-            <template slot-scope="scope">
-              <div class="specialFont" @click="toNode(scope.row.operator_address)">{{scope.row.moniker}}</div>
-            </template>
+              <template slot-scope="scope">
+                <div
+                  class="specialFont"
+                  @click="toNode(scope.row.operator_address)"
+                >
+                  {{ scope.row.moniker }}
+                </div>
+              </template>
             </el-table-column>
             <el-table-column
               :label="languagePack.nodetext66"
               width="270"
               align="right"
             >
-            <template slot-scope="scope">
-              <div>{{scope.row.tokens | toMoney}} GHM </div>
-            </template>
+              <template slot-scope="scope">
+                <div>{{ scope.row.tokens | toMoney }} GHM</div>
+              </template>
             </el-table-column>
             <el-table-column
-              label="已产生区块数"
+              :label="languagePack.nodetext70"
               width="270"
               align="right"
             >
-            <template slot-scope="scope">
-              {{ scope.row.unbonding_height }}
-            </template>
+              <template slot-scope="scope">
+                {{ scope.row.unbonding_height }}
+              </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext67" width="200">
               <template slot-scope="scope">
@@ -59,7 +69,18 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="footer">底部</div>
+        <div class="footer">
+          <el-pagination
+            small
+            layout="prev, pager, next,sizes"
+            :total="list.length"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :page-sizes="[10, 25, 50]"
+            :page-size="10"
+          >
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -69,11 +90,11 @@
 import { allValidationNode } from "@/api/api.js";
 import mixins from "@/mixins";
 export default {
-  mixins:[mixins],
+  mixins: [mixins],
   data() {
     return {
       list: [],
-      loading:true
+      loading: true,
     };
   },
   created() {},
@@ -88,7 +109,7 @@ export default {
         min_self_delegation,
         unbonding_time,
         unbonding_height,
-        operator_address
+        operator_address,
       } = e;
       this.list.push({
         moniker,
@@ -96,39 +117,41 @@ export default {
         min_self_delegation,
         unbonding_height,
         operator_address,
-        unbonding_time:unbonding_time.split('.')[0].replace(/[A-Z]/g,' '),
+        unbonding_time: unbonding_time.split(".")[0].replace(/[A-Z]/g, " "),
       });
     });
-    setTimeout(()=>{
-      this.loading = false
-    },3000)
+    setTimeout(() => {
+      this.loading = false;
+    }, 3000);
   },
-  methods:{
-    toNode(address){
-      this.$router.push({name:'node_detail',query:{address}})
-    }
+  methods: {
+    toNode(address) {
+      this.$router.push({ name: "node_detail", query: { address } });
+    },
+    handleSizeChange() {},
+    handleCurrentChange() {},
   },
-  watch:{
-    list(value){
-      if(Array.isArray(value)){
-        this.loading = value.length === 0 ? true:false;
-      }else{
-        this.loading = false
+  watch: {
+    list(value) {
+      if (Array.isArray(value)) {
+        this.loading = value.length === 0 ? true : false;
+      } else {
+        this.loading = false;
       }
-    }
+    },
   },
-  computed:{
-    languagePack(){
-      return this.$store.state.Language
-    }
-  }
+  computed: {
+    languagePack() {
+      return this.$store.state.Language;
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .punishment-main {
   width: 1280px;
-  margin: 0 auto;
+  margin: 0 auto 80px;
   .title {
     height: 60px;
     line-height: 60px;
@@ -147,11 +170,12 @@ export default {
     .header,
     .footer {
       height: 60px;
-      font-weight: 500;
       font-size: 12px;
       color: rgba(20, 37, 62, 0.85);
-      line-height: 60px;
       padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
     }
     .tableBody {
       height: 612px;
@@ -159,13 +183,13 @@ export default {
   }
 }
 
-@media screen and (max-width:598px) {
+@media screen and (max-width: 598px) {
   .punishment-main {
-    .title{
-      padding-left: 10px ;
+    .title {
+      padding-left: 10px;
     }
     width: 100%;
-    &-table{
+    &-table {
       width: 100%;
     }
   }

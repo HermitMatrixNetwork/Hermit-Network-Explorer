@@ -39,13 +39,14 @@ export default {
     },
     queryDealtoAddress(address) {
       if(this.$route.path == '/hash_detail'){
-        return this.$router.replace({ path: '/address_detail', query: { address } }).catch(e => { })
+        return this.$router.push({ path: '/address_detail', query: { address } }).catch(e => { })
       }
       this.$router.push({ path: '/address_detail', query: { address } }).catch(e => { })
     },
     disposeTableType(arr) {
       if (!Array.isArray(arr)) return ;
       arr.forEach((item) => {
+        item.targetAddress = item.targetAddress?item.targetAddress:item.message?item.message.validator_address:''
         switch (item.operate) {
           case "MsgExecuteContract":
             item.type = "合约执行";
@@ -101,10 +102,10 @@ export default {
     queryDealtoBlock(height) {
       let path = this.$route.path
       if (path === "/block_detail") {
-        return this.$router.replace({ query: { height, status: 0 } }).catch(e => { })
+        return this.$router.push({ query: { height, status: 0 } }).catch(e => { })
       }
       if (path === '/hash_detail') {
-        return this.$router.replace({ path: '/block_detail', query: { height } }).catch(e => { })
+        return this.$router.push({ path: '/block_detail', query: { height } }).catch(e => { })
       }
       this.$router.push({ path: '/block_detail', query: { height } }).catch(e => { })
     },

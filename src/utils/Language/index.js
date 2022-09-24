@@ -19,7 +19,9 @@ let prompt = {
         'prompttext10':'Check the details',
         'prompttext11':'No data available for the time being',
         'prompttext12':'The number of new users',
-
+        'prompttext13':'An application has been submitted.',
+        'prompttext14':'Submitted successfully',
+        
     },
     Cn:{
         'prompttext01':'暂未开放',
@@ -34,6 +36,8 @@ let prompt = {
         'prompttext10':'查看详情',
         'prompttext11':'暂无数据',
         'prompttext12':'新增用户数',
+        'prompttext13':'已经提交过申请',
+        'prompttext14':'提交成功',
 
 
     },
@@ -50,6 +54,8 @@ let prompt = {
         'prompttext10':'查看詳情',
         'prompttext11':'暫無數據',
         'prompttext12':'新增用戶數',
+        'prompttext13':'已经提交过申请',
+        'prompttext14':'提交成功',
 
     }
 }

@@ -113,6 +113,9 @@ export default {
       this.allData = data.list
       this.allData.forEach((item,index)=>{
         item.rank = index + 1
+        if(item.balance == 0){
+          this.allData.splice(index,1)
+        }
       })
       this.tableData =  this.allData.slice(0,10);
       if (this.pagination == 0) return (this.pagination = data.total);

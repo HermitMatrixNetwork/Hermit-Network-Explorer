@@ -140,11 +140,12 @@ export default {
     async getData(limit) {
       const res = await getContract(limit);
       console.log("合约列表", res);
-      // let arr = res.data.list;
-      // arr.forEach((item) => {
-      //   item.user_count = Object.keys(item.user_count).length;
-      // });
-      this.tableList = res.data.list;
+      let arr = res.data.list;
+      arr.forEach((item) => {
+        item.user_count = Object.keys(item.user_count).length;
+        // console.log(Object.keys(item.user_count));
+      });
+      this.tableList = arr;
       this.pagination = res.data.total;
     },
     handleSizeChange() {},
@@ -240,21 +241,27 @@ export default {
       .icon {
         width: 64px;
         height: 64px;
-        background-size: 100% 100%;
+        
       }
       &:nth-child(1) {
         .icon {
-          background: url("../../assets/img/contract_icon1.png");
+          background: url("../../assets/img/contract_icon1@2x.png") no-repeat;
+          background-size: 100% 100%;
+
         }
       }
       &:nth-child(2) {
         .icon {
-          background: url("../../assets/img/contract_icon2.png");
+          background: url("../../assets/img/contract_icon2@2x.png") no-repeat;
+          background-size: 100% 100%;
+
         }
       }
       &:nth-child(3) {
         .icon {
-          background: url("../../assets/img/contract_icon3.png");
+          background: url("../../assets/img/contract_icon3@2x.png") no-repeat;
+          background-size: 100% 100%;
+
         }
       }
     }

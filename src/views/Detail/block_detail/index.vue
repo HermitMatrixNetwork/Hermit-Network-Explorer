@@ -29,7 +29,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext14 }}：</p>
-              <span>{{ blockData.timestamp | timeStamp }} +UTC</span>
+              <span>{{ blockData.timestamp}} +UTC</span>
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext18 }}：</p>
@@ -42,7 +42,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext19 }}：</p>
-              <span>{{ blockData.gas_used }}<span style="color:#86909C45" v-if="blockData.gas_total"> ({{(blockData.gas_used/blockData.gas_total*100).toFixed(2)}} %)</span></span>
+              <span>{{ blockData.gas_used }}<span style="color:#86909C" v-if="blockData.gas_total"> ({{(blockData.gas_used/blockData.gas_total*100).toFixed(2)}} %)</span></span>
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext16 }}：</p>
@@ -108,7 +108,7 @@
           </el-table-column>
           <el-table-column prop="timestamp" :label="languagePack.blocktext25">
             <template slot-scope="scope">
-              <div>{{ scope.row.timestamp | jetlag }}</div>
+              <div>{{ TimeStamp(scope.row.timestamp)  }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -150,7 +150,7 @@
           <el-table-column :label="languagePack.blocktext28">
             <template slot-scope="scope">
               <div>
-                {{ scope.row.tx_amount /1e6
+                {{ isNaN(scope.row.tx_amount)?0:scope.row.tx_amount /1e6
                 }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
               </div>
             </template>
@@ -215,6 +215,7 @@ export default {
         return false;
       }
       this.blockData = res.data.block;
+      this.blockData.timestamp = this.blockData.timestamp.slice(0,19)
       let arr = res.data.txs;
       this.disposeTableType(arr);
       this.tableData = arr;

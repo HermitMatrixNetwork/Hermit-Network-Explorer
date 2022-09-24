@@ -27,17 +27,26 @@
               :rules="rules"
               label-width="190px"
             >
-              <el-form-item :label="languagePack.applytext05 + '： '" prop="user">
-                <el-input v-model="form.user" :placeholder="languagePack.applytext06"></el-input>
+              <el-form-item
+                :label="languagePack.applytext05 + '： '"
+                prop="user"
+              >
+                <el-input
+                  v-model="form.user"
+                  :placeholder="languagePack.applytext06"
+                ></el-input>
               </el-form-item>
-              <el-form-item :label="languagePack.applytext07 +'：'" prop="contact">
+              <el-form-item
+                :label="languagePack.applytext07 + '：'"
+                prop="contact"
+              >
                 <el-input
                   v-model="form.contact"
                   :placeholder="languagePack.applytext08"
                 ></el-input>
               </el-form-item>
               <!--代币LOGO上传-->
-              <el-form-item :label="languagePack.applytext09 + '：'" >
+              <el-form-item :label="languagePack.applytext09 + '：'">
                 <el-upload
                   action="#"
                   list-type="picture-card"
@@ -65,65 +74,96 @@
                       </span>
                     </span>
                   </div>
-                  <div slot="tip" class="el-upload__tip">推荐：尺寸256 像素 x 256 像素，背景透明</div>
+                  <div
+                    slot="tip"
+                    style="white-space: nowrap"
+                    class="el-upload__tip"
+                  >
+                    {{ languagePack.applytext34 }}
+                  </div>
                 </el-upload>
               </el-form-item>
 
               <!--表单-->
-              <el-form-item :label="languagePack.applytext11 + '：'" prop="contract_address">
+              <el-form-item
+                :label="languagePack.applytext11 + '：'"
+                prop="contract_address"
+              >
                 <el-input
                   v-model="form.contract_address"
                   :placeholder="languagePack.applytext11"
                 ></el-input>
               </el-form-item>
-              <el-form-item :label="languagePack.applytext12 +'：'" prop="full_name">
+              <el-form-item
+                :label="languagePack.applytext12 + '：'"
+                prop="full_name"
+              >
                 <el-input
                   v-model="form.full_name"
                   :placeholder="languagePack.applytext13"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item :label="languagePack.applytext14+'：'" prop="alias_name">
+              <el-form-item
+                :label="languagePack.applytext14 + '：'"
+                prop="alias_name"
+              >
                 <el-input
                   v-model="form.alias_name"
                   :placeholder="languagePack.applytext15"
                 ></el-input>
               </el-form-item>
-              <el-form-item :label="languagePack.applytext16+'：'" prop="total_supply">
+              <el-form-item
+                :label="languagePack.applytext16 + '：'"
+                prop="total_supply"
+              >
                 <el-input
                   v-model="form.total_supply"
                   :placeholder="languagePack.applytext17"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item :label="languagePack.applytext18+'：'" prop="currency">
+              <el-form-item
+                :label="languagePack.applytext18 + '：'"
+                prop="currency"
+              >
                 <el-input
                   v-model="form.currency"
                   :placeholder="languagePack.applytext19"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item :label="languagePack.applytext20+'：'" prop="desc">
+              <el-form-item
+                :label="languagePack.applytext20 + '：'"
+                prop="desc"
+              >
                 <el-input
                   type="textarea"
                   :autosize="{ minRows: 3, maxRows: 6 }"
                   :placeholder="languagePack.applytext21"
                   v-model="form.desc"
-                  maxlength="300"
+                  maxlength="150"
                   show-word-limit
                 >
                 </el-input>
               </el-form-item>
 
-              <el-form-item :label="languagePack.applytext23+'：'" class="unRequired">
+              <el-form-item
+                :label="languagePack.applytext23 + '：'"
+                class="unRequired"
+              >
                 <el-input
                   v-model="form.official"
                   :placeholder="languagePack.applytext24"
                 ></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit('form')">{{languagePack.applytext25}}</el-button>
-                <el-button @click="clearForm('form')">{{languagePack.applytext26}}</el-button>
+                <el-button type="primary" @click="onSubmit('form')">{{
+                  languagePack.applytext25
+                }}</el-button>
+                <el-button @click="clearForm('form')">{{
+                  languagePack.applytext26
+                }}</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -136,9 +176,9 @@
 <script>
 import axios from "axios";
 import mixins from "@/mixins";
-import {sumbitToken} from '@/api/api.js'
+import { sumbitToken } from "@/api/api.js";
 export default {
-  mixins:[mixins],
+  mixins: [mixins],
   data() {
     let username = (rule, value, callback) => {
       if (!value) {
@@ -181,7 +221,7 @@ export default {
         return callback(new Error(this.languagePack.applytext27));
       }
       if (value.length > 300) {
-        return callback(new Error("长度不超过300"));
+        return callback(new Error("长度不超过150"));
       } else {
         callback();
       }
@@ -216,11 +256,11 @@ export default {
         callback();
       }
     };
-    let logo = (rule,value,callback) => {
-      if(!value){
-        return callback(new Error('请上传图片'))
+    let logo = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("请上传图片"));
       }
-    }
+    };
     return {
       titleStyle: {
         position: "relative",
@@ -241,7 +281,6 @@ export default {
         desc: "", //描述 text
         official: "", //官网 http://boxi666.com
       },
-      dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,
       fileList: [],
@@ -253,9 +292,9 @@ export default {
         currency: [{ validator: issuetotal, trigger: "blur" }],
         desc: [{ validator: descmessage, trigger: "blur" }],
         contract_address: [{ validator: contract_address, trigger: "blur" }],
-        full_name: [{validator:full_name,trigger:'blur'}],
-        alias_name: [{validator:alias_name,trigger:'blur'}],
-        logo:[{validator:logo,trigger:'change'}]
+        full_name: [{ validator: full_name, trigger: "blur" }],
+        alias_name: [{ validator: alias_name, trigger: "blur" }],
+        logo: [{ validator: logo, trigger: "change" }],
       },
     };
   },
@@ -263,14 +302,17 @@ export default {
     async onSubmit(formName) {
       // console.log("submit!");
       let status;
+
       this.$refs[formName].validate((e) => {
-        if(!e){
-          return status = false
-        }else{
-          return status = true
+        if (!e) {
+          return (status = false);
+        } else {
+          return (status = true);
         }
       });
-      if(!status) return
+      if (!status) return;
+      if (!this.tokenLogo)
+        return this.messageBox(this.languagePack.applytext33, "error");
       const {
         user,
         contact,
@@ -296,15 +338,16 @@ export default {
         official,
         order: 1,
       };
-      const {code,msg} = await sumbitToken(params)
-      if(code === 7){
-        this.messageBox(msg,'error')
-      }else{
-        this.messageBox('提交成功','success')
+      const { code, msg } = await sumbitToken(params);
+      if (code === 7) {
+        this.messageBox(this.languagePack.prompttext13, "error");
+      } else {
+        this.messageBox(this.languagePack.prompttext14, "success");
       }
     },
     upload() {},
     fileChange(file) {
+      this.fileList.push(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         const src = e.target.result;
@@ -315,19 +358,24 @@ export default {
       reader.readAsDataURL(file.raw);
     },
     handleRemove(file, fileList) {
-      // console.log(file)
       console.log(file);
-      console.log(fileList);
+      for(let i in this.fileList){
+        if(this.fileList[i].url === file.url){
+          this.fileList.splice(i,1)
+        }
+      }
     },
     clearForm(formName) {
       this.$refs[formName].resetFields();
+      this.form.official = "";
+      this.fileList = []
     },
   },
-  computed:{
-    languagePack(){
-      return this.$store.state.Language
-    }
-  }
+  computed: {
+    languagePack() {
+      return this.$store.state.Language;
+    },
+  },
 };
 </script>
 

@@ -388,6 +388,7 @@ export default {
     },
 
     lastData() {
+      this.$router.push({ query: null }).catch((e) => {});
       if (this.hashIndex == 0) return;
       sessionStorage.setItem(
         "hashList",
@@ -395,6 +396,7 @@ export default {
       );
     },
     nextData() {
+      this.$router.push({ query: null }).catch((e) => {});
       if (this.hashIndex == this.hashList.length - 1) return;
       sessionStorage.setItem(
         "hashList",
@@ -427,10 +429,13 @@ export default {
     },
     "$route.query": {
       handler(val) {
-        console.log("通过query");
-        this.queryData(JSON.parse(val.hash));
+        if (val.hash) {
+          // console.log('query中的hash',val);
+          // console.log("通过query", JSON.parse(val.hash).hash);
+          this.queryData(JSON.parse(val.hash));
+        }
       },
-      deep: true,
+      // deep: true,
     },
   },
   computed: {
@@ -474,16 +479,19 @@ export default {
       }
     },
     TxStatus() {
+      if (this.$route.query.hash) return false;
       if (this.hashIndex) {
         return this.hashList[this.hashIndex].status;
-      }else{
-        return false
+      } else {
+        return false;
       }
     },
   },
-  beforeDestroy(){
-    this.$router.push({query:null}).catch(e=>{})
-  }
+  destroyed() {
+    // if (this.$route.query) {
+      // this.$router.push({ query: null }).catch((e) => {});
+    // }
+  },
 };
 </script>
 

@@ -24,7 +24,7 @@
           <template #message>
             <div class="messageBasic">
               <div class="prompt">
-                <img src="@/assets/img/Close-Circle-Fill.png" alt="" />
+                <img src="@/assets/img/Close-Circle-Fill@2x.png" alt="" width="12"/>
                 {{languagePack.RPCtext11}}
               </div>
               <div class="column">

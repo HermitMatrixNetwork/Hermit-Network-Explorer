@@ -3,27 +3,44 @@
     <div id="setting_Image">
       <div class="content">
         <div class="leftContent">
-          <div class="bannerPrompt">{{languagePack.hometext01}}</div>
+          <div class="bannerPrompt">{{ languagePack.hometext01 }}</div>
           <SearchBox :currentHeight="basicData.blockHeight"></SearchBox>
-          <a href="http://www.baidu.com" target="_blank" class="link">活动：此处可插入广告语进行引导 跳转按钮 跳转网页</a>
+          <a href="http://www.baidu.com" target="_blank" class="link"
+            >活动：此处可插入广告语进行引导 跳转按钮 跳转网页</a
+          >
         </div>
         <div class="banner">
-          <a href="http://www.baidu.com" target="_blank"><img src="@/assets/img/home_banner.png" alt=""/></a>
+          <a href="http://www.baidu.com" target="_blank"
+            ><img src="@/assets/img/home_banner.png" alt=""
+          /></a>
         </div>
       </div>
     </div>
 
     <div class="pageMain">
       <div class="block-message">
-        <div v-for="(item,index) in messageList" :key="index" class="block-item">
+        <div
+          v-for="(item, index) in messageList"
+          :key="index"
+          class="block-item"
+        >
           <div class="blockicon">
-            <img :src="item.icon" alt="" />
+            <img :src="item.icon" width="64px" alt="" />
           </div>
           <div class="explain">
             <p>{{ item.title }}</p>
-            <h3 v-if="index === 0">$ {{item.price}}<span :style="{ color: item.updown > 0 ? '#f23c24' : '#55C499' }">{{ item.updown }}</span>
+            <h3 v-if="index === 0">
+              $ {{ item.price
+              }}<span
+                :style="{ color: item.updown > 0 ? '#f23c24' : '#55C499' }"
+                >{{ item.updown }}</span
+              >
             </h3>
-            <h3 v-else>{{ item.price}} M<span :style="{ color: item.updown > 0 ? '#f23c24' : '#55C499' }">{{ item.updown }}</span>
+            <h3 v-else>
+              {{ item.price }} M<span
+                :style="{ color: item.updown > 0 ? '#f23c24' : '#55C499' }"
+                >{{ item.updown }}</span
+              >
             </h3>
           </div>
         </div>
@@ -87,13 +104,13 @@
                 placement="top-start"
                 popper-class="circulateTooltipStyle"
               >
-                <img src="@/assets/img/annotation.png" />
+                <img src="@/assets/img/annotation@2x.png" width="12px" height="12px"/>
               </el-tooltip>
               /{{ languagePack.hometext29 }}
             </p>
             <span>
-              {{ basicData.circulation / 1e12 + "M" }}/{{
-                basicData.issueNum / 1e12 + "M"
+              {{ (basicData.circulation / 1e12).toFixed(6) + "M" }}/{{
+                (basicData.issueNum / 1e12).toFixed(6) + "M"
               }}
             </span>
             <el-progress
@@ -110,9 +127,8 @@
           <div class="progress">
             <p>{{ languagePack.hometext17 }}</p>
             <span
-              >{{ basicData.Pledgerate }}% /{{
-                (basicData.issueNum / 1e12) + "M"
-              }}</span
+              >{{ basicData.Pledgerate }}% /
+              {{ basicData.pledgeNum / 1e6 }}</span
             >
             <el-progress
               :percentage="
@@ -142,7 +158,7 @@
               v-for="item in blockList"
               :key="item._id"
             >
-              <img src="@/assets/img/bar.png" alt="" />
+              <img src="@/assets/img/bar@2x.png" alt="" width="40px"/>
               <div class="basic">
                 <p>
                   <span @click="queryDealtoBlock(item._id)">{{
@@ -150,14 +166,14 @@
                   }}</span>
                   <span
                     style="color: rgba(20, 37, 62, 0.85); padding-left: 24px"
-                    >{{ languagePack.hometext20 }} </span
-                  >
+                    >{{ languagePack.hometext20 }}
+                  </span>
                   <span @click="queryDealtoNode(item.validator)">{{
                     item.proposer_address | sliceAddress
                   }}</span>
                 </p>
-                <p>{{ item.timestamp | jetlag }}</p>
-                <!-- <p>{{item.timeStamp}}</p> -->
+                <!-- <p>{{ item.timestamp | jetlag }}</p> -->
+                <p>{{TimeStamp(item.timestamp)}}</p>
                 <!-- {{ languagePack.xsecondsago }} -->
               </div>
               <div class="btnRate">{{ item.tx_count }} Txns</div>
@@ -256,6 +272,11 @@ export default {
   },
   async created() {
     this.basicData.blockHeight = await this.getnowBlockHeight();
+    const { validators } = await allValidationNode();
+    this.nodelist = validators.sort((a,b)=>{
+        return b.tokens - a.tokens
+      });;
+
     this.getBlockMsg();
     this.getnowBlockList();
     // let {
@@ -277,7 +298,8 @@ export default {
     //获取当前区块高度
     async getnowBlockHeight() {
       const res = await getLatestBlock();
-      return res.block.last_commit.height;
+      // console.log('最新出块',res);
+      return res.block.header.height;
     },
     //获取数据
     async getBlockMsg() {
@@ -286,12 +308,14 @@ export default {
       const {
         pool: { bonded_tokens },
       } = await pledgeTotal(); //获取质押参数
-      const { validators } = await allValidationNode();
       // console.log("节点", await querylatestNodeMessage());
+      const { validators } = await allValidationNode();
+      this.nodelist = validators.sort((a,b)=>{
+        return b.tokens - a.tokens
+      });
       const {
         data: { total },
       } = await queryTxList(10, 1); //获取交易数量
-      let newValidatoes = validators.reverse();
       this.basicData = {
         ...this.basicData,
         totalNum: res.pagination.total, //总地址数量
@@ -299,14 +323,12 @@ export default {
         pledgeNum: bonded_tokens, //质押参数
         circulation: supply[0].amount - bonded_tokens, //流通量 = 总发行量 - 质押量
         Pledgerate: ((bonded_tokens / supply[0].amount) * 100).toFixed(1), //质押率
-        latestNode: {
-          moniker: newValidatoes[0].description.moniker,
-          address: newValidatoes[0].operator_address,
-        }, //最新出块节点
         detailNum: total,
       };
-
-      this.nodelist = newValidatoes;
+      let blockList = this.blockList.slice(0,5).map(item=>item.tx_count)
+      let num1 = blockList.reduce((a,b)=>a+b);
+      let num2 = blockList.sort()[4];
+      this.TPS = num1/5 + ' / ' + num2
     },
     //实时出块区块
     async getnowBlockList() {
@@ -314,12 +336,13 @@ export default {
         data: { list },
       } = await queryBlockList(20, 0);
       // console.log("最新的出块区块", list);
+      //计算最新出块节点
+      this.computeLastNode(list[0].validator);
       this.blockList = list;
       let echartList = list.map((e) => {
         return { height: e._id, timestamp: e.timestamp, tx: e.tx_count };
       });
       if (this.chartsAnimation) {
-        // console.log('调用出块动画');
         blockBar(this.charts, echartList);
       }
     },
@@ -332,19 +355,14 @@ export default {
         return 1;
       }
     },
-
-    async updateNode() {
-      const { validators } = await allValidationNode();
-      const {
-        data: { total },
-      } = await queryTxList(10, 1); //获取交易数量
-      let newValidators = validators.reverse();
-      this.basicData.detailNum = total;
+    computeLastNode(value) {
+      const { nodelist } = this;
       this.basicData.latestNode = {
-        moniker: newValidators[0].description.moniker,
-        address: newValidators[0].operator_address,
+        moniker: nodelist.find((e) =>{
+          return e.operator_address === value
+        }).description.moniker,
+        address: value,
       };
-      this.nodelist = newValidators;
     },
   },
   activated() {
@@ -371,24 +389,18 @@ export default {
           title: hometext08,
           price: this.tokenPrice,
           updown: "",
-          icon: require("@/assets/img/home_icon1.png"),
+          icon: require("@/assets/img/home_icon1@2x.png"),
         },
         {
           title: hometext09,
           price: "0.00",
           updown: "",
-          icon: require("@/assets/img/home_icon2.png"),
+          icon: require("@/assets/img/home_icon2@2x.png"),
         },
       ];
     },
   },
   watch: {
-    blockList(value) {
-      let num1 = value[0].tx_count;
-      let num2 = value[1].tx_count;
-      this.TPS = num1 + num2 + " / " + (num1 > num2 ? num1 : num2);
-      // console.log(num1,num2,'TPS',this.TPS);
-    },
     async lastUpdate(value) {
       if (value % 3 === 0) {
         const number = await this.getnowBlockHeight();
@@ -410,7 +422,7 @@ export default {
 }
 #setting_Image {
   min-height: 277px;
-  background: url("../../assets/img/home_background.png");
+  background: url("../../assets/img/home_background@2x.png");
   background-size: 100% 100%;
   .content {
     max-width: 1280px;
@@ -478,7 +490,7 @@ export default {
           height: 17px;
           font-weight: 400;
           font-size: 12px;
-          color: #86909C;
+          color: #86909c;
           white-space: nowrap;
         }
         h3 {
@@ -533,7 +545,7 @@ export default {
           height: 17px;
           font-weight: 400;
           font-size: 12px;
-          color: #86909C;
+          color: #86909c;
           letter-spacing: 0;
           margin-bottom: 8px;
         }
@@ -566,7 +578,7 @@ export default {
     padding: 40px 64px;
     display: flex;
     font-size: 12px;
-    color: #86909C;
+    color: #86909c;
     div {
       flex: 1;
       height: 100%;
@@ -706,7 +718,7 @@ export default {
       border-radius: 1px 4px 4px 1px 0;
       font-weight: bold;
       font-size: 12px;
-      color: #86909C;
+      color: #86909c;
       letter-spacing: 0;
       text-align: center;
       line-height: 28px;
@@ -730,7 +742,7 @@ export default {
       }
       p:nth-child(2) {
         height: 17px;
-        color: #86909C;
+        color: #86909c;
       }
     }
   }
@@ -749,7 +761,7 @@ export default {
     .content {
       height: 200px;
       min-width: 100% !important;
-      .leftContent{
+      .leftContent {
         width: 100%;
         padding: 0 10px;
       }
@@ -847,10 +859,9 @@ export default {
 .progress {
   height: 60px !important;
 }
-
 </style>
 <style>
-  .circulateTooltipStyle{
+.circulateTooltipStyle {
   height: auto;
 }
 </style>

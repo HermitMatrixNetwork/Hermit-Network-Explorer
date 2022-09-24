@@ -1,7 +1,7 @@
 let contract = {
     En:{
         'contracttext01':'contract',
-        'contracttext02':'overview',
+        'contracttext02':'Total number of operations',
         'contracttext03':'the number of users',
         'contracttext04':'deployed contracts',
         'contracttext05':'contract ID',
@@ -13,7 +13,7 @@ let contract = {
     },
     Cn:{
         'contracttext01':'合约',
-        'contracttext02':'概览',
+        'contracttext02':'总运算次数',
         'contracttext03':'总用户数',
         'contracttext04':'已部署合约',
         'contracttext05':'合约ID',
@@ -25,7 +25,7 @@ let contract = {
     },
     Ct:{
         'contracttext01':'合約',
-        'contracttext02':'概覽',
+        'contracttext02':'總運算次數',
         'contracttext03':'總用戶數',
         'contracttext04':'已部署合約',
         'contracttext05':'合約ID',
@@ -59,6 +59,9 @@ let contract_detail = {
         'contracttext28':'details',
         'contracttext29':'Total found',
         'contracttext30':'Contracts',
+        'contracttext31':'Operation',
+        'contracttext33':'',
+
     },
     Cn:{
         'contracttext11':'合约信息',
@@ -81,6 +84,9 @@ let contract_detail = {
         'contracttext28':'详情',
         'contracttext29':'总共找到',
         'contracttext30':'个合约',
+        'contracttext31':'操作',
+        'contracttext33':'次',
+
     },
     Ct:{
         'contracttext11':'合約信息',
@@ -103,6 +109,9 @@ let contract_detail = {
         'contracttext28':'詳情',
         'contracttext29':'總共找到',
         'contracttext30':'個合約',
+        'contracttext31':'操作',
+        'contracttext33':'次',
+
     }
 }
 

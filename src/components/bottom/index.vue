@@ -3,19 +3,19 @@
     <div class="contact">
       <div class="bottom_logo">
         <img
-          src="../../assets/img/bottom-bar_logo.png"
+          src="../../assets/img/bottom-bar_logo@2x.png"
           alt=""
           width="28"
           class="bottomLogo"
         />
-        <!-- <img src="@/assets/img/bottom-bar_logo@2x.png" alt="" width="48" class="bottomLogoM"> -->
+        <!-- <img src="@/assets/img/bottom-bar_logo@2x@2x.png" alt="" width="48" class="bottomLogoM"> -->
         <p>Powered by Hermit Matrix Network</p>
       </div>
 
       <div class="contact_ways">
         <div class="qrcode">
           <p>微信公众号</p>
-          <img src="../../assets/img/bottom-bar_qrcode.png" alt="" />
+          <img src="../../assets/img/bottom-bar_qrcode@2x.png" alt="" />
         </div>
         <div
           class="contact_ways_item"
@@ -38,23 +38,23 @@ export default {
       contacts: [
         {
           label: "Telegram",
-          icon: require("@/assets/img/bottom-bar_telegram.png"),
+          icon: require("@/assets/img/bottom-bar_telegram@2x.png"),
         },
         {
           label: "Twitter",
-          icon: require("@/assets/img/bottom-bar_twitter.png"),
+          icon: require("@/assets/img/bottom-bar_twitter@2x.png"),
         },
         {
           label: "Medium",
-          icon: require("@/assets/img/bottom-bar_medium.png"),
+          icon: require("@/assets/img/bottom-bar_medium@2x.png"),
         },
         {
           label: "GitHub",
-          icon: require("@/assets/img/bottom-bar_github.png"),
+          icon: require("@/assets/img/bottom-bar_github@2x.png"),
         },
         {
           label: "Gitbook",
-          icon: require("@/assets/img/bottom-bar_gitbook.png"),
+          icon: require("@/assets/img/bottom-bar_gitbook@2x.png"),
         },
       ],
     };
@@ -67,7 +67,7 @@ export default {
   position: relative;
   width: 100%;
   height: 210px;
-  background: url("../../assets/img/bottom-bar_background.png");
+  background: url("../../assets/img/bottom-bar_background@2x.png");
   background-size: 100% 100%;
 
   .contact {

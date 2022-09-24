@@ -39,10 +39,10 @@
           width="80px"
           align="center"
         >
-        <template slot-scope="scope">
-          <div>{{scope.row.rank}}</div>
-        </template>
-      </el-table-column>
+          <template slot-scope="scope">
+            <div>{{ scope.row.rank }}</div>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="address"
           :label="languagePack.accounttext10"
@@ -61,7 +61,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            <div>{{ scope.row.balance/1e6 }} GHM</div>
+            <div>{{ scope.row.balance / 1e6 }} GHM</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -102,7 +102,7 @@ export default {
   data() {
     return {
       accountslist: [],
-      allData:[],
+      allData: [],
       amountnum: "",
       currentPage: 0,
       navIndex: 0,
@@ -124,7 +124,7 @@ export default {
     let arr = [600, 1000, 800, 900, 450, 600, 920, 450, 890, 860, 400, 650];
     const chart = document.querySelector(".line_chart");
     this.lineChart = echarts.init(chart);
-    line(this.lineChart, arr,this.languagePack.prompttext12);
+    line(this.lineChart, arr, this.languagePack.prompttext12);
   },
   filters: {
     toMoney,
@@ -133,9 +133,9 @@ export default {
     async getaccounts(pageSize, page) {
       const res = await queryAccountList(pageSize, page);
       console.log("获取的数组", res.data.list);
-      this.allData = res.data.list
-      this.allData.forEach((item,index)=>item.rank = index+1)
-      this.accountslist = this.allData.slice(0,10)
+      this.allData = res.data.list;
+      this.allData.forEach((item, index) => (item.rank = index + 1));
+      this.accountslist = this.allData.slice(0, 10);
       if (this.pagination == 0) return (this.pagination = res.data.total);
     },
     //获取uGHM的总的供应量
@@ -153,8 +153,8 @@ export default {
       //   (this.pageData.page = 0)
       // );
 
-      this.pageData.pageSize = value
-      this.accountslist = this.allData.slice(0,value);
+      this.pageData.pageSize = value;
+      this.accountslist = this.allData.slice(0, value);
     },
     handleCurrentChange(val) {
       // this.pageData.page = val - 1;
@@ -164,7 +164,10 @@ export default {
 
       this.pageData.page = val - 1;
       let { pageSize, page } = this.pageData;
-      this.accountslist = this.allData.slice(page*pageSize,page*pageSize+pageSize);
+      this.accountslist = this.allData.slice(
+        page * pageSize,
+        page * pageSize + pageSize
+      );
     },
     chartsChange(index) {
       this.navIndex = index;
@@ -177,11 +180,19 @@ export default {
           );
           break;
         case 1:
-          line(this.lineChart, [1, 2, 3, 4, 5, 6, 7],this.languagePack.prompttext12);
+          line(
+            this.lineChart,
+            [1, 2, 3, 4, 5, 6, 7],
+            this.languagePack.prompttext12
+          );
 
           break;
         case 2:
-          line(this.lineChart, [7, 6, 5, 4, 3, 2, 1],this.languagePack.prompttext12);
+          line(
+            this.lineChart,
+            [7, 6, 5, 4, 3, 2, 1],
+            this.languagePack.prompttext12
+          );
           break;
         case 3:
           line(
@@ -212,6 +223,10 @@ export default {
       } else {
         this.loading = false;
       }
+    },
+    languagePack(val) {
+      let arr = [600, 1000, 800, 900, 450, 600, 920, 450, 890, 860, 400, 650];
+      line(this.lineChart, arr, val.prompttext12);
     },
     deep: true,
   },

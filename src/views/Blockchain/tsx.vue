@@ -83,7 +83,7 @@
                     {{languagePack.prompttext10}}
                   </div>
                 </div>
-                <img slot="reference" src="@/assets/img/table_eye_nor.png" />
+                <img slot="reference" width="14" src="@/assets/img/table_eye_nor@2x.png" />
               </el-popover>
             </div>
           </template>
@@ -101,8 +101,9 @@
                 placement="top"
               >
                 <img
-                  src="@/assets/img/table_mistake.png"
+                  src="@/assets/img/table_mistake@2x.png"
                   v-if="scope.row.result === 'error'"
+                  width="14"
                   @click.stop
                 />
               </el-tooltip>
@@ -143,7 +144,8 @@
           <template slot-scope="scope">
             <div>
               <img
-                src="@/assets/img/table_transmit.png"
+                src="@/assets/img/table_transmit@2x.png"
+                width="20"
                 alt=""
                 v-if="scope.row.result !== 'error'"
               />
@@ -159,7 +161,7 @@
           <template slot-scope="scope">
             <TableTooltip
               :content="scope.row.targetAddress"
-              @click.native="toAddress(scope.row.targetAddress)"
+              @click.native="scope.row.targetAddress"
             ></TableTooltip>
           </template>
         </el-table-column>
@@ -245,9 +247,9 @@ export default {
       //   this.page.total = data.total;
     },
     queryTxDetail(index) {
+      sessionStorage.setItem('hashList',JSON.stringify({hashList:this.hashList,index}))
       console.log(this.hashList, index);
       this.$router.push({name: "hash_detail"});
-      sessionStorage.setItem('hashList',JSON.stringify({hashList:this.hashList,index}))
     },
     toAddress(address) {
       this.$router.push({ path: "/address_detail", query: { address } });

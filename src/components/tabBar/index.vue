@@ -5,7 +5,7 @@
       :style="{ height: $route.path == '/home' ? '60px' : '110px' }"
     >
       <img
-        src="img/top-bar_logo.png"
+        src="@/assets/img/top-bar_logo@2x.png"
         class="logo_style"
         @click="toGo('/home')"
       />
@@ -289,8 +289,7 @@ export default {
   created() {
     this.lang = localStorage.getItem("language") || 0;
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     LanguageChange(val) {
       if (this.lang === val) return;
@@ -298,12 +297,16 @@ export default {
       localStorage.setItem("language", val);
       // 调用mutation中的方法，通过本地存储切换语言
       this.$store.commit("CHANGE_LANGUAGE");
-      
+
       this.messageBox(this.languagePack.prompttext04, "success");
     },
     blockCommand(command) {
       if (command === "/whitebook") {
-        window.open(window.location.origin+"/whitepaper.html");
+        window.open(window.location.origin + "/whitepaper.html");
+        return;
+      }
+      if (command === "/ibc" || command === '/Tendermint') {
+        window.open("https://github.com/HermitMatrixNetwork/web-browser");
         return;
       }
       this.toGo(command);
@@ -348,8 +351,8 @@ export default {
         { title: headertext10, command: "/whitebook" },
         { title: headertext11, command: "/developapi", divided: true },
         { title: headertext12, command: "/b" },
-        { title: headertext13, command: "/c" },
-        { title: headertext14, command: "/d" },
+        { title: headertext13, command: "/Tendermint" },
+        { title: headertext14, command: "/ibc" },
         { title: headertext15, command: "/compile" },
       ];
     },
@@ -376,7 +379,7 @@ export default {
   position: relative;
   width: 100%;
   font-size: 14px;
-  color: #86909C;
+  color: #86909c;
   box-shadow: inset 0 -1px 0 0 #e9eaef;
   z-index: 3333;
 }
@@ -430,10 +433,10 @@ export default {
     overflow: hidden;
     cursor: pointer;
     text-align: center;
-    color: #86909C;
+    color: #86909c;
   }
   .el-dropdown-link {
-    color: #86909C;
+    color: #86909c;
     cursor: pointer;
   }
 }
@@ -539,7 +542,7 @@ export default {
   width: 174px !important;
   white-space: nowrap;
   .el-dropdown-menu__item {
-    color: #86909C !important;
+    color: #86909c !important;
     line-height: 40px !important;
     &:hover {
       background: #ecefff !important;

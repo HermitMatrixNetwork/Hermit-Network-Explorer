@@ -6,7 +6,7 @@
           <div class="basicStyle messageBasic">
             <div class="column">
               <p>{{ languagePack.contracttext12 }}：</p>
-              <span>{{ contractData.contract_address }}</span>
+              <span>{{ contractData.contract_address }} <img src="@/assets/img/copy.png" @click="Copy(address)" style='cursor: pointer;'/></span>
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext18 }}：</p>
@@ -55,7 +55,7 @@
       <div class="contracts_table">
         <div class="contracts_table_title">
           {{ languagePack.contracttext23 }} {{ languagePack.contracttext24
-          }}<span> {{ txtotal }} </span>
+          }}<span> {{ txtotal }} </span>{{languagePack.contracttext33}}
         </div>
         <el-table
           height="612px"
@@ -70,7 +70,7 @@
           <el-table-column
             prop="ID"
             :label="languagePack.contracttext25"
-            width="570"
+            width="560"
           >
             <template slot-scope="scope">
               <div class="specialFont" @click="toaddress(scope.row.sender)">
@@ -78,15 +78,14 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column :label="languagePack.contracttext26" width="430">
+          <el-table-column :label="languagePack.contracttext26" width="420">
             <template slot-scope="scope">
               <p>
-                {{ scope.row.timestamp | timeStamp }}
+                {{ scope.row.timestamp.replace(/[A-Z]/g,' ')}} +UTC
               </p>
             </template>
           </el-table-column>
           <el-table-column
-            prop="num"
             :label="languagePack.contracttext27"
             width="200"
           >
@@ -102,11 +101,12 @@
                       scope.row.result == 'success' ? '#55C499' : '#ED422B',
                   }"
                 />
-                {{ scope.row.result }}
+                <span v-if="scope.row.result === 'success'">{{languagePack.prompttext02}}</span>
+                <span v-else>{{languagePack.prompttext03}}</span>
               </div>
             </template>
           </el-table-column>
-          <el-table-column :label="'操作'" align="center">
+          <el-table-column :label="languagePack.contracttext31" align="center">
             <template slot-scope="scope">
               <div class="tableDetail" @click="tohash(scope.$index)">
                 {{ languagePack.contracttext28 }}
@@ -163,12 +163,14 @@ export default {
       const address = this.$route.query.address;
       const txlist = await getContractTx(pageSize, page, address);
       console.log(txlist);
-      this.tableList = txlist.data.list;
-      if (this.tableList) {
-        this.hashList = txlist.data.list.map((item) => {
+      let arr = txlist.data.list
+      if(Array.isArray(arr)){
+        this.tableList = arr
+        this.hashList = this.tableList.map((item) => {
           return { hash: item._id, status: item.result };
         });
       }
+      this.tableList = arr
 
       if (this.txtotal !== 0) return;
       this.txtotal = txlist.data.total;
@@ -183,9 +185,9 @@ export default {
       this.queryTx(this.pageSize, this.page);
     },
     tohash(index) {
+      sessionStorage.setItem('hashList',JSON.stringify({hashList:this.hashList,index}))
       this.$router.push({
         name: "hash_detail",
-        params: { hash: this.hashList, index },
       });
     },
     toaddress(address) {

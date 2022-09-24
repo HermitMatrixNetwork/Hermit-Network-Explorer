@@ -32,6 +32,9 @@ let apply = {
         'applytext30': 'The mobile number cannot be empty.',
         'applytext31': 'Incorrect format of mobile phone',
         'applytext32': 'You can only fill in numbers.',
+        'applytext33': 'Logo value cannot be empty',
+        'applytext34': 'Recommended: size 256 pixels x 256 pixels, background transparent'
+        
     },
     Cn: {
         'applytext01': '上币说明',
@@ -66,7 +69,8 @@ let apply = {
         'applytext30': '手机号不能为空',
         'applytext31': '手机格式不正确',
         'applytext32': '仅能填写数字',
-
+        'applytext33': 'Logo值不能为空',
+        'applytext34': '推荐：尺寸256 像素 x 256 像素，背景透明'
     },
     Ct: {
         'applytext01': '上幣說明',
@@ -101,6 +105,9 @@ let apply = {
         'applytext30': '手機號不能爲空',
         'applytext31': '手機格式不正確',
         'applytext32': '僅能填寫數字',
+        'applytext33': 'Logo值不能為空',
+        'applytext34': '推荐：尺寸256 像素 x 256 像素，背景透明'
+
 
     }
 }

@@ -77,7 +77,7 @@
         >
           <div class="basicMessage messageBasic" v-if="selectNav == 0">
             <div class="basicMessage-title">
-              <img src="@/assets/img/bottom-bar_logo.png" alt="" />
+              <img src="@/assets/img/bottom-bar_logo@2x.png" alt="" />
               <h3>{{ basic.validator_name }}</h3>
             </div>
 
@@ -362,6 +362,10 @@ export default {
     this.getData(this.address, pageSize, currentPage);
     this.$loading();
   },
+  mounted(){
+    
+    
+  },
   methods: {
     async getData(address, limit, index) {
       const res = await Promise.all([
@@ -431,9 +435,9 @@ export default {
       let { pageSize, currentPage } = this.page;
       let {
         data: { list },
-      } = await getNodeblockList(pageSize, 0, this.address);
-      this.outblockTable = list;
-      setTimeout(() => (this.blockloading = false));
+      } = await getNodeblockList(pageSize, this.page.currentPage = 0, this.address);
+      this.outblockTable.list = list;
+      setTimeout(() => (this.blockloading = false),500);
     },
     async blockCurrentChange(value) {
       this.blockloading = true;
@@ -442,8 +446,8 @@ export default {
       let {
         data: { list },
       } = await getNodeblockList(pageSize, currentPage, this.address);
-      this.outblockTable = list;
-      setTimeout(() => (this.blockloading = false));
+      this.outblockTable.list = list;
+      setTimeout(() => (this.blockloading = false),500);
     },
 
     async rewardSizeChange(value) {
@@ -452,7 +456,7 @@ export default {
       let { pageSize, currentPage } = this.rewardPage;
       let {
         data: { list },
-      } = await getNodeRewardList(pageSize, 0, this.address);
+      } = await getNodeRewardList(pageSize,this.rewardPage.currentPage = 0, this.address);
       this.rewardTable.list = list;
       setTimeout(() => (this.rewardloading = false), 500);
     },
@@ -524,7 +528,8 @@ export default {
     border: 1px solid #e9eaef;
     box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
     border-radius: 4px;
-    overflow: auto;
+    overflow-x: auto;
+    height: auto;
     &-header,
     &-bottom {
       height: 52px;
@@ -626,4 +631,5 @@ export default {
   display: flex;
   align-items: center;
 }
+
 </style>

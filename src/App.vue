@@ -37,12 +37,17 @@ html,
 body,
 #app {
   width: 100%;
-  height: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
   background: #f8fafb;
 }
-
+@media screen and (max-width:598px) {
+  html,
+body,
+#app {
+  height: 100%;
+}
+}
 /* 修改全局滚动条 */
 ::-webkit-scrollbar {
   width: 3px;
