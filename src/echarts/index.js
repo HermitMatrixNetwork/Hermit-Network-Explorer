@@ -1,9 +1,7 @@
 import * as echarts from "echarts";
-import { debounce } from '@/utils/common.js'
-let newdebounce = debounce()
 export const blockBar = (element, data = []) => {
 
-  let { block, txcharts } = element
+  let { block, txcharts,txDom,blockDom } = element
   let heightmsg = []
   let timearr = []
   let txs = []
@@ -129,30 +127,32 @@ export const blockBar = (element, data = []) => {
   block.setOption(blockOption);
   txcharts.setOption(txOption)
   echarts.connect([block, txcharts]);
+  let _blockoption = echarts.getInstanceByDom(blockDom).getOption()
+  let _blockvalue = _blockoption.series[0].data
+  let _txsoption = echarts.getInstanceByDom(txDom).getOption()
+  let _txsvalue = _txsoption.series[0].data
 
   block.on('mouseover', function (event) {
-    if(txs[event.dataIndex].itemStyle) return
-    newdebounce(function () {
-      txs[event.dataIndex] = { value: txs[event.dataIndex], itemStyle: { color: '#1E42ED' } }
-      txcharts.setOption(txOption)
-    })
-
-    // console.log(newdebounce);
+    _txsvalue[event.dataIndex] = { value: _txsvalue[event.dataIndex], itemStyle: { color: '#1E42ED' } }
+    echarts.getInstanceByDom(txDom).setOption(_txsoption)
+    
   })
   block.on('mouseout', function (event) {
-    if(!txs[event.dataIndex].itemStyle) return
-    newdebounce(function () {
-      txs[event.dataIndex] = txs[event.dataIndex].value
-      txcharts.setOption(txOption)
-    })
+    _txsvalue[event.dataIndex] = _txsvalue[event.dataIndex].value
+    echarts.getInstanceByDom(txDom).setOption(_txsoption)
   })
+
+  
   txcharts.on('mouseover', function (event) {
-    timearr[event.dataIndex] = { value: timearr[event.dataIndex], itemStyle: { color: '#1E42ED' } }
-    block.setOption(blockOption)
+    _blockvalue[event.dataIndex] = { value: _blockvalue[event.dataIndex], itemStyle: { color: '#1E42ED' } }
+    echarts.getInstanceByDom(blockDom).setOption(_blockoption)
+
   })
+  
+
   txcharts.on('mouseout', function (event) {
-    timearr[event.dataIndex] = timearr[event.dataIndex].value
-    block.setOption(blockOption)
+    _blockvalue[event.dataIndex] = _blockvalue[event.dataIndex].value
+    echarts.getInstanceByDom(blockDom).setOption(_blockoption)
   })
 };
 

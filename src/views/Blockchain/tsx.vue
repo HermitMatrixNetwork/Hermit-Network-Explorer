@@ -161,7 +161,7 @@
           <template slot-scope="scope">
             <TableTooltip
               :content="scope.row.targetAddress"
-              @click.native="scope.row.targetAddress"
+              @click.native="toAddress(scope.row.targetAddress)"
             ></TableTooltip>
           </template>
         </el-table-column>
@@ -252,6 +252,9 @@ export default {
       this.$router.push({name: "hash_detail"});
     },
     toAddress(address) {
+      if(address.includes('valoper')){
+        return this.$router.push({path:'/node_detail',query:{address}})
+      }
       this.$router.push({ path: "/address_detail", query: { address } });
     },
     toBlock(height) {

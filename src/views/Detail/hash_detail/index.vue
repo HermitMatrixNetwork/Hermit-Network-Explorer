@@ -4,7 +4,7 @@
       <div class="title">
         <h3>{{ languagePack.txstext20 }}</h3>
         <p>
-          <span class="specialFont">{{ detailed.txhash }}</span>
+          <span>{{ detailed.txhash }}</span>
         </p>
         <div class="nextBtn" v-if="hashList.length">
           <span
@@ -37,7 +37,7 @@
             </div>
             <div class="column" v-if="dealType === 'MsgExecuteContract'">
               <p>{{ languagePack.txstext23 }}：</p>
-              <span class="specialFont">{{ detailed.contract }}</span>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
             </div>
 
             <!-- 当该笔交易为转账时 -->
@@ -85,12 +85,12 @@
             >
               <p>{{ languagePack.txstext40 }}：</p>
               <span
-                >从验证节点
+                >{{languagePack.txstext59}}
                 <span
                   class="specialFont"
                   @click="queryDealtoNode(detailed.validator_address)"
                   >{{ detailed.validator_address }} </span
-                >领取奖励{{ detailed.turnover / 1e6 }} GHM</span
+                >{{languagePack.txstext60}}{{ detailed.turnover / 1e6 }} GHM</span
               >
             </div>
 
@@ -244,7 +244,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.txstext30 }}：</p>
-              <span>{{ detailed.timestamp }} +UTC</span>
+              <span>{{ detailed.timestamp }}</span>
             </div>
             <div class="column">
               <p>{{ languagePack.txstext31 }}：</p>
@@ -354,12 +354,12 @@ export default {
           break;
         case "MsgUndelegate":
           obj.delegator_address = message.delegator_address;
-          obj.turnover = message.amount.amount;
+          obj.turnover = message.amount.amount/1e6;
           obj.validator_address = message.validator_address;
           break;
         case "MsgBeginRedelegate":
           obj.delegator_address = message.delegator_address;
-          obj.turnover = message.amount.amount;
+          obj.turnover = message.amount.amount/1e6;
           obj.validator_address = message.validator_dst_address;
           break;
         case "MsgInstantiateContract":
@@ -378,7 +378,7 @@ export default {
       this.detailed = {
         perform: "",
         txhash,
-        timestamp: timestamp.replace(/[A-Z]/g, " "),
+        timestamp:this.dealwithTime(timestamp),
         height,
         gas_used,
         gas_wanted,
@@ -500,11 +500,13 @@ export default {
   width: 1280px;
   margin: 0 auto 80px;
   .title {
+    color: #5671f2;
+    font-weight: 600;
+    font-size: 12px;
     padding: 16px 0;
     position: relative;
 
     > h3 {
-      font-weight: 500;
       font-size: 20px;
       color: rgba(20, 37, 62, 0.85);
       padding-bottom: 8px;

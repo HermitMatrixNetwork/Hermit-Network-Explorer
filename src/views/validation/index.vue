@@ -109,10 +109,17 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.nodetext18" width="180">
+            <el-table-column :label="languagePack.nodetext60" width="180">
               <template slot-scope="scope">
                 <p class="specialFont" @click="TableClick(scope.row)">
                   {{ scope.row.operator_address | sliceAddress }}
+                </p>
+              </template>
+            </el-table-column>
+            <el-table-column :label="languagePack.nodetext18" width="180">
+              <template slot-scope="scope">
+                <p class="specialFont" @click="TableClick(scope.row)">
+                  {{ scope.row.self_delegator | sliceAddress }}
                 </p>
               </template>
             </el-table-column>

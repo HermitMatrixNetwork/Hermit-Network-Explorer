@@ -31,7 +31,7 @@
                       TotalBalance(
                         account.balance,
                         account.delegate_amount,
-                        !isNaN(account.rewards)?account.rewards:0,
+                        !isNaN(account.rewards) ? account.rewards : 0,
                         account.withdraw_amount,
                         account.unbonding
                       ) / 1e6
@@ -74,7 +74,7 @@
                   <p>{{ languagePack.accounttext24 }}：</p>
                   <span
                     >{{
-                      (account.rewards !== "null" ? account.rewards : 0)/1e6
+                      (account.rewards !== "null" ? account.rewards : 0) / 1e6
                     }}
                     GHM</span
                   >
@@ -82,11 +82,11 @@
 
                 <div class="column">
                   <p>{{ languagePack.accounttext26 }}：</p>
-                  <span>{{ account.withdraw_amount/1e6 }} GHM</span>
+                  <span>{{ account.unbonding / 1e6 }} GHM</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext27 }}：</p>
-                  <span>{{ account.unbonding / 1e6 }}</span>
+                  <span>{{ account.withdraw_amount / 1e6 }}</span>
                 </div>
               </div>
             </template>
@@ -119,7 +119,7 @@
             :row-style="{ height: '58px !important' }"
             v-loading="loading"
           >
-          <div slot="empty">{{languagePack.prompttext11}}</div>
+            <div slot="empty">{{ languagePack.prompttext11 }}</div>
             <el-table-column width="48">
               <template slot-scope="scope">
                 <div class="tableEyeBackground">
@@ -232,7 +232,7 @@
               :label="languagePack.accounttext32"
             >
               <template slot-scope="scope">
-                <div>{{ TimeStamp(scope.row.timestamp)  }}</div>
+                <div>{{ TimeStamp(scope.row.timestamp) }}</div>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.accounttext33" width="150px">
@@ -269,7 +269,7 @@
             <el-table-column :label="languagePack.accounttext35">
               <template slot-scope="scope">
                 <div>
-                  {{ isNaN(scope.row.tx_amount)?0:scope.row.tx_amount / 1e6
+                  {{ isNaN(scope.row.tx_amount) ? 0 : scope.row.tx_amount / 1e6
                   }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
                 </div>
               </template>
@@ -302,7 +302,7 @@
 import { queryAccountInfo, queryAccountTx } from "@/api/account.js";
 import mixin from "@/mixins";
 import vueQr from "vue-qr";
-import { data } from 'autoprefixer';
+import { data } from "autoprefixer";
 export default {
   name: "addressDetail",
   mixins: [mixin],
@@ -313,7 +313,13 @@ export default {
       txtotal: 0,
       TxsList: [],
       hashList: [],
-      account: {},
+      account: {
+        balance: 0,
+        delegate_amount: 0,
+        rewards: 0,
+        withdraw_amount: 0,
+        unbonding: 0,
+      },
       page: {
         currentPage: 0,
         pageSize: 10,

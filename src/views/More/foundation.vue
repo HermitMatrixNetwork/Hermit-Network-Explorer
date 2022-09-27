@@ -15,8 +15,14 @@
             <div class="pagination">
               <el-pagination
                 small
-                layout="prev, pager, next"
-                :total="1000"
+                layout="prev, pager, next, sizes"
+                :page-sizes="[10, 25, 50]"
+                :page-size="10"
+                :total="addressList.length"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="1"
+                
               >
               </el-pagination>
             </div>
@@ -42,6 +48,14 @@ export default {
       ],
     };
   },
+  methods: {
+    handleSizeChange(val) {
+      console.log(val);
+    },
+    handleCurrentChange(val) {
+      console.log(val);
+    },
+  },
 };
 </script>
 
@@ -62,8 +76,8 @@ export default {
   letter-spacing: 0;
   line-height: 18px;
 }
-.pagination{
-  margin-top:16px ;
+.pagination {
+  margin-top: 16px;
   text-align: right;
 }
 </style>

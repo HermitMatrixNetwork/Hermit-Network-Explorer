@@ -150,7 +150,7 @@ export default {
       let { data } = await queryBlockList(limit, index);
       // console.log("区块数据", data);
       this.tableData = data.list;
-      this.blockTotal = data.total;
+      this.blockTotal = data.total + 1;
     },
     handleSizeChange(val) {
       this.tableData = [];

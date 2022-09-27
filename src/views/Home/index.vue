@@ -104,7 +104,11 @@
                 placement="top-start"
                 popper-class="circulateTooltipStyle"
               >
-                <img src="@/assets/img/annotation@2x.png" width="12px" height="12px"/>
+                <img
+                  src="@/assets/img/annotation@2x.png"
+                  width="12px"
+                  height="12px"
+                />
               </el-tooltip>
               /{{ languagePack.hometext29 }}
             </p>
@@ -152,13 +156,13 @@
         <!--查看所有区块-->
         <div class="newBlock">
           <div class="block-title">{{ languagePack.hometext19 }}</div>
-          <ul class="blockInformation">
+          <ul class="blockInformation" ref="RightAnimation">
             <li
               class="blockInformation-item"
               v-for="item in blockList"
               :key="item._id"
             >
-              <img src="@/assets/img/bar@2x.png" alt="" width="40px"/>
+              <img src="@/assets/img/bar@2x.png" alt="" width="40px" />
               <div class="basic">
                 <p>
                   <span @click="queryDealtoBlock(item._id)">{{
@@ -173,7 +177,7 @@
                   }}</span>
                 </p>
                 <!-- <p>{{ item.timestamp | jetlag }}</p> -->
-                <p>{{TimeStamp(item.timestamp)}}</p>
+                <p>{{ TimeStamp(item.timestamp) }}</p>
                 <!-- {{ languagePack.xsecondsago }} -->
               </div>
               <div class="btnRate">{{ item.tx_count }} Txns</div>
@@ -273,9 +277,9 @@ export default {
   async created() {
     this.basicData.blockHeight = await this.getnowBlockHeight();
     const { validators } = await allValidationNode();
-    this.nodelist = validators.sort((a,b)=>{
-        return b.tokens - a.tokens
-      });;
+    this.nodelist = validators.sort((a, b) => {
+      return b.tokens - a.tokens;
+    });
 
     this.getBlockMsg();
     this.getnowBlockList();
@@ -291,7 +295,9 @@ export default {
   mounted() {
     this.charts = {
       block: echarts.init(document.querySelector(".barChart")),
+      blockDom:document.querySelector(".barChart"),
       txcharts: echarts.init(document.querySelector(".txbarChart")),
+      txDom:document.querySelector(".txbarChart")
     };
   },
   methods: {
@@ -310,8 +316,8 @@ export default {
       } = await pledgeTotal(); //获取质押参数
       // console.log("节点", await querylatestNodeMessage());
       const { validators } = await allValidationNode();
-      this.nodelist = validators.sort((a,b)=>{
-        return b.tokens - a.tokens
+      this.nodelist = validators.sort((a, b) => {
+        return b.tokens - a.tokens;
       });
       const {
         data: { total },
@@ -325,10 +331,10 @@ export default {
         Pledgerate: ((bonded_tokens / supply[0].amount) * 100).toFixed(1), //质押率
         detailNum: total,
       };
-      let blockList = this.blockList.slice(0,5).map(item=>item.tx_count)
-      let num1 = blockList.reduce((a,b)=>a+b);
+      let blockList = this.blockList.slice(0, 5).map((item) => item.tx_count);
+      let num1 = blockList.reduce((a, b) => a + b);
       let num2 = blockList.sort()[4];
-      this.TPS = num1/5 + ' / ' + num2
+      this.TPS = num1 / 5 + " / " + num2;
     },
     //实时出块区块
     async getnowBlockList() {
@@ -338,6 +344,7 @@ export default {
       // console.log("最新的出块区块", list);
       //计算最新出块节点
       this.computeLastNode(list[0].validator);
+      this.$refs["RightAnimation"].classList.remove("RightAnimation");
       this.blockList = list;
       let echartList = list.map((e) => {
         return { height: e._id, timestamp: e.timestamp, tx: e.tx_count };
@@ -358,8 +365,8 @@ export default {
     computeLastNode(value) {
       const { nodelist } = this;
       this.basicData.latestNode = {
-        moniker: nodelist.find((e) =>{
-          return e.operator_address === value
+        moniker: nodelist.find((e) => {
+          return e.operator_address === value;
         }).description.moniker,
         address: value,
       };
@@ -409,6 +416,11 @@ export default {
           this.lastUpdate = 0;
           this.basicData.blockHeight = number;
           this.getnowBlockList();
+          this.$refs["RightAnimation"].classList.add("RightAnimation");
+          // this.$refs['RightAnimation'].classList
+          setTimeout(() => {
+            // this.$refs["RightAnimation"].classList.remove("RightAnimation");
+          },1000);
         }
       }
     },
@@ -858,6 +870,18 @@ export default {
 }
 .progress {
   height: 60px !important;
+}
+.RightAnimation{
+  animation: pull .6s linear;
+
+}
+@keyframes pull {
+  from{
+    transform: translateY(0);
+  }
+  to{
+    transform: translateY(72px);
+  }
 }
 </style>
 <style>

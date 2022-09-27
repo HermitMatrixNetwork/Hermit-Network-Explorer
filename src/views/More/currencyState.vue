@@ -158,7 +158,7 @@
                 ></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit('form')">{{
+                <el-button type="primary" class="submit_btn" @click="onSubmit('form')">{{
                   languagePack.applytext25
                 }}</el-button>
                 <el-button @click="clearForm('form')">{{
@@ -376,6 +376,13 @@ export default {
       return this.$store.state.Language;
     },
   },
+  watch:{
+    languagePack:{
+      handler(val){
+        this.clearForm('form')
+      }
+    }
+  }
 };
 </script>
 
@@ -402,8 +409,13 @@ export default {
     height: 28px;
     background: #ffffff;
     border-radius: 2px;
-    font-weight: 400;
     font-size: 12px;
+    &:hover{
+      border-color: #5671F2;
+    }
+    &:focus{
+      border-color: #5671F2;
+    }
   }
 
   .el-form-item__label {
@@ -469,6 +481,17 @@ export default {
   width: 80px !important;
   height: 80px !important;
   border-radius: 2px !important;
+}
+
+::v-deep .submit_btn{
+  border: none;
+  transition: background .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  &:hover{
+    background: #6F85F9;
+  }
+  &:active{
+    background: #0E30D6;
+  }
 }
 
 @media screen and (max-width: 598px) {

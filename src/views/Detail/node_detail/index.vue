@@ -10,6 +10,7 @@
             <div class="detailColumn-basic messageBasic">
               <div class="column">
                 <p>{{ languagePack.nodetext27 }}</p>
+                <span>{{outblockTable.list?outblockTable.list[0]._id:0}}</span>
               </div>
               <div class="column">
                 <p>{{ languagePack.nodetext28 }}:</p>
@@ -101,6 +102,10 @@
               <span>{{ basic.consen_addr }}</span>
             </div>
             <div class="column">
+              <p>{{ languagePack.nodetext18 }}：</p>
+              <span>{{ basic.self_delegator }}</span>
+            </div>
+            <div class="column">
               <p>{{ languagePack.nodetext46 }}：</p>
               <span>{{ basic.website }}</span>
             </div>
@@ -141,7 +146,7 @@
             </el-table-column>
             <el-table-column :label="languagePack.nodetext38" align="left">
               <template slot-scope="scope">
-                <div>{{ scope.row.timestamp.split(".")[0] }} UTC</div>
+                <div>{{dealwithTime(scope.row.timestamp )}}</div>
               </template>
             </el-table-column>
             <el-table-column
@@ -166,7 +171,8 @@
             :row-style="{ height: '58px' }"
             :header-cell-class-name="'tableHeaderCellStyle'"
             :row-class-name="'tableRowStyle'"
-            :data="delegationTable"
+            :data="sliceDelegation"
+            height="612px"
           >
             <div slot="empty">{{ languagePack.prompttext11 }}</div>
             <el-table-column :label="languagePack.nodetext50" width="240">
@@ -253,7 +259,7 @@
             </el-table-column>
             <el-table-column :label="languagePack.nodetext58">
               <template slot-scope="scope">
-                <p>{{ scope.row.timestamp.replace(/[A-Z]/g, " ") }} UTC</p>
+                <p>{{ dealwithTime(scope.row.timestamp )}}</p>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext59" align="right">
@@ -299,6 +305,20 @@
             :total="outblockTable.total > 5000 ? 5000 : outblockTable.total"
             :pager-count="5"
           ></el-pagination>
+
+          <el-pagination
+            v-if="selectNav === 2"
+            small
+            @size-change="entrustSizeChange"
+            @current-change="entrustCurrentChange"
+            :current-page="entrusPage.currentPage + 1"
+            :page-sizes="[10, 25, 50]"
+            :page-size="10"
+            layout="prev, pager, next, sizes"
+            :total="delegationTable.length"
+            :pager-count="5"
+          ></el-pagination>
+
           <el-pagination
             v-if="selectNav === 3"
             small
@@ -333,7 +353,16 @@ export default {
   data() {
     return {
       selectNav: 0,
-      basic: {},
+      basic: {
+        uptime: 0,
+        delegators: 0,
+        total_system_reward: 0,
+        total_delegate_reward: 0,
+        outstanding_reward: 0,
+        self_delegate_tokens: 0,
+        tokens: 0,
+        delegate_tokens: 0,
+      },
       page: {
         pageSize: 10,
         currentPage: 0,
@@ -350,6 +379,11 @@ export default {
         pageSize: 10,
         currentPage: 0,
       },
+      entrusPage: {
+        pageSize: 10,
+        currentPage: 0,
+      },
+      sliceDelegation: [],
     };
   },
   created() {
@@ -362,10 +396,7 @@ export default {
     this.getData(this.address, pageSize, currentPage);
     this.$loading();
   },
-  mounted(){
-    
-    
-  },
+  mounted() {},
   methods: {
     async getData(address, limit, index) {
       const res = await Promise.all([
@@ -412,6 +443,7 @@ export default {
         }
       });
       // console.log(this.delegationTable);
+      this.sliceDelegation = this.delegationTable.slice(0, 10);
     },
     //委托列表
     delegaTion(arr) {
@@ -435,9 +467,13 @@ export default {
       let { pageSize, currentPage } = this.page;
       let {
         data: { list },
-      } = await getNodeblockList(pageSize, this.page.currentPage = 0, this.address);
+      } = await getNodeblockList(
+        pageSize,
+        (this.page.currentPage = 0),
+        this.address
+      );
       this.outblockTable.list = list;
-      setTimeout(() => (this.blockloading = false),500);
+      setTimeout(() => (this.blockloading = false), 500);
     },
     async blockCurrentChange(value) {
       this.blockloading = true;
@@ -447,7 +483,7 @@ export default {
         data: { list },
       } = await getNodeblockList(pageSize, currentPage, this.address);
       this.outblockTable.list = list;
-      setTimeout(() => (this.blockloading = false),500);
+      setTimeout(() => (this.blockloading = false), 500);
     },
 
     async rewardSizeChange(value) {
@@ -456,7 +492,11 @@ export default {
       let { pageSize, currentPage } = this.rewardPage;
       let {
         data: { list },
-      } = await getNodeRewardList(pageSize,this.rewardPage.currentPage = 0, this.address);
+      } = await getNodeRewardList(
+        pageSize,
+        (this.rewardPage.currentPage = 0),
+        this.address
+      );
       this.rewardTable.list = list;
       setTimeout(() => (this.rewardloading = false), 500);
     },
@@ -470,6 +510,22 @@ export default {
       } = await getNodeRewardList(pageSize, currentPage, this.address);
       this.rewardTable.list = list;
       setTimeout(() => (this.rewardloading = false), 500);
+    },
+
+    entrustSizeChange(value) {
+      this.entrusPage.pageSize = value;
+      this.sliceDelegation = this.delegationTable.slice(
+        (this.entrusPage.currentPage = 0),
+        value
+      );
+    },
+    entrustCurrentChange(value) {
+      this.entrusPage.currentPage = value - 1;
+      let { pageSize, currentPage } = this.entrusPage;
+      this.sliceDelegation = this.delegationTable.slice(
+        currentPage * pageSize,
+        currentPage * pageSize + pageSize
+      );
     },
   },
   computed: {
@@ -503,6 +559,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 296px;
     &-item {
       width: 632px;
       //   height: 296px;
@@ -631,5 +688,4 @@ export default {
   display: flex;
   align-items: center;
 }
-
 </style>

@@ -11,7 +11,7 @@ export default {
   methods: {
     Copy(val) {
       //复制
-      copy(val,this.languagePack.prompttext09);
+      copy(val, this.languagePack.prompttext09);
     },
     toGo(path) {
       this.$router.push({ path }).catch(e => { });
@@ -31,22 +31,22 @@ export default {
     },
     queryDealtoHash(hash, index) {
       let path = this.$route.path
-      if(path==='/hash_detail'){
-        this.$router.replace({ query: { hash:JSON.stringify(hash)}}).catch(e => { })
-        return 
+      if (path === '/hash_detail') {
+        this.$router.replace({ query: { hash: JSON.stringify(hash) } }).catch(e => { })
+        return
       }
-      this.$router.push({ name: 'hash_detail', query: { hash:JSON.stringify(hash) } }).catch(e => { })
+      this.$router.push({ name: 'hash_detail', query: { hash: JSON.stringify(hash) } }).catch(e => { })
     },
     queryDealtoAddress(address) {
-      if(this.$route.path == '/hash_detail'){
+      if (this.$route.path == '/hash_detail') {
         return this.$router.push({ path: '/address_detail', query: { address } }).catch(e => { })
       }
       this.$router.push({ path: '/address_detail', query: { address } }).catch(e => { })
     },
     disposeTableType(arr) {
-      if (!Array.isArray(arr)) return ;
+      if (!Array.isArray(arr)) return;
       arr.forEach((item) => {
-        item.targetAddress = item.targetAddress?item.targetAddress:item.message?item.message.validator_address:''
+        item.targetAddress = item.targetAddress ? item.targetAddress : item.message ? item.message.validator_address : ''
         switch (item.operate) {
           case "MsgExecuteContract":
             item.type = "合约执行";
@@ -119,27 +119,39 @@ export default {
     timeStamp,
     jetlag
   },
-  computed:{
-    languagePack(){
+  computed: {
+    languagePack() {
       return this.$store.state.Language
     },
-    TimeStamp(){
-      return function(value){
+    TimeStamp() {
+      return function (value) {
         var nowTime = Date.parse(new Date())
         var oldTime = Date.parse(new Date(value))
-        var times = (nowTime-oldTime)/1000
-        if(times<60){
+        var times = (nowTime - oldTime) / 1000
+        if (times < 60) {
           return times + this.languagePack.timetext01
-        }else if(times>60&&times<3600){
-          return Math.trunc(times/60) + this.languagePack.timetext02
-        }else if(times>3600&&times<(3600*24)){
-          return Math.trunc(times/3600) + this.languagePack.timetext03
-        }else if(times>(3600*24)){
-          return Math.trunc(times/(3600*24)) + this.languagePack.timetext04
+        } else if (times > 60 && times < 3600) {
+          return Math.trunc(times / 60) + this.languagePack.timetext02
+        } else if (times > 3600 && times < (3600 * 24)) {
+          return Math.trunc(times / 3600) + this.languagePack.timetext03
+        } else if (times > (3600 * 24)) {
+          return Math.trunc(times / (3600 * 24)) + this.languagePack.timetext04
         }
-        
+
       }
     },
+    dealwithTime() {
+      return function (time) {
+        let date = new Date(time)
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+        let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+        let hours = date.getHours()<10? '0' + date.getHours() : date.getHours()
+        let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+        let seconds = date.getSeconds()<10? '0' +date.getSeconds() :date.getSeconds()
+        return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
+      }
+    }
   }
 };
 

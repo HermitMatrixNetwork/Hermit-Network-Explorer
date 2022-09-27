@@ -29,7 +29,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext14 }}：</p>
-              <span>{{ blockData.timestamp}} +UTC</span>
+              <span>{{ blockData.timestamp}}</span>
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext18 }}：</p>
@@ -76,7 +76,6 @@
                 @click="
                   queryDealtoHash({
                     hash: scope.row._id,
-                    status: scope.row.result,
                   })
                 "
               >
@@ -215,7 +214,7 @@ export default {
         return false;
       }
       this.blockData = res.data.block;
-      this.blockData.timestamp = this.blockData.timestamp.slice(0,19)
+      this.blockData.timestamp = this.dealwithTime(this.blockData.timestamp)
       let arr = res.data.txs;
       this.disposeTableType(arr);
       this.tableData = arr;

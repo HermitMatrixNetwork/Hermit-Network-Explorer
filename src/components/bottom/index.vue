@@ -37,19 +37,19 @@ export default {
     return {
       contacts: [
         {
-          label: "Telegram",
+          label: "ghm188@outlook.com",
           icon: require("@/assets/img/bottom-bar_telegram@2x.png"),
         },
         {
-          label: "Twitter",
+          label: "@ghmhermit ",
           icon: require("@/assets/img/bottom-bar_twitter@2x.png"),
         },
         {
-          label: "Medium",
+          label: "ghm188@outlook.com ",
           icon: require("@/assets/img/bottom-bar_medium@2x.png"),
         },
         {
-          label: "GitHub",
+          label: "github.com/ghermit",
           icon: require("@/assets/img/bottom-bar_github@2x.png"),
         },
         {
@@ -82,10 +82,9 @@ export default {
       display: flex;
       align-items: center;
       height: 28px;
-      font-weight: 500;
+      font-weight: bold;
       font-size: 20px;
       color: #ffffff;
-      letter-spacing: 0;
       > img {
         padding: 0 10px;
       }
@@ -102,10 +101,8 @@ export default {
         flex-direction: column;
         align-items: center;
         font-family: PingFangSC-Regular;
-        font-weight: 400;
         font-size: 12px;
         color: #ffffff;
-        letter-spacing: 0;
         img {
           padding-top: 8px;
           width: 80px;
@@ -119,6 +116,7 @@ export default {
         text-align: center;
         width: 56px;
         margin: 0 10px;
+        height: 60px;
         > img {
           width: 32px;
           margin-bottom: 5px;
@@ -136,10 +134,8 @@ export default {
     text-align: center;
     line-height: 50px;
     font-family: PingFangSC-Regular;
-    font-weight: 400;
     font-size: 12px;
     color: rgba(255, 255, 255, 0.45);
-    letter-spacing: 0;
   }
 }
 

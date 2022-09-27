@@ -158,7 +158,7 @@ let block_detail = {
         'blocktext25': 'time',
         'blocktext26': 'start address',
         'blocktext27': 'target address',
-        'blocktext28': 'transaction numerical value',
+        'blocktext28': 'transaction value',
         'blocktext29': 'Transaction Fee(GHM)',
     },
     Cn: {
@@ -245,7 +245,9 @@ let txs_detail = {
         'txstext55': 'Set the address for receiving the award',
         'txstext56': 'Instantiated contract',
         'txstext57': 'Upload contract',
-        'txstext58': 'Re-entrust'
+        'txstext58': 'Re-entrust',
+        'txstext59': 'Secondary validation node',
+        'txstext60': 'get the rewards',
     },
     Cn: {
         'txstext20': '交易详情：',
@@ -286,7 +288,9 @@ let txs_detail = {
         'txstext55': '设置领奖地址',
         'txstext56': '实例化合约',
         'txstext57': '上传合约',
-        'txstext58': '重新委托'
+        'txstext58': '重新委托',
+        'txstext59': '从验证节点',
+        'txstext60': '领取奖励',
     },
     Ct: {
         //合约执行
@@ -328,7 +332,9 @@ let txs_detail = {
         'txstext55': '設置領獎地址',
         'txstext56': '實例化合約',
         'txstext57': '上傳合約',
-        'txstext58': '重新委托'
+        'txstext58': '重新委托',
+        'txstext59': '從驗證節點',
+        'txstext60': '領取獎勵',
     }
 }
 

@@ -22,7 +22,7 @@
             <el-table-column
               type="index"
               :label="languagePack.nodetext64"
-              width="80"
+              width="120"
               align="center"
             ></el-table-column>
             <el-table-column

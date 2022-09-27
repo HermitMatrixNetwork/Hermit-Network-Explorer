@@ -81,7 +81,7 @@
           <el-table-column :label="languagePack.contracttext26" width="420">
             <template slot-scope="scope">
               <p>
-                {{ scope.row.timestamp.replace(/[A-Z]/g,' ')}} +UTC
+                {{ dealwithTime(scope.row.timestamp )}}
               </p>
             </template>
           </el-table-column>

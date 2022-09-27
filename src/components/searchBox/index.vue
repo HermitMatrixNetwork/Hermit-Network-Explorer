@@ -4,6 +4,7 @@
       :placeholder="languagePack.hometext07"
       v-model="searchVal"
       class="input-with-select"
+      @keyup.enter.native="searchBtn"
     >
       <el-select
         v-model="select"

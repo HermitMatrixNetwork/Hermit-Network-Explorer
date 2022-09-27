@@ -97,7 +97,7 @@ export default {
   methods: {
     handleSizeChange(val) {
       this.page.pageSize = val
-      this.tableData = this.allData.slice(0,val);
+      this.tableData = this.allData.slice(this.page.currentPage,val);
     },
 
     handleCurrentChange(index) {

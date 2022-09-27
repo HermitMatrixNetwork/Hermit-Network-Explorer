@@ -132,7 +132,7 @@ export default {
   methods: {
     async getaccounts(pageSize, page) {
       const res = await queryAccountList(pageSize, page);
-      console.log("获取的数组", res.data.list);
+      // console.log("获取的数组", res.data.list);
       this.allData = res.data.list;
       this.allData.forEach((item, index) => (item.rank = index + 1));
       this.accountslist = this.allData.slice(0, 10);
@@ -154,7 +154,7 @@ export default {
       // );
 
       this.pageData.pageSize = value;
-      this.accountslist = this.allData.slice(0, value);
+      this.accountslist = this.allData.slice(this.pageData.page = 0, value);
     },
     handleCurrentChange(val) {
       // this.pageData.page = val - 1;
