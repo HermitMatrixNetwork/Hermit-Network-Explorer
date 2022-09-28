@@ -10,7 +10,9 @@
             <div class="detailColumn-basic messageBasic">
               <div class="column">
                 <p>{{ languagePack.nodetext27 }}</p>
-                <span>{{outblockTable.list?outblockTable.list[0]._id:0}}</span>
+                <span>{{
+                  outblockTable.list ? outblockTable.list[0]._id : 0
+                }}</span>
               </div>
               <div class="column">
                 <p>{{ languagePack.nodetext28 }}:</p>
@@ -103,7 +105,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.nodetext18 }}：</p>
-              <span>{{ basic.self_delegator }}</span>
+              <span style="cursor: pointer;" @click="queryDealtoAddress(basic.self_delegator)">{{ basic.self_delegator }}</span>
             </div>
             <div class="column">
               <p>{{ languagePack.nodetext46 }}：</p>
@@ -146,7 +148,7 @@
             </el-table-column>
             <el-table-column :label="languagePack.nodetext38" align="left">
               <template slot-scope="scope">
-                <div>{{dealwithTime(scope.row.timestamp )}}</div>
+                <div>{{ dealwithTime(scope.row.timestamp) }}</div>
               </template>
             </el-table-column>
             <el-table-column
@@ -171,7 +173,7 @@
             :row-style="{ height: '58px' }"
             :header-cell-class-name="'tableHeaderCellStyle'"
             :row-class-name="'tableRowStyle'"
-            :data="sliceDelegation"
+            :data="delegationTable"
             height="612px"
           >
             <div slot="empty">{{ languagePack.prompttext11 }}</div>
@@ -259,7 +261,7 @@
             </el-table-column>
             <el-table-column :label="languagePack.nodetext58">
               <template slot-scope="scope">
-                <p>{{ dealwithTime(scope.row.timestamp )}}</p>
+                <p>{{ dealwithTime(scope.row.timestamp) }}</p>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext59" align="right">
@@ -315,7 +317,7 @@
             :page-sizes="[10, 25, 50]"
             :page-size="10"
             layout="prev, pager, next, sizes"
-            :total="delegationTable.length"
+            :total="basic.delegators"
             :pager-count="5"
           ></el-pagination>
 
@@ -382,8 +384,8 @@ export default {
       entrusPage: {
         pageSize: 10,
         currentPage: 0,
+        offset: 0,
       },
-      sliceDelegation: [],
     };
   },
   created() {
@@ -402,7 +404,7 @@ export default {
       const res = await Promise.all([
         // validationNodeData(address),
         validationBasic(address),
-        validationEntrust(address),
+        validationEntrust(address, 0, 10),
         getNodeblockList(limit, index, address),
         getNodeRewardList(limit, index, address),
         getUnbonding(address),
@@ -418,6 +420,7 @@ export default {
       console.log("节点解绑信息", res[4]);
       this.basic = res[0].data;
       //处理数组并赋值
+      this.basic.delegators = res[1].pagination.total
       this.delegaTion(res[1].delegation_responses);
       this.outblockTable = res[2].data;
       this.rewardTable = res[3].data;
@@ -443,15 +446,16 @@ export default {
         }
       });
       // console.log(this.delegationTable);
-      this.sliceDelegation = this.delegationTable.slice(0, 10);
     },
     //委托列表
     delegaTion(arr) {
       if (!Array.isArray(arr)) return (this.delegationTable = []);
+      let newarr = []
       arr.forEach((item) => {
         const { balance, delegation } = item;
-        this.delegationTable.push({ ...balance, ...delegation });
+        newarr.push({ ...balance, ...delegation });
       });
+      this.delegationTable = newarr
     },
     queryTxDetail(index) {
       console.log(this.hashList, index);
@@ -512,20 +516,24 @@ export default {
       setTimeout(() => (this.rewardloading = false), 500);
     },
 
-    entrustSizeChange(value) {
-      this.entrusPage.pageSize = value;
-      this.sliceDelegation = this.delegationTable.slice(
-        (this.entrusPage.currentPage = 0),
-        value
+    async entrustSizeChange(value) {   
+      const { delegation_responses } = await validationEntrust(
+        this.address,
+        this.entrusPage.offset,
+        this.entrusPage.pageSize = value,
       );
+      this.delegaTion(delegation_responses)
     },
-    entrustCurrentChange(value) {
-      this.entrusPage.currentPage = value - 1;
-      let { pageSize, currentPage } = this.entrusPage;
-      this.sliceDelegation = this.delegationTable.slice(
-        currentPage * pageSize,
-        currentPage * pageSize + pageSize
+    async entrustCurrentChange(value) {
+      let { pageSize } = this.entrusPage;
+      this.entrusPage.currentPage = value-1
+      this.entrusPage.offset = (value - 1) * pageSize;
+      const { delegation_responses } = await validationEntrust(
+        this.address,
+        this.entrusPage.offset,
+        pageSize
       );
+      this.delegaTion(delegation_responses)
     },
   },
   computed: {
@@ -671,6 +679,7 @@ export default {
   }
 
   .detailColumn {
+    height: auto !important;
     &-basic {
       height: auto !important;
       flex-wrap: nowrap !important;

@@ -7,7 +7,7 @@ let account = {
         'accounttext05':'90 days',
         'accounttext06':'new address',
         'accounttext07':'date',
-        'accounttext08':'the amount of total users',
+        'accounttext08':'Total number of users',
         'accounttext09':'ranking',
         'accounttext10':'address',
         'accounttext11':'labels',

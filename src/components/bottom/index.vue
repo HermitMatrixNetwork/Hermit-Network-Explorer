@@ -37,19 +37,19 @@ export default {
     return {
       contacts: [
         {
-          label: "ghm188@outlook.com",
+          label: "Telegram",
           icon: require("@/assets/img/bottom-bar_telegram@2x.png"),
         },
         {
-          label: "@ghmhermit ",
+          label: "Twitter ",
           icon: require("@/assets/img/bottom-bar_twitter@2x.png"),
         },
         {
-          label: "ghm188@outlook.com ",
+          label: "Medium ",
           icon: require("@/assets/img/bottom-bar_medium@2x.png"),
         },
         {
-          label: "github.com/ghermit",
+          label: "GitHub",
           icon: require("@/assets/img/bottom-bar_github@2x.png"),
         },
         {

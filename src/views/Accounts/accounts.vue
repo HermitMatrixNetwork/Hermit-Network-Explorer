@@ -23,7 +23,7 @@
     <div class="accounts_table">
       <div class="table_Tile">
         {{ languagePack.accounttext08 }}
-        <span style="color: #5671f2">{{ pagination }}</span> 位
+        <span style="color: #5671f2">{{ pagination }}</span>
       </div>
       <el-table
         :data="accountslist"
@@ -40,7 +40,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <div>{{ scope.row.rank }}</div>
+            <div>{{ (scope.$index+1 )+ (pageData.page*pageData.pageSize) }}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -81,6 +81,7 @@
           small
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
+          :current-page="pageData.page+1"
           layout="prev, pager, next,sizes"
           :total="pagination"
           :page-sizes="[10, 25, 50]"
@@ -102,7 +103,6 @@ export default {
   data() {
     return {
       accountslist: [],
-      allData: [],
       amountnum: "",
       currentPage: 0,
       navIndex: 0,
@@ -110,14 +110,14 @@ export default {
       loading: true,
       pagination: 0,
       pageData: {
-        page: 1,
+        page: 0,
         pageSize: 10,
       },
     };
   },
   created() {
     const { page, pageSize } = this.pageData;
-    this.getaccounts(0, 0);
+    this.getaccounts(pageSize, page);
     this.amountNumber();
   },
   mounted() {
@@ -133,9 +133,7 @@ export default {
     async getaccounts(pageSize, page) {
       const res = await queryAccountList(pageSize, page);
       // console.log("获取的数组", res.data.list);
-      this.allData = res.data.list;
-      this.allData.forEach((item, index) => (item.rank = index + 1));
-      this.accountslist = this.allData.slice(0, 10);
+      this.accountslist = res.data.list;
       if (this.pagination == 0) return (this.pagination = res.data.total);
     },
     //获取uGHM的总的供应量
@@ -147,27 +145,17 @@ export default {
       this.$router.push({ path: "address_detail", query: { address } });
     },
     handleSizeChange(value) {
-      // this.accountslist = [];
-      // this.getaccounts(
-      //   (this.pageData.pageSize = value),
-      //   (this.pageData.page = 0)
-      // );
-
-      this.pageData.pageSize = value;
-      this.accountslist = this.allData.slice(this.pageData.page = 0, value);
+      this.accountslist = [];
+      this.getaccounts(
+        (this.pageData.pageSize = value),
+        (this.pageData.page = 0)
+      );
     },
     handleCurrentChange(val) {
-      // this.pageData.page = val - 1;
-      // let { pageSize, page } = this.pageData;
-      // this.accountslist = [];
-      // this.getaccounts(pageSize, page);
-
       this.pageData.page = val - 1;
       let { pageSize, page } = this.pageData;
-      this.accountslist = this.allData.slice(
-        page * pageSize,
-        page * pageSize + pageSize
-      );
+      this.accountslist = [];
+      this.getaccounts(pageSize, page);
     },
     chartsChange(index) {
       this.navIndex = index;

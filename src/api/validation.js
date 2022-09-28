@@ -36,9 +36,9 @@ export function validationBasic(address){
 }
 
 //获取节点委托数列表
-export function validationEntrust(address) {
+export function validationEntrust(address,offset,limit) {
     return Service({
-        url: `/cosmos/staking/v1beta1/validators/${address}/delegations`,
+        url: `/cosmos/staking/v1beta1/validators/${address}/delegations?pagination.offset=${offset}&pagination.limit=${limit}&pagination.count_total=true`,
         method: 'GET'
     })
 }

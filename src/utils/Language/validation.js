@@ -209,7 +209,7 @@ let punishment = {
         'nodetext67': 'lock time',
         'nodetext68': 'unlock block height',
         'nodetext69': 'data temporarily not availabe',
-        'nodetext70': 'To generate the number of blocks',
+        'nodetext70': 'Number of blocks generated',
     },
     Cn: {
         'nodetext61': '惩罚节点',
@@ -221,7 +221,7 @@ let punishment = {
         'nodetext67': '锁定时间',
         'nodetext68': '解锁块高',
         'nodetext69': '暂无数据',
-        'nodetext70': '以产生区块数',
+        'nodetext70': '已产生区块数',
     },
     Ct: {
         'nodetext61': '懲罰節點',

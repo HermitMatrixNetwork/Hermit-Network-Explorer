@@ -1,7 +1,7 @@
 <template>
   <div class="develop">
     <div class="developMain">
-      <div class="developMain-title">API文档</div>
+      <div class="developMain-title">{{languagePack.apitext01}}</div>
       <div class="developMain-box">
         <div class="basic">
           <p>
@@ -16,210 +16,210 @@
           </p>
         </div>
 
-        <basicTitle :title="'接口名称：获取区块列表'">
+        <basicTitle :title="languagePack.apitext02+'：获取区块列表'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/blocklist</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取区块列表</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-        <basicTitle :title="'接口名称：获取区块详情'">
+        <basicTitle :title="languagePack.apitext02+'：获取区块详情'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/blockdetails</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>通过区块高度获取区块详情</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-        <basicTitle :title="'接口名称：获取交易列表'">
+        <basicTitle :title="languagePack.apitext02+'：获取交易列表'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/txlist</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取交易列表</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-        <basicTitle :title="'接口名称：获取账号领取奖励的交易记录'">
+        <basicTitle :title="languagePack.apitext02+'：获取账号领取奖励的交易记录'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/txwithdraw</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取交易列表</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-        <basicTitle :title="'接口名称：获取账号撤销委托的交易记录'">
+        <basicTitle :title="languagePack.apitext02+'：获取账号撤销委托的交易记录'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/txundelegate</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取账号撤销委托的交易记录</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-        <basicTitle :title="'接口名称：获取合约的交易记录'">
+        <basicTitle :title="languagePack.apitext02+'：获取合约的交易记录'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/txcontract</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取合约的交易记录</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-        <basicTitle :title="'接口名称：获取账号的交易记录'">
+        <basicTitle :title="languagePack.apitext02+'：获取账号的交易记录'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/txaccount</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取账号的交易记录</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-        <basicTitle :title="'接口名称：获取top账号列表'">
+        <basicTitle :title="languagePack.apitext02+'：获取top账号列表'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/accountlist</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取top账号列表</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-        <basicTitle :title="'接口名称：获取账号的详细信息'">
+        <basicTitle :title="languagePack.apitext02+'：获取账号的详细信息'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/accountinfo</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取账号的详细信息</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-        <basicTitle :title="'接口名称：获取合约列表'">
+        <basicTitle :title="languagePack.apitext02+'：获取合约列表'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/contractlist</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取合约列表</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-         <basicTitle :title="'接口名称：获取合约详细信息'">
+         <basicTitle :title="languagePack.apitext02+'：获取合约详细信息'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/contractinfo</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取合约详细信息</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-         <basicTitle :title="'接口名称：获取节点详细信息'">
+         <basicTitle :title="languagePack.apitext02+'：获取节点详细信息'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/nodeinfo</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取节点详细信息</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-         <basicTitle :title="'接口名称：获取原生代币供应量'">
+         <basicTitle :title="languagePack.apitext02+'：获取原生代币供应量'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://167.179.118.118:1317/cosmos/bank/v1beta1/supply/uGHM</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取原生代币供应量</div>
               </div>
             </div>
           </template>
         </basicTitle>
 
-         <basicTitle :title="'接口名称：获取合约列表'">
+         <basicTitle :title="languagePack.apitext02+'：获取合约列表'">
           <template #message>
             <div class="developApi messageBasic">
               <div class="column">
-                <p>接口：</p>
+                <p>{{languagePack.apitext03}}：</p>
                 <span>http://158.247.237.78:8181/browser/contractlist</span>
               </div>
               <div class="column">
-                <p>接口解释：</p>
+                <p>{{languagePack.apitext04}}：</p>
                 <div>获取合约列表</div>
               </div>
             </div>
@@ -231,7 +231,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  computed:{
+    languagePack(){
+      return this.$store.state.Language
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -282,7 +288,8 @@ export default {};
     height: auto;    
     >p{
       flex-shrink: 0;
-      // padding: 0;
+      white-space: nowrap !important;
+      width: 130px;
     }
     >div{
       line-height: 28px;

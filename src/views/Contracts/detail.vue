@@ -6,7 +6,7 @@
           <div class="basicStyle messageBasic">
             <div class="column">
               <p>{{ languagePack.contracttext12 }}：</p>
-              <span>{{ contractData.contract_address }} <img src="@/assets/img/copy.png" @click="Copy(address)" style='cursor: pointer;'/></span>
+              <span>{{ contractData.contract_address }} <img src="@/assets/img/copy.png" @click="Copy(contractData.contract_address )" style='cursor: pointer;'/></span>
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext18 }}：</p>

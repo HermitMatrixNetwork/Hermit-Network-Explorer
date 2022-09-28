@@ -26,6 +26,7 @@
             <div class="column">
               <p>{{ languagePack.blocktext17 }}：</p>
               <span style="color:#5671F2;cursor: pointer;" @click="nextData(-1)">{{ blockData.parent_hash }}</span>
+              <img v-if="blockData.parent_hash" src="@/assets/img/copy.png" @click="Copy(blockData.parent_hash)" style="cursor: pointer;"/>
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext14 }}：</p>
@@ -47,6 +48,8 @@
             <div class="column">
               <p>{{ languagePack.blocktext16 }}：</p>
               <span>{{ blockData.hash }}</span>
+              <img v-if="blockData.hash" src="@/assets/img/copy.png" @click="Copy(blockData.hash)" style="cursor: pointer;"/>
+
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext20 }}：</p>

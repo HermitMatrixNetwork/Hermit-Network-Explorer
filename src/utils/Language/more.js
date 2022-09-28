@@ -120,7 +120,7 @@ let RPC = {
         'RPCtext04':'symbol',
         'RPCtext05':'Explorer URL',
         'RPCtext06':'connected  wallet',
-        'RPCtext07':'???',
+        'RPCtext07':'Users can quickly add to their wallets and Web3 middleware providers (such as Kpler) to connect to the correct Chain ID and Network ID to connect to the correct chain',
         'RPCtext08':'connect wallet',
         'RPCtext09':'add network',
         'RPCtext10':'connected',
@@ -141,7 +141,7 @@ let RPC = {
         'RPCtext04':'符号',
         'RPCtext05':'浏览器URL',
         'RPCtext06':'连接到钱包',
-        'RPCtext07':`"用户用户可以快速添加到他们的钱包和Web3 中间件提供商（如：Kpler）连接到正确的Chain ID 和Network ID 以连接到正确的链；步骤："`,
+        'RPCtext07':`用户用户可以快速添加到他们的钱包和Web3 中间件提供商（如：Kpler）连接到正确的Chain ID 和Network ID 以连接到正确的链`,
         'RPCtext08':'连接钱包',
         'RPCtext09':'添加网络',
         'RPCtext10':'连接成功',
@@ -162,8 +162,8 @@ let RPC = {
         'RPCtext04':'符號',
         'RPCtext05':'瀏覽器URL',
         'RPCtext06':'連接到錢包',
-        'RPCtext07':`"用戶用戶可以快速添加到他們的錢包和Web3 中間件提供商（如：Kpler）連接到正確的Chain ID 和
-        Network ID 以連接到正確的鏈；步驟："`,
+        'RPCtext07':`用戶用戶可以快速添加到他們的錢包和Web3 中間件提供商（如：Kpler）連接到正確的Chain ID 和
+        Network ID 以連接到正確的鏈`,
         'RPCtext08':'連接錢包',
         'RPCtext09':'添加網絡',
         'RPCtext10':'連接成功',
@@ -200,22 +200,38 @@ let faucet = {
     }
 }
 
-
+let foundation = {
+    En:{
+        foundationtext01:'Foundation address',
+        foundationtext02:'address',
+    },
+    Cn:{
+        foundationtext01:'基金会地址',
+        foundationtext02:'地址',
+    },
+    Ct:{
+        foundationtext01:'基金會地址',
+        foundationtext02:'地址',
+    }
+}
 
 export const moreEn = {
     ...apply.En,
     ...RPC.En,
     ...faucet.En,
+    ...foundation.En
 }
 
 export const moreCn = {
     ...apply.Cn,
     ...RPC.Cn,
     ...faucet.Cn,
+    ...foundation.Cn
 }
 
 export const moreCt = {
     ...apply.Ct,
     ...RPC.Ct,
     ...faucet.Ct,
+    ...foundation.Ct
 }

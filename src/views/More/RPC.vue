@@ -3,9 +3,7 @@
     <div class="rpcmain">
       <div class="rpcmain-box">
         <div class="hint">
-          用户可以快速添加到他们的钱包和Web3
-          中间件提供商（如：Kpler）连接到正确的Chain ID 和 Network ID
-          以连接到正确的链
+          {{languagePack.RPCtext07}}
         </div>
         <div class="step">
           <el-steps :active="active">

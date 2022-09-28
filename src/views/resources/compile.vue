@@ -2,7 +2,7 @@
   <div>
     <div class="main">
       <div class="body">
-        <h3>合约编译器操作步骤</h3>
+        <h3>{{languagePack.apitext05}}</h3>
         <div class="content">
           合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤合约编译器操作步骤
         </div>
@@ -12,7 +12,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  computed:{
+    languagePack(){
+      return this.$store.state.Language
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

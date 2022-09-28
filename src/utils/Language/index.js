@@ -4,6 +4,7 @@ import {validationEn,validationCn,validationCt} from './validation'
 import {blockchainEn,blockchainCn,blockchainCt} from './blockchain'
 import {moreEn,moreCn,moreCt} from './more'
 import { homeEn,homeCn,homeCt } from './home'
+import { resourcesEn,resourcesCn,resourcesCt } from './resources'
 
 let prompt = {
     En:{
@@ -101,7 +102,8 @@ export const Language = [
         /* 更多 */
         ...moreEn,
         ...prompt.En,
-        ...time.En
+        ...time.En,
+        ...resourcesEn
     },
     //中文简体
     {
@@ -123,8 +125,8 @@ export const Language = [
          /* 更多 */
          ...moreCn,
         ...prompt.Cn,
-        ...time.Cn
-
+        ...time.Cn,
+        ...resourcesCn
 
     },
     //中文繁体
@@ -136,6 +138,7 @@ export const Language = [
         ...blockchainCt,
         ...moreCt,
         ...prompt.Ct,
-        ...time.Ct
+        ...time.Ct,
+        ...resourcesCt
     }
 ]

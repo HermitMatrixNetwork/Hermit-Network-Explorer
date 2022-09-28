@@ -2,11 +2,11 @@
   <div class="foundation">
     <div class="foundationMain">
       <div class="foundationBox">
-        <BasicTitle :title="'基金会地址'">
+        <BasicTitle :title="languagePack.foundationtext01">
           <template #message>
             <el-table :data="addressList" style="width: 100%">
               <el-table-column prop="id" label="#" width="80"></el-table-column>
-              <el-table-column label="地址">
+              <el-table-column :label="languagePack.foundationtext02">
                 <template slot-scope="scope">
                   <p class="adresStyle">{{ scope.row.address }}</p>
                 </template>
@@ -55,6 +55,14 @@ export default {
     handleCurrentChange(val) {
       console.log(val);
     },
+  },
+  computed:{
+    languagePack(){
+      return this.$store.state.Language
+    }
+  },
+  mounted() {
+    
   },
 };
 </script>

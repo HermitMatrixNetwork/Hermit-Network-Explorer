@@ -118,7 +118,7 @@
             </el-table-column>
             <el-table-column :label="languagePack.nodetext18" width="180">
               <template slot-scope="scope">
-                <p class="specialFont" @click="TableClick(scope.row)">
+                <p class="specialFont" @click="queryDealtoAddress(scope.row.self_delegator)">
                   {{ scope.row.self_delegator | sliceAddress }}
                 </p>
               </template>

@@ -246,8 +246,8 @@ let txs_detail = {
         'txstext56': 'Instantiated contract',
         'txstext57': 'Upload contract',
         'txstext58': 'Re-entrust',
-        'txstext59': 'Secondary validation node',
-        'txstext60': 'get the rewards',
+        'txstext59': 'Get ',
+        'txstext60': 'reward from verification node ',
     },
     Cn: {
         'txstext20': '交易详情：',
@@ -289,8 +289,8 @@ let txs_detail = {
         'txstext56': '实例化合约',
         'txstext57': '上传合约',
         'txstext58': '重新委托',
-        'txstext59': '从验证节点',
-        'txstext60': '领取奖励',
+        'txstext59': '获取',
+        'txstext60': '奖励来自验证节点',
     },
     Ct: {
         //合约执行
@@ -333,8 +333,8 @@ let txs_detail = {
         'txstext56': '實例化合約',
         'txstext57': '上傳合約',
         'txstext58': '重新委托',
-        'txstext59': '從驗證節點',
-        'txstext60': '領取獎勵',
+        'txstext59': '獲取 ',
+        'txstext60': ' 獎勵來自驗證節點',
     }
 }
 

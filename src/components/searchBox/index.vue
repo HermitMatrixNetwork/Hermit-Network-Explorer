@@ -4,7 +4,7 @@
       :placeholder="languagePack.hometext07"
       v-model="searchVal"
       class="input-with-select"
-      @keyup.enter.native="searchBtn"
+      @keyup.enter.native="keyupSearch"
     >
       <el-select
         v-model="select"
@@ -132,6 +132,11 @@ export default {
       } else {
       }
     },
+    keyupSearch(){
+      if(this.searchVal){
+        this.searchBtn()
+      }
+    }
   },
 };
 </script>

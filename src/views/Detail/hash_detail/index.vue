@@ -4,7 +4,7 @@
       <div class="title">
         <h3>{{ languagePack.txstext20 }}</h3>
         <p>
-          <span>{{ detailed.txhash }}</span>
+          <span>{{ detailed.txhash }}</span><img src="@/assets/img/copy.png" @click="Copy(detailed.txhash)" />
         </p>
         <div class="nextBtn" v-if="hashList.length">
           <span
@@ -37,7 +37,11 @@
             </div>
             <div class="column" v-if="dealType === 'MsgExecuteContract'">
               <p>{{ languagePack.txstext23 }}：</p>
-              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
+              <span
+                class="specialFont"
+                @click="queryDealtoAddress(detailed.contract)"
+                >{{ detailed.contract }}</span
+              >
             </div>
 
             <!-- 当该笔交易为转账时 -->
@@ -84,14 +88,7 @@
               v-if="dealType === 'MsgWithdrawDelegatorReward'"
             >
               <p>{{ languagePack.txstext40 }}：</p>
-              <span
-                >{{languagePack.txstext59}}
-                <span
-                  class="specialFont"
-                  @click="queryDealtoNode(detailed.validator_address)"
-                  >{{ detailed.validator_address }} </span
-                >{{languagePack.txstext60}}{{ detailed.turnover / 1e6 }} GHM</span
-              >
+              <span>{{ languagePack.txstext59 }}{{ detailed.turnover / 1e6 }} GHM {{ languagePack.txstext60}}</span><span class="specialFont" @click="queryDealtoNode(detailed.validator_address)">{{ detailed.validator_address }} </span>
             </div>
 
             <!-- 当该笔交易为委托时 -->
@@ -152,7 +149,7 @@
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
               <p>{{ languagePack.txstext49 }}：</p>
-              <span>{{ detailed.turnover | toMoney }} GHM</span>
+              <span>{{ detailed.turnover }} GHM</span>
             </div>
 
             <!-- 当为实例化合约时 -->
@@ -354,12 +351,12 @@ export default {
           break;
         case "MsgUndelegate":
           obj.delegator_address = message.delegator_address;
-          obj.turnover = message.amount.amount/1e6;
+          obj.turnover = message.amount.amount / 1e6;
           obj.validator_address = message.validator_address;
           break;
         case "MsgBeginRedelegate":
           obj.delegator_address = message.delegator_address;
-          obj.turnover = message.amount.amount/1e6;
+          obj.turnover = message.amount.amount / 1e6;
           obj.validator_address = message.validator_dst_address;
           break;
         case "MsgInstantiateContract":
@@ -378,7 +375,7 @@ export default {
       this.detailed = {
         perform: "",
         txhash,
-        timestamp:this.dealwithTime(timestamp),
+        timestamp: this.dealwithTime(timestamp),
         height,
         gas_used,
         gas_wanted,
@@ -489,7 +486,7 @@ export default {
   },
   destroyed() {
     // if (this.$route.query) {
-      // this.$router.push({ query: null }).catch((e) => {});
+    // this.$router.push({ query: null }).catch((e) => {});
     // }
   },
 };
@@ -506,10 +503,18 @@ export default {
     padding: 16px 0;
     position: relative;
 
+    > p {
+      align-items: center;
+      display: flex;
+    }
     > h3 {
       font-size: 20px;
       color: rgba(20, 37, 62, 0.85);
       padding-bottom: 8px;
+    }
+    img {
+      padding: 0 4px;
+      cursor: pointer;
     }
   }
   .nextBtn {
