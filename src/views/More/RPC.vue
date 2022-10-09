@@ -3,18 +3,24 @@
     <div class="rpcmain">
       <div class="rpcmain-box">
         <div class="hint">
-          {{languagePack.RPCtext07}}
+          {{ languagePack.RPCtext07 }}
         </div>
         <div class="step">
           <el-steps :active="active">
             <el-step>
-              <div class="stepTitle" slot="title">{{languagePack.RPCtext08}}</div>
+              <div class="stepTitle" slot="title">
+                {{ languagePack.RPCtext08 }}
+              </div>
             </el-step>
             <el-step>
-              <div class="stepTitle" slot="title">{{languagePack.RPCtext09}}</div>
+              <div class="stepTitle" slot="title">
+                {{ languagePack.RPCtext09 }}
+              </div>
             </el-step>
             <el-step>
-              <div class="stepTitle" slot="title">{{languagePack.RPCtext10}}</div>
+              <div class="stepTitle" slot="title">
+                {{ languagePack.RPCtext10 }}
+              </div>
             </el-step>
           </el-steps>
         </div>
@@ -22,27 +28,33 @@
           <template #message>
             <div class="messageBasic">
               <div class="prompt">
-                <img src="@/assets/img/Close-Circle-Fill@2x.png" alt="" width="12"/>
-                {{languagePack.RPCtext11}}
+                <img
+                  src="@/assets/img/Close-Circle-Fill@2x.png"
+                  alt=""
+                  width="12"
+                />
+                {{ languagePack.RPCtext11 }}
               </div>
               <div class="column">
-                <p>{{languagePack.RPCtext02}}：</p>
-                <span>http://localhost:8080/rpc</span>
+                <p>{{ languagePack.RPCtext02 }}：</p>
+                <span>http://167.179.118.118:1317</span>
               </div>
               <div class="column">
-                <p>{{languagePack.RPCtext03}}：</p>
+                <p>{{ languagePack.RPCtext03 }}：</p>
                 <span>{{ chainId }}</span>
               </div>
               <div class="column">
-                <p>{{languagePack.RPCtext04}}：</p>
+                <p>{{ languagePack.RPCtext04 }}：</p>
                 <span>GHM</span>
               </div>
               <div class="column">
-                <p>{{languagePack.RPCtext05}}：</p>
+                <p>{{ languagePack.RPCtext05 }}：</p>
                 <span>https://xxxxx.xx.xx</span>
               </div>
 
-              <button class="submit" @click="submit">{{languagePack.RPCtext06}}</button>
+              <button class="submit" @click="submit">
+                {{ languagePack.RPCtext06 }}
+              </button>
             </div>
           </template>
         </BasicTitle>
@@ -58,22 +70,67 @@ export default {
   data() {
     return {
       active: 1,
-      chainId: "cosmoshub-5",
+      chainId: "ghmdev", //cosmoshub-5
     };
   },
+  async mounted() {},
   methods: {
-    submit() {
+    async submit() {
       if (!window.keplr) {
         return this.messageBox(this.languagePack.RPCtext11, "error");
       }
+      await window.keplr.experimentalSuggestChain({
+        chainId: "ghmdev",
+        chainName: "ghmdev chain",
+        rpc: "http://167.179.118.118:1317",
+        rest: "http://167.179.118.118:1317",
+        bip44: {
+          coinType: 118,
+        },
+        bech32Config: {
+          bech32PrefixAccAddr: "ghm",
+          bech32PrefixAccPub: "ghm" + "pub",
+          bech32PrefixValAddr: "ghm" + "valoper",
+          bech32PrefixValPub: "ghm" + "valoperpub",
+          bech32PrefixConsAddr: "ghm" + "valcons",
+          bech32PrefixConsPub: "ghm" + "valconspub",
+        },
+        currencies: [
+          {
+            coinDenom: "GHM",
+            coinMinimalDenom: "ughm",
+            coinDecimals: 6,
+            coinGeckoId: "ghmdev",
+          },
+        ],
+        feeCurrencies: [
+          {
+            coinDenom: "GHM",
+            coinMinimalDenom: "ughm",
+            coinDecimals: 6,
+            coinGeckoId: "ghmdev",
+            gasPriceStep: {
+              low: 0.0125,
+              average: 0.025,
+              high: 0.04,
+            },
+          },
+        ],
+        stakeCurrency: {
+          coinDenom: "GHM",
+          coinMinimalDenom: "ughm",
+          coinDecimals: 6,
+          coinGeckoId: "ghmdev",
+        },
+      });
+      // console.log(keplr.experimentalSuggestChain);
       keplr.enable(this.chainId);
-
       const offlilneSigner = getOfflineSigner(this.chainId);
       //   console.log(offlilneSigner);
 
       offlilneSigner.getAccounts().then((accounts) => {
         //getAccounts方法用来获取账户地址以及公钥
-        console.log('获取到keplr钱包的账户地址及公钥',accounts);
+        console.log("获取到keplr钱包的账户地址及公钥", accounts);
         if (accounts) {
           let timer = setInterval(() => {
             this.active++;
@@ -81,13 +138,14 @@ export default {
           if ((this.active = 3)) clearInterval(timer);
         }
       });
+      
     },
   },
-  computed:{
-    languagePack(){
-      return this.$store.state.Language
-    }
-  }
+  computed: {
+    languagePack() {
+      return this.$store.state.Language;
+    },
+  },
 };
 </script>
 
@@ -106,7 +164,7 @@ export default {
       height: 34px;
       font-weight: 400;
       font-size: 12px;
-      color: #86909C;
+      color: #86909c;
     }
   }
 }
@@ -179,14 +237,13 @@ export default {
   }
 }
 
-@media screen and (max-width:598px) {
-    .rpcmain{
-      width: 100%;
-      padding: 10px;
-    }
-    .prompt{
-      width: calc(100vw - 20px) !important;
-
-    }
+@media screen and (max-width: 598px) {
+  .rpcmain {
+    width: 100%;
+    padding: 10px;
+  }
+  .prompt {
+    width: calc(100vw - 20px) !important;
+  }
 }
 </style>

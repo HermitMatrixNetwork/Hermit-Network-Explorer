@@ -6,7 +6,7 @@ export function queryAccountInfo(address) {
         url: '/api/browser/accountinfo',
         method: 'post',
         data: {
-            chain_id: "ghmdev",
+            chain_id: "dev",
             address,
         }
     })
@@ -15,10 +15,10 @@ export function queryAccountInfo(address) {
 //获取账号交易列表
 export function queryAccountTx(limit,index,address) {
     return service1({
-        url: '/api/browser/txaccount',
+        url: '/api/browser/txlist',
         method: 'post',
         data: {
-            chain_id: "ghmdev",
+            chain_id: "dev",
             limit,
             index,
             address,
@@ -26,6 +26,17 @@ export function queryAccountTx(limit,index,address) {
     })
 }
 
+//用户增长
+export function userIncrease(days){
+    return service1({
+        url: '/api/browser/accountincrease',
+        method: 'post',
+        data: {
+            chain_id:'dev',
+            days
+        }
+    })
+}
 
 
 

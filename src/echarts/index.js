@@ -161,7 +161,12 @@ export const line = (element, message,prompt='The number of new users') => {
   // var chartDom = document.querySelector(classname);
   // var myChart = echarts.init(chartDom);
   // console.log('渲染');
-
+  let userdate = message.map(item=>{
+    let year = new Date(item.date).getFullYear() 
+    let month = new Date(item.date).getMonth()+1>=10?new Date(item.date).getMonth()+1:'0' + (new Date(item.date).getMonth()+1)
+    let day = new Date(item.date).getDate()>=10?new Date(item.date).getDate():'0'+new Date(item.date).getDate()
+    return year+'-'+ month + '-' + day
+  })
   var option = {
     //位置
     grid: {
@@ -173,7 +178,7 @@ export const line = (element, message,prompt='The number of new users') => {
     },
     tooltip: {
       show: true,
-      formatter: `${prompt}：{c}`,
+      formatter: `${prompt}：{c}<br/>{b}`,
       padding: 12,
       backgroundColor: "rgba(0,0,0,0.85)",
       textStyle: {
@@ -183,7 +188,7 @@ export const line = (element, message,prompt='The number of new users') => {
     },
     xAxis: {
       type: "category",
-      data: [],
+      data: userdate,
       boundaryGap: false,
       boundaryGap: ["15%", "15%"],
       show: false,
@@ -207,7 +212,7 @@ export const line = (element, message,prompt='The number of new users') => {
     },
     series: [
       {
-        data: message,
+        data: message.map(item=>item.user),
         type: "line",
         areaStyle: {
           color: {

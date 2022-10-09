@@ -94,9 +94,9 @@ export function getTokenContent(data) {    //合约地址
 }
 
 
-export function allValidationNode() {     //获取所有验证节点
+export function allValidationNode(page=0,pageSize=0) {     //获取所有验证节点
     return Service({
-        url: '/cosmos/staking/v1beta1/validators',
+        url: `/cosmos/staking/v1beta1/validators?pagination.offset=${page}&pagination.limit=${pageSize}&pagination.count_total=true&pagination.reverse=false`,
         method: 'GET'
     })
 }
@@ -127,7 +127,7 @@ export function queryAccountList(limit, index) {
         url: '/api/browser/accountlist',
         method: 'POST',
         data: {
-            chain_id: 'ghmdev',
+            chain_id: 'dev',
             limit,
             index
         }

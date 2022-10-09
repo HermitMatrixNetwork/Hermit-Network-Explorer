@@ -1,6 +1,6 @@
 let apply = {
     En: {
-        'applytext01': 'token Application',
+        'applytext01': 'Token Application',
         'applytext02': 'Submit Applicattion',
         'applytext03': '* is a mandatory field',
         'applytext04': 'basic information',
@@ -141,7 +141,7 @@ let RPC = {
         'RPCtext04':'符号',
         'RPCtext05':'浏览器URL',
         'RPCtext06':'连接到钱包',
-        'RPCtext07':`用户用户可以快速添加到他们的钱包和Web3 中间件提供商（如：Kpler）连接到正确的Chain ID 和Network ID 以连接到正确的链`,
+        'RPCtext07':`用户可以快速添加到他们的钱包和Web3 中间件提供商（如：Kpler）连接到正确的Chain ID 和Network ID 以连接到正确的链`,
         'RPCtext08':'连接钱包',
         'RPCtext09':'添加网络',
         'RPCtext10':'连接成功',
@@ -162,7 +162,7 @@ let RPC = {
         'RPCtext04':'符號',
         'RPCtext05':'瀏覽器URL',
         'RPCtext06':'連接到錢包',
-        'RPCtext07':`用戶用戶可以快速添加到他們的錢包和Web3 中間件提供商（如：Kpler）連接到正確的Chain ID 和
+        'RPCtext07':`用戶可以快速添加到他們的錢包和Web3 中間件提供商（如：Kpler）連接到正確的Chain ID 和
         Network ID 以連接到正確的鏈`,
         'RPCtext08':'連接錢包',
         'RPCtext09':'添加網絡',

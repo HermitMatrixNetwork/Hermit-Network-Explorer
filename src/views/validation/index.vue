@@ -90,8 +90,8 @@
             :data="tableList"
             size="mini"
             height="612px"
-            :row-style="{ height: '58px' }"
-            :header-cell-class-name="'validationTableHeader'"
+            :row-style="{ height: '58px !important' }"
+            :header-cell-class-name="'tableHeaderCellStyle'"
             :row-class-name="'tableRowStyle'"
             v-loading="loading"
           >
@@ -156,11 +156,12 @@
               </template>
             </el-table-column>
 
-            <el-table-column :label="languagePack.nodetext22" align="right">
+            <!-- 委托奖励比例 -->
+            <!-- <el-table-column :label="languagePack.nodetext22" align="right">
               <template slot-scope="scope">
-                <p>{{ scope.row.delegate_reward_rate }} %</p>
+                <p>{{ (scope.row.total_delegate_reward/scope.row.total_system_reward*100).toFixed(2) }} %</p>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column :label="languagePack.nodetext23" align="right">
               <template slot-scope="scope">
                 <p>{{ scope.row.delegators }}</p>
@@ -170,7 +171,6 @@
               :label="languagePack.nodetext24"
               width="120"
               align="right"
-              prop="count"
             >
               <template slot-scope="scope">
                 <div>{{ (1 - scope.row.uptime) * 100 }}%</div>
@@ -202,8 +202,9 @@
 </template>
 
 <script>
-import { pledgeParameter, totalCirculation } from "@/api/home.js";
+import { pledgeTotal, totalCirculation } from "@/api/home.js";
 import { getValidationList } from "@/api/validation.js";
+import {allValidationNode} from '@/api/api'
 import mixin from "@/mixins";
 export default {
   mixins: [mixin],
@@ -239,15 +240,16 @@ export default {
   methods: {
     async getList(limit, index) {
       const res = await getValidationList(limit, index);
-      console.log("中心化节点列表", res);
-      let arr = res.data.list;
+      console.log("中心化节点列表",res);
+      let arr = res.data.list.sort((a,b)=>b.tokens - a.tokens);
       this.tableList = this.nodeList = arr;
       arr.forEach((e) => (e.status = e.status.split("_").pop()));
       this.activeNode = arr.filter((item) => item.status === "BONDED");
       this.candidate = arr.filter((item) => item.status === "UNBONDING");
     },
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
+      this.tableList = [];
+      this.getList((this.page.pageSize = val), (this.page.currentPage = 0));
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
@@ -276,15 +278,16 @@ export default {
       });
     },
     async queryPledge() {
-      const pledge = await pledgeParameter(); //获取质押参数
+      // const pledge = await pledgeTotal(); //获取质押参数
+      // console.log(pledge);
       const issueNum = await totalCirculation(); //获取总发行量
       this.pledgeMessage.issueNum = issueNum.supply[0].amount / 1e6;
-      this.pledgeMessage.pledgeNum = pledge.params.historical_entries; //质押参数
-      this.pledgeMessage.Pledgerate = (
-        this.pledgeMessage.pledgeNum / this.pledgeMessage.issueNum
-      ).toFixed(2); //质押率
+      // this.pledgeMessage.pledgeNum = pledge.params.historical_entries; //质押参数
+      // this.pledgeMessage.Pledgerate = (
+      //   this.pledgeMessage.pledgeNum / this.pledgeMessage.issueNum
+      // ).toFixed(2); //质押率
 
-      console.log("获取质押参数", pledge, "获取总发行量", issueNum);
+      // console.log("获取质押参数", pledge, "获取总发行量", issueNum);
     },
     searchNode() {
       if (this.screenIndex === 0) {
@@ -310,8 +313,8 @@ export default {
     },
     totalEntrust() {
       let num = 0;
-      this.tableList.forEach((item) => {
-        num += item.tokens;
+      this.nodeList.forEach((item) => {
+        num += item.tokens*1;
       });
       return num / 1e6;
     },
@@ -404,6 +407,7 @@ export default {
       .moniker {
         display: flex;
         align-items: center;
+        white-space: nowrap;
         > img {
           width: 24px;
           padding: 0 8px;

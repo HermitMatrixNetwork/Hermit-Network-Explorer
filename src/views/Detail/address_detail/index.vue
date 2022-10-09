@@ -29,12 +29,10 @@
                   <span
                     >{{
                       TotalBalance(
-                        account.balance,
+                        account.balance / 1e6,
                         account.delegate_amount,
-                        !isNaN(account.rewards) ? account.rewards : 0,
-                        account.withdraw_amount,
                         account.unbonding
-                      ) / 1e6
+                      )
                     }}
                     GHM</span
                   >
@@ -51,7 +49,7 @@
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext20 }}：</p>
-                  <span>{{ account.tx_count }}</span>
+                  <span>{{ account.txCount?account.txCount:0 }}</span>
                 </div>
               </div>
             </template>
@@ -68,25 +66,20 @@
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext23 }}：</p>
-                  <span>{{ account.delegate_amount / 1e6 }} GHM</span>
+                  <span>{{ account.delegate_amount }} GHM</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext24 }}：</p>
-                  <span
-                    >{{
-                      (account.rewards !== "null" ? account.rewards : 0) / 1e6
-                    }}
-                    GHM</span
-                  >
+                  <span>{{ account.withdrawAmount?account.withdrawAmount/1e6:0 }} GHM</span>
                 </div>
 
                 <div class="column">
                   <p>{{ languagePack.accounttext26 }}：</p>
-                  <span>{{ account.unbonding / 1e6 }} GHM</span>
+                  <span>{{ account.unbonding }} GHM</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext27 }}：</p>
-                  <span>{{ account.withdraw_amount / 1e6 }}</span>
+                  <span>0</span>
                 </div>
               </div>
             </template>
@@ -123,66 +116,57 @@
             <el-table-column width="48">
               <template slot-scope="scope">
                 <div class="tableEyeBackground">
-                  <el-popover
-                    placement="right-start"
-                    :offset="50"
-                    :visible-arrow="true"
-                    width="300px"
-                    trigger="click"
-                  >
-                    <div class="popoverBox">
-                      <div class="popoverBox_content">
-                        <div style="height: 28px; line-height: 28px">
-                          {{ languagePack.txstext13 }}
-                        </div>
-                        <div class="popStatus">
-                          <div v-if="scope.row.result == 'success'">
-                            <img src="@/assets/img/deal_succeed@2x.png" /><span
-                              >{{ languagePack.prompttext02 }}</span
-                            ><span>(X个区块确认)</span>
-                          </div>
-                          <div v-else>
-                            <img src="@/assets/img/deal_lose@2x.png" /><span>{{
-                              languagePack.prompttext03
-                            }}</span
-                            ><span>(X个区块确认)</span>
-                          </div>
-
-                          <el-divider></el-divider>
-                        </div>
-                        <div v-for="(item, index) in statusTitle" :key="index">
-                          <div style="height: 28px; line-height: 28px">
-                            {{ item.title }}
-                          </div>
-                          <span v-show="index === 0"
-                            >{{ scope.row.fee / 1e6 }} GHM ($0.00)</span
-                          >
-                          <span v-show="index === 1"
-                            >{{
-                              scope.row.gas_wanted | toMoney
-                            }}Gas总量中实际消耗{{
-                              scope.row.gas_used | toMoney
-                            }}Gas<br />@0.0004GHM</span
-                          >
-                          <span v-show="index === 2">957820（位置154）</span>
-
-                          <el-divider></el-divider>
-                        </div>
-                      </div>
-                      <div
-                        class="detailBox"
-                        @click="queryTxDetail(scope.$index)"
-                      >
-                        {{ languagePack.prompttext10 }}
-                      </div>
+              <el-popover
+                placement="right-start"
+                :offset="50"
+                :visible-arrow="true"
+                width="300px"
+                trigger="manual"
+                v-model="scope.row.eyePopover"
+              >
+                <div class="popoverBox">
+                  <div class="popoverBox_content">
+                    <div style="height:28px;line-height:28px;">
+                      {{ languagePack.txstext13 }}
                     </div>
-                    <img
-                      slot="reference"
-                      src="@/assets/img/table_eye_nor@2x.png"
-                      width="14"
-                    />
-                  </el-popover>
+                    <div class="popStatus">
+                      <div v-if="scope.row.result == 'success'">
+                        <img src="@/assets/img/deal_succeed@2x.png" /><span
+                          >{{languagePack.prompttext02}}</span
+                        ><span></span>
+                      </div>
+                      <div v-else>
+                        <img src="@/assets/img/deal_lose@2x.png" /><span
+                          >{{languagePack.prompttext03}}</span
+                        ><span></span>
+                      </div>
+
+                      <el-divider></el-divider>
+                    </div>
+                    <div
+                      v-for="(item, index) in statusTitle"
+                      :key="index"
+                    >
+                      <div style="height:28px;line-height:28px;">{{ item.title }}</div>
+                      <span v-show="index === 0"
+                        >{{ scope.row.fee/1e6 }} GHM ($0.00)</span
+                      >
+                      <span v-show="index === 1"
+                        >{{ scope.row.gas_wanted | toMoney }}Gas总量中实际消耗{{
+                          scope.row.gas_used | toMoney
+                        }}Gas<br /> {{(scope.row.gas_used*scope.row.fee/scope.row.gas_wanted/1e6).toFixed(6)}}GHM </span> <!---->
+                      <span v-show="index === 2">{{scope.row.sequence}}</span>
+
+                      <el-divider></el-divider>
+                    </div>
+                  </div>
+                  <div class="detailBox" @click="queryTxDetail(scope.$index)">
+                    {{languagePack.prompttext10}}
+                  </div>
                 </div>
+                <img slot="reference"  @focus="scope.row.eyePopover = true" @blur="scope.row.eyePopover = false" width="14" src="@/assets/img/table_eye_nor@2x.png" />
+              </el-popover>
+            </div>
               </template>
             </el-table-column>
             <el-table-column
@@ -210,19 +194,16 @@
             </el-table-column>
             <el-table-column
               :label="languagePack.accounttext30"
-              width="100px"
+              width="220px"
               align="center"
             >
               <template slot-scope="scope">
-                <div class="table_txOperate">{{ scope.row.type }}</div>
+                <span class="table_txOperate">{{ scope.row.type }}</span>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.accounttext31">
               <template slot-scope="scope">
-                <div
-                  class="specialFont"
-                  @click="queryDealtoBlock(scope.row.height)"
-                >
+                <div class="specialFont" @click="queryDealtoBlock(scope.row.height)">
                   {{ scope.row.height }}
                 </div>
               </template>
@@ -258,18 +239,15 @@
                 <TableTooltip
                   v-if="scope.row.targetAddress"
                   :content="scope.row.targetAddress"
-                  @click.native="queryDealtoAddress(scope.row.targetAddress)"
+                  @click.native="toAddress(scope.row.targetAddress)"
                 ></TableTooltip>
-                <TableTooltip
-                  v-else
-                  :content="scope.row.message.validator_address"
-                ></TableTooltip>
+                <span v-else>--</span>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.accounttext35">
               <template slot-scope="scope">
                 <div>
-                  {{ isNaN(scope.row.tx_amount) ? 0 : scope.row.tx_amount / 1e6
+                  {{ isNaN(scope.row.tx_amount) ? 0 : scope.row.tx_amount
                   }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
                 </div>
               </template>
@@ -302,7 +280,11 @@
 import { queryAccountInfo, queryAccountTx } from "@/api/account.js";
 import mixin from "@/mixins";
 import vueQr from "vue-qr";
-import { data } from "autoprefixer";
+import {
+  getadresRewards,
+  getadresUnbonding,
+  getadresDelegated,
+} from "@/api/api.js";
 export default {
   name: "addressDetail",
   mixins: [mixin],
@@ -317,7 +299,6 @@ export default {
         balance: 0,
         delegate_amount: 0,
         rewards: 0,
-        withdraw_amount: 0,
         unbonding: 0,
       },
       page: {
@@ -328,34 +309,89 @@ export default {
   },
   created() {
     this.address = this.$route.query.address;
+    const noquery = this.$route.query.noquery
+    // console.log(this.$route.query);
+    if(noquery){
+      this.TxsList = []
+      return
+    }
     this.getAccountMsg();
-
     let { pageSize, currentPage } = this.page;
     this.getTxList(pageSize, currentPage);
   },
   methods: {
     async getAccountMsg() {
-      const res = await queryAccountInfo(this.address);
-      console.log("账户基本信息", res);
-      this.account = res.data;
+      const res = await Promise.all([
+        queryAccountInfo(this.address),
+        getadresDelegated(this.address),
+        getadresRewards(this.address),
+        getadresUnbonding(this.address),
+      ]);
+      console.log(res);
+      let delegate_amount = 0;
+      if (res[1].delegation_responses.length !== 0) {
+        res[1].delegation_responses.forEach((item) => {
+          delegate_amount += item.balance.amount * 1;
+        });
+      }else{
+        delegate_amount = 0
+      }
+      let rewards = res[2].total[0]?res[2].total[0].amount:0;
+      let unbonding = 0;
+      res[3].unbonding_responses.forEach((item) => {
+        item.entries.map((e) => {
+          unbonding += e.balance * 1;
+        });
+      });
+      // console.log(unbonding);
+      this.account = {
+        ...res[0].data,
+        delegate_amount: delegate_amount / 1e6,
+        rewards: rewards / 1e6,
+        unbonding: unbonding / 1e6,
+      };
     },
     async getTxList(limit, index) {
-      const {
-        data: { list, total },
-      } = await queryAccountTx(limit, index, this.address);
-      console.log("账户交易列表", list);
-      let arr;
-      if (list) {
-        arr = list.reverse();
-        this.disposeTableType(arr);
+      let { data:{list,total} } = await queryAccountTx(limit, index, this.address);;
+      // console.log("交易", list);
+      // console.log(total);
+      let arr = []
+      this.hashList = []
+      if(list.length >= 1){
+        list.forEach(({tx_response:{txhash,height,timestamp,gas_used,gas_wanted,logs,events},tx:{auth_info,body:{messages}}})=>{
+        let {amount,from_address,to_address,delegator_address,validator_address,withdraw_address,sender,contract} = messages[0]
+        let type = messages[0]['@type'].split('.').pop()
+        let reward = type === 'MsgWithdrawDelegatorReward'?logs[0].events[0].attributes.pop().value.replace(/[a-zA-Z]/g, ""):0
+        // let status = 
+        
+        let statusArr = events.map((e) => {
+            return e.attributes.map((i) => {
+                return i.index;
+            }); 
+        });
+        let result = statusArr.flat().includes(false)?'error':'success'
+        arr.push({
+          _id:txhash,
+          type,
+          height,
+          timestamp,
+          sender:from_address || delegator_address || sender,
+          targetAddress:to_address || validator_address || withdraw_address || contract,
+          tx_amount:(type === 'MsgWithdrawDelegatorReward'?reward:amount?amount.amount?amount.amount:amount[0].amount:0)/1e6,
+          fee:auth_info.fee.amount[0].amount,
+          result,
+          gas_used,
+          gas_wanted,
+          sequence:auth_info.signer_infos[0].sequence,
+          eyePopover:false
+        })
+        this.hashList.push({
+          hash: txhash, type: type, status:result
+        }) 
+      })
       }
       this.TxsList = arr;
-      this.txtotal = total;
-      if (Array.isArray(arr)) {
-        this.hashList = arr.map((item) => {
-          return { hash: item._id, status: item.result };
-        });
-      }
+      this.txtotal = total
     },
     //分页
     handleSizeChange(val) {
@@ -377,6 +413,12 @@ export default {
       );
       this.$router.push({ name: "hash_detail" });
     },
+    toAddress(address){
+      if(address.includes('valoper')){
+        return this.$router.push({path:'/node_detail',query:{address}})
+      }
+      this.$router.push({ path: "/address_detail", query: { address } });
+    }
   },
   computed: {
     languagePack() {
@@ -392,7 +434,7 @@ export default {
     TotalBalance() {
       return function (...args) {
         return args.reduce((a, b) => {
-          return a + b;
+          return a * 1 + b * 1;
         });
       };
     },
@@ -402,6 +444,9 @@ export default {
       // if (!Array.isArray(value)) return (this.loading = false);
       if (Array.isArray(value)) {
         this.loading = value.length == 0 ? true : false;
+        setTimeout(()=>{
+          this.loading = false
+        },1500)
       } else {
         this.loading = false;
       }

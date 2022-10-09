@@ -30,7 +30,11 @@
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext14 }}：</p>
-              <span>{{ blockData.timestamp}}</span>
+
+              <el-tooltip effect="dark" :content="blockData.utc" placement="top">
+                <span>{{ blockData.timestamp}}</span>
+              </el-tooltip>
+              
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext18 }}：</p>
@@ -74,14 +78,7 @@
         <div slot="empty">{{languagePack.prompttext11}}</div>
           <el-table-column :label="languagePack.blocktext22">
             <template slot-scope="scope">
-              <div
-                class="specialFont"
-                @click="
-                  queryDealtoHash({
-                    hash: scope.row._id,
-                  })
-                "
-              >
+              <div class="specialFont" @click="queryDealtoHash({hash: scope.row._id})">
                 <el-tooltip effect="dark" :content="languagePack.prompttext05" placement="top">
                   <img
                     src="@/assets/img/table_mistake.png"
@@ -94,13 +91,12 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="operationType"
             :label="languagePack.blocktext23"
-            width="110px"
+            width="220px"
             align="center"
           >
             <template slot-scope="scope">
-              <div class="table_txOperate">{{ scope.row.type }}</div>
+              <span class="table_txOperate">{{ scope.row.type }}</span>
             </template>
           </el-table-column>
           <el-table-column :label="languagePack.blocktext24">
@@ -152,8 +148,7 @@
           <el-table-column :label="languagePack.blocktext28">
             <template slot-scope="scope">
               <div>
-                {{ isNaN(scope.row.tx_amount)?0:scope.row.tx_amount /1e6
-                }}<span v-if="!isNaN(scope.row.tx_amount)"> GHM</span>
+                {{scope.row.tx_amount?scope.row.tx_amount:'--'}}<span v-if="scope.row.tx_amount"> GHM</span>
               </div>
             </template>
           </el-table-column>
@@ -209,18 +204,54 @@ export default {
   mounted() {},
   methods: {
     async getblockDetail(value) {
-      const res = await queryBlockdetails(value * 1);
-      console.log("区块信息", res);
+      const res = await queryBlockdetails(String(value));
+      // console.log("区块信息", res);
 
       if (!res.data.block) {
         this.messageBox("暂未出块", "error");
         return false;
       }
       this.blockData = res.data.block;
-      this.blockData.timestamp = this.dealwithTime(this.blockData.timestamp)
-      let arr = res.data.txs;
-      this.disposeTableType(arr);
+      let timestamp = this.blockData.timestamp 
+      this.blockData.timestamp = this.dealwithTime(timestamp)
+      this.blockData.utc = '(UTC) '+ timestamp.slice(0,19)
+      let arr = []
+      if(res.data.txs === null){
+        this.tableData = null
+      }else{
+
+      
+      res.data.txs.forEach(({tx_response:{txhash,height,timestamp,gas_used,gas_wanted,logs,events},tx:{auth_info,body:{messages}}})=>{
+        let {amount,from_address,to_address,delegator_address,validator_address,withdraw_address,sender,contract} = messages[0]
+        let type = messages[0]['@type'].split('.').pop()
+        let reward = type === 'MsgWithdrawDelegatorReward'?logs[0].events[0].attributes.pop().value.replace(/[a-zA-Z]/g, ""):0
+        // let status = 
+        
+        let statusArr = events.map((e) => {
+            return e.attributes.map((i) => {
+                return i.index;
+            }); 
+        });
+        let result = statusArr.flat().includes(false)?'error':'success'
+        arr.push({
+          _id:txhash,
+          type,
+          height,
+          timestamp,
+          sender:from_address || delegator_address || sender,
+          targetAddress:to_address || validator_address || withdraw_address || contract,
+          tx_amount:(type === 'MsgWithdrawDelegatorReward'?reward:amount?amount.amount?amount.amount:amount[0].amount:0)/1e6,
+          fee:auth_info.fee.amount[0].amount,
+          result,
+          gas_used,
+          gas_wanted,
+        })
+        // this.hashList.push({
+        //   hash: txhash, type: type, status:result
+        // }) 
+      })
       this.tableData = arr;
+      }
       return true;
     },
 

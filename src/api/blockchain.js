@@ -9,7 +9,7 @@ export function queryBlockdetails(data) {
         url: '/api/browser/blockdetails',
         method: 'POST',
         data: {
-            chain_id: "ghmdev",
+            chain_id: "dev",
             height: data
         }
     })
@@ -21,7 +21,7 @@ export function queryTxList(limit, index) {
         url: '/api/browser/txlist',
         method: 'POST',
         data: {
-            chain_id: "ghmdev",
+            chain_id: "dev",
             limit,
             index
         }
@@ -34,7 +34,7 @@ export function queryBlockList(limit,index) {
         url: '/api/browser/blocklist',
         method: 'POST',
         data: {
-            chain_id: "ghmdev",
+            chain_id: "dev",
             limit,
             index
         }

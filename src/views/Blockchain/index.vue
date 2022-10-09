@@ -14,11 +14,14 @@
           v-loading="loading"
         >
           <el-table-column
-            prop="rank"
             :label="languagePack.toptext03"
             width="80px"
             align="center"
-          />
+          >
+          <template slot-scope="scope">
+            <div>{{(scope.$index+1)+page.currentPage*page.pageSize}}</div>
+          </template>
+        </el-table-column>
           <el-table-column
             prop="address"
             :label="languagePack.toptext04"
@@ -42,15 +45,18 @@
             width="160"
           >
             <template slot-scope="scope">
-              <div>{{ (scope.row.percentage * 100).toFixed(8) }} %</div>
+              <div>{{ (scope.row.balance / amountNum*100).toFixed(8) }} %</div>
             </template>
           </el-table-column>
           <el-table-column
-            prop="tx_count"
             :label="languagePack.toptext08"
             width="100px"
             align="right"
-          />
+          >
+          <template slot-scope="scope">
+            <div>{{scope.row.txCount?scope.row.txCount:0}}</div>
+          </template>
+        </el-table-column>
         </el-table>
       </div>
       <el-row type="flex" justify="end" align="middle" style="height: 60px">
@@ -70,7 +76,7 @@
 </template>
 
 <script>
-import { queryAccountList } from "@/api/api";
+import { getAllanmount,queryAccountList } from "@/api/api";
 import mixins from "@/mixins";
 export default {
   name: "Blockchain",
@@ -78,51 +84,45 @@ export default {
   data() {
     return {
       tableData: [],
-      allData:[],
       page: {
         pageSize: 10,
-        currentPage: 1,
+        currentPage: 0,
       },
       pagination: 0,
       loading: true,
+      amountNum:0,
     };
   },
-  mounted() {
-    // document.querySelector(".selected").style.color = "#1E42ED";
-  },
-  created() {
+  async created() {
     let { pageSize, currentPage } = this.page;
-    this.getData(0, 0);
+    const {supply} = await getAllanmount()
+    this.amountNum = Number(supply[0]['amount'])
+    this.getData(pageSize, currentPage);
   },
   methods: {
     handleSizeChange(val) {
-      this.page.pageSize = val
-      this.tableData = this.allData.slice(this.page.currentPage,val);
+      this.tableData = []
+      this.getData(this.page.pageSize = val,this.page.currentPage)
     },
 
     handleCurrentChange(index) {
+      this.tableData = []
       this.page.currentPage = index - 1;
       let { pageSize, currentPage } = this.page;
-      this.tableData = this.allData.slice(currentPage*pageSize,currentPage*pageSize+pageSize);
-      // this.getData(pageSize, currentPage);
+      this.getData(pageSize,currentPage)
     },
 
     async getData(limit, index) {
       let { data } = await queryAccountList(limit, index);
-      // console.log("顶级账户", data);
-      this.allData = data.list
-      this.allData.forEach((item,index)=>{
-        item.rank = index + 1
-        if(item.balance == 0){
-          this.allData.splice(index,1)
-        }
-      })
-      this.tableData =  this.allData.slice(0,10);
-      if (this.pagination == 0) return (this.pagination = data.total);
+      console.log("顶级账户", data);
+      let arr = data.list
+      // this.tableData = data.list
+      this.tableData = arr.filter(item=>item.balance != 0)
+      if (this.pagination == 0) return (this.pagination = data.total>=1000?1000:data.total);
     },
 
     toDetail(address) {
-      console.log(address);
+      // console.log(address);
       this.$router.push({ path: "/address_detail", query: { address } });
     },
   },

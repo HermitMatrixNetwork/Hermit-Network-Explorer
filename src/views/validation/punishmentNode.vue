@@ -11,14 +11,15 @@
         <div class="tableBody">
           <el-table
             size="mini"
-            height="612px"
             :data="list"
-            :row-style="{ height: '58px' }"
+            height="auto"
+            :row-style="{ height: '58px',cursor: 'pointer' }"
             :header-cell-class-name="'tableHeaderCellStyle'"
             :row-class-name="'tableRowStyle'"
+            @row-click="toNode"
             v-loading="loading"
           >
-            <div slot="empty">{{ languagePack.prompttext11 }}</div>
+            <div slot="empty" style="height:600px,line-height:600px">{{ languagePack.prompttext11 }}</div>
             <el-table-column
               type="index"
               :label="languagePack.nodetext64"
@@ -33,7 +34,6 @@
               <template slot-scope="scope">
                 <div
                   class="specialFont"
-                  @click="toNode(scope.row.operator_address)"
                 >
                   {{ scope.row.moniker }}
                 </div>
@@ -45,7 +45,7 @@
               align="right"
             >
               <template slot-scope="scope">
-                <div>{{ scope.row.tokens | toMoney }} GHM</div>
+                <div>{{ scope.row.tokens/1e6 }} GHM</div>
               </template>
             </el-table-column>
             <el-table-column
@@ -59,7 +59,7 @@
             </el-table-column>
             <el-table-column :label="languagePack.nodetext67" width="200">
               <template slot-scope="scope">
-                <div>{{ scope.row.unbonding_time }}</div>
+                <div>{{ dealTime(scope.row.unbonding_time) }}</div>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext68" align="right">
@@ -88,6 +88,8 @@
 
 <script>
 import { allValidationNode } from "@/api/api.js";
+import { getValidationList } from "@/api/validation.js";
+
 import mixins from "@/mixins";
 export default {
   mixins: [mixins],
@@ -99,42 +101,59 @@ export default {
   },
   created() {},
   async mounted() {
-    const res = await allValidationNode();
-    let arr = res.validators.filter((item) => item.jailed);
-    console.log(arr);
-    arr.forEach((e) => {
-      let {
-        description: { moniker },
-        tokens,
-        min_self_delegation,
-        unbonding_time,
-        unbonding_height,
-        operator_address,
-      } = e;
-      this.list.push({
-        moniker,
-        tokens,
-        min_self_delegation,
-        unbonding_height,
-        operator_address,
-        unbonding_time: unbonding_time.split(".")[0].replace(/[A-Z]/g, " "),
-      });
-    });
-    setTimeout(() => {
-      this.loading = false;
-    }, 3000);
+    // const res = await allValidationNode();
+    // let arr = res.validators.filter((item) => item.jailed);
+    // console.log(arr);
+    // arr.forEach((e) => {
+    //   let {
+    //     description: { moniker },
+    //     tokens,
+    //     min_self_delegation,
+    //     unbonding_time,
+    //     unbonding_height,
+    //     operator_address,
+    //   } = e;
+    //   this.list.push({
+    //     moniker,
+    //     tokens,
+    //     min_self_delegation,
+    //     unbonding_height,
+    //     operator_address,
+    //     unbonding_time: unbonding_time.split(".")[0].replace(/[A-Z]/g, " "),
+    //   });
+    // });
+    // setTimeout(() => {
+    //   this.loading = false;
+    // }, 3000);
+    const {data:{list}} = await getValidationList(0, 0);
+    // console.log(list);
+    this.list= list.filter((item) => item.jailed);
+    
   },
   methods: {
-    toNode(address) {
-      this.$router.push({ name: "node_detail", query: { address } });
+    toNode(value) {
+      this.$router.push({ name: "node_detail", query: { address:value.operator_address } });
     },
     handleSizeChange() {},
     handleCurrentChange() {},
+    dealTime(time) {
+        let date = new Date(time)
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+        let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+        let hours = date.getHours()<10? '0' + date.getHours() : date.getHours()
+        let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+        let seconds = date.getSeconds()<10? '0' +date.getSeconds() :date.getSeconds()
+        return year + '-' + month + '-' + day + ' ' + (hours-9 )+ ':' + minutes + ':' + seconds
+    }
   },
   watch: {
     list(value) {
       if (Array.isArray(value)) {
         this.loading = value.length === 0 ? true : false;
+        setTimeout(()=>{
+          this.loading = false
+        },1500)
       } else {
         this.loading = false;
       }
@@ -179,6 +198,9 @@ export default {
     }
     .tableBody {
       height: 612px;
+      .el-table{
+        min-height: 612px;
+      }
     }
   }
 }

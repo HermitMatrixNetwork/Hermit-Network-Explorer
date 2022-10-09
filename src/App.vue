@@ -28,7 +28,9 @@ export default {
     //   this.$router.replace('/home')
     // }
   },
-  mounted() {},
+  mounted() {
+    
+  },
   watch: {},
 };
 </script>
@@ -40,6 +42,7 @@ body,
   box-sizing: border-box;
   overflow-x: hidden;
   background: #f8fafb;
+  height: 100vh;
 }
 @media screen and (max-width:598px) {
   html,

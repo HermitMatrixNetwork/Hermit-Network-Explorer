@@ -34,7 +34,7 @@ let top = {
 
 let txs = {
     En: {
-        'txstext01': 'transactions',
+        'txstext01': 'Transactions',
         'txstext02': 'A total of ',
         'txstext03': 'Showing The Last 500k Records',
         'txstext04': 'transaction hash',
@@ -102,7 +102,7 @@ let txs = {
 
 let block = {
     En: {
-        'blocktext01': 'block',
+        'blocktext01': 'Block',
         'blocktext02': 'Total of',
         'blocktext03': 'x',
         'blocktext04': 'blocks',
@@ -141,17 +141,17 @@ let block = {
 
 let block_detail = {
     En: {
-        'blocktext11': 'block',
-        'blocktext12': 'details',
-        'blocktext13': 'block height',
+        'blocktext11': 'Block',
+        'blocktext12': 'Details',
+        'blocktext13': 'Block Height',
         'blocktext14': 'TimeStamp',
         'blocktext15': 'Amount',
-        'blocktext16': 'block hash',
-        'blocktext17': 'parent block hash',
-        'blocktext18': 'proposer',
+        'blocktext16': 'Block Hash',
+        'blocktext17': 'Parent Block Hash',
+        'blocktext18': 'Proposer',
         'blocktext19': 'Gas Used',
         'blocktext20': 'Gas Limit',
-        'blocktext21': 'transaction',
+        'blocktext21': 'Transaction',
         'blocktext22': 'transaction hash',
         'blocktext23': 'operation type',
         'blocktext24': 'block',
@@ -207,16 +207,16 @@ let block_detail = {
 
 let txs_detail = {
     En: {
-        'txstext20': 'transaction details',
-        'txstext21': 'contract execution',
-        'txstext22': 'executive',
-        'txstext23': 'contract',
+        'txstext20': 'Transaction Details',
+        'txstext21': 'Contract Execution',
+        'txstext22': 'Executive',
+        'txstext23': 'Contract',
         'txstext24': 'Amount',
         'txstext25': 'Transaction Fee',
         'txstext26': 'meme',
-        'txstext27': 'details',
-        'txstext28': 'status',
-        'txstext29': 'transaction hash',
+        'txstext27': 'Details',
+        'txstext28': 'Status',
+        'txstext29': 'Transaction hash',
         'txstext30': 'TimeStamp',
         'txstext31': 'block height',
         'txstext32': 'Gas Used',
@@ -248,12 +248,13 @@ let txs_detail = {
         'txstext58': 'Re-entrust',
         'txstext59': 'Get ',
         'txstext60': 'reward from verification node ',
+        'txstext61': 'Verify address',
     },
     Cn: {
         'txstext20': '交易详情：',
         'txstext21': '合约执行',
         'txstext22': '执行方',
-        'txstext23': '合约',
+        'txstext23': '合约标签',
         'txstext24': '交易额',
         'txstext25': '手续费',
         'txstext26': '备注',
@@ -291,13 +292,14 @@ let txs_detail = {
         'txstext58': '重新委托',
         'txstext59': '获取',
         'txstext60': '奖励来自验证节点',
+        'txstext61': '验证地址',
     },
     Ct: {
         //合约执行
         'txstext20': '交易詳情',
         'txstext21': '合約執行',
         'txstext22': '執行方',
-        'txstext23': '合約',
+        'txstext23': '合約標簽',
         'txstext24': '交易額',
         'txstext25': '手續費',
         'txstext26': '備註',
@@ -335,6 +337,8 @@ let txs_detail = {
         'txstext58': '重新委托',
         'txstext59': '獲取 ',
         'txstext60': ' 獎勵來自驗證節點',
+        'txstext61': '驗證地址',
+
     }
 }
 

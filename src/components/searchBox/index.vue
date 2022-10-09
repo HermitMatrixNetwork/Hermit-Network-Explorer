@@ -77,15 +77,18 @@ export default {
       let value = this.searchVal.replace(/\s+/g, "");
       switch (this.select * 1) {
         case 1:
-          if (!value.includes("ghm1")) {
-            break;
-          }
-          var result = await queryAccountInfo(value);
-          if (result.code === 0){
-            this.queryDealtoAddress(value);
-            this.searchVal = ""
-            return 
-          }
+          if (value.includes("ghm1")&&value.length===42) {
+              var result = await queryAccountInfo(value);
+            if (result.code === 0){
+              this.queryDealtoAddress(value);
+              this.searchVal = ""
+              return
+            }else{
+              this.queryDealtoAddress(value,true);
+              this.searchVal = ""
+              return
+            } 
+          }       
           break;
         // case 2:
         //   console.log(this.select);
@@ -108,7 +111,7 @@ export default {
           if (isNaN(value)) break;
           var {
             data: { block },
-          } = await queryBlockdetails(Number(value));
+          } = await queryBlockdetails(value);
           if (block){
             this.queryDealtoBlock(value);
             this.searchVal = ""

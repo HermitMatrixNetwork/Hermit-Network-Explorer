@@ -10,8 +10,8 @@
           >
         </div>
         <div class="banner">
-          <a href="http://www.baidu.com" target="_blank"
-            ><img src="@/assets/img/home_banner.png" alt=""
+          <a :href="banner.link" target="_blank"
+            ><img :src="banner.url" alt=""
           /></a>
         </div>
       </div>
@@ -210,7 +210,7 @@
             >
               <div class="icon">Top{{ index + 1 }}</div>
               <div class="basic">
-                <p>{{ languagePack.hometext24 }}{{ index + 1 }}</p>
+                <p>{{ item.description.moniker}}</p>
                 <p>{{ languagePack.hometext25 }}{{ item.tokens / 1e6 }} GHM</p>
               </div>
               <div class="btnRate">
@@ -283,14 +283,15 @@ export default {
 
     this.getBlockMsg();
     this.getnowBlockList();
-    // let {
-    //   data: {
-    //     banner: {
-    //       photos: { photos },
-    //     },
-    //   },
-    // } = await getbanner();
-    // this.banner = photos[0];
+    let {
+      data: {
+        banner: {
+          photos: { photos },
+        },
+      },
+    } = await getbanner();
+    this.banner = photos[1];
+    // console.log(photos);
   },
   mounted() {
     this.charts = {
@@ -343,7 +344,7 @@ export default {
       } = await queryBlockList(20, 0);
       // console.log("最新的出块区块", list);
       //计算最新出块节点
-      this.computeLastNode(list[0].validator);
+      // this.computeLastNode(list[0].validator);
       this.$refs["RightAnimation"].classList.remove("RightAnimation");
       this.blockList = list;
       let echartList = list.map((e) => {

@@ -6,7 +6,7 @@
           <div class="basicStyle messageBasic">
             <div class="column">
               <p>{{ languagePack.contracttext12 }}：</p>
-              <span>{{ contractData.contract_address }} <img src="@/assets/img/copy.png" @click="Copy(contractData.contract_address )" style='cursor: pointer;'/></span>
+              <span>{{ contractData.contract_address }} <img src="@/assets/img/copy.png" @click="Copy(contractData.contract_address )" style='cursor:pointer;'/></span>
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext18 }}：</p>
@@ -80,9 +80,12 @@
           </el-table-column>
           <el-table-column :label="languagePack.contracttext26" width="420">
             <template slot-scope="scope">
-              <p>
+              <!-- <p>
                 {{ dealwithTime(scope.row.timestamp )}}
-              </p>
+              </p> -->
+              <el-tooltip effect="dark" :content="scope.row.utc" placement="top">
+                <span>{{ scope.row.timestamp}}</span>
+              </el-tooltip>
             </template>
           </el-table-column>
           <el-table-column
@@ -161,19 +164,40 @@ export default {
     },
     async queryTx(pageSize, page) {
       const address = this.$route.query.address;
-      const txlist = await getContractTx(pageSize, page, address);
-      console.log(txlist);
-      let arr = txlist.data.list
-      if(Array.isArray(arr)){
-        this.tableList = arr
-        this.hashList = this.tableList.map((item) => {
-          return { hash: item._id, status: item.result };
+      const {data:{list,total}} = await getContractTx(pageSize, page, address);
+      console.log(list);
+      let arr = []
+      list.forEach(item=>{
+        let {tx_response:{txhash,timestamp,events},tx:{body}} = item
+        let message = body['messages'][0]
+        let statusArr = events.map((e) => {
+            return e.attributes.map((i) => {
+                return i.index;
+            }); 
         });
-      }
+        let result = statusArr.flat().includes(false)?'error':'success'
+        arr.push({
+          sender:message.sender,
+          timestamp:this.dealwithTime(timestamp),
+          utc:'(UTC) '+timestamp.replace(/[A-Z]/g,' '),
+          txhash,
+          result
+        })
+        this.hashList.push({
+          hash:txhash,
+          status:result
+        })
+      })
+      // if(Array.isArray(arr)){
+      //   this.tableList = arr
+      //   this.hashList = this.tableList.map((item) => {
+      //     return { hash: item._id, status: item.result };
+      //   });
+      // }
       this.tableList = arr
 
       if (this.txtotal !== 0) return;
-      this.txtotal = txlist.data.total;
+      this.txtotal = total;
     },
     handleSizeChange(val) {
       this.tableList = [];

@@ -94,7 +94,7 @@
           align="right"
         >
         <template slot-scope="scope">
-          <div>{{ scope.row.coinbase/1e6}}</div>
+          <div>{{ 9922/1e6}}</div>
         </template>
       </el-table-column>
       </el-table>
@@ -148,9 +148,9 @@ export default {
     // 获取区块数据
     async getBlockData(limit, index) {
       let { data } = await queryBlockList(limit, index);
-      // console.log("区块数据", data);
+      console.log("区块数据", data);
       this.tableData = data.list;
-      this.blockTotal = data.total + 1;
+      this.blockTotal = data.total;
     },
     handleSizeChange(val) {
       this.tableData = [];

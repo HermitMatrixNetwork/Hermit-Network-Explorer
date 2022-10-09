@@ -40,7 +40,9 @@
           align="center"
         >
           <template slot-scope="scope">
-            <div>{{ (scope.$index+1 )+ (pageData.page*pageData.pageSize) }}</div>
+            <div>
+              {{ scope.$index + 1 + pageData.page * pageData.pageSize }}
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -81,7 +83,7 @@
           small
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="pageData.page+1"
+          :current-page="pageData.page + 1"
           layout="prev, pager, next,sizes"
           :total="pagination"
           :page-sizes="[10, 25, 50]"
@@ -95,6 +97,7 @@
 
 <script>
 import { getAllanmount, queryAccountList } from "@/api/api.js";
+import {userIncrease} from '@/api/account.js'
 import * as echarts from "echarts";
 import { bar, line } from "@/echarts/index.js";
 import { toMoney } from "@/utils/common.js";
@@ -121,10 +124,24 @@ export default {
     this.amountNumber();
   },
   mounted() {
-    let arr = [600, 1000, 800, 900, 450, 600, 920, 450, 890, 860, 400, 650];
+    // console.log(date);
     const chart = document.querySelector(".line_chart");
     this.lineChart = echarts.init(chart);
-    line(this.lineChart, arr, this.languagePack.prompttext12);
+    this.queryUsergrow(7)
+    // .then(res=>{
+    //     console.log(res);
+    //     let userList = res.map((e,index)=>{
+    //       return {user:e,date:date-index*1000*60*60*24}
+    //     })
+    //     // console.log(userList);
+    //     line(this.lineChart, userList.reverse(), this.languagePack.prompttext12);
+    // });
+    // console.log(arr);
+    
+    
+    
+
+    
   },
   filters: {
     toMoney,
@@ -146,10 +163,7 @@ export default {
     },
     handleSizeChange(value) {
       this.accountslist = [];
-      this.getaccounts(
-        (this.pageData.pageSize = value),
-        (this.pageData.page = 0)
-      );
+      this.getaccounts((this.pageData.pageSize = value), this.pageData.page);
     },
     handleCurrentChange(val) {
       this.pageData.page = val - 1;
@@ -161,38 +175,33 @@ export default {
       this.navIndex = index;
       switch (index) {
         case 0:
-          line(
-            this.lineChart,
-            [600, 1000, 800, 900, 450, 600, 920, 450, 890, 860, 400, 650],
-            this.languagePack.prompttext12
-          );
+        this.queryUsergrow(7)
           break;
         case 1:
-          line(
-            this.lineChart,
-            [1, 2, 3, 4, 5, 6, 7],
-            this.languagePack.prompttext12
-          );
-
+        this.queryUsergrow(30)
           break;
         case 2:
-          line(
-            this.lineChart,
-            [7, 6, 5, 4, 3, 2, 1],
-            this.languagePack.prompttext12
-          );
+        this.queryUsergrow(60)
           break;
         case 3:
-          line(
-            this.lineChart,
-            [14, 2, 8, 16, 21, 3, 15, 17, 9, 13, 27, 5, 12, 8, 9, 11, 13],
-            this.languagePack.prompttext12
-          );
+        this.queryUsergrow(90)
           break;
         default:
           break;
       }
     },
+    //获取用户增长信息
+    async queryUsergrow(days){
+      const {data} = await userIncrease(days)
+      let date = Date.parse(new Date())
+      let userList = data.map((e,index)=>{
+          return {user:e,date:date-index*1000*60*60*24}
+        })
+        // console.log(userList);
+        line(this.lineChart,this.userList = userList.reverse(), this.languagePack.prompttext12);
+      // console.log(res);
+      // return res.data
+    }
   },
   computed: {
     languagePack() {
@@ -213,8 +222,7 @@ export default {
       }
     },
     languagePack(val) {
-      let arr = [600, 1000, 800, 900, 450, 600, 920, 450, 890, 860, 400, 650];
-      line(this.lineChart, arr, val.prompttext12);
+      line(this.lineChart, this.userList, val.prompttext12);
     },
     deep: true,
   },

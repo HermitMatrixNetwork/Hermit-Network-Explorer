@@ -37,11 +37,11 @@ export default {
       }
       this.$router.push({ name: 'hash_detail', query: { hash: JSON.stringify(hash) } }).catch(e => { })
     },
-    queryDealtoAddress(address) {
+    queryDealtoAddress(address,noquery) {
       if (this.$route.path == '/hash_detail') {
         return this.$router.push({ path: '/address_detail', query: { address } }).catch(e => { })
       }
-      this.$router.push({ path: '/address_detail', query: { address } }).catch(e => { })
+      this.$router.push({ path: '/address_detail', query: { address,noquery } }).catch(e => { })
     },
     disposeTableType(arr) {
       if (!Array.isArray(arr)) return;

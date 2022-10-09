@@ -9,12 +9,12 @@
         <div class="nextBtn" v-if="hashList.length">
           <span
             @click="lastData"
-            :style="{ cursor: waitResult ? 'wait' : 'pointer' }"
+            :style="{ cursor: waitResult ? 'wait' : 'pointer',background:hashIndex==0?'#80808045':''  }"
             ><i class="el-icon-arrow-left"></i
           ></span>
           <span
             @click="nextData"
-            :style="{ cursor: waitResult ? 'wait' : 'pointer' }"
+            :style="{ cursor: waitResult ? 'wait' : 'pointer',background:hashIndex==hashList.length - 1?'#80808045':'' }"
             ><i class="el-icon-arrow-right"></i
           ></span>
         </div>
@@ -25,126 +25,80 @@
             ? languagePack.receivereward
             : languagePack.contractexecution -->
         <template #message>
-          <div class="messageBasic" style="height: 160px">
+          <div class="messageBasic" :style="{height:detailed.memo?'200px':'160px'}">
             <!-- 当该笔交易为合约执行时 -->
             <div class="column" v-if="dealType === 'MsgExecuteContract'">
               <p>{{ languagePack.txstext22 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoAddress(detailed.perform)"
-                >{{ detailed.perform }}</span
-              >
+              <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.perform)" />
             </div>
             <div class="column" v-if="dealType === 'MsgExecuteContract'">
               <p>{{ languagePack.txstext23 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoAddress(detailed.contract)"
-                >{{ detailed.contract }}</span
-              >
+              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.contract)" />
             </div>
 
             <!-- 当该笔交易为转账时 -->
             <div class="column" v-if="dealType === 'MsgSend'">
               <p>{{ languagePack.txstext35 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoAddress(detailed.perform)"
-                >{{ detailed.perform }}</span
-              >
+              <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.perform)" />
             </div>
             <div class="column" v-if="dealType === 'MsgSend'">
               <p>{{ languagePack.txstext36 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoAddress(detailed.toaddress)"
-                >{{ detailed.toaddress }}</span
-              >
+              <span class="specialFont" @click="queryDealtoAddress(detailed.toaddress)">{{ detailed.toaddress }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.toaddress)" />
             </div>
 
             <!-- 当该笔交易为领取奖励时 -->
-            <div
-              class="column"
-              v-if="dealType === 'MsgWithdrawDelegatorReward'"
-            >
+            <div class="column" v-if="dealType === 'MsgWithdrawDelegatorReward'">
               <p>{{ languagePack.txstext41 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoAddress(detailed.delegator_address)"
-                >{{ detailed.delegator_address }}</span
-              >
+              <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)">{{ detailed.delegator_address }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.delegator_address)" />
             </div>
 
-            <div
-              class="column"
-              v-if="dealType === 'MsgWithdrawDelegatorReward'"
-            >
+            <div class="column" v-if="dealType === 'MsgWithdrawDelegatorReward'">
               <p>{{ languagePack.txstext39 }}：</p>
               <span>{{ detailed.turnover / 1e6 }} GHM</span>
             </div>
 
-            <div
-              class="column"
-              v-if="dealType === 'MsgWithdrawDelegatorReward'"
-            >
+            <div class="column" v-if="dealType === 'MsgWithdrawDelegatorReward'">
               <p>{{ languagePack.txstext40 }}：</p>
               <span>{{ languagePack.txstext59 }}{{ detailed.turnover / 1e6 }} GHM {{ languagePack.txstext60}}</span><span class="specialFont" @click="queryDealtoNode(detailed.validator_address)">{{ detailed.validator_address }} </span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.validator_address)" />
+
             </div>
 
             <!-- 当该笔交易为委托时 -->
-            <div
-              class="column"
-              v-if="
-                dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'
-              "
-            >
+            <div class="column" v-if="dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'">
               <p>{{ languagePack.txstext41 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoAddress(detailed.delegator_address)"
-                >{{ detailed.delegator_address }}</span
-              >
+              <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)">{{ detailed.delegator_address }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.delegator_address)" />
             </div>
 
-            <div
-              class="column"
-              v-if="
-                dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'
-              "
-            >
+            <div class="column" v-if=" dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'">
               <p>{{ languagePack.txstext42 }}：</p>
-              <span>{{ detailed.validator_address }} </span>
+              <span class="specialFont" @click="queryDealtoNode(detailed.validator_address)">{{ detailed.validator_address }} </span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.validator_address)" />
             </div>
 
-            <div
-              class="column"
-              v-if="
-                dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'
-              "
-            >
+            <div class="column" v-if="dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'">
               <p>{{ languagePack.txstext43 }}：</p>
-              <span
-                >{{ detailed.turnover ? detailed.turnover / 1e6 : 0 }} GHM</span
-              >
+              <span>{{ detailed.turnover ? detailed.turnover / 1e6 : 0 }} GHM</span>
             </div>
 
             <!-- 当该笔交易为取消委托时 -->
             <div class="column" v-if="dealType === 'MsgUndelegate'">
               <p>{{ languagePack.txstext47 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoAddress(detailed.delegator_address)"
-                >{{ detailed.delegator_address }}</span
-              >
+              <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)">{{ detailed.delegator_address }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.delegator_address)" />
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
               <p>{{ languagePack.txstext48 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoNode(detailed.validator_address)"
-                >{{ detailed.validator_address }}
-              </span>
+              <span class="specialFont" @click="queryDealtoNode(detailed.validator_address)">{{ detailed.validator_address }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.validator_address)" />
+
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
@@ -156,42 +110,42 @@
             <div class="column" v-if="dealType === 'MsgInstantiateContract'">
               <p>{{ languagePack.txstext22 }}：</p>
               <span class="specialFont">{{ detailed.contract }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.contract)" />
             </div>
             <div class="column" v-if="dealType === 'MsgInstantiateContract'">
               <p>{{ languagePack.txstext23 }}：</p>
-              <span>{{ detailed.contract }}</span>
+              <span>{{ detailed.label }}</span>
             </div>
 
             <!-- 当为上传合约时 -->
             <div class="column" v-if="dealType === 'MsgStoreCode'">
               <p>{{ languagePack.txstext22 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoAddress(detailed.contract)"
-                >{{ detailed.contract }}</span
-              >
-            </div>
-            <div class="column" v-if="dealType === 'MsgStoreCode'">
-              <p>构建：</p>
-              <span>{{ detailed.perform }}</span>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.contract)" />
             </div>
 
             <!-- 当为设置领奖地址时 -->
             <div class="column" v-if="dealType === 'MsgSetWithdrawAddress'">
               <p>{{ languagePack.txstext53 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoAddress(detailed.contract)"
-                >{{ detailed.contract }}</span
-              >
+              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.contract)" />
             </div>
             <div class="column" v-if="dealType === 'MsgSetWithdrawAddress'">
               <p>{{ languagePack.txstext54 }}：</p>
-              <span
-                class="specialFont"
-                @click="queryDealtoAddress(detailed.perform)"
-                >{{ detailed.perform }}</span
-              >
+              <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.perform)" />
+            </div>
+
+            <!-- 当为创建验证器时 -->
+            <div class="column" v-if="dealType === 'MsgCreateValidator'">
+              <p>{{ languagePack.txstext51 }}：</p>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.contract)" />
+            </div>
+            <div class="column" v-if="dealType === 'MsgCreateValidator'">
+              <p>{{ languagePack.txstext61 }}：</p>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.perform)" />
             </div>
 
             <div
@@ -211,6 +165,10 @@
             <div class="column">
               <p>{{ languagePack.txstext25 }}：</p>
               <span>{{ detailed.poundage / 1e6 }} GHM</span>
+            </div>
+            <div class="column" v-if="detailed.memo">
+              <p>memo：</p>
+              <span style="white-space: pre-wrap;">{{ detailed.memo }}</span>
             </div>
           </div>
         </template>
@@ -241,7 +199,10 @@
             </div>
             <div class="column">
               <p>{{ languagePack.txstext30 }}：</p>
-              <span>{{ detailed.timestamp }}</span>
+              <el-tooltip effect="dark" :content="detailed.utc" placement="top">
+                <span>{{ detailed.timestamp }}</span>
+              </el-tooltip>
+              
             </div>
             <div class="column">
               <p>{{ languagePack.txstext31 }}：</p>
@@ -361,6 +322,7 @@ export default {
           break;
         case "MsgInstantiateContract":
           obj.contract = message.sender;
+          obj.label = message.label
           break;
         case "MsgStoreCode":
           obj.contract = message.sender;
@@ -369,6 +331,11 @@ export default {
         case "MsgSetWithdrawAddress":
           obj.contract = message.delegator_address;
           obj.perform = message.withdraw_address;
+          break;
+        case 'MsgCreateValidator':
+          obj.contract = message.delegator_address
+          obj.perform = message.validator_address
+          break;
         default:
           break;
       }
@@ -379,6 +346,8 @@ export default {
         height,
         gas_used,
         gas_wanted,
+        memo:body.memo,
+        utc:timestamp.replace(/[A-Z]/g,' '),
         ...obj,
       };
       console.log(this.detailed);
@@ -416,7 +385,7 @@ export default {
   },
   watch: {
     hashIndex(value) {
-      // if(value)
+     
       const { hash } = this.$route.params;
       if (hash) {
         this.queryData(hash, value);
@@ -470,6 +439,9 @@ export default {
           break;
         case "MsgStoreCode":
           return this.languagePack.txstext57;
+          break;
+        case 'MsgCreateValidator':
+          return '创建验证器';
           break;
         default:
           break;

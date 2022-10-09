@@ -92,7 +92,13 @@
     background: #d5d5e6;
   }
   img {
-    padding: 6px;
+    padding: 3px;
+    transition: background .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    border-radius: 4px;
+
+    &:focus{
+      background: #1E42E8;
+    }
   }
 }
 //交易类型

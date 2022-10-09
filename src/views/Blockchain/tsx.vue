@@ -26,7 +26,6 @@
       <el-table
         :data="tableData"
         size="mini"
-        height="612px"
         :header-cell-class-name="'tableHeaderCellStyle'"
         :row-class-name="'tableRowStyle'"
         :row-style="{ height: '58px !important' }"
@@ -40,7 +39,8 @@
                 :offset="50"
                 :visible-arrow="true"
                 width="300px"
-                trigger="click"
+                trigger="manual"
+                v-model="scope.row.eyePopover"
               >
                 <div class="popoverBox">
                   <div class="popoverBox_content">
@@ -51,12 +51,12 @@
                       <div v-if="scope.row.result == 'success'">
                         <img src="@/assets/img/deal_succeed@2x.png" /><span
                           >{{languagePack.prompttext02}}</span
-                        ><span>(X个区块确认)</span>
+                        ><span></span>
                       </div>
                       <div v-else>
                         <img src="@/assets/img/deal_lose@2x.png" /><span
                           >{{languagePack.prompttext03}}</span
-                        ><span>(X个区块确认)</span>
+                        ><span></span>
                       </div>
 
                       <el-divider></el-divider>
@@ -72,9 +72,8 @@
                       <span v-show="index === 1"
                         >{{ scope.row.gas_wanted | toMoney }}Gas总量中实际消耗{{
                           scope.row.gas_used | toMoney
-                        }}Gas<br />@0.0004GHM</span
-                      >
-                      <span v-show="index === 2">957820（位置154）</span>
+                        }}Gas<br /> {{(scope.row.gas_used*scope.row.fee/scope.row.gas_wanted/1e6).toFixed(6)}}GHM </span> <!---->
+                      <span v-show="index === 2">{{scope.row.sequence}}</span>
 
                       <el-divider></el-divider>
                     </div>
@@ -83,7 +82,7 @@
                     {{languagePack.prompttext10}}
                   </div>
                 </div>
-                <img slot="reference" width="14" src="@/assets/img/table_eye_nor@2x.png" />
+                <img slot="reference" @focus="scope.row.eyePopover = true" @blur="scope.row.eyePopover = false" width="14" src="@/assets/img/table_eye_nor@2x.png" />
               </el-popover>
             </div>
           </template>
@@ -113,11 +112,11 @@
         </el-table-column>
         <el-table-column
           :label="languagePack.txstext05"
-          width="110px"
+          width="220px"
           align="center"
         >
           <template slot-scope="scope">
-            <div class="table_txOperate">{{ scope.row.type }}</div>
+            <span class="table_txOperate">{{ scope.row.type }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="languagePack.txstext06">
@@ -154,23 +153,23 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="fuelTotal"
           :label="languagePack.txstext09"
           width="150px"
         >
           <template slot-scope="scope">
-            <TableTooltip
+            <TableTooltip v-if="scope.row.targetAddress"
               :content="scope.row.targetAddress"
               @click.native="toAddress(scope.row.targetAddress)"
             ></TableTooltip>
+            <span v-else>--</span>
           </template>
         </el-table-column>
         <el-table-column :label="languagePack.txstext10">
           <template slot-scope="scope">
-            <div v-if="!isNaN(scope.row.tx_amount)">
-              {{ scope.row.tx_amount / 1e6}} GHM
-            </div>
-            <div v-else>-</div>
+            <!-- <div v-if="!isNaN(scope.row.tx_amount)"> -->
+              {{ scope.row.tx_amount}} GHM
+            <!-- </div> -->
+            <!-- <div v-else>-</div> -->
           </template>
         </el-table-column>
         <el-table-column :label="languagePack.txstext11">
@@ -218,7 +217,9 @@ export default {
     let { pageSize, currentPage } = this.page;
     this.getData(pageSize, currentPage);
   },
-  mounted() {},
+  mounted() {
+    
+  },
   methods: {
     handleSizeChange(val) {
       this.tableData = [];
@@ -231,20 +232,47 @@ export default {
       this.getData(pageSize, currentPage);
     },
     async getData(limit, index) {
-      let { data } = await queryTxList(limit, index);
-      console.log("交易", data);
-      let arr = data.list;
-      if (Array.isArray(arr)) {
-        //为数组添加type属性
-        this.disposeTableType(arr);
-        this.hashList = arr.map((item) => {
-          return { hash: item._id, type: item.type, status: item.result };
+      let { data:{list,total} } = await queryTxList(limit, index);
+      // console.log("交易", list);
+      let arr = []
+      this.hashList = []
+      list.forEach((item)=>{
+        if(item.code) return
+        let {tx_response:{txhash,height,timestamp,gas_used,gas_wanted,logs,events},tx:{auth_info,body:{messages}}} = item
+        let {amount,from_address,to_address,delegator_address,validator_address,withdraw_address,sender,contract} = messages[0]
+        let type = messages[0]['@type'].split('.').pop()
+        let reward = type === 'MsgWithdrawDelegatorReward'?logs[0].events[0].attributes.pop().value.replace(/[a-zA-Z]/g, ""):0
+        // let status = 
+        
+        let statusArr = events.map((e) => {
+            return e.attributes.map((i) => {
+                return i.index;
+            }); 
         });
-      }
+        let result = statusArr.flat().includes(false)?'error':'success'
+        arr.push({
+          _id:txhash,
+          type,
+          height,
+          timestamp,
+          sender:from_address || delegator_address || sender,
+          targetAddress:to_address || validator_address || withdraw_address || contract,
+          tx_amount:(type === 'MsgWithdrawDelegatorReward'?reward:amount?amount.amount?amount.amount:amount[0].amount:0)/1e6,
+          fee:auth_info.fee.amount[0].amount,
+          result,
+          gas_used,
+          gas_wanted,
+          sequence:auth_info.signer_infos[0].sequence,
+          eyePopover:false
+        })
+        this.hashList.push({
+          hash: txhash, type: type, status:result
+        }) 
+      })
       this.tableData = arr;
-      this.totalNumber = data.total;
+      this.totalNumber = total;
       //   this.tableData = data.list;
-      //   this.page.total = data.total;
+        // this.page.total = total;
     },
     queryTxDetail(index) {
       sessionStorage.setItem('hashList',JSON.stringify({hashList:this.hashList,index}))
@@ -287,13 +315,16 @@ export default {
 <style lang="scss" scoped>
 .main {
   width: 1280px;
-  height: 732px;
+  min-height: 732px;
   margin: 0 auto 80px;
   background: #ffffff;
   border: 1px solid #e9eaef;
   box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
   border-radius: 4px;
 
+  .el-table{
+    min-height: 612px;
+  }
   .total_title {
     height: 60px;
     padding-left: 16px;
@@ -336,6 +367,7 @@ h3 {
   }
 }
 .table_txOperate {
+  width: auto;
   height: 20px;
   line-height: 20px;
   background: #f8f9fa;
@@ -368,5 +400,8 @@ h3 {
       justify-content: center;
     }
   }
+}
+.tableEyeBackground{
+  // background: red;
 }
 </style>

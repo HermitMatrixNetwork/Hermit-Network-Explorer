@@ -10,7 +10,7 @@ module.exports = defineConfig({
     https:false,
     proxy: {  //代理服务器
       '/api': {
-        target: 'http://158.247.237.78:8181',
+        target: 'http://158.247.237.78:8188',
         pathRewrite: { '^/api': '' },
         logLevel: "debug",
         // ws: true,
