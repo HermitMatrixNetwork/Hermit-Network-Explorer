@@ -6,44 +6,46 @@
           <div class="basicStyle messageBasic">
             <div class="column">
               <p>{{ languagePack.contracttext12 }}：</p>
-              <span>{{ contractData.contract_address }} <img src="@/assets/img/copy.png" @click="Copy(contractData.contract_address )" style='cursor:pointer;'/></span>
+              <span>{{ contractData.contract_address }} <img src="@/assets/img/copy.png" @click="Copy(contractData.contract_address )" style='cursor:pointer'></span>
             </div>
-            <div class="column">
+            <!-- <div class="column">
               <p>{{ languagePack.contracttext18 }}：</p>
               <span>N/A</span>
-            </div>
+            </div> -->
             <div class="column">
               <p>{{ languagePack.contracttext13 }}：</p>
               <span>{{ contractData.contract_lable }}</span>
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext19 }}：</p>
-              <span>0 GHM</span>
+              <span>{{contractData.balance}} GHM</span>
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext14 }}：</p>
               <span>{{ contractData.contract_id }}</span>
             </div>
-            <div class="column">
+            <!-- <div class="column">
               <p>{{ languagePack.contracttext20 }}：</p>
               <span>0.000%</span>
-            </div>
+            </div> -->
             <div class="column">
               <p>{{ languagePack.contracttext15 }}：</p>
+              <span>{{contractData.creator}}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(contractData.creator )" style='cursor:pointer'>
               <!-- <span>0x9BF4001d307dFd62B26A2F1307ee0C0307632d59</span> -->
             </div>
             <div class="column">
               <p>{{ languagePack.contracttext21 }}：</p>
               <span>{{ contractData.compute_count }}</span>
             </div>
-            <div class="column">
+            <!-- <div class="column">
               <p>{{ languagePack.contracttext16 }}：</p>
-              <!-- <span>FA824C4504F21FC59250DA0CDF549DD392FD862BAF2689D246A07B9E941F04A9</span> -->
-            </div>
-            <div class="column">
+              <span>FA824C4504F21FC59250DA0CDF549DD392FD862BAF2689D246A07B9E941F04A9</span>
+            </div> -->
+            <!-- <div class="column">
               <p>{{ languagePack.contracttext22 }}：</p>
               <span>0 GHM</span>
-            </div>
+            </div> -->
             <!-- <div class="column">
               <p>{{ languagePack.constructor }}：</p>
               <span>无</span>
@@ -137,7 +139,8 @@
 
 <script>
 import mixins from "@/mixins";
-import { getContractInfo, getContractTx } from "@/api/contract.js";
+import { getContractInfo, getContractTx,createPeople } from "@/api/contract.js";
+import {queryAccountInfo} from '@/api/account'
 export default {
   mixins: [mixins],
   data() {
@@ -152,15 +155,24 @@ export default {
     };
   },
   created() {
-    this.queryContract();
+    this.queryContract(this.$route.query.address);
     this.queryTx(this.pageSize, this.page);
   },
   methods: {
-    async queryContract() {
-      const address = this.$route.query.address;
-      const res = await getContractInfo(address);
+    async queryContract(address) {
+      const res = await Promise.all([
+        getContractInfo(address),
+        queryAccountInfo(address),
+        createPeople(address)
+      ])
+      // const address = this.$route.query.address;
+      // const res = await ;
       console.log("合约详细信息", res);
-      this.contractData = res.data;
+      this.contractData = {
+        ...res[0].data,
+        balance:res[1].code === 0?res[1].data.balance/1e6:0,
+        creator:res[2].result.creator
+      };
     },
     async queryTx(pageSize, page) {
       const address = this.$route.query.address;

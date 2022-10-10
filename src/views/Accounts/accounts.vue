@@ -88,6 +88,7 @@
           :total="pagination"
           :page-sizes="[10, 25, 50]"
           :page-size="10"
+          :pager-count="5"
         >
         </el-pagination>
       </div>

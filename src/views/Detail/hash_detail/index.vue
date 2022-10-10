@@ -9,12 +9,12 @@
         <div class="nextBtn" v-if="hashList.length">
           <span
             @click="lastData"
-            :style="{ cursor: waitResult ? 'wait' : 'pointer',background:hashIndex==0?'#80808045':''  }"
+            :style="{ cursor: waitResult ? 'wait' : 'pointer',color:hashIndex==0?'#14253E45':''  }"
             ><i class="el-icon-arrow-left"></i
           ></span>
           <span
             @click="nextData"
-            :style="{ cursor: waitResult ? 'wait' : 'pointer',background:hashIndex==hashList.length - 1?'#80808045':'' }"
+            :style="{ cursor: waitResult ? 'wait' : 'pointer',color:hashIndex==hashList.length - 1?'#14253E45':'' }"
             ><i class="el-icon-arrow-right"></i
           ></span>
         </div>
@@ -147,6 +147,19 @@
               <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
               <img src="@/assets/img/copy.png" @click="Copy(detailed.perform)" />
             </div>
+
+            <div class="column" v-if="dealType === 'RaAuthenticate'">
+              <p>{{ languagePack.txstext51 }}：</p>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.contract)" />
+            </div>
+
+            <div class="column" v-if="dealType === 'MsgUnjail'">
+              <p>{{ languagePack.txstext61 }}：</p>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.contract)">{{ detailed.contract }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.contract)" />
+            </div>
+
 
             <div
               class="column"
@@ -336,6 +349,12 @@ export default {
           obj.contract = message.delegator_address
           obj.perform = message.validator_address
           break;
+        case 'RaAuthenticate':
+          obj.contract = message.sender
+          break;
+        case 'MsgUnjail':
+          obj.contract = message.validator_addr;
+          break;
         default:
           break;
       }
@@ -347,7 +366,7 @@ export default {
         gas_used,
         gas_wanted,
         memo:body.memo,
-        utc:timestamp.replace(/[A-Z]/g,' '),
+        utc:'(UTC) '+timestamp.replace(/[A-Z]/g,' '),
         ...obj,
       };
       console.log(this.detailed);
@@ -441,7 +460,13 @@ export default {
           return this.languagePack.txstext57;
           break;
         case 'MsgCreateValidator':
-          return '创建验证器';
+          return this.languagePack.txstext62;
+          break;
+        case 'RaAuthenticate':
+          return this.languagePack.txstext63;
+          break;
+        case 'MsgUnjail':
+          return this.languagePack.txstext64;
           break;
         default:
           break;

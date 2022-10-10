@@ -38,7 +38,7 @@
             </div>
             <div class="column">
               <p>{{ languagePack.blocktext18 }}：</p>
-              <span style="color:#5671F2;cursor: pointer;" @click="queryDealtoNode(blockData.validator)">{{ blockData.proposer_address }}</span>
+              <span style="color:#5671F2;cursor: pointer;" @click="toValidation(blockData.proposer_address)">{{ blockData.proposer_address }}</span>
             </div>
 
             <div class="column">
@@ -139,16 +139,17 @@
             width="150px"
           >
             <template slot-scope="scope">
-              <TableTooltip
+              <TableTooltip  v-if="scope.row.targetAddress"
                 :content="scope.row.targetAddress"
                 @click.native="queryDealtoAddress(scope.row.targetAddress)"
               ></TableTooltip>
+              <span v-else>--</span>
             </template>
           </el-table-column>
           <el-table-column :label="languagePack.blocktext28">
             <template slot-scope="scope">
               <div>
-                {{scope.row.tx_amount?scope.row.tx_amount:'--'}}<span v-if="scope.row.tx_amount"> GHM</span>
+                {{scope.row.tx_amount}} GHM
               </div>
             </template>
           </el-table-column>
@@ -195,6 +196,7 @@ export default {
       blockData: {},
       loading: true,
       waitResult: false,
+      nodelist:JSON.parse(sessionStorage.getItem('node'))
     };
   },
   created() {
@@ -222,7 +224,7 @@ export default {
 
       
       res.data.txs.forEach(({tx_response:{txhash,height,timestamp,gas_used,gas_wanted,logs,events},tx:{auth_info,body:{messages}}})=>{
-        let {amount,from_address,to_address,delegator_address,validator_address,withdraw_address,sender,contract} = messages[0]
+        let {amount,from_address,to_address,delegator_address,validator_address,withdraw_address,sender,contract,validator_addr} = messages[0]
         let type = messages[0]['@type'].split('.').pop()
         let reward = type === 'MsgWithdrawDelegatorReward'?logs[0].events[0].attributes.pop().value.replace(/[a-zA-Z]/g, ""):0
         // let status = 
@@ -238,7 +240,7 @@ export default {
           type,
           height,
           timestamp,
-          sender:from_address || delegator_address || sender,
+          sender:from_address || delegator_address || sender || validator_addr,
           targetAddress:to_address || validator_address || withdraw_address || contract,
           tx_amount:(type === 'MsgWithdrawDelegatorReward'?reward:amount?amount.amount?amount.amount:amount[0].amount:0)/1e6,
           fee:auth_info.fee.amount[0].amount,
@@ -271,6 +273,11 @@ export default {
         this.waitResult = false;
       });
     },
+    toValidation(e){
+      // console.log(e);
+      let address = this.nodelist.find(v=>e === v.consen_addr_hex).operator_address
+      this.$router.push({ name: "node_detail", query: { address} });
+    }
   },
   computed: {
     languagePack() {

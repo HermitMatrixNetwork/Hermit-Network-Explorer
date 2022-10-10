@@ -5,7 +5,7 @@
       <div class="punishment-main-table">
         <div class="header">
           {{ languagePack.nodetext62 }}
-          <span style="color: #5671f2">{{ list.length }}</span>
+          <span style="color: #5671f2;padding:0 5px;">{{ list.length}}</span>
           {{ languagePack.nodetext63 }}
         </div>
         <div class="tableBody">
@@ -59,7 +59,10 @@
             </el-table-column>
             <el-table-column :label="languagePack.nodetext67" width="200">
               <template slot-scope="scope">
-                <div>{{ dealTime(scope.row.unbonding_time) }}</div>
+                <!-- <div>{{ dealTime(scope.row.unbonding_time) }}</div> -->
+                <el-tooltip effect="dark" :content="'(UTC) '+scope.row.unbonding_time" placement="top">
+                  <span>{{ dealTime(scope.row.unbonding_time)}}</span>
+                </el-tooltip>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext68" align="right">
@@ -101,33 +104,34 @@ export default {
   },
   created() {},
   async mounted() {
-    // const res = await allValidationNode();
-    // let arr = res.validators.filter((item) => item.jailed);
-    // console.log(arr);
-    // arr.forEach((e) => {
-    //   let {
-    //     description: { moniker },
-    //     tokens,
-    //     min_self_delegation,
-    //     unbonding_time,
-    //     unbonding_height,
-    //     operator_address,
-    //   } = e;
-    //   this.list.push({
-    //     moniker,
-    //     tokens,
-    //     min_self_delegation,
-    //     unbonding_height,
-    //     operator_address,
-    //     unbonding_time: unbonding_time.split(".")[0].replace(/[A-Z]/g, " "),
-    //   });
-    // });
-    // setTimeout(() => {
-    //   this.loading = false;
-    // }, 3000);
-    const {data:{list}} = await getValidationList(0, 0);
-    // console.log(list);
-    this.list= list.filter((item) => item.jailed);
+    const res = await allValidationNode();
+    // console.log(res);
+    let arr = res.validators.filter((item) => item.jailed);
+    console.log(arr);
+    arr.forEach((e) => {
+      let {
+        description: { moniker },
+        tokens,
+        min_self_delegation,
+        unbonding_time,
+        unbonding_height,
+        operator_address,
+      } = e;
+      this.list.push({
+        moniker,
+        tokens,
+        min_self_delegation,
+        unbonding_height,
+        operator_address,
+        unbonding_time: unbonding_time.split(".")[0].replace(/[A-Z]/g, " "),
+      });
+    });
+    setTimeout(() => {
+      this.loading = false;
+    }, 3000);
+    // const {data:{list}} = await getValidationList(0, 0);
+    // // console.log(list);
+    // this.list= list.filter((item) => item.jailed);
     
   },
   methods: {

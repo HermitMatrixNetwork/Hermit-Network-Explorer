@@ -10,7 +10,7 @@
               <div class="messageBasic" style="height: 124px">
                 <div class="column">
                   <p>{{ languagePack.nodetext03 }}：</p>
-                  <span>{{ nodeList.length }}</span>
+                  <span>{{ all.length }}</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.nodetext04 }}：</p>
@@ -59,7 +59,7 @@
                 ]"
                 :key="index"
                 :class="screenIndex == index ? 'navSelected' : ''"
-                @click="navBtn(index)"
+                @click="screenIndex = index"
                 >{{ item }}</span
               >
             </div>
@@ -99,8 +99,11 @@
               :label="languagePack.nodetext16"
               width="80"
               align="center"
-              type="index"
-            ></el-table-column>
+            >
+            <template slot-scope="scope">
+              {{(scope.$index+1) + Number(page.pageSize*page.currentPage)}}
+            </template>
+          </el-table-column>
             <el-table-column :label="languagePack.nodetext17" width="160">
               <template slot-scope="scope">
                 <div class="moniker">
@@ -133,13 +136,13 @@
                       borderRadius: '6px',
                       marginRight: '6px',
                       background:
-                        scope.row.status == 'UNBONDING' ? '#ED422B' : '#55C499',
+                        scope.row.status == 'UNBONDED' ? '#ED422B' : '#55C499',
                     }"
                   />
                   {{
                     scope.row.status == "BONDED"
                       ? languagePack.nodetext11
-                      : scope.row.status == "UNBONDING"
+                      : scope.row.status == "UNBONDED"
                       ? languagePack.nodetext12
                       : languagePack.nodetext13
                   }}
@@ -188,7 +191,7 @@
           <el-pagination
             small
             layout="prev, pager, next,sizes"
-            :total="pagination"
+            :total="nodeList.length"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :page-sizes="[10, 25, 50]"
@@ -215,6 +218,7 @@ export default {
       screenIndex: 0,
       pagination: 0,
       tableList: [],
+      all:[],
       pledgeMessage: {
         issueNum: 0,
         pledgeNum: 0,
@@ -239,36 +243,28 @@ export default {
   mounted() {},
   methods: {
     async getList(limit, index) {
-      const res = await getValidationList(limit, index);
+      const res = await getValidationList(0, 0);
       console.log("中心化节点列表",res);
       let arr = res.data.list.sort((a,b)=>b.tokens - a.tokens);
-      this.tableList = this.nodeList = arr;
+      this.all = this.nodeList = arr;
       arr.forEach((e) => (e.status = e.status.split("_").pop()));
+      // this.tableList = arr.slice(0,10)
+      this.filterNodelist(arr)
       this.activeNode = arr.filter((item) => item.status === "BONDED");
-      this.candidate = arr.filter((item) => item.status === "UNBONDING");
+      this.candidate = arr.filter((item) => item.status === "UNBONDED");
+      this.pagination = res.data.total
     },
     handleSizeChange(val) {
       this.tableList = [];
-      this.getList((this.page.pageSize = val), (this.page.currentPage = 0));
+      // this.getList((this.page.pageSize = val), (this.page.currentPage = 0));
+      this.filterNodelist(this.nodeList,this.page.currentPage = 0,this.page.pageSize = val)
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-    },
-    navBtn(index) {
-      this.screenIndex = index;
-      switch (index) {
-        case 0:
-          this.tableList = this.nodeList;
-          break;
-        case 1:
-          this.tableList = this.activeNode;
-          break;
-        case 2:
-          this.tableList = this.candidate;
-          break;
-        default:
-          break;
-      }
+      // this.screenIndex = 0
+      this.tableList = [];
+      // this.getList(this.page.pageSize, this.page.currentPage = val - 1);
+      this.filterNodelist(this.nodeList,(this.page.currentPage = val-1)*this.page.pageSize,this.page.pageSize*val)
     },
 
     TableClick(val) {
@@ -306,6 +302,9 @@ export default {
         });
       }
     },
+    filterNodelist(arr,page=0,pageSize=10){
+      this.tableList = arr.slice(page,pageSize)
+    }
   },
   computed: {
     languagePack() {
@@ -313,7 +312,7 @@ export default {
     },
     totalEntrust() {
       let num = 0;
-      this.nodeList.forEach((item) => {
+      this.all.forEach((item) => {
         num += item.tokens*1;
       });
       return num / 1e6;
@@ -330,6 +329,26 @@ export default {
         this.loading = false;
       }, 1500);
     },
+    screenIndex(val){
+      switch (val) {
+        case 0:
+          this.filterNodelist(this.all)
+          // this.tableList = this.nodeList;
+          break;
+        case 1:
+          // this.tableList = ;
+          this.filterNodelist(this.nodeList = this.activeNode)
+          break;
+        case 2:
+          // this.tableList = this.candidate;
+          this.filterNodelist(this.nodeList = this.candidate)
+          break;
+        default:
+          break;
+      }
+      // this.page.currentPage = 0
+      // this.pagination = this.tableList.length
+    }
   },
 };
 </script>

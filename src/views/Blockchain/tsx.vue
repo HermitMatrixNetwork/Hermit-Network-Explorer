@@ -20,6 +20,7 @@
           :page-size="page.pageSize"
           layout="prev, pager, next"
           :total="totalNumber"
+          :pager-count="5"
         >
         </el-pagination>
       </el-row>
@@ -166,13 +167,12 @@
         </el-table-column>
         <el-table-column :label="languagePack.txstext10">
           <template slot-scope="scope">
-            <!-- <div v-if="!isNaN(scope.row.tx_amount)"> -->
+            <div><!-- style="white-space: nowrap"-->
               {{ scope.row.tx_amount}} GHM
-            <!-- </div> -->
-            <!-- <div v-else>-</div> -->
+            </div>
           </template>
         </el-table-column>
-        <el-table-column :label="languagePack.txstext11">
+        <el-table-column :label="languagePack.txstext11" min-width="90px" align="center">
           <template slot-scope="scope">
             <div>{{ (scope.row.fee/1e6)}}</div>
           </template>
@@ -189,6 +189,7 @@
           :page-size="page.pageSize"
           layout="prev, pager, next, sizes"
           :total="totalNumber"
+          :pager-count="5"
         >
         </el-pagination>
       </el-row>
@@ -239,7 +240,7 @@ export default {
       list.forEach((item)=>{
         if(item.code) return
         let {tx_response:{txhash,height,timestamp,gas_used,gas_wanted,logs,events},tx:{auth_info,body:{messages}}} = item
-        let {amount,from_address,to_address,delegator_address,validator_address,withdraw_address,sender,contract} = messages[0]
+        let {amount,from_address,to_address,delegator_address,validator_address,withdraw_address,sender,contract,validator_addr} = messages[0]
         let type = messages[0]['@type'].split('.').pop()
         let reward = type === 'MsgWithdrawDelegatorReward'?logs[0].events[0].attributes.pop().value.replace(/[a-zA-Z]/g, ""):0
         // let status = 
@@ -255,7 +256,7 @@ export default {
           type,
           height,
           timestamp,
-          sender:from_address || delegator_address || sender,
+          sender:from_address || delegator_address || sender || validator_addr,
           targetAddress:to_address || validator_address || withdraw_address || contract,
           tx_amount:(type === 'MsgWithdrawDelegatorReward'?reward:amount?amount.amount?amount.amount:amount[0].amount:0)/1e6,
           fee:auth_info.fee.amount[0].amount,
@@ -401,7 +402,5 @@ h3 {
     }
   }
 }
-.tableEyeBackground{
-  // background: red;
-}
+
 </style>

@@ -9,9 +9,7 @@
           <div class="detailColumn-basic messageBasic">
             <div class="column">
               <p>{{ languagePack.nodetext27 }}</p>
-              <span>{{
-                outblockTable.list ? outblockTable.list[0]._id : 0
-              }}</span>
+              <span>{{basic.start_height}}</span>
             </div>
             <div class="column">
               <p>{{ languagePack.nodetext28 }}:</p>
@@ -98,7 +96,7 @@
             <span>{{ $route.query.address }}</span><img src="@/assets/img/copy.png" @click="Copy($route.query.address)" />
           </div>
 
-          <!-- 奖励账户 -->
+          <!-- 共识地址 -->
           <div class="column">
             <p>{{ languagePack.nodetext45 }}：</p>
             <span>{{ basic.consen_addr }}</span><img src="@/assets/img/copy.png" @click="Copy(basic.consen_addr )" />
@@ -348,6 +346,7 @@ import {
   getNodeRewardList,
   validationBasic,
   getUnbonding,
+  initBlock
 } from "@/api/validation.js";
 
 export default {
@@ -422,6 +421,7 @@ export default {
       this.basic = res[0].data;
       //处理数组并赋值
       this.basic.delegators = res[1].pagination.total * 1;
+      this.queryInitBlock(this.basic.consen_addr)
       this.delegaTion(res[1].delegation_responses);
       this.outblockTable = res[2].data;
       let { list, total } = res[3].data;
@@ -602,6 +602,11 @@ export default {
       );
       this.delegaTion(delegation_responses);
     },
+    async queryInitBlock(address){
+      if(!address) return
+      const {val_signing_info:{start_height}} = await initBlock(address)
+      this.$set(this.basic,'start_height',start_height)
+    }
   },
   computed: {
     languagePack() {

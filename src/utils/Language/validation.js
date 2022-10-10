@@ -7,13 +7,13 @@ let node = {
         'nodetext05': 'Candidate Nodes',
         'nodetext06': 'Live stakes information',
         'nodetext07': 'Total Stakes',
-        'nodetext08': 'delegation accepted',
+        'nodetext08': 'Delegation Accepted',
         'nodetext09': 'Staking Rate',
         'nodetext10': 'All',
         'nodetext11': 'Active',
         'nodetext12': 'Candidate',
         'nodetext13': 'Search by Validators',
-        'nodetext14': 'Punishment nodes',
+        'nodetext14': 'Punishment Nodes',
         'nodetext15': 'Verified Validators',
         'nodetext16': 'Rank',
         'nodetext17': 'Node Name',
@@ -25,7 +25,7 @@ let node = {
         'nodetext23': 'Delegates',
         'nodetext24': 'Activity',
         'nodetext25': 'Commission',
-        'nodetext26': 'Consensus',
+        'nodetext71': 'Consensus',
     },
     Cn: {
         'nodetext01': '验证节点',
@@ -53,7 +53,7 @@ let node = {
         'nodetext23': '委托者数',
         'nodetext24': '活跃度',
         'nodetext25': '佣金',
-        'nodetext26': '共识中',
+        'nodetext71': '共识中',
     },
     Ct: {
         'nodetext01': '驗證節點',
@@ -81,7 +81,7 @@ let node = {
         'nodetext23': '委托者數',
         'nodetext24': '活躍度',
         'nodetext25': '傭金',
-        'nodetext26': '共實中',
+        'nodetext71': '共實中',
 
     }
 }
@@ -200,14 +200,14 @@ let node_detail = {
 }
 let punishment = {
     En: {
-        'nodetext61': 'punishment nodes',
+        'nodetext61': 'Punishment Nodes',
         'nodetext62': '',
-        'nodetext63': 'ㅤnodes in total',
-        'nodetext64': 'serial number',
-        'nodetext65': 'name',
+        'nodetext63': ' Nodes in Total',
+        'nodetext64': 'Serial Number',
+        'nodetext65': 'Name',
         'nodetext66': 'the number of delegation',
-        'nodetext67': 'lock time',
-        'nodetext68': 'unlock block height',
+        'nodetext67': 'Lock Time',
+        'nodetext68': 'Unlock Block Height',
         'nodetext69': 'data temporarily not availabe',
         'nodetext70': 'Number of blocks generated',
     },

@@ -172,7 +172,7 @@
                     style="color: rgba(20, 37, 62, 0.85); padding-left: 24px"
                     >{{ languagePack.hometext20 }}
                   </span>
-                  <span @click="queryDealtoNode(item.validator)">{{
+                  <span @click="toValidation(item.proposer_address)">{{
                     item.proposer_address | sliceAddress
                   }}</span>
                 </p>
@@ -210,11 +210,11 @@
             >
               <div class="icon">Top{{ index + 1 }}</div>
               <div class="basic">
-                <p>{{ item.description.moniker}}</p>
+                <p>{{ item.validator_name}}</p>
                 <p>{{ languagePack.hometext25 }}{{ item.tokens / 1e6 }} GHM</p>
               </div>
               <div class="btnRate">
-                {{ item.commission.commission_rates.rate * 100 }}%
+                {{ item.commission_rate * 100 }}%
                 {{ languagePack.hometext26 }}
               </div>
             </li>
@@ -233,7 +233,8 @@
 <script>
 import { blockBar } from "@/echarts/index.js";
 import * as echarts from "echarts";
-import { allValidationNode } from "@/api/api.js";
+import { getValidationList } from "@/api/validation.js";
+import {queryAccountList} from '@/api/api.js'
 import {
   getLatestBlock,
   allAdresQuantity,
@@ -276,11 +277,13 @@ export default {
   },
   async created() {
     this.basicData.blockHeight = await this.getnowBlockHeight();
-    const { validators } = await allValidationNode();
-    this.nodelist = validators.sort((a, b) => {
+    const { data:{list} } = await getValidationList();
+    this.nodelist = list.sort((a, b) => {
       return b.tokens - a.tokens;
     });
-
+    //存储节点
+    sessionStorage.setItem('node',JSON.stringify(this.nodelist))
+    // console.log(list);
     this.getBlockMsg();
     this.getnowBlockList();
     let {
@@ -310,22 +313,22 @@ export default {
     },
     //获取数据
     async getBlockMsg() {
-      const res = await allAdresQuantity(); //总地址数
+      const res = await queryAccountList(0,0); //总地址数
       const { supply } = await totalCirculation(); //获取总发行量
       const {
         pool: { bonded_tokens },
       } = await pledgeTotal(); //获取质押参数
       // console.log("节点", await querylatestNodeMessage());
-      const { validators } = await allValidationNode();
-      this.nodelist = validators.sort((a, b) => {
+      const { data:{list} } = await getValidationList();
+      this.nodelist = list.sort((a, b) => {
         return b.tokens - a.tokens;
-      });
+    });
       const {
         data: { total },
       } = await queryTxList(10, 1); //获取交易数量
       this.basicData = {
         ...this.basicData,
-        totalNum: res.pagination.total, //总地址数量
+        totalNum: res.data.total, //总地址数量
         issueNum: supply[0].amount, //总发行量
         pledgeNum: bonded_tokens, //质押参数
         circulation: supply[0].amount - bonded_tokens, //流通量 = 总发行量 - 质押量
@@ -344,7 +347,7 @@ export default {
       } = await queryBlockList(20, 0);
       // console.log("最新的出块区块", list);
       //计算最新出块节点
-      // this.computeLastNode(list[0].validator);
+      this.computeLastNode(list[0].proposer_address);
       this.$refs["RightAnimation"].classList.remove("RightAnimation");
       this.blockList = list;
       let echartList = list.map((e) => {
@@ -367,11 +370,18 @@ export default {
       const { nodelist } = this;
       this.basicData.latestNode = {
         moniker: nodelist.find((e) => {
-          return e.operator_address === value;
-        }).description.moniker,
-        address: value,
+          return e.consen_addr_hex === value;
+        }).validator_name,
+        address: nodelist.find((e) => {
+          return e.consen_addr_hex === value;
+        }).operator_address,
       };
     },
+    toValidation(e){
+      // console.log(e);
+      let address = this.nodelist.find(v=>e === v.consen_addr_hex).operator_address
+      this.$router.push({ name: "node_detail", query: { address} });
+    }
   },
   activated() {
     this.timer = setInterval(() => {
@@ -661,7 +671,7 @@ export default {
         }
       }
       .animation_Node {
-        animation: sliding 10s linear infinite;
+        animation: sliding 15s linear infinite;
         padding-top: 0 !important ;
       }
       .nodeInformation {

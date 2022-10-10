@@ -80,3 +80,11 @@ export function getUnbonding(address='ghmvaloper15v4z6h7wjcrdx0pygxyvk3naaupgk6a
     })
 }
 
+
+//获取当选验证节点
+export function initBlock(address){
+    return Service({
+        url:`/cosmos/slashing/v1beta1/signing_infos/${address}`,
+        method:'get'
+    })
+}

@@ -17,7 +17,7 @@ let header = {
         'headertext15': 'Contract Compiler',
         'headertext16': 'More',
         'headertext17': 'Governable Parameter',
-        'headertext18': 'DAO fundation Address',
+        'headertext18': 'DAO Fundation Address',
         'headertext19': 'Submit Applicattion',
         'headertext20': 'RPC Information',
         'headertext21': 'Faucet',

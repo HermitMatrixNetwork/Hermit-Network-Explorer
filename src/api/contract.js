@@ -1,4 +1,6 @@
 import service1 from "./request1"
+import {Service} from './request'
+
 
 //获取合约列表
 export function getContract(limit) {
@@ -39,3 +41,10 @@ export function getContractTx(limit,index,address){
     })
 }
 
+//获取合约创建人  http://167.179.118.118:1317/wasm/contract/ghm18vd8fpwxzck93qlwghaj6arh4p7c5n89fkfxf0
+export function createPeople(address){
+    return Service({
+        url:`/wasm/contract/${address}`,
+        method:'get'
+    })
+}

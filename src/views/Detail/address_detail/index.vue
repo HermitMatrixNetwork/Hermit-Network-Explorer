@@ -106,7 +106,6 @@
           <el-table
             :data="TxsList"
             size="mini"
-            height="612px"
             :header-cell-class-name="'tableHeaderCellStyle'"
             :row-class-name="'tableRowStyle'"
             :row-style="{ height: '58px !important' }"
@@ -252,7 +251,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.accounttext36">
+            <el-table-column :label="languagePack.accounttext36" min-width="90px" align="center">
               <template slot-scope="scope">
                 <div>{{ scope.row.fee / 1e6 }}</div>
               </template>
@@ -465,7 +464,7 @@ export default {
 <style lang="scss" scoped>
 .detail {
   width: 1280px;
-  margin: 24px auto;
+  margin: 24px auto 80px;
 
   &-title {
     height: 68px;
@@ -509,7 +508,7 @@ export default {
 
   &-table {
     width: 1280px;
-    height: 732px;
+    // height: 732px;
     background: #ffffff;
     border: 1px solid #e9eaef;
     box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
@@ -524,7 +523,11 @@ export default {
     }
 
     &-body {
-      height: 612px;
+      min-height: 612px;
+      .el-table{
+        min-height: 612px;
+
+      }
     }
 
     .dealType {

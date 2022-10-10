@@ -94,7 +94,7 @@
           align="right"
         >
         <template slot-scope="scope">
-          <div>{{ 9922/1e6}}</div>
+          <div>--</div>
         </template>
       </el-table-column>
       </el-table>

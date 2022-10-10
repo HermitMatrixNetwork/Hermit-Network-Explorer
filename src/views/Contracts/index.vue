@@ -70,10 +70,7 @@
           </el-table-column>
           <el-table-column :label="languagePack.contracttext12">
             <template slot-scope="scope">
-              <p
-                class="specialFont"
-                @click="toContractDetail(scope.row.contract_address)"
-              >
+              <p class="specialFont" @click="toContractDetail(scope.row.contract_address)">
                 {{ scope.row.contract_address }}
               </p>
             </template>
@@ -92,10 +89,10 @@
             align="right"
           >
           </el-table-column>
-          <el-table-column :label="languagePack.contracttext09" align="right">
+          <el-table-column :label="languagePack.contracttext19" align="right">
             <template slot-scope="scope">
               <div>
-                <p>{{ scope.row.value }} GHM</p>
+                <p>{{ scope.row.balance }} GHM</p>
                 <p>$ 0.00</p>
               </div>
             </template>
@@ -121,7 +118,7 @@
 
 <script>
 import { getContract } from "@/api/contract";
-import axios from "axios";
+import {queryAccountInfo} from '@/api/account';
 import mixins from "@/mixins";
 
 export default {
@@ -141,8 +138,11 @@ export default {
       const res = await getContract(limit);
       console.log("合约列表", res);
       let arr = res.data.list;
-      arr.forEach((item) => {
+      arr.forEach(async (item) => {
         item.user_count = Object.keys(item.user_count).length;
+        const {data:{balance}} = await queryAccountInfo(item.contract_address)
+        this.$set(item,'balance',balance?balance/1e6:0)
+        // console.log(item.contract_address);
         // console.log(Object.keys(item.user_count));
       });
       this.tableList = arr;

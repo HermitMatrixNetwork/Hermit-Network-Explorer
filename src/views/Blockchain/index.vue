@@ -68,6 +68,7 @@
           :page-size="page.pageSize"
           layout="prev, pager, next, sizes"
           :total="pagination"
+          :pager-count="5"
         >
         </el-pagination>
       </el-row>
