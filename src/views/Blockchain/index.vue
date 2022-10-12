@@ -33,8 +33,8 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="tag" :label="languagePack.toptext05" />
-          <el-table-column :label="languagePack.toptext06" align="left">
+          <!-- <el-table-column prop="tag" :label="languagePack.toptext05" /> -->
+          <el-table-column :label="languagePack.toptext06" align="center">
             <template slot-scope="scope">
               <div>{{ scope.row.balance / 1e6 }} GHM</div>
             </template>

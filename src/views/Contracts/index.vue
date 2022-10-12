@@ -68,11 +68,11 @@
               </p>
             </template>
           </el-table-column>
-          <el-table-column :label="languagePack.contracttext12">
+          <el-table-column :label="languagePack.contracttext12" width="320px">
             <template slot-scope="scope">
-              <p class="specialFont" @click="toContractDetail(scope.row.contract_address)">
-                {{ scope.row.contract_address }}
-              </p>
+              <div class="specialFont" @click="toContractDetail(scope.row.contract_address)">
+                {{ scope.row.contract_address}}
+              </div>
             </template>
           </el-table-column>
           <el-table-column

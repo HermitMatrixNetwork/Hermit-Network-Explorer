@@ -302,7 +302,7 @@ export default {
     },
     blockCommand(command) {
       if (command === "/whitebook") {
-        window.open(window.location.origin + "/whitepaper.html");
+        window.open(window.location.origin + `/whitepaper.html?language=${this.lang === 0?'EN':'CN'}`);
         return;
       }
       if (command === "/ibc" || command === '/Tendermint') {

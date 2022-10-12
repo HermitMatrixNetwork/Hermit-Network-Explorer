@@ -58,7 +58,7 @@
         />
         <el-table-column :label="languagePack.blocktext07" width="160">
           <template slot-scope="scope">
-            <div  @click="toNode(scope.row.validator)" class="specialFont">{{scope.row.proposer_address | sliceAddress}}</div>
+            <div  @click="toNode(scope.row.proposer_address)" class="specialFont">{{scope.row.proposer_address | sliceAddress}}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -94,7 +94,7 @@
           align="right"
         >
         <template slot-scope="scope">
-          <div>--</div>
+          <div>{{scope.row.coinbase?(scope.row.coinbase.replace(/[a-z]/g,''))/1e6:0}}</div>
         </template>
       </el-table-column>
       </el-table>
@@ -134,6 +134,7 @@ export default {
       },
       loading: true,
       timer: "",
+      nodes:JSON.parse(sessionStorage.getItem('node'))
     };
   },
   created() {
@@ -172,7 +173,11 @@ export default {
       });
     },
     toNode(val) {
-      this.$router.push({ name: "node_detail", query: { address: val } });
+      // console.log(val);
+      // console.log(this.nodes);
+      let address = this.nodes.find(e=>val === e.consen_addr_hex).operator_address
+      // console.log(address);
+      this.$router.push({ name: "node_detail", query: { address } });
     },
   },
   watch: {

@@ -13,14 +13,15 @@
       </div>
 
       <div class="contact_ways">
-        <div class="qrcode">
+        <!-- <div class="qrcode">
           <p>微信公众号</p>
           <img src="../../assets/img/bottom-bar_qrcode@2x.png" alt="" />
-        </div>
+        </div> -->
         <div
           class="contact_ways_item"
           v-for="item in contacts"
           :key="item.label"
+          @click="jump(item.url)"
         >
           <img :src="item.icon" alt="" />
           <p>{{ item.label }}</p>
@@ -39,26 +40,36 @@ export default {
         {
           label: "Telegram",
           icon: require("@/assets/img/bottom-bar_telegram@2x.png"),
+          url:'https://t.me/G_Hermit'
         },
         {
           label: "Twitter ",
           icon: require("@/assets/img/bottom-bar_twitter@2x.png"),
+          url:' https://twitter.com/ghmhermit?s=09'
         },
         {
           label: "Medium ",
           icon: require("@/assets/img/bottom-bar_medium@2x.png"),
+          url:'https://medium.com/@ghermit'
         },
         {
           label: "GitHub",
           icon: require("@/assets/img/bottom-bar_github@2x.png"),
+          url:'https://github.com/HermitMatrixNetwork/web-browser'
         },
         {
           label: "Gitbook",
           icon: require("@/assets/img/bottom-bar_gitbook@2x.png"),
+          url:''
         },
       ],
     };
   },
+  methods:{
+    jump(url){
+      window.open(url)
+    }
+  }
 };
 </script>
 

@@ -280,12 +280,8 @@ export default {
     const { data:{list} } = await getValidationList();
     this.nodelist = list.sort((a, b) => {
       return b.tokens - a.tokens;
-    });
-    //存储节点
-    sessionStorage.setItem('node',JSON.stringify(this.nodelist))
-    // console.log(list);
-    this.getBlockMsg();
-    this.getnowBlockList();
+    }).filter(e=> !e.jailed);
+    
     let {
       data: {
         banner: {
@@ -297,6 +293,8 @@ export default {
     // console.log(photos);
   },
   mounted() {
+    this.getBlockMsg();
+    this.getnowBlockList();
     this.charts = {
       block: echarts.init(document.querySelector(".barChart")),
       blockDom:document.querySelector(".barChart"),
@@ -322,7 +320,7 @@ export default {
       const { data:{list} } = await getValidationList();
       this.nodelist = list.sort((a, b) => {
         return b.tokens - a.tokens;
-    });
+      }).filter(e=> !e.jailed);
       const {
         data: { total },
       } = await queryTxList(10, 1); //获取交易数量
@@ -367,12 +365,11 @@ export default {
       }
     },
     computeLastNode(value) {
-      const { nodelist } = this;
       this.basicData.latestNode = {
-        moniker: nodelist.find((e) => {
+        moniker: this.nodelist.find((e) => {
           return e.consen_addr_hex === value;
         }).validator_name,
-        address: nodelist.find((e) => {
+        address: this.nodelist.find((e) => {
           return e.consen_addr_hex === value;
         }).operator_address,
       };

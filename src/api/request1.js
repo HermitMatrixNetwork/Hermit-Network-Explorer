@@ -30,12 +30,14 @@ service.interceptors.response.use(
 	},
 	(error) => {
 		console.log(error)
-		const msg = error.Message !== undefined ? error.Message : ''
-		Message({
-			message: '网络错误' + msg,
-			type: 'error',
-			duration: 3 * 1000,
-		})
+		if (!error.config.isError) {
+			const msg = error.Message !== undefined ? error.Message : ''
+			Message({
+				message: '网络错误' + msg,
+				type: 'error',
+				duration: 3 * 1000,
+			})
+		}
 		return Promise.reject(error)
 	}
 )

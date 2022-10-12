@@ -79,7 +79,7 @@
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext27 }}：</p>
-                  <span>0</span>
+                  <span>{{commission}}</span>
                 </div>
               </div>
             </template>
@@ -284,6 +284,7 @@ import {
   getadresUnbonding,
   getadresDelegated,
 } from "@/api/api.js";
+import {addressCommission} from '@/api/validation'
 export default {
   name: "addressDetail",
   mixins: [mixin],
@@ -304,6 +305,8 @@ export default {
         currentPage: 0,
         pageSize: 10,
       },
+      nodes:JSON.parse(sessionStorage.getItem('node')),
+      commission:0,
     };
   },
   created() {
@@ -317,6 +320,11 @@ export default {
     this.getAccountMsg();
     let { pageSize, currentPage } = this.page;
     this.getTxList(pageSize, currentPage);
+    //查看地址是否为验证节点地址
+    let isValidation = this.nodes.find(e=>e.self_delegator === this.address)
+    if(isValidation){
+      this.commiSsion(isValidation.operator_address)
+    }
   },
   methods: {
     async getAccountMsg() {
@@ -356,7 +364,7 @@ export default {
       // console.log(total);
       let arr = []
       this.hashList = []
-      if(list.length >= 1){
+      if(Array.isArray(list)&&list.length >= 1){
         list.forEach(({tx_response:{txhash,height,timestamp,gas_used,gas_wanted,logs,events},tx:{auth_info,body:{messages}}})=>{
         let {amount,from_address,to_address,delegator_address,validator_address,withdraw_address,sender,contract} = messages[0]
         let type = messages[0]['@type'].split('.').pop()
@@ -417,6 +425,12 @@ export default {
         return this.$router.push({path:'/node_detail',query:{address}})
       }
       this.$router.push({ path: "/address_detail", query: { address } });
+    },
+    //查询验证地址佣金
+    async commiSsion(address){
+      console.log('是验证地址',address);
+      const {commission:{commission}} = await addressCommission(address)
+      this.commission = (commission[0].amount/1e6).toFixed(6)
     }
   },
   computed: {
@@ -433,7 +447,7 @@ export default {
     TotalBalance() {
       return function (...args) {
         return args.reduce((a, b) => {
-          return a * 1 + b * 1;
+          return (a * 1 + b * 1).toFixed(6);
         });
       };
     },
@@ -452,6 +466,17 @@ export default {
     },
     "$route.query"(val) {
       this.address = this.$route.query.address;
+      if(this.$route.query.noquery){
+        this.TxsList = []
+        this.txtotal = 0
+        this.account = {
+          balance:0,
+          delegate_amount:0,
+          withdrawAmount:0,
+          unbonding:0,
+        }
+        return
+      }
       this.getAccountMsg();
       let { pageSize, currentPage } = this.page;
       this.getTxList(pageSize, currentPage);

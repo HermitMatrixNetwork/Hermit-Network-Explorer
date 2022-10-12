@@ -3,8 +3,9 @@
     <div class="pages-main">
       <BasicTitle :title="languagePack.applytext01" :basicStyle="titleStyle">
         <template #message>
-          <div class="textStyle">
-            除了上述举例的图片，NFT还具有其他多种信息，最重要的就是NFT的编码，也就是Token
+          <div class="textStyle" v-html="languagePack.submitExplain">
+            <!-- submitExplain -->
+            <!-- 除了上述举例的图片，NFT还具有其他多种信息，最重要的就是NFT的编码，也就是Token
             ID，这个编码是唯一的。<br />
             由于以上三点，NFT成了不可分割、可确权、可追溯的某种信息及价值的载体。载体可以有多种格式或者标准。仍与图片类比，同样一张图可以有PDF格式、PNG格式的，也可以有JPEG格式的。NFT同理。<br />
             知道了NFT是什么以后，下面聊聊NFT有哪些种类，具体有什么用。2021年，越来越多的歌手开始尝试制作、发行自己的音乐NFT，这让音乐NFT逐渐在圈外产生了更多的影响力。<br />
@@ -13,7 +14,8 @@
             下图为3LAU转发自己发行NFT的新闻。Origin
             Protocol称这次拍卖具有重大的意义，因为这是世界上第一张NFT音乐专辑。<br />
             与此同时，国内也有一些音乐人积极地参与进来。2021年7月，参加过第一季“中国好声音”的爵士歌手赵可，把单曲Lost
-            in translation做成了NFT在全球发行。
+            in translation做成了NFT在全球发行。 -->
+            
           </div>
         </template>
       </BasicTitle>
@@ -403,7 +405,7 @@ export default {
 ::v-deep .formBox {
   position: relative;
   top: 32px;
-  width: 460px;
+  width: 540px;
   margin: 0 auto 80px;
   .el-input__inner {
     height: 28px;

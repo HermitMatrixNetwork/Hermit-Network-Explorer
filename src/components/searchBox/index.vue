@@ -30,8 +30,8 @@
 <script>
 import mixin from "@/mixins";
 import { queryAccountInfo } from "@/api/account.js";
-import { getHashContent } from "@/api/api.js";
-import { queryBlockdetails } from "@/api/blockchain.js";
+import { getHashContent } from "@/api/blockchain";
+import { queryBlockdetails,queryBlockdetails_hash } from "@/api/blockchain.js";
 export default {
   mixins: [mixin],
   props: {
@@ -95,27 +95,39 @@ export default {
         //   break;
         case 3:
           if (value.length !== 64) break;
-          var {
-            tx_response: { code },
-          } = await getHashContent(value);
-          if (code !== 3) {
+          var {code} = await getHashContent(value);
+          console.log(code);
+          if (code === 0) {
             this.queryDealtoHash({
               hash: value,
               random: Math.floor(Math.random() * 10000),
             });
             this.searchVal = ''
             return 
+          }else{
+            var {data:{block}} = await queryBlockdetails_hash(value)
+            if(block){
+              this.queryDealtoBlock(block._id);
+              this.searchVal = ""
+              return
+            }
           }
           break;
         case 4:
-          if (isNaN(value)) break;
-          var {
-            data: { block },
-          } = await queryBlockdetails(value);
-          if (block){
-            this.queryDealtoBlock(value);
-            this.searchVal = ""
-            return 
+          if (isNaN(value)){
+           var {data:{block}} =  await queryBlockdetails_hash(value)
+            if(block){
+              this.queryDealtoBlock(block._id);
+              this.searchVal = ""
+              return
+            }
+          }else{
+            var { data: { block }} = await queryBlockdetails(value);
+            if (block){
+              this.queryDealtoBlock(value);
+              this.searchVal = ""
+              return 
+            }
           }
           break;
         default:

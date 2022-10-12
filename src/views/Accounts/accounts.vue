@@ -56,10 +56,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="tag" :label="languagePack.accounttext11" />
+        <!-- <el-table-column prop="tag" :label="languagePack.accounttext11" /> -->
         <el-table-column
           :label="languagePack.accounttext12"
-          width="270"
           align="right"
         >
           <template slot-scope="scope">

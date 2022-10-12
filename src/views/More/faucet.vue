@@ -1,40 +1,58 @@
 <template>
   <div class="main">
     <div class="receive-Token">
-      <h3>{{languagePack.faucettext01}}</h3>
-      <input type="text" :placeholder="languagePack.faucettext02" />
-      <button @click="submit">{{languagePack.faucettext03}}</button>
+      <h3>{{ languagePack.faucettext01 }}</h3>
+      <input
+        type="text"
+        v-model="value"
+        :placeholder="languagePack.faucettext02"
+      />
+      <button @click="submit">{{ languagePack.faucettext03 }}</button>
     </div>
   </div>
 </template>
 
 <script>
-import mixins from '@/mixins';
-
+import mixins from "@/mixins";
+// import axios from  'axios'
+import { testToken } from "@/api/api";
 export default {
-  mixins:[mixins],
+  mixins: [mixins],
   name: "More",
   data() {
-    return {};
+    return {
+      value: "",
+    };
   },
-  methods:{
-    submit(){
-      // this.messageBox(this.languagePack.faucettext04,'error')
-      // this.messageBox(this.languagePack.faucettext05,'success')
-    }
+  methods: {
+    submit() {
+      if (this.value.trim() && this.value.includes("ghm1")) {
+        testToken(this.value, true).then(
+          (res) => {
+            this.messageBox(this.languagePack.faucettext05, "success");
+          },
+          (error) => {
+            this.messageBox(this.languagePack.faucettext04, "error");
+          }
+        );
+      }else{
+          this.messageBox('请输入正确的地址','error')
+      }
+      this.value = ''
+    },
   },
-  computed:{
-    languagePack(){
-      return this.$store.state.Language
-    }
-  }
+  computed: {
+    languagePack() {
+      return this.$store.state.Language;
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-.main{
-    height: calc(100vh - 110px - 210px);
-    padding-bottom: 80px;
-    position: relative;
+.main {
+  height: calc(100vh - 110px - 210px);
+  padding-bottom: 80px;
+  position: relative;
 }
 .receive-Token {
   width: 384px;
@@ -49,8 +67,8 @@ export default {
 
   position: absolute;
   top: 50%;
-  left:50%;
-  transform: translate(-50%,-50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
 
   > h3 {
     height: 20px;
@@ -66,19 +84,19 @@ export default {
     border-radius: 2px;
     outline: none;
     font-size: 12px;
-    color: #86909C;
+    color: #86909c;
     line-height: 20px;
     text-indent: 8px;
     margin: 40px 0;
-    transition:border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     &::placeholder {
       color: rgba(20, 37, 62, 0.25);
     }
-    &:hover{
-        border-color: #5671F2;
+    &:hover {
+      border-color: #5671f2;
     }
-    &:focus{
-        border-color:#1E42ED;   
+    &:focus {
+      border-color: #1e42ed;
     }
   }
 
@@ -92,12 +110,12 @@ export default {
     color: #ffffff;
     text-align: center;
     border: none;
-    transition: background .2s cubic-bezier(.645,.045,.355,1) ;
-    &:hover{
-        background: #6E85F7;
+    transition: background 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    &:hover {
+      background: #6e85f7;
     }
-    &:active{
-        background: #0E31D6;
+    &:active {
+      background: #0e31d6;
     }
   }
 }

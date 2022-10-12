@@ -12,6 +12,7 @@
 <script>
 import TabBar from "@/components/tabBar/index.vue";
 import Bottom from "@/components/bottom/";
+import {getValidationList} from '@/api/validation'
 import "element-ui/lib/theme-chalk/display.css";
 import "@/assets/css/common.scss";
 import '@/assets/css/init.css'
@@ -20,16 +21,22 @@ export default {
   data() {
     return {};
   },
-  created() {
+  async created() {
     this.$store.commit("CHANGE_LANGUAGE", 123);
-    // console.log(this.$route);
-
-    // if(this.$route.path == '/hash_detail'){
-    //   this.$router.replace('/home')
-    // }
+    //初次进入 请求所有验证节点并存储
+    if(!sessionStorage.getItem('node')){
+      getValidationList(0,0).then(({data:{list}})=>{
+      // console.log('App',list);
+      let nodes = list.sort((a, b) => b.tokens - a.tokens);
+      sessionStorage.setItem('node',JSON.stringify(nodes))
+     })
+    }
   },
   mounted() {
-    
+    // window.addEventListener('message', (e) => {
+    //     console.log('iframe=' + e.data);
+    //     // this.$router.back()
+    // }, false);
   },
   watch: {},
 };

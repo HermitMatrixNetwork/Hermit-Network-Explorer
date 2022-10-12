@@ -126,7 +126,7 @@
                 </p>
               </template>
             </el-table-column>
-            <el-table-column :label="languagePack.nodetext19" width="88">
+            <el-table-column :label="languagePack.nodetext19">
               <template slot-scope="scope">
                 <div class="stateColumn">
                   <div
@@ -136,15 +136,13 @@
                       borderRadius: '6px',
                       marginRight: '6px',
                       background:
-                        scope.row.status == 'UNBONDED' ? '#ED422B' : '#55C499',
+                        scope.$index >100 ? '#ED422B' : '#55C499',
                     }"
                   />
                   {{
-                    scope.row.status == "BONDED"
-                      ? languagePack.nodetext11
-                      : scope.row.status == "UNBONDED"
+                    scope.$index >100
                       ? languagePack.nodetext12
-                      : languagePack.nodetext13
+                      : languagePack.nodetext11
                   }}
                 </div>
               </template>
@@ -165,7 +163,7 @@
                 <p>{{ (scope.row.total_delegate_reward/scope.row.total_system_reward*100).toFixed(2) }} %</p>
               </template>
             </el-table-column> -->
-            <el-table-column :label="languagePack.nodetext23" align="right">
+            <el-table-column :label="languagePack.nodetext23" align="center">
               <template slot-scope="scope">
                 <p>{{ scope.row.delegators }}</p>
               </template>
@@ -176,7 +174,7 @@
               align="right"
             >
               <template slot-scope="scope">
-                <div>{{ (1 - scope.row.uptime) * 100 }}%</div>
+                <div>{{ scope.row.uptime?(scope.row.uptime * 100).toFixed(2):0 }}%</div>
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext25" align="center">
@@ -196,6 +194,7 @@
             @current-change="handleCurrentChange"
             :page-sizes="[10, 25, 50]"
             :page-size="10"
+            :current-page="page.currentPage+1"
           >
           </el-pagination>
         </div>
@@ -246,12 +245,12 @@ export default {
       const res = await getValidationList(0, 0);
       console.log("中心化节点列表",res);
       let arr = res.data.list.sort((a,b)=>b.tokens - a.tokens);
-      this.all = this.nodeList = arr;
-      arr.forEach((e) => (e.status = e.status.split("_").pop()));
+      this.all = this.nodeList = arr.filter(e=>!e.jailed);
+      // arr.forEach((e) => (e.status = e.status.split("_").pop()));
       // this.tableList = arr.slice(0,10)
       this.filterNodelist(arr)
-      this.activeNode = arr.filter((item) => item.status === "BONDED");
-      this.candidate = arr.filter((item) => item.status === "UNBONDED");
+      this.activeNode = this.all.length>100?this.all.slice(0,100):this.all
+      this.candidate = this.all.length>100?this.all.slice(100,this.all.length-1):[]
       this.pagination = res.data.total
     },
     handleSizeChange(val) {
@@ -289,17 +288,17 @@ export default {
       if (this.screenIndex === 0) {
         this.tableList = this.nodeList.filter((item) => {
           return item.validator_name.includes(this.searchValue);
-        });
+        }).slice(0,this.page.pageSize);
       }
       if (this.screenIndex === 1) {
         this.tableList = this.activeNode.filter((item) => {
           return item.validator_name.includes(this.searchValue);
-        });
+        }).slice(0,this.page.pageSize);
       }
       if (this.screenIndex === 2) {
         this.tableList = this.candidate.filter((item) => {
           return item.validator_name.includes(this.searchValue);
-        });
+        }).slice(0,this.page.pageSize);
       }
     },
     filterNodelist(arr,page=0,pageSize=10){
@@ -332,7 +331,7 @@ export default {
     screenIndex(val){
       switch (val) {
         case 0:
-          this.filterNodelist(this.all)
+          this.filterNodelist(this.nodeList = this.all)
           // this.tableList = this.nodeList;
           break;
         case 1:
@@ -346,7 +345,7 @@ export default {
         default:
           break;
       }
-      // this.page.currentPage = 0
+      this.page.currentPage = 0
       // this.pagination = this.tableList.length
     }
   },
@@ -422,6 +421,7 @@ export default {
       .stateColumn {
         display: flex;
         align-items: center;
+        white-space: nowrap;
       }
       .moniker {
         display: flex;

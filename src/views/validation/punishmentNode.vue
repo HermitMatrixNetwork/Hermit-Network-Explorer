@@ -51,10 +51,10 @@
             <el-table-column
               :label="languagePack.nodetext70"
               width="270"
-              align="right"
+              align="center"
             >
               <template slot-scope="scope">
-                {{ scope.row.unbonding_height }}
+                {{ scope.row.total }}
               </template>
             </el-table-column>
             <el-table-column :label="languagePack.nodetext67" width="200">
@@ -91,7 +91,7 @@
 
 <script>
 import { allValidationNode } from "@/api/api.js";
-import { getValidationList } from "@/api/validation.js";
+import { getNodeblockList } from "@/api/validation.js";
 
 import mixins from "@/mixins";
 export default {
@@ -105,10 +105,11 @@ export default {
   created() {},
   async mounted() {
     const res = await allValidationNode();
-    // console.log(res);
+    
     let arr = res.validators.filter((item) => item.jailed);
     console.log(arr);
-    arr.forEach((e) => {
+    let jailedlist = []
+    arr.forEach(async (e) => {
       let {
         description: { moniker },
         tokens,
@@ -117,22 +118,19 @@ export default {
         unbonding_height,
         operator_address,
       } = e;
-      this.list.push({
+      let {data:{total}} = await getNodeblockList(0,1,operator_address)
+      jailedlist.push({
         moniker,
         tokens,
         min_self_delegation,
         unbonding_height,
         operator_address,
         unbonding_time: unbonding_time.split(".")[0].replace(/[A-Z]/g, " "),
+        total
       });
+
     });
-    setTimeout(() => {
-      this.loading = false;
-    }, 3000);
-    // const {data:{list}} = await getValidationList(0, 0);
-    // // console.log(list);
-    // this.list= list.filter((item) => item.jailed);
-    
+    this.list = jailedlist
   },
   methods: {
     toNode(value) {
@@ -148,7 +146,7 @@ export default {
         let hours = date.getHours()<10? '0' + date.getHours() : date.getHours()
         let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
         let seconds = date.getSeconds()<10? '0' +date.getSeconds() :date.getSeconds()
-        return year + '-' + month + '-' + day + ' ' + (hours-9 )+ ':' + minutes + ':' + seconds
+        return year + '-' + month + '-' + day + ' ' + (hours-8 )+ ':' + minutes + ':' + seconds
     }
   },
   watch: {

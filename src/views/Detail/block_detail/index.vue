@@ -210,7 +210,7 @@ export default {
       // console.log("区块信息", res);
 
       if (!res.data.block) {
-        this.messageBox("暂未出块", "error");
+        this.messageBox(this.languagePack.prompttext15, "error");
         return false;
       }
       this.blockData = res.data.block;

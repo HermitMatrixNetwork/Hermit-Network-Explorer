@@ -129,7 +129,7 @@ export default {
         var oldTime = Date.parse(new Date(value))
         var times = (nowTime - oldTime) / 1000
         if (times < 60) {
-          return times + this.languagePack.timetext01
+          return (times>0?times:1) + this.languagePack.timetext01
         } else if (times > 60 && times < 3600) {
           return Math.trunc(times / 60) + this.languagePack.timetext02
         } else if (times > 3600 && times < (3600 * 24)) {

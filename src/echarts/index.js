@@ -35,6 +35,7 @@ export const blockBar = (element, data = []) => {
       show: false,
     },
     color: "#DDE0E3",
+    animation:true,
     tooltip: {
       show: true,
       trigger: "item",
@@ -42,6 +43,7 @@ export const blockBar = (element, data = []) => {
       backgroundColor: "transparent",
       borderColor: "transparent",
       padding: 0,
+      triggerOn:'mousemove',
       textStyle: {
         color: "#5671F2",
         fontStyle: "normal",
@@ -88,6 +90,7 @@ export const blockBar = (element, data = []) => {
       show: false,
     },
     color: "#DDE0E3",
+    animation:true,
     tooltip: {
       show: true,
       trigger: "item",
@@ -95,6 +98,7 @@ export const blockBar = (element, data = []) => {
       backgroundColor: "transparent",
       borderColor: "transparent",
       padding: 0,
+      triggerOn:'mousemove',
       textStyle: {
         color: "#5671F2",
         fontStyle: "normal",
@@ -134,24 +138,27 @@ export const blockBar = (element, data = []) => {
 
   block.on('mouseover', function (event) {
     _txsvalue[event.dataIndex] = { value: _txsvalue[event.dataIndex], itemStyle: { color: '#1E42ED' } }
+    _txsoption.animation = false
     echarts.getInstanceByDom(txDom).setOption(_txsoption)
     
   })
   block.on('mouseout', function (event) {
     _txsvalue[event.dataIndex] = _txsvalue[event.dataIndex].value
+    _txsoption.animation = false
     echarts.getInstanceByDom(txDom).setOption(_txsoption)
   })
 
   
   txcharts.on('mouseover', function (event) {
     _blockvalue[event.dataIndex] = { value: _blockvalue[event.dataIndex], itemStyle: { color: '#1E42ED' } }
+    _blockoption.animation = false
     echarts.getInstanceByDom(blockDom).setOption(_blockoption)
 
   })
   
-
   txcharts.on('mouseout', function (event) {
     _blockvalue[event.dataIndex] = _blockvalue[event.dataIndex].value
+    _blockoption.animation = false
     echarts.getInstanceByDom(blockDom).setOption(_blockoption)
   })
 };

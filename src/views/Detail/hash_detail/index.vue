@@ -180,7 +180,7 @@
               <span>{{ detailed.poundage / 1e6 }} GHM</span>
             </div>
             <div class="column" v-if="detailed.memo">
-              <p>memo：</p>
+              <p>Memo：</p>
               <span style="white-space: pre-wrap;">{{ detailed.memo }}</span>
             </div>
           </div>
@@ -242,7 +242,7 @@
 
 <script>
 import mixin from "@/mixins";
-import { getHashContent } from "@/api/api.js";
+import { getHashContent } from "@/api/blockchain";
 export default {
   mixins: [mixin],
   data() {
@@ -290,7 +290,7 @@ export default {
           logs,
         },
         tx: { auth_info, body },
-      } = res;
+      } = res.data.list;
       let message = body.messages[0];
       //如果没有交易状态或者交易状态为undifind时通过events来判断交易状态
       if (!this.TxStatus) {

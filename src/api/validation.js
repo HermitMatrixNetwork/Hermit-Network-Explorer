@@ -7,7 +7,7 @@ export function getNodeblockList(limit, index, address) {
         url: '/api/browser/blocklist_node',
         method: 'post',
         data: {
-            chain_id: "ghmdev",
+            chain_id: "dev",
             limit,
             index,
             address,
@@ -85,6 +85,15 @@ export function getUnbonding(address='ghmvaloper15v4z6h7wjcrdx0pygxyvk3naaupgk6a
 export function initBlock(address){
     return Service({
         url:`/cosmos/slashing/v1beta1/signing_infos/${address}`,
+        method:'get'
+    })
+}
+
+
+//验证地址佣金
+export function addressCommission(address){
+    return Service({
+        url:`/cosmos/distribution/v1beta1/validators/${address}/commission`,
         method:'get'
     })
 }

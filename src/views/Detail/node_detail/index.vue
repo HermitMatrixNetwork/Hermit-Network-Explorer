@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
     <div class="detail-title">
-      {{ languagePack.nodetext01 }}：{{ basic.validator_name }}
+      {{ languagePack.nodetext01 }}：{{ basic.validator_name }}<img src="@/assets/img/copy.png" @click="Copy(basic.validator_name )" />
     </div>
     <div class="detailColumn">
       <BasicTitle :title="languagePack.nodetext26">
@@ -13,11 +13,11 @@
             </div>
             <div class="column">
               <p>{{ languagePack.nodetext28 }}:</p>
-              <span>{{ (1 - basic.uptime) * 100 }}%</span>
+              <span>{{ !isNaN(basic.uptime)?basic.uptime * 100:0 }}%</span>
             </div>
             <div class="column">
               <p>{{ languagePack.nodetext29 }}:</p>
-              <span>{{ (1 - basic.uptime) * 100 }}%</span>
+              <span>{{ !isNaN(basic.uptime)?basic.uptime * 100:0 }}%</span>
             </div>
             <!-- 当前委托者数 -->
             <div class="column">
@@ -32,7 +32,7 @@
 
             <div class="column">
               <p>{{ languagePack.nodetext33 }} :</p>
-              <span>{{ basic.outstanding_reward / 1e6 }} GHM</span>
+              <span>{{ !isNaN(basic.outstanding_reward)?basic.outstanding_reward / 1e6:basic.outstanding_reward }} <span v-if="!isNaN(basic.outstanding_reward)">GHM</span></span>
             </div>
             <div class="column">
               <p>{{ languagePack.nodetext34 }}:</p>
@@ -161,7 +161,7 @@
           </el-table-column>
           <el-table-column :label="languagePack.nodetext40" align="right">
             <template slot-scope="scope">
-              <div>{{ scope.row.coinbase / 1e6 }}</div>
+              <div>{{scope.row.coinbase?(scope.row.coinbase.replace(/[a-z]/g,''))/1e6:0}}</div>
             </template>
           </el-table-column>
         </el-table>
@@ -385,7 +385,8 @@ export default {
         currentPage: 0,
         offset: 0,
       },
-      unbonds:[]
+      unbonds:[],
+      nodes:JSON.parse(sessionStorage.getItem('node'))
     };
   },
   created() {
@@ -394,18 +395,21 @@ export default {
     // const { operator_address } = this.basic;
     const { pageSize, currentPage } = this.page;
     this.address = this.$route.query.address;
-    console.log(this.address);
-    this.getData(this.address, pageSize, currentPage);
-    this.$loading();
+    this.hex = this.nodes.find(e=>e.operator_address == this.address)
+    console.log(this.address,this.hex);
+    // if(hex){
+      this.getData(this.address, pageSize, currentPage,this.hex?this.hex.consen_addr_hex:'');
+      this.$loading(); 
+    // }
   },
   mounted() {},
   methods: {
-    async getData(address, limit, index) {
+    async getData(address, limit, index,hex) {
       const res = await Promise.all([
         // validationNodeData(address),
         validationBasic(address),
         validationEntrust(address, 0, 10),
-        getNodeblockList(limit, index, address),
+        getNodeblockList(limit, index, hex),
         getNodeRewardList(limit, index, address),
         getUnbonding(address),
       ]);
@@ -494,18 +498,20 @@ export default {
       } = await getNodeblockList(
         pageSize,
         (this.page.currentPage = 0),
-        this.address
+        this.hex.consen_addr_hex
       );
       this.outblockTable.list = list;
       setTimeout(() => (this.blockloading = false), 500);
     },
     async blockCurrentChange(value) {
+      // return console.log(this.address);
       this.blockloading = true;
       this.page.currentPage = value - 1;
       let { pageSize, currentPage } = this.page;
       let {
         data: { list },
-      } = await getNodeblockList(pageSize, currentPage, this.address);
+      } = await getNodeblockList(pageSize, currentPage, this.hex.consen_addr_hex);
+      console.log(list);
       this.outblockTable.list = list;
       setTimeout(() => (this.blockloading = false), 500);
     },
