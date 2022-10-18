@@ -144,10 +144,10 @@ export function sumbitToken(data){
 }
 
 //测试币领取
-export function testToken(data,isError){
+export function testToken(data,faucet=true){
     return service1({
         url:`/faucet/faucet?address=${data}`,
         method:'get',
-        isError
+        faucet
     })
 }

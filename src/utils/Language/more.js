@@ -183,6 +183,8 @@ let faucet = {
         'faucettext03':'obtain GHM test note',
         'faucettext04':'failed in obtaining test note, please try again',
         'faucettext05':'successfully obtained test-tokens',
+        'faucettext06':'In the same network environment, the collection is limited to once per minute. Please collect it later'
+
     },
     Cn:{
         'faucettext01':'测试币领取',
@@ -190,6 +192,7 @@ let faucet = {
         'faucettext03':'获取GHM测试币',
         'faucettext04':'提交获取测试币失败，请重试',
         'faucettext05':'提交获取测试币请求成功！',
+        'faucettext06':'在同一网络环境下，每分钟限领一次，请稍后再领取'
     },
     Ct:{
         'faucettext01':'測試幣領取',
@@ -197,6 +200,8 @@ let faucet = {
         'faucettext03':'獲取GHM測試幣',
         'faucettext04':'提交獲取測試幣失敗，請重試',
         'faucettext05':'提交獲取測試幣請求成功！',
+        'faucettext06':'在同一網絡環境下，每分鐘限領一次，請稍後再領取'
+
     }
 }
 

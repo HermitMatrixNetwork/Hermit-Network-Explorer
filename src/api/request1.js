@@ -32,6 +32,9 @@ service.interceptors.response.use(
 		// console.log(error)
 		if (!error.config.isError) {
 			const msg = error.Message !== undefined ? error.Message : ''
+			if(error.config.faucet){
+				return Promise.reject(error)
+			}
 			Message({
 				message: '网络错误' + msg,
 				type: 'error',

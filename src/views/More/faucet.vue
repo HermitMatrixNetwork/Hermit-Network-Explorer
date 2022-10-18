@@ -7,6 +7,7 @@
         v-model="value"
         :placeholder="languagePack.faucettext02"
       />
+      <p class="link specialFont" @click="jumplink">{{link}}</p>
       <button @click="submit">{{ languagePack.faucettext03 }}</button>
     </div>
   </div>
@@ -22,24 +23,38 @@ export default {
   data() {
     return {
       value: "",
+      showhash:false,
+      link:''
     };
   },
   methods: {
     submit() {
       if (this.value.trim() && this.value.includes("ghm1")) {
-        testToken(this.value, true).then(
+        // this.link = JSON.parse(JSON.stringify(this.value))
+
+        testToken(this.value).then(
           (res) => {
             this.messageBox(this.languagePack.faucettext05, "success");
+            this.link = res.txhash.slice(0,64)
+            this.value = ''
           },
           (error) => {
-            this.messageBox(this.languagePack.faucettext04, "error");
-          }
+            // console.log(error);
+            if(error.response?.status === 503){
+                this.messageBox(this.languagePack.faucettext06, "error");
+            }else{
+                this.messageBox(this.languagePack.faucettext04, "error");
+            }
+          },
         );
       }else{
           this.messageBox(this.languagePack.prompttext16,'error')
       }
-      this.value = ''
     },
+    jumplink(){
+      // this.$router
+      this.queryDealtoHash({hash:this.link})
+    }
   },
   computed: {
     languagePack() {
@@ -87,7 +102,7 @@ export default {
     color: #86909c;
     line-height: 20px;
     text-indent: 8px;
-    margin: 40px 0;
+    margin: 40px 0 0 0;
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     &::placeholder {
       color: rgba(20, 37, 62, 0.25);
@@ -101,6 +116,10 @@ export default {
   }
 
   > button {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translate(-50%);
     width: auto;
     padding: 0 12px;
     height: 32px;
@@ -118,5 +137,10 @@ export default {
       background: #0e31d6;
     }
   }
+}
+.link{
+  text-align: left;
+  padding: 0 30px;
+  white-space: pre-wrap;
 }
 </style>
