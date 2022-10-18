@@ -41,7 +41,7 @@ export function queryTxList(limit, index) {
 }
 
 //查询区块的数据列表
-export function queryBlockList(limit,index) {
+export function queryBlockList(limit,index,isError=false) {
     return service1({
         url: '/api/browser/blocklist',
         method: 'POST',
@@ -49,7 +49,8 @@ export function queryBlockList(limit,index) {
             chain_id: "dev",
             limit,
             index
-        }
+        },
+        isError
     })
 }
 

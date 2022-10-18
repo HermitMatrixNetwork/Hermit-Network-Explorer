@@ -90,13 +90,13 @@ const routes = [
       ID: 3
     }
   },
-  {
-    path: '/developapi',
-    component: Resources,
-    meta: {
-      ID: 6
-    }
-  },
+  // {
+  //   path: '/developapi',
+  //   component: Resources,
+  //   meta: {
+  //     ID: 6
+  //   }
+  // },
   {
     path: '/address_detail',
     component: Addressdetail,

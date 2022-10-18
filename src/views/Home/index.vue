@@ -5,8 +5,8 @@
         <div class="leftContent">
           <div class="bannerPrompt">{{ languagePack.hometext01 }}</div>
           <SearchBox :currentHeight="basicData.blockHeight"></SearchBox>
-          <a href="http://www.baidu.com" target="_blank" class="link"
-            >活动：此处可插入广告语进行引导 跳转按钮 跳转网页</a
+          <a :href="adtexts.link" target="_blank" class="link"
+            >{{adtexts.text}}</a
           >
         </div>
         <div class="banner">
@@ -70,8 +70,8 @@
           <!--当前区块高度-->
           <div class="canClick">
             <p>{{ languagePack.hometext12 }}</p>
-            <span @click="queryDealtoBlock(basicData.blockHeight)">{{
-              basicData.blockHeight
+            <span @click="queryDealtoBlock(basicData.blockHeight.height)">{{
+              basicData.blockHeight.height
             }}</span>
           </div>
           <!--当前出块节点-->
@@ -177,7 +177,7 @@
                   }}</span>
                 </p>
                 <!-- <p>{{ item.timestamp | jetlag }}</p> -->
-                <p>{{ TimeStamp(item.timestamp) }}</p>
+                <p>{{ TimeStamp(item.timestamp,basicData.blockHeight.time) }}</p>
                 <!-- {{ languagePack.xsecondsago }} -->
               </div>
               <div class="btnRate">{{ item.tx_count }} Txns</div>
@@ -243,6 +243,7 @@ import {
   querylatestNodeMessage,
   pledgeTotal,
   getbanner,
+  getadText
 } from "@/api/home.js";
 import { queryBlockList, queryTxList } from "@/api/blockchain.js";
 import mixin from "@/mixins";
@@ -259,9 +260,11 @@ export default {
       TPS: "",
       lastUpdate: 0,
       percenTage: 0,
-      nodelist: "", //当前验证节点列表
+      nodelist: [], //当前验证节点列表
       basicData: {
-        blockHeight: 0, //当前区块高度
+        blockHeight: {
+          height:0
+        }, //当前区块高度
         latestNode: "", //当前出块节点
         detailNum: "", //累计交易笔数
         circulation: "", //流通量
@@ -273,6 +276,7 @@ export default {
       blockList: [],
       banner: {},
       chartsAnimation: true,
+      adtexts:{}
     };
   },
   async created() {
@@ -281,20 +285,23 @@ export default {
     this.nodelist = list.sort((a, b) => {
       return b.tokens - a.tokens;
     }).filter(e=> !e.jailed);
-    
     let {
       data: {
-        banner: {
-          photos: { photos },
+        adphotos: {
+          adphotos: { adphotos },
         },
       },
     } = await getbanner();
-    this.banner = photos[1];
+    this.banner = adphotos[0];
+
+    let {data:{adtexts:{adtexts}}} = await getadText()
+    this.adtexts = adtexts
     // console.log(photos);
-  },
-  mounted() {
     this.getBlockMsg();
     this.getnowBlockList();
+  },
+  mounted() {
+    
     this.charts = {
       block: echarts.init(document.querySelector(".barChart")),
       blockDom:document.querySelector(".barChart"),
@@ -307,7 +314,7 @@ export default {
     async getnowBlockHeight() {
       const res = await getLatestBlock();
       // console.log('最新出块',res);
-      return res.block.header.height;
+      return {height:res.block.header.height,time:res.block.header.time};
     },
     //获取数据
     async getBlockMsg() {
@@ -340,17 +347,20 @@ export default {
     },
     //实时出块区块
     async getnowBlockList() {
-      const {
-        data: { list },
-      } = await queryBlockList(20, 0);
-      // console.log("最新的出块区块", list);
+      const res = await queryBlockList(20, 0,true);
+      if(!res) return 
+      let {data: { list }} = res
+      this.blockList = list;
+      this.$refs["RightAnimation"].classList.remove("RightAnimation");
+
       //计算最新出块节点
       this.computeLastNode(list[0].proposer_address);
-      this.$refs["RightAnimation"].classList.remove("RightAnimation");
-      this.blockList = list;
+      this.basicData.blockHeight = this.basicData.blockHeight.height === list[0]._id? this.basicData.blockHeight:{height:list[0]._id,time:list[0].timestamp}
+      // console.log("最新的出块区块", list);
       let echartList = list.map((e) => {
         return { height: e._id, timestamp: e.timestamp, tx: e.tx_count };
       });
+
       if (this.chartsAnimation) {
         blockBar(this.charts, echartList);
       }
@@ -418,13 +428,13 @@ export default {
   watch: {
     async lastUpdate(value) {
       if (value % 3 === 0) {
-        const number = await this.getnowBlockHeight();
+        const obj = await this.getnowBlockHeight();
         /* 判断是否出块，有出块就更新列表，重新渲染图表 */
-        if (number !== this.basicData.blockHeight) {
+        if (obj.height !== this.basicData.blockHeight) {
+          this.basicData.blockHeight = obj;
           this.lastUpdate = 0;
-          this.basicData.blockHeight = number;
-          this.getnowBlockList();
           this.$refs["RightAnimation"].classList.add("RightAnimation");
+          this.getnowBlockList();
           // this.$refs['RightAnimation'].classList
           setTimeout(() => {
             // this.$refs["RightAnimation"].classList.remove("RightAnimation");
@@ -784,6 +794,11 @@ export default {
       .leftContent {
         width: 100%;
         padding: 0 10px;
+        .link{
+          overflow:hidden;
+          text-overflow:ellipsis;
+          white-space:nowrap;
+        }
       }
     }
     .banner {

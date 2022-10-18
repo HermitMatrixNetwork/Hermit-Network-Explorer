@@ -99,8 +99,7 @@
 import { getAllanmount, queryAccountList } from "@/api/api.js";
 import {userIncrease} from '@/api/account.js'
 import * as echarts from "echarts";
-import { bar, line } from "@/echarts/index.js";
-import { toMoney } from "@/utils/common.js";
+import { line } from "@/echarts/index.js";
 export default {
   name: "Accounts",
   data() {
@@ -142,9 +141,6 @@ export default {
     
 
     
-  },
-  filters: {
-    toMoney,
   },
   methods: {
     async getaccounts(pageSize, page) {

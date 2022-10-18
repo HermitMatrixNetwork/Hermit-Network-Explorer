@@ -1,4 +1,6 @@
 <template>
+  <div class="pageBody">
+
   <div class="main">
     <div class="block_title">
       {{ languagePack.blocktext11 }} ：#{{ commitHeight }}
@@ -141,7 +143,7 @@
             <template slot-scope="scope">
               <TableTooltip  v-if="scope.row.targetAddress"
                 :content="scope.row.targetAddress"
-                @click.native="queryDealtoAddress(scope.row.targetAddress)"
+                @click.native="toAddress(scope.row.targetAddress)"
               ></TableTooltip>
               <span v-else>--</span>
             </template>
@@ -175,6 +177,8 @@
       </el-row>
     </div>
   </div>
+</div>
+
 </template>
 
 <script>
@@ -277,6 +281,14 @@ export default {
       // console.log(e);
       let address = this.nodelist.find(v=>e === v.consen_addr_hex).operator_address
       this.$router.push({ name: "node_detail", query: { address} });
+    },
+    toAddress(address){
+      if(address.includes('ghm1')){
+        this.$router.push({ path: '/address_detail', query: { address } }).catch(e => { })
+      }
+      if(address.includes('ghmvaloper')){
+        this.$router.push({ path: '/node_detail', query: { address } }).catch(e => { })
+      }
     }
   },
   computed: {
@@ -300,9 +312,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.pageBody{
+  width: 100vw;
+  min-height: calc(100vh - 110px - 210px);
+}
 .main {
   width: 1280px;
   margin: 0 auto;
+  // min-height: calc(100vh - 110px - 210px);
 
   .block_title {
     padding: 16px 0;
@@ -315,7 +332,7 @@ export default {
 
   .block_basic {
     width: 1280px;
-    // height: 252px;
+    height: 252px;
     background: #ffffff;
     border: 1px solid #e9eaef;
     box-shadow: 0 4px 24px 0 rgba(93, 102, 138, 0.08);
@@ -405,6 +422,7 @@ export default {
     }
     .block_basic {
       width: 100% !important;
+      height: auto !important;
 
       .block_basic_content {
         padding: 12px;

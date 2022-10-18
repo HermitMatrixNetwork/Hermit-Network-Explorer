@@ -1,7 +1,6 @@
 
 import { copy, toMoney, sliceAddress, timeStamp, jetlag } from "@/utils/common.js";
 import { Message } from "element-ui";
-import moment from "moment";
 export default {
   data() {
     return {
@@ -43,61 +42,6 @@ export default {
       }
       this.$router.push({ path: '/address_detail', query: { address,noquery } }).catch(e => { })
     },
-    disposeTableType(arr) {
-      if (!Array.isArray(arr)) return;
-      arr.forEach((item) => {
-        item.targetAddress = item.targetAddress ? item.targetAddress : item.message ? item.message.validator_address : ''
-        switch (item.operate) {
-          case "MsgExecuteContract":
-            item.type = "合约执行";
-            item.targetAddress = item.message.contract;
-            break;
-          case "MsgWithdrawDelegatorReward":
-            item.type = "领取奖励";
-            item.targetAddress = item.message.validator_address;
-            break;
-          case "MsgUndelegate":
-            item.type = "取消委托";
-            break;
-          case "MsgBeginRedelegate":
-            item.type = "赎回交易";
-            break;
-          case "MsgSend":
-            item.type = "转账";
-            item.targetAddress = item.message.to_address;
-            break;
-          case "MsgSetWithdrawAddress":
-            item.type = "设置领奖地址";
-            item.targetAddress = item.message.withdraw_address;
-            break;
-          case "MsgVote":
-            item.type = "投票";
-            break;
-          case "MsgCreateValidator":
-            item.type = "创建验证器";
-            break;
-          case "RaAuthenticate":
-            item.type = "身份验证";
-            break;
-          case "MsgExecuteContract":
-            item.type = "合约执行";
-            break;
-          case "MsgInstantiateContract":
-            item.type = "实例化合约";
-            break;
-          case "MsgStoreCode":
-            item.type = "上传合约";
-            break;
-          case 'MsgDelegate':
-            item.type = '委托';
-            break
-          default:
-            item.type = "";
-            break;
-        }
-      });
-      // console.log(arr);
-    },
     //查找块
     queryDealtoBlock(height) {
       let path = this.$route.path
@@ -124,10 +68,11 @@ export default {
       return this.$store.state.Language
     },
     TimeStamp() {
-      return function (value) {
-        var nowTime = Date.parse(new Date())
-        var oldTime = Date.parse(new Date(value))
-        var times = (nowTime - oldTime) / 1000
+      return function (value,newTime) {
+        
+        let nowTime = Date.parse(new Date(newTime)) || Date.parse(new Date())
+        let oldTime = Date.parse(new Date(value))
+        let times = (nowTime - oldTime) / 1000
         if (times < 60) {
           return (times>0?times:1) + this.languagePack.timetext01
         } else if (times > 60 && times < 3600) {
@@ -137,7 +82,6 @@ export default {
         } else if (times > (3600 * 24)) {
           return Math.trunc(times / (3600 * 24)) + this.languagePack.timetext04
         }
-
       }
     },
     dealwithTime() {

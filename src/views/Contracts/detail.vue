@@ -167,7 +167,7 @@ export default {
       ])
       // const address = this.$route.query.address;
       // const res = await ;
-      console.log("合约详细信息", res);
+      // console.log("合约详细信息", res);
       this.contractData = {
         ...res[0].data,
         balance:res[1].code === 0?res[1].data.balance/1e6:0,
@@ -177,7 +177,7 @@ export default {
     async queryTx(pageSize, page) {
       const address = this.$route.query.address;
       const {data:{list,total}} = await getContractTx(pageSize, page, address);
-      console.log(list);
+      // console.log(list);
       let arr = []
       list.forEach(item=>{
         let {tx_response:{txhash,timestamp,events},tx:{body}} = item

@@ -5,7 +5,7 @@
       <div class="punishment-main-table">
         <div class="header">
           {{ languagePack.nodetext62 }}
-          <span style="color: #5671f2;padding:0 5px;">{{ list.length}}</span>
+          <span style="color: #5671f2;padding:0 5px;">{{ nodelist.length}}</span>
           {{ languagePack.nodetext63 }}
         </div>
         <div class="tableBody">
@@ -21,11 +21,14 @@
           >
             <div slot="empty" style="height:600px,line-height:600px">{{ languagePack.prompttext11 }}</div>
             <el-table-column
-              type="index"
               :label="languagePack.nodetext64"
               width="120"
               align="center"
-            ></el-table-column>
+            >
+            <template slot-scope="scope">
+              <div>{{scope.$index+1 + Number(page.page*page.pageSize)}}</div>
+            </template>
+          </el-table-column>
             <el-table-column
               :label="languagePack.nodetext65"
               width="178"
@@ -76,7 +79,7 @@
           <el-pagination
             small
             layout="prev, pager, next,sizes"
-            :total="list.length"
+            :total="nodelist.length"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :page-sizes="[10, 25, 50]"
@@ -100,53 +103,65 @@ export default {
     return {
       list: [],
       loading: true,
+      nodelist:[],
+      page:{
+        page:0,
+        pageSize:10
+      }
     };
   },
   created() {},
   async mounted() {
     const res = await allValidationNode();
     
-    let arr = res.validators.filter((item) => item.jailed);
-    console.log(arr);
-    let jailedlist = []
-    arr.forEach(async (e) => {
-      let {
-        description: { moniker },
-        tokens,
-        min_self_delegation,
-        unbonding_time,
-        unbonding_height,
-        operator_address,
-      } = e;
-      let {data:{total}} = await getNodeblockList(0,1,operator_address)
-      jailedlist.push({
-        moniker,
-        tokens,
-        min_self_delegation,
-        unbonding_height,
-        operator_address,
-        unbonding_time: unbonding_time.split(".")[0].replace(/[A-Z]/g, " "),
-        total
-      });
-
-    });
-    this.list = jailedlist
+    this.nodelist = res.validators.filter((item) => item.jailed);
+    this.dealArray(this.nodelist.slice(0,10))
   },
   methods: {
     toNode(value) {
       this.$router.push({ name: "node_detail", query: { address:value.operator_address } });
     },
-    handleSizeChange() {},
-    handleCurrentChange() {},
-    dealTime(time) {
-        let date = new Date(time)
+    handleSizeChange(val) {
+      this.list = []
+      this.dealArray(this.nodelist.slice(this.page.page = 0,this.page.pageSize = val))
+    },
+    handleCurrentChange(val) {
+      this.list = []
+      this.page.page = val - 1
+      this.dealArray(this.nodelist.slice(this.page.page*this.page.pageSize,val*this.page.pageSize))
+    },
+    dealTime(time,hour= -8) {
+        let UTC = Date.parse(new Date(time)) - 60*60*1000*hour
+        let date = new Date(UTC)
         let year = date.getFullYear()
         let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
         let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
         let hours = date.getHours()<10? '0' + date.getHours() : date.getHours()
         let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
         let seconds = date.getSeconds()<10? '0' +date.getSeconds() :date.getSeconds()
-        return year + '-' + month + '-' + day + ' ' + (hours-8 )+ ':' + minutes + ':' + seconds
+        return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
+    },
+    dealArray(array){
+      array.forEach(async (e) => {
+        let {
+          description: { moniker },
+          tokens,
+          min_self_delegation,
+          unbonding_time,
+          unbonding_height,
+          operator_address,
+        } = e;
+        // let {data:{total}} = await getNodeblockList(0,1,operator_address)
+        this.list.push({
+          moniker,
+          tokens,
+          min_self_delegation,
+          unbonding_height,
+          operator_address,
+          unbonding_time:this.dealTime(unbonding_time,31),
+          total:0
+        });
+      });
     }
   },
   watch: {
@@ -156,9 +171,17 @@ export default {
         setTimeout(()=>{
           this.loading = false
         },1500)
+        this.list.forEach(async item=>{
+          let {data:{total}} = await getNodeblockList(0,1,item.operator_address)
+          this.$set(item,'total',total)
+        })
+
+
+
       } else {
         this.loading = false;
       }
+
     },
   },
   computed: {

@@ -36,7 +36,7 @@ export default {
           }
         );
       }else{
-          this.messageBox('请输入正确的地址','error')
+          this.messageBox(this.languagePack.prompttext16,'error')
       }
       this.value = ''
     },

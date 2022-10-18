@@ -305,9 +305,13 @@ export default {
         window.open(window.location.origin + `/whitepaper.html?language=${this.lang === 0?'EN':'CN'}`);
         return;
       }
-      if (command === "/ibc" || command === '/Tendermint') {
-        window.open("https://github.com/HermitMatrixNetwork/web-browser");
+      if (command === "/ibc") {
+        window.open("https://tendermint.com/ibc/");
         return;
+      }
+      if(command === '/Tendermint') {
+        window.open('https://tendermint.com/core/')
+        return
       }
       this.toGo(command);
     },
@@ -349,9 +353,10 @@ export default {
       } = this.languagePack;
       return [
         { title: headertext10, command: "/whitebook" },
-        { title: headertext11, command: "/developapi", divided: true },
-        { title: headertext12, command: "/b" },
-        { title: headertext13, command: "/Tendermint" },
+        //api及sdk两个页面隐藏
+        // { title: headertext11, command: "/developapi", divided: true },
+        // { title: headertext12, command: "/b" },
+        { title: headertext13, command: "/Tendermint", divided: true },
         { title: headertext14, command: "/ibc" },
         { title: headertext15, command: "/compile" },
       ];

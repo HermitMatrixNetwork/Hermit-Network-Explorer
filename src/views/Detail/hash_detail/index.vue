@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pageBody">
     <div class="hashdetail">
       <div class="title">
         <h3>{{ languagePack.txstext20 }}</h3>
@@ -275,7 +275,7 @@ export default {
       } else {
         res = await getHashContent(hash[index].hash);
       }
-      console.log("通过hash查找信息", res);
+      // console.log("通过hash查找信息", res);
       if (res) {
         this.waitResult = false;
       }
@@ -369,7 +369,7 @@ export default {
         utc:'(UTC) '+timestamp.replace(/[A-Z]/g,' '),
         ...obj,
       };
-      console.log(this.detailed);
+      // console.log(this.detailed);
     },
 
     lastData() {
@@ -490,6 +490,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.pageBody{
+  width: 100vw;
+  min-height: calc(100vh - 110px - 210px);
+}
 .hashdetail {
   width: 1280px;
   margin: 0 auto 80px;

@@ -136,7 +136,7 @@ export default {
   methods: {
     async getData(limit) {
       const res = await getContract(limit);
-      console.log("合约列表", res);
+      // console.log("合约列表", res);
       let arr = res.data.list;
       arr.forEach(async (item) => {
         item.user_count = Object.keys(item.user_count).length;

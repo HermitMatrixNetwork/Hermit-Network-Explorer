@@ -49,7 +49,15 @@ export function getLatestBlock() {    //获取最新出块
 
 export function getbanner() {   
     return service1({
-        url: '/upload/message/get_banner',
+        url: '/upload/message/get_adbanner',
         method: 'get'
     })
 }
+
+export const getadText = () => {
+    return service1({
+      method: 'get',
+      url: '/upload/message/get_adtext'
+    })
+  }
+  

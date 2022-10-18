@@ -23,7 +23,7 @@ module.exports = defineConfig({
         changeOrigin: true
       },
       '/faucet':{
-        target:'http://45.32.116.172:5000',
+        target:'http://158.247.237.78',
         pathRewrite: {'^/faucet':''},
         logLevel:'debug',
         changeOrigin: true

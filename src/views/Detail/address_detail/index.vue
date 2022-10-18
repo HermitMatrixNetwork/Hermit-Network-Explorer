@@ -283,6 +283,7 @@ import {
   getadresRewards,
   getadresUnbonding,
   getadresDelegated,
+  adresBalance
 } from "@/api/api.js";
 import {addressCommission} from '@/api/validation'
 export default {
@@ -309,9 +310,11 @@ export default {
       commission:0,
     };
   },
-  created() {
+  async created() {
     this.address = this.$route.query.address;
     const noquery = this.$route.query.noquery
+    // const res = await adresBalance(this.address)
+    // console.log('连接口',res);
     // console.log(this.$route.query);
     if(noquery){
       this.TxsList = []
@@ -334,7 +337,7 @@ export default {
         getadresRewards(this.address),
         getadresUnbonding(this.address),
       ]);
-      console.log(res);
+      // console.log(res);
       let delegate_amount = 0;
       if (res[1].delegation_responses.length !== 0) {
         res[1].delegation_responses.forEach((item) => {
@@ -357,6 +360,8 @@ export default {
         rewards: rewards / 1e6,
         unbonding: unbonding / 1e6,
       };
+      // console.log('成功赋值');
+      this.balanceBychain()
     },
     async getTxList(limit, index) {
       let { data:{list,total} } = await queryAccountTx(limit, index, this.address);;
@@ -413,7 +418,7 @@ export default {
     },
     //查看交易详情
     queryTxDetail(index) {
-      console.log(this.hashList, index);
+      // console.log(this.hashList, index);
       sessionStorage.setItem(
         "hashList",
         JSON.stringify({ hashList: this.hashList, index })
@@ -428,9 +433,20 @@ export default {
     },
     //查询验证地址佣金
     async commiSsion(address){
-      console.log('是验证地址',address);
+      console.log('验证节点地址',address);
       const {commission:{commission}} = await addressCommission(address)
       this.commission = (commission[0].amount/1e6).toFixed(6)
+    },
+    //链上获取余额
+    async balanceBychain(){
+      const {balances} = await adresBalance(this.address)
+      let balance = balances[0]['amount']
+      if(this.account.balance != balance){
+        this.account.balance = balance
+        // console.log('调用');
+      }else{
+        // console.log('相等');
+      }
     }
   },
   computed: {

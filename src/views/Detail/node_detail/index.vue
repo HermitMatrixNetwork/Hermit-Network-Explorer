@@ -27,12 +27,12 @@
             <div class="column">
               <!-- 累计系统奖励 -->
               <p>{{ languagePack.nodetext31 }}:</p>
-              <span>{{ basic.total_system_reward / 1e6 }} GHM</span>
+              <span>{{ !isNaN(basic.total_system_reward)?basic.total_system_reward / 1e6:0 }} <span v-if="!isNaN(basic.total_system_reward)">GHM</span></span>
             </div>
 
             <div class="column">
               <p>{{ languagePack.nodetext33 }} :</p>
-              <span>{{ !isNaN(basic.outstanding_reward)?basic.outstanding_reward / 1e6:basic.outstanding_reward }} <span v-if="!isNaN(basic.outstanding_reward)">GHM</span></span>
+              <span>{{ !isNaN(basic.outstanding_reward)?basic.outstanding_reward / 1e6:0 }} <span v-if="!isNaN(basic.outstanding_reward)">GHM</span></span>
             </div>
             <div class="column">
               <p>{{ languagePack.nodetext34 }}:</p>
@@ -414,14 +414,14 @@ export default {
         getUnbonding(address),
       ]);
       if (res) {
-        console.log("有数据");
+        // console.log("有数据");
         this.$loading().close();
       }
-      console.log("节点基本信息", res[0]);
-      console.log("节点委托信息列表", res[1]);
-      console.log("节点出块", res[2]);
-      console.log("节点奖励", res[3]);
-      console.log("节点解绑信息", res[4]);
+      // console.log("节点基本信息", res[0]);
+      // console.log("节点委托信息列表", res[1]);
+      // console.log("节点出块", res[2]);
+      // console.log("节点奖励", res[3]);
+      // console.log("节点解绑信息", res[4]);
       this.basic = res[0].data;
       //处理数组并赋值
       this.basic.delegators = res[1].pagination.total * 1;
@@ -482,7 +482,7 @@ export default {
       this.delegationTable = newarr;
     },
     queryTxDetail(index) {
-      console.log(this.hashList, index);
+      // console.log(this.hashList, index);
       sessionStorage.setItem(
         "hashList",
         JSON.stringify({ hashList: this.hashList, index })
@@ -511,7 +511,7 @@ export default {
       let {
         data: { list },
       } = await getNodeblockList(pageSize, currentPage, this.hex.consen_addr_hex);
-      console.log(list);
+      // console.log(list);
       this.outblockTable.list = list;
       setTimeout(() => (this.blockloading = false), 500);
     },
@@ -544,7 +544,8 @@ export default {
         arr.push({
           _id: txhash,
           message,
-          timestamp,
+          timestamp:this.dealwithTime(timestamp),
+          utc:'(UTC) ' +timestamp.replace(/[A-Z]/g,' '),
           reward:reward/1e6,
           result,
         });
@@ -556,7 +557,6 @@ export default {
     async rewardCurrentChange(value) {
       // return console.log(value);
       this.rewardloading = true;
-
       this.rewardPage.currentPage = value - 1;
       let { pageSize, currentPage } = this.rewardPage;
       let {
@@ -579,7 +579,8 @@ export default {
         arr.push({
           _id: txhash,
           message,
-          timestamp,
+          timestamp:this.dealwithTime(timestamp),
+          utc:'(UTC) ' +timestamp.replace(/[A-Z]/g,' '),
           reward:reward/1e6,
           result,
         });
@@ -635,7 +636,8 @@ export default {
           this.delegationTable[value.indexOf(bb)].redeem = num;
         }
       });
-      }
+      },
+      deep:true
     }
   },
 };

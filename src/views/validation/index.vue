@@ -136,13 +136,11 @@
                       borderRadius: '6px',
                       marginRight: '6px',
                       background:
-                        scope.$index >100 ? '#ED422B' : '#55C499',
+                      screenIndex == 1 ? '#55C499' :screenIndex == 0&&(scope.$index+1) + Number(page.pageSize*page.currentPage)<=100?'#55C499':'#ED422B',
                     }"
                   />
                   {{
-                    scope.$index >100
-                      ? languagePack.nodetext12
-                      : languagePack.nodetext11
+                    screenIndex == 1? languagePack.nodetext11:screenIndex == 0&&(scope.$index+1) + Number(page.pageSize*page.currentPage)<=100 ?languagePack.nodetext11:languagePack.nodetext12
                   }}
                 </div>
               </template>
@@ -245,10 +243,13 @@ export default {
       const res = await getValidationList(0, 0);
       console.log("中心化节点列表",res);
       let arr = res.data.list.sort((a,b)=>b.tokens - a.tokens);
+      //虚拟数据测试
+      // let a = arr.filter(e=>!e.jailed)
+      // this.all = this.nodeList = [...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,]
       this.all = this.nodeList = arr.filter(e=>!e.jailed);
       // arr.forEach((e) => (e.status = e.status.split("_").pop()));
       // this.tableList = arr.slice(0,10)
-      this.filterNodelist(arr)
+      this.filterNodelist(this.nodeList)
       this.activeNode = this.all.length>100?this.all.slice(0,100):this.all
       this.candidate = this.all.length>100?this.all.slice(100,this.all.length-1):[]
       this.pagination = res.data.total

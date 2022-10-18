@@ -151,7 +151,8 @@ export default {
 
 <style lang="scss" scoped>
 .rpc {
-  width: 100%;
+  width: 100vw;
+  min-height: calc(100vh - 110px - 210px);
 }
 .rpcmain {
   width: 632px;

@@ -29,7 +29,7 @@ service.interceptors.response.use(
 		return response.data
 	},
 	(error) => {
-		console.log(error)
+		// console.log(error)
 		if (!error.config.isError) {
 			const msg = error.Message !== undefined ? error.Message : ''
 			Message({
@@ -37,8 +37,10 @@ service.interceptors.response.use(
 				type: 'error',
 				duration: 3 * 1000,
 			})
+			return Promise.reject(error)
+		}else{
+			return false
 		}
-		return Promise.reject(error)
 	}
 )
 

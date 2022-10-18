@@ -71,6 +71,11 @@ export default {
         this.searchVal = "";
         return;
       }
+      if(!/^[A-Za-z0-9]+$/.test(this.searchVal)){
+        this.messageBox(this.languagePack.prompttext07,'error');
+        this.searchVal = "";
+        return;
+      }
       if (this.select === 0) {
         this.filtersSearchValue(this.searchVal);
       }
@@ -114,7 +119,7 @@ export default {
           }
           break;
         case 4:
-          if (isNaN(value)){
+          if (isNaN(value)&&value.length === 64){
            var {data:{block}} =  await queryBlockdetails_hash(value)
             if(block){
               this.queryDealtoBlock(block._id);
