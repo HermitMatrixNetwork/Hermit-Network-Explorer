@@ -146,7 +146,7 @@ export function sumbitToken(data){
 //测试币领取
 export function testToken(data,faucet=true){
     return service1({
-        url:`/faucet/faucet?address=${data}`,
+        url:`/faucet/faucet/faucet?address=${data}`,
         method:'get',
         faucet
     })

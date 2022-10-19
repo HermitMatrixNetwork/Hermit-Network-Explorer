@@ -40,7 +40,8 @@ export default {
         {
           label: "Telegram",
           icon: require("@/assets/img/bottom-bar_telegram@2x.png"),
-          url:'https://t.me/G_Hermit'
+          // url:'https://t.me/G_Hermit'
+          url:"https://outlook.live.com/owa/"
         },
         {
           label: "Twitter ",
@@ -50,12 +51,13 @@ export default {
         {
           label: "Medium ",
           icon: require("@/assets/img/bottom-bar_medium@2x.png"),
-          url:'https://medium.com/@ghermit'
+          // url:'https://medium.com/@ghermit'
+          url:'https://outlook.live.com/owa/'
         },
         {
           label: "GitHub",
           icon: require("@/assets/img/bottom-bar_github@2x.png"),
-          url:'https://github.com/HermitMatrixNetwork/web-browser'
+          url:'https://github.com/ghermit'
         },
         {
           label: "Gitbook",
