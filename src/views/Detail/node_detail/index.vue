@@ -341,7 +341,6 @@
 import mixin from "@/mixins";
 import {
   getNodeblockList,
-  validationNodeData,
   validationEntrust,
   getNodeRewardList,
   validationBasic,

@@ -69,7 +69,7 @@
 
             </div>
 
-            <!-- 当该笔交易为委托时 -->
+            <!-- 当该笔交易为委托时 delegateValue-->
             <div class="column" v-if="dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'">
               <p>{{ languagePack.txstext41 }}：</p>
               <span class="specialFont" @click="queryDealtoAddress(detailed.delegator_address)">{{ detailed.delegator_address }}</span>
@@ -81,7 +81,12 @@
               <span class="specialFont" @click="queryDealtoNode(detailed.validator_address)">{{ detailed.validator_address }} </span>
               <img src="@/assets/img/copy.png" @click="Copy(detailed.validator_address)" />
             </div>
-
+            
+            <div class="column" v-if="dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'">
+              <p>{{languagePack.txstext65}}：</p>
+              <span>{{ detailed.delegateValue ? detailed.delegateValue : 0 }} GHM</span>
+            </div>
+            
             <div class="column" v-if="dealType === 'MsgDelegate' || dealType === 'MsgBeginRedelegate'">
               <p>{{ languagePack.txstext43 }}：</p>
               <span>{{ detailed.turnover ? detailed.turnover / 1e6 : 0 }} GHM</span>
@@ -99,6 +104,11 @@
               <span class="specialFont" @click="queryDealtoNode(detailed.validator_address)">{{ detailed.validator_address }}</span>
               <img src="@/assets/img/copy.png" @click="Copy(detailed.validator_address)" />
 
+            </div>
+
+            <div class="column" v-if="dealType === 'MsgUndelegate'">
+              <p>{{languagePack.txstext65}}：</p>
+              <span>{{ detailed.delegateValue ? detailed.delegateValue : 0 }} GHM</span>
             </div>
 
             <div class="column" v-if="dealType === 'MsgUndelegate'">
@@ -275,7 +285,7 @@ export default {
       } else {
         res = await getHashContent(hash[index].hash);
       }
-      // console.log("通过hash查找信息", res);
+      console.log("通过hash查找信息", res);
       if (res) {
         this.waitResult = false;
       }
@@ -321,12 +331,15 @@ export default {
         case "MsgDelegate":
           obj.delegator_address = message.delegator_address;
           obj.turnover = message.amount.amount;
+          /* 自动领取奖励 delegateValue */
+          obj.delegateValue = logs[0]['events'][0]['attributes'].length>2?logs[0]['events'][0]['attributes'][1].value.replace(/[a-z]/g,'')/1e6:0
           obj.validator_address = message.validator_address;
           break;
         case "MsgUndelegate":
           obj.delegator_address = message.delegator_address;
           obj.turnover = message.amount.amount / 1e6;
           obj.validator_address = message.validator_address;
+          obj.delegateValue = logs[0]['events'][0]['attributes'].length>2?logs[0]['events'][0]['attributes'][1].value.replace(/[a-z]/g,'')/1e6:0
           break;
         case "MsgBeginRedelegate":
           obj.delegator_address = message.delegator_address;

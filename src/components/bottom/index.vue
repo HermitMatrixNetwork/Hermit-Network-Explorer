@@ -62,7 +62,7 @@ export default {
         {
           label: "Gitbook",
           icon: require("@/assets/img/bottom-bar_gitbook@2x.png"),
-          url:''
+          url:'https://www.doc.hermit.network'
         },
       ],
     };

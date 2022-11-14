@@ -252,6 +252,7 @@ let txs_detail = {
         'txstext62': 'Create Validator',
         'txstext63': 'RaAuthenticate',
         'txstext64': 'MsgUnjail',
+        'txstext65': 'Receive rewards automatically',
     },
     Cn: {
         'txstext20': '交易详情：',
@@ -299,6 +300,7 @@ let txs_detail = {
         'txstext62': '创建验证器',
         'txstext63': '节点注册',
         'txstext64': '激活节点',
+        'txstext65': '自动领取奖励',
 
     },
     Ct: {
@@ -348,6 +350,7 @@ let txs_detail = {
         'txstext62': '創建驗證器',
         'txstext63': '節點注冊',
         'txstext64': '激活節點',
+        'txstext65': '自動領取獎勵',
 
     }
 }

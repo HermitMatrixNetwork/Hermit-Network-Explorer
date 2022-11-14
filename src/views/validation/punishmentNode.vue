@@ -142,6 +142,7 @@ export default {
         return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
     },
     dealArray(array){
+      if(array.length === 0) return this.list = null
       array.forEach(async (e) => {
         let {
           description: { moniker },
@@ -158,7 +159,7 @@ export default {
           min_self_delegation,
           unbonding_height,
           operator_address,
-          unbonding_time:this.dealTime(unbonding_time,31),
+          unbonding_time:this.dealTime(unbonding_time,127),
           total:0
         });
       });

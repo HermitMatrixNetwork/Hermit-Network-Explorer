@@ -43,7 +43,7 @@
                     >$
                     {{
                       (($store.state.tokenPrice * account.balance) / 1e6)
-                        | toMoney
+                        
                     }}</span
                   >
                 </div>

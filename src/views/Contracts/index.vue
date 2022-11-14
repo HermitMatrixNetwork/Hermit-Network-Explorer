@@ -51,7 +51,7 @@
           v-loading="loading"
         >
           <!-- 表格空状态 -->
-          <div slot="empty">{{languagePack.prompttext11}}</div>
+          <div slot="empty">{{ languagePack.prompttext11 }}</div>
           <el-table-column
             prop="contract_id"
             :label="languagePack.contracttext05"
@@ -70,8 +70,11 @@
           </el-table-column>
           <el-table-column :label="languagePack.contracttext12" width="320px">
             <template slot-scope="scope">
-              <div class="specialFont" @click="toContractDetail(scope.row.contract_address)">
-                {{ scope.row.contract_address}}
+              <div
+                class="specialFont"
+                @click="toContractDetail(scope.row.contract_address)"
+              >
+                {{ scope.row.contract_address }}
               </div>
             </template>
           </el-table-column>
@@ -118,7 +121,7 @@
 
 <script>
 import { getContract } from "@/api/contract";
-import {queryAccountInfo} from '@/api/account';
+import { queryAccountInfo } from "@/api/account";
 import mixins from "@/mixins";
 
 export default {
@@ -138,13 +141,18 @@ export default {
       const res = await getContract(limit);
       // console.log("合约列表", res);
       let arr = res.data.list;
-      arr.forEach(async (item) => {
-        item.user_count = Object.keys(item.user_count).length;
-        const {data:{balance}} = await queryAccountInfo(item.contract_address)
-        this.$set(item,'balance',balance?balance/1e6:0)
-        // console.log(item.contract_address);
-        // console.log(Object.keys(item.user_count));
-      });
+      if (Array.isArray(arr)) {
+        arr.forEach(async (item) => {
+          item.user_count = Object.keys(item.user_count).length;
+          const {
+            data: { balance },
+          } = await queryAccountInfo(item.contract_address);
+          this.$set(item, "balance", balance ? balance / 1e6 : 0);
+          // console.log(item.contract_address);
+          // console.log(Object.keys(item.user_count));
+        });
+      }
+
       this.tableList = arr;
       this.pagination = res.data.total;
     },
@@ -241,27 +249,23 @@ export default {
       .icon {
         width: 64px;
         height: 64px;
-        
       }
       &:nth-child(1) {
         .icon {
           background: url("../../assets/img/contract_icon1@2x.png") no-repeat;
           background-size: 100% 100%;
-
         }
       }
       &:nth-child(2) {
         .icon {
           background: url("../../assets/img/contract_icon2@2x.png") no-repeat;
           background-size: 100% 100%;
-
         }
       }
       &:nth-child(3) {
         .icon {
           background: url("../../assets/img/contract_icon3@2x.png") no-repeat;
           background-size: 100% 100%;
-
         }
       }
     }

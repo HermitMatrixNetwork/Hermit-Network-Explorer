@@ -176,7 +176,6 @@
                     item.proposer_address | sliceAddress
                   }}</span>
                 </p>
-                <!-- <p>{{ item.timestamp | jetlag }}</p> -->
                 <p>{{ TimeStamp(item.timestamp,basicData.blockHeight.time) }}</p>
                 <!-- {{ languagePack.xsecondsago }} -->
               </div>
@@ -237,10 +236,7 @@ import { getValidationList } from "@/api/validation.js";
 import {queryAccountList} from '@/api/api.js'
 import {
   getLatestBlock,
-  allAdresQuantity,
-  pledgeParameter,
   totalCirculation,
-  querylatestNodeMessage,
   pledgeTotal,
   getbanner,
   getadText
@@ -318,7 +314,7 @@ export default {
     },
     //获取数据
     async getBlockMsg() {
-      const res = await queryAccountList(0,0); //总地址数
+      const res = await queryAccountList(1,0); //总地址数
       const { supply } = await totalCirculation(); //获取总发行量
       const {
         pool: { bonded_tokens },
@@ -351,10 +347,13 @@ export default {
       if(!res) return 
       let {data: { list }} = res
       this.blockList = list;
-      this.$refs["RightAnimation"].classList.remove("RightAnimation");
-
       //计算最新出块节点
       this.computeLastNode(list[0].proposer_address);
+      setTimeout(()=>{
+        this.$refs["RightAnimation"].classList.remove("RightAnimation");
+      },500)
+
+      
       this.basicData.blockHeight = this.basicData.blockHeight.height === list[0]._id? this.basicData.blockHeight:{height:list[0]._id,time:list[0].timestamp}
       // console.log("最新的出块区块", list);
       let echartList = list.map((e) => {
@@ -377,10 +376,10 @@ export default {
     computeLastNode(value) {
       this.basicData.latestNode = {
         moniker: this.nodelist.find((e) => {
-          return e.consen_addr_hex === value;
+          return e.consen_addr_hex == value;
         }).validator_name,
         address: this.nodelist.find((e) => {
-          return e.consen_addr_hex === value;
+          return e.consen_addr_hex == value;
         }).operator_address,
       };
     },
@@ -429,10 +428,12 @@ export default {
     async lastUpdate(value) {
       if (value % 3 === 0) {
         const obj = await this.getnowBlockHeight();
+        // console.log(obj.height,this.basicData.blockHeight.height);
         /* 判断是否出块，有出块就更新列表，重新渲染图表 */
-        if (obj.height !== this.basicData.blockHeight) {
+        if (obj.height > this.basicData.blockHeight.height) {
           this.basicData.blockHeight = obj;
           this.lastUpdate = 0;
+          // console.log(1111111111111);
           this.$refs["RightAnimation"].classList.add("RightAnimation");
           this.getnowBlockList();
           // this.$refs['RightAnimation'].classList

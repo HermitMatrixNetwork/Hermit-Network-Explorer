@@ -35,11 +35,11 @@ service.interceptors.response.use(
 			if(error.config.faucet){
 				return Promise.reject(error)
 			}
-			Message({
-				message: '网络错误' + msg,
-				type: 'error',
-				duration: 3 * 1000,
-			})
+			// Message({
+			// 	message: '网络错误' + msg,
+			// 	type: 'error',
+			// 	duration: 3 * 1000,
+			// })
 			return Promise.reject(error)
 		}else{
 			return false

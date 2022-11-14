@@ -127,7 +127,7 @@ export function queryAccountList(limit, index) {
         url: '/api/browser/accountlist',
         method: 'POST',
         data: {
-            chain_id: 'dev',
+            chain_id: 'ghm-testnet',
             limit,
             index
         }
@@ -146,7 +146,7 @@ export function sumbitToken(data){
 //测试币领取
 export function testToken(data,faucet=true){
     return service1({
-        url:`/faucet/faucet/faucet?address=${data}`,
+        url:`/faucet/faucet?address=${data}`,
         method:'get',
         faucet
     })

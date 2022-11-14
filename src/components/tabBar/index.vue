@@ -247,7 +247,7 @@
               <p
                 v-for="item in morenavs"
                 :key="item.title"
-                @click="toGo(item.command)"
+                @click="blockCommand(item.command)"
               >
                 {{ item.title }}
               </p>
@@ -301,16 +301,19 @@ export default {
       this.messageBox(this.languagePack.prompttext04, "success");
     },
     blockCommand(command) {
-      if (command === "/whitebook") {
-        window.open(window.location.origin + `/whitepaper.html?language=${this.lang === 0?'EN':'CN'}`);
-        return;
+      let jumpUrl = {
+        '/whitebook':`${window.location.origin}/whitepaper.html?language=${this.lang === 0?'EN':'CN'}`,
+        '/ibc':'https://tendermint.com/ibc/',
+        '/Tendermint':'https://tendermint.com/core/',
+        '/faucet':'https://faucet.hermit.network/'
       }
-      if (command === "/ibc") {
-        window.open("https://tendermint.com/ibc/");
-        return;
-      }
-      if(command === '/Tendermint') {
-        window.open('https://tendermint.com/core/')
+      if(command in jumpUrl){
+        console.log(document.body.clientWidth);
+        if(document.body.clientWidth<598){
+            window.location.href = jumpUrl[command]
+        }else{
+            window.open(jumpUrl[command])
+        }
         return
       }
       this.toGo(command);

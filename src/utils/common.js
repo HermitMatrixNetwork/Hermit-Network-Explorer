@@ -1,5 +1,4 @@
 import { Message } from 'element-ui'
-import moment from 'moment';
 
 //复制文本
 export function copy(text,hint) {
@@ -55,75 +54,6 @@ export function sliceAddress(address, start = 8, end = 8) {
         return ''
     }
 }
-
-//计算时间差
-export function pastTime(timestamp) {
-    var date1 = (Date.parse(new Date())) / 1000;//计算当前时间戳 
-    var date2 = (Date.parse(new Date(timestamp))) / 1000;; //自动收货的时间戳 （字符串转时间戳）
-    var date3 = (date1 - date2) * 1000; //时间差的毫秒数
-    //计算出相差天数
-    var days = Math.floor(date3 / (24 * 3600 * 1000));
-    //计算出小时数
-    var leave1 = date3 % (24 * 3600 * 1000); //计算天数后剩余的毫秒数
-    var hours = Math.floor(leave1 / (3600 * 1000));
-    //计算相差分钟数
-    var leave2 = leave1 % (3600 * 1000); //计算小时数后剩余的毫秒数
-    var minutes = Math.floor(leave2 / (60 * 1000));
-    //计算相差秒数
-    var leave3 = leave2 % (60 * 1000); //计算分钟数后剩余的毫秒数
-    var seconds = Math.round(leave3 / 1000);
-    return days + "天 " + hours + "小时 " + minutes + " 分钟"
-}
-
-// 防抖函数
-export function debounce() {
-    let timeout;
-    return function (func, wait) {
-        let context = this;
-        let args = arguments;
-
-        if (timeout){
-            clearTimeout(timeout);
-            timeout = null
-        } 
-        
-        timeout = setTimeout(() => {
-            func.apply(context, args)
-        }, wait);
-    }
-}
-
-//时间戳
-export function timeStamp(time) {
-    if (!time) return '-'
-    // let isCn = localStorage.getItem('language')
-    // if (isCn == 1) {
-        // moment.locale('zh-cn')
-    // }
-    return moment(time).format('LLLL')
-}
-
-export function jetlag(time) {
-    return moment(time).startOf('second').fromNow()
-}
-
-//倒计时
-export function numAdd(num1, num2) {
-    var baseNum, baseNum1, baseNum2;
-    try {
-        baseNum1 = num1.toString().split(".")[1].length;
-    } catch (e) {
-        baseNum1 = 0;
-    }
-    try {
-        baseNum2 = num2.toString().split(".")[1].length;
-    } catch (e) {
-        baseNum2 = 0;
-    }
-    baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
-    return (num1 * baseNum + num2 * baseNum) / baseNum;
-}
-
 
 
 

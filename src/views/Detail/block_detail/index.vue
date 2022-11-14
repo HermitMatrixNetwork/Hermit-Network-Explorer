@@ -184,7 +184,6 @@
 <script>
 import { queryBlockdetails } from "@/api/blockchain.js";
 import mixins from "@/mixins";
-import moment from "moment";
 export default {
   mixins: [mixins],
   data() {

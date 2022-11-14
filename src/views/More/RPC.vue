@@ -37,11 +37,11 @@
               </div>
               <div class="column">
                 <p>{{ languagePack.RPCtext02 }}：</p>
-                <span>http://167.179.118.118:1317</span>
+                <span>http://167.179.118.118:9091</span>
               </div>
               <div class="column">
                 <p>{{ languagePack.RPCtext03 }}：</p>
-                <span>{{ chainId }}</span>
+                <span>ghm-testnet</span>
               </div>
               <div class="column">
                 <p>{{ languagePack.RPCtext04 }}：</p>
@@ -49,7 +49,7 @@
               </div>
               <div class="column">
                 <p>{{ languagePack.RPCtext05 }}：</p>
-                <span>https://xxxxx.xx.xx</span>
+                <span>https://scan.hermit.network/</span>
               </div>
 
               <button class="submit" @click="submit">
@@ -82,10 +82,10 @@ export default {
       await window.keplr.experimentalSuggestChain({
         chainId: "ghmdev",
         chainName: "ghmdev chain",
-        rpc: "http://167.179.118.118:1317",
-        rest: "http://167.179.118.118:1317",
+        rpc: "https://rpc.hermit.network:1317",
+        rest: "https://rpc.hermit.network:1317",
         bip44: {
-          coinType: 118,
+          coinType: 928,
         },
         bech32Config: {
           bech32PrefixAccAddr: "ghm",

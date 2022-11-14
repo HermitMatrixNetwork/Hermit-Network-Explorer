@@ -1,5 +1,5 @@
 
-import { copy, toMoney, sliceAddress, timeStamp, jetlag } from "@/utils/common.js";
+import { copy, toMoney, sliceAddress } from "@/utils/common.js";
 import { Message } from "element-ui";
 export default {
   data() {
@@ -60,8 +60,6 @@ export default {
   filters: {
     toMoney,
     sliceAddress,
-    timeStamp,
-    jetlag
   },
   computed: {
     languagePack() {

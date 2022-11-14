@@ -277,7 +277,7 @@ export default {
     },
     queryTxDetail(index) {
       sessionStorage.setItem('hashList',JSON.stringify({hashList:this.hashList,index}))
-      console.log(this.hashList, index);
+      // console.log(this.hashList, index);
       this.$router.push({name: "hash_detail"});
     },
     toAddress(address) {
