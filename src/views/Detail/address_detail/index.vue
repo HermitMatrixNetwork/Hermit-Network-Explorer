@@ -39,13 +39,7 @@
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext18 }}：</p>
-                  <span
-                    >$
-                    {{
-                      (($store.state.tokenPrice * account.balance) / 1e6)
-                        
-                    }}</span
-                  >
+                  <span>${{ $store.state.tokenPrice * ((account.balance / 1e6)+account.delegate_amount+account.unbonding) }}</span>
                 </div>
                 <div class="column">
                   <p>{{ languagePack.accounttext20 }}：</p>
