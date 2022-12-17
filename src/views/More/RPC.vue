@@ -37,11 +37,11 @@
               </div>
               <div class="column">
                 <p>{{ languagePack.RPCtext02 }}：</p>
-                <span>http://167.179.118.118:9091</span>
+                <span>https://rpc.hermit.network:9191</span>
               </div>
               <div class="column">
                 <p>{{ languagePack.RPCtext03 }}：</p>
-                <span>ghm-testnet</span>
+                <span>Hermit</span>
               </div>
               <div class="column">
                 <p>{{ languagePack.RPCtext04 }}：</p>

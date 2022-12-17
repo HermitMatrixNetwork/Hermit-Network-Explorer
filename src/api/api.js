@@ -127,7 +127,7 @@ export function queryAccountList(limit, index) {
         url: '/api/browser/accountlist',
         method: 'POST',
         data: {
-            chain_id: 'ghm-testnet',
+            chain_id: 'Hermit',
             limit,
             index
         }

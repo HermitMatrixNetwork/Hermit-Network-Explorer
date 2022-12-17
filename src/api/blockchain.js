@@ -9,7 +9,7 @@ export function queryBlockdetails(data) {
         url: '/api/browser/blockdetails',
         method: 'POST',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             height: data
         }
     })
@@ -21,7 +21,7 @@ export function queryBlockdetails_hash(hash) {
         url: '/api/browser/blockdetails',
         method: 'POST',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             hash
         }
     })
@@ -33,7 +33,7 @@ export function queryTxList(limit, index) {
         url: '/api/browser/txlist',
         method: 'POST',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             limit,
             index
         }
@@ -46,7 +46,7 @@ export function queryBlockList(limit,index,isError=false) {
         url: '/api/browser/blocklist',
         method: 'POST',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             limit,
             index
         },
@@ -60,7 +60,7 @@ export function getHashContent(hash) {
         url: '/api/browser/txhash',
         method: 'POST',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             hash,
         }
     })

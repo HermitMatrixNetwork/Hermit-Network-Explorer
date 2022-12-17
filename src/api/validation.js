@@ -7,7 +7,7 @@ export function getNodeblockList(limit, index, address) {
         url: '/api/browser/blocklist_node',
         method: 'post',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             limit,
             index,
             address,
@@ -29,7 +29,7 @@ export function validationBasic(address){
         url:'/api/browser/nodeinfo',
         method:'post',
         data:{
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             address
         }
     })
@@ -49,7 +49,7 @@ export function getNodeRewardList(limit, index, address) {
         url: '/api/browser/txwithdraw_node',
         method: 'post',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             limit,
             index,
             address,
@@ -63,7 +63,7 @@ export function getValidationList(limit, index) {
         url: '/api/browser/nodelist',
         method:'post',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             limit,
             index
         }

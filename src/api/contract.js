@@ -8,7 +8,7 @@ export function getContract(limit) {
         url: '/api/browser/contractlist',
         method: 'post',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             index: '',
             limit
         }
@@ -21,7 +21,7 @@ export function getContractInfo(address) {
         url: '/api/browser/contractinfo',
         method: 'post',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             address
         }
     })
@@ -33,7 +33,7 @@ export function getContractTx(limit,index,address){
         url:'/api/browser/txcontract',
         method:'post',
         data:{
-            chain_id:"ghm-testnet",
+            chain_id:"Hermit",
             limit,
             index,
             address,

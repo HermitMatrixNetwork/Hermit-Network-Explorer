@@ -6,7 +6,7 @@ export function queryAccountInfo(address) {
         url: '/api/browser/accountinfo',
         method: 'post',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             address,
         }
     })
@@ -18,7 +18,7 @@ export function queryAccountTx(limit,index,address) {
         url: '/api/browser/txlist',
         method: 'post',
         data: {
-            chain_id: "ghm-testnet",
+            chain_id: "Hermit",
             limit,
             index,
             address,
@@ -32,7 +32,7 @@ export function userIncrease(days){
         url: '/api/browser/accountincrease',
         method: 'post',
         data: {
-            chain_id:'ghm-testnet',
+            chain_id:'Hermit',
             days
         }
     })
