@@ -6,7 +6,7 @@ const ConfigBaseURL = 'https://rpc.hermit.network:1317'
 // const ConfigBaseURL = 'http://158.247.237.78:8888'
 //使用create方法创建axios实例
 export const Service = axios.create({
-  timeout: 100000, // 请求超时时间
+  timeout: 300000, // 请求超时时间
   baseURL: ConfigBaseURL,
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'

@@ -4,7 +4,7 @@ import { http1 } from './index'
 // 创建axios 实例
 const service = axios.create({
 	baseURL: '',
-	timeout: 10000, // 请求超时时间
+	timeout: 300000, // 请求超时时间
 	headers: {
 		'Content-Type': 'application/json;charset=UTF-8',
 	},
