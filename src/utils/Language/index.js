@@ -24,7 +24,7 @@ let prompt = {
         'prompttext14':'Submitted successfully',
         'prompttext15':'Yet out of the blocks',
         'submitExplain':`<h3>Submission process</h3>
-        When submitting a token icon, select the token type based on the information on this page and the corresponding code compartment on Github, then submit the necessary token icons and information files. (Note: Documents containing token information cannot be passed without submitting them.) <a style='color:#5671f2' href='https://docs.hermit.network/kai-fa-wen-dang/Token-submission'>See our Gitbook Documentation guide for more information.</a><br>
+        When submitting a token icon, select the token type based on the information on this page and the corresponding code compartment on Github, then submit the necessary token icons and information files. (Note: Documents containing token information cannot be passed without submitting them.) <a style='color:#5671f2' target='_blank' href='https://docs.hermit.network/kai-fa-wen-dang/Token-submission'>See our Gitbook Documentation guide for more information.</a><br>
         1. Because HermitMatrixNetwork has the highest privacy, it is not possible to know the address and hash of both parties. Viewkey information from GHB donations must be attached to the token chart when it is submitted.<br>
         2. A Github account does not allow multiple token logo applications to be submitted;<br>
         3. The number of GHB donations is 1000 and the donation address is:ghm1sndkzxws43uyqg24fgwuyvcvf28j2x5w5f0klr<br>
@@ -59,7 +59,7 @@ let prompt = {
         'prompttext14':'提交成功',
         'prompttext15':'暂未出块',
         'submitExplain':`<h3>提交流程</h3>
-        提交代币图标时，请根据本页面信息选择代币类型并在Github上选择相应的代码仓，然后提交必要的代币图标和信息文件。（注意：如未提交代币信息文件将无法通过。）详细操作请<a style='color:#5671f2' href='https://docs.hermit.network/kai-fa-wen-dang/Token-submission'>查看我们的Gitbook文档（超链接）指引。</a><br>
+        提交代币图标时，请根据本页面信息选择代币类型并在Github上选择相应的代码仓，然后提交必要的代币图标和信息文件。（注意：如未提交代币信息文件将无法通过。）详细操作请<a style='color:#5671f2' target='_blank' href='https://docs.hermit.network/kai-fa-wen-dang/Token-submission'>查看我们的Gitbook文档（超链接）指引。</a><br>
         1、由于HermitMatrixNetwork隐私至上，无法获知交易双方地址及hash，在提交代币图表时必须附上GHB捐赠的Viewkey信息；<br>
         2、一个Github账户，不允许提交多个代币logo申请；<br>
         3、GHB捐赠数量为1000个，捐赠地址为：ghm1sndkzxws43uyqg24fgwuyvcvf28j2x5w5f0klr<br>
@@ -96,7 +96,7 @@ let prompt = {
         'prompttext14':'提交成功',
         'prompttext15':'暫未出塊',
         'submitExplain':`<h3>提交流程</h3>
-        提交代幣圖標時，請根據本頁面信息選擇代幣類型並在Github上選擇相應的代碼倉，然後提交必要的代幣圖標和信息文件。（註意：如未提交代幣信息文件將無法通過。）詳細操作請<a style='color:#5671f2' href='https://docs.hermit.network/kai-fa-wen-dang/Token-submission'>查看我們的Gitbook文檔（超鏈接）指引。</a><br>
+        提交代幣圖標時，請根據本頁面信息選擇代幣類型並在Github上選擇相應的代碼倉，然後提交必要的代幣圖標和信息文件。（註意：如未提交代幣信息文件將無法通過。）詳細操作請<a style='color:#5671f2' target='_blank' href='https://docs.hermit.network/kai-fa-wen-dang/Token-submission'>查看我們的Gitbook文檔（超鏈接）指引。</a><br>
         1、由於HermitMatrixNetwork隱私至上，無法獲知交易雙方地址及hash，在提交代幣圖表時必須附上GHB捐贈的Viewkey信息；<br>
         2、一個Github賬戶，不允許提交多個代幣logo申請；<br>
         3、GHB捐贈數量為1000個，捐贈地址為：ghm1sndkzxws43uyqg24fgwuyvcvf28j2x5w5f0klr<br>
