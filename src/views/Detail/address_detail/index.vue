@@ -371,14 +371,6 @@ export default {
         if(type === 'MsgWithdrawDelegatorReward'){
           reward = logs[0].events.pop().attributes[0].value.replace(/[a-zA-Z]/g, "")
         }
-        // let outputs_amount = type === 'MsgMultiSend'?messages[0].outputs[0].coins[0].amount:0
-        // console.log(outputs_amount);
-        // amount = type === 'MsgMultiSend'?messages[0].outputs[0].coins[0].amount:amount
-        // if(type === 'MsgMultiSend'){
-        //   // console.log(messages[0].outputs[0].coins[0].amount);
-        //   // amount = messages[0].outputs[0].coins[0].amount
-          
-        // }
         // let status = 
         
         let statusArr = events.map((e) => {

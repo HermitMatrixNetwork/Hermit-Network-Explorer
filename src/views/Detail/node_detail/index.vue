@@ -22,7 +22,7 @@
             <!-- 当前委托者数 -->
             <div class="column">
               <p>{{ languagePack.nodetext30 }}:</p>
-              <span>{{ basic.delegators }}</span>
+              <span>{{ basic.delegators }}</span> 
             </div>
             <div class="column">
               <!-- 累计系统奖励 -->
