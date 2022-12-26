@@ -211,7 +211,7 @@
             </el-table-column>
             <el-table-column :label="languagePack.accounttext33" width="150px">
               <template slot-scope="scope">
-                <TableTooltip :content="scope.row.sender"></TableTooltip>
+                <TableTooltip :content="scope.row.sender" @click.native="sender_Address(scope.row.sender)"></TableTooltip>
               </template>
             </el-table-column>
             <el-table-column align="center" width="56px">
@@ -371,6 +371,12 @@ export default {
         if(type === 'MsgWithdrawDelegatorReward'){
           reward = logs[0].events.pop().attributes[0].value.replace(/[a-zA-Z]/g, "")
         }
+        let outputs_address;
+        let outputs_amount;
+        if(type === 'MsgMultiSend'){
+          outputs_address = messages[0].inputs[0].address == this.address?false:this.address
+          outputs_amount = messages[0].inputs[0].address == this.address?messages[0].inputs[0].coins[0].amount:messages[0].outputs[0].coins[0].amount
+        }
         // let status = 
         
         let statusArr = events.map((e) => {
@@ -386,8 +392,8 @@ export default {
           height,
           timestamp,
           sender:from_address || delegator_address || sender || messages[0].inputs[0].address,
-          targetAddress:to_address || validator_address || withdraw_address || contract,
-          tx_amount:(type === 'MsgWithdrawDelegatorReward'?reward:amount?amount.amount?amount.amount:amount[0].amount:type === 'MsgMultiSend'?messages[0].outputs[0].coins[0].amount:0)/1e6,
+          targetAddress:to_address || validator_address || withdraw_address || contract || outputs_address,
+          tx_amount:(type === 'MsgWithdrawDelegatorReward'?reward:amount?amount.amount?amount.amount:amount[0].amount:type === 'MsgMultiSend'?outputs_amount:0)/1e6,
           fee:auth_info.fee.amount[0].amount,
           result,
           gas_used,
@@ -445,6 +451,12 @@ export default {
       }else{
         // console.log('相等');
       }
+    },
+    sender_Address(address){
+      if(address === this.address){
+        return
+      }
+      this.toAddress(address)
     }
   },
   computed: {

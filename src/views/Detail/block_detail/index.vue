@@ -249,7 +249,7 @@ export default {
           timestamp,
           sender:from_address || delegator_address || sender || validator_addr || messages[0].inputs[0].address,
           targetAddress:to_address || validator_address || withdraw_address || contract,
-          tx_amount:(type === 'MsgWithdrawDelegatorReward'?reward:amount?amount.amount?amount.amount:amount[0].amount:type === 'MsgMultiSend'?messages[0].outputs[0].coins[0].amount:0)/1e6,
+          tx_amount:(type === 'MsgWithdrawDelegatorReward'?reward:amount?amount.amount?amount.amount:amount[0].amount:type === 'MsgMultiSend'?messages[0].inputs[0].coins[0].amount:0)/1e6,
           fee:auth_info.fee.amount[0].amount,
           result,
           gas_used,

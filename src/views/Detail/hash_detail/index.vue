@@ -58,8 +58,7 @@
             </div>
             <div class="column" v-if="dealType === 'MsgMultiSend'">
               <p>{{ languagePack.txstext36 }}：</p>
-              <span class="specialFont" @click="queryDealtoAddress(detailed.toaddress)">{{ detailed.toaddress }}</span>
-              <img src="@/assets/img/copy.png" @click="Copy(detailed.toaddress)" />
+              <span>{{ detailed.toaddress }}</span>
             </div>
 
             <!-- 当该笔交易为领取奖励时 -->
@@ -382,8 +381,8 @@ export default {
           break;
         case 'MsgMultiSend':
           obj.perform = message.inputs[0].address
-          obj.toaddress = message.outputs[0].address
-          obj.turnover = message.outputs[0].coins[0].amount;
+          obj.toaddress = '--'
+          obj.turnover = message.inputs[0].coins[0].amount;
           break;
         default:
           break;
