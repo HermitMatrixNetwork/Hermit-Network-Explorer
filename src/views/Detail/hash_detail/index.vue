@@ -50,6 +50,18 @@
               <img src="@/assets/img/copy.png" @click="Copy(detailed.toaddress)" />
             </div>
 
+             <!-- 当该笔交易为MsgMultiSend时 -->
+             <div class="column" v-if="dealType === 'MsgMultiSend'">
+              <p>{{ languagePack.txstext35 }}：</p>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.perform)">{{ detailed.perform }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.perform)" />
+            </div>
+            <div class="column" v-if="dealType === 'MsgMultiSend'">
+              <p>{{ languagePack.txstext36 }}：</p>
+              <span class="specialFont" @click="queryDealtoAddress(detailed.toaddress)">{{ detailed.toaddress }}</span>
+              <img src="@/assets/img/copy.png" @click="Copy(detailed.toaddress)" />
+            </div>
+
             <!-- 当该笔交易为领取奖励时 -->
             <div class="column" v-if="dealType === 'MsgWithdrawDelegatorReward'">
               <p>{{ languagePack.txstext41 }}：</p>
@@ -368,6 +380,11 @@ export default {
         case 'MsgUnjail':
           obj.contract = message.validator_addr;
           break;
+        case 'MsgMultiSend':
+          obj.perform = message.inputs[0].address
+          obj.toaddress = message.outputs[0].address
+          obj.turnover = message.outputs[0].coins[0].amount;
+          break;
         default:
           break;
       }
@@ -481,6 +498,9 @@ export default {
         case 'MsgUnjail':
           return this.languagePack.txstext64;
           break;
+        case 'MsgMultiSend':
+          return 'MsgMultiSend'
+          break
         default:
           break;
       }

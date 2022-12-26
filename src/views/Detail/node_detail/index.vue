@@ -26,8 +26,8 @@
             </div>
             <div class="column">
               <!-- 累计系统奖励 -->
-              <p>{{ languagePack.nodetext31 }}:</p>
-              <span>{{ !isNaN(basic.total_system_reward)?basic.total_system_reward / 1e6:0 }} <span v-if="!isNaN(basic.total_system_reward)">GHM</span></span>
+              <!-- <p>{{ languagePack.nodetext31 }}:</p>
+              <span>{{ !isNaN(basic.total_system_reward)?basic.total_system_reward / 1e6:0 }} <span v-if="!isNaN(basic.total_system_reward)">GHM</span></span> -->
             </div>
 
             <div class="column">

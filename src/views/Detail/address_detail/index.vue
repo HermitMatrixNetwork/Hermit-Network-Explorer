@@ -367,10 +367,22 @@ export default {
         list.forEach(({tx_response:{txhash,height,timestamp,gas_used,gas_wanted,logs,events},tx:{auth_info,body:{messages}}})=>{
         let {amount,from_address,to_address,delegator_address,validator_address,withdraw_address,sender,contract} = messages[0]
         let type = messages[0]['@type'].split('.').pop()
-        let reward = type === 'MsgWithdrawDelegatorReward'?logs[0].events[0].attributes.pop().value.replace(/[a-zA-Z]/g, ""):0
+        let reward;
+        if(type === 'MsgWithdrawDelegatorReward'){
+          reward = logs[0].events.pop().attributes[0].value.replace(/[a-zA-Z]/g, "")
+        }
+        // let outputs_amount = type === 'MsgMultiSend'?messages[0].outputs[0].coins[0].amount:0
+        // console.log(outputs_amount);
+        // amount = type === 'MsgMultiSend'?messages[0].outputs[0].coins[0].amount:amount
+        // if(type === 'MsgMultiSend'){
+        //   // console.log(messages[0].outputs[0].coins[0].amount);
+        //   // amount = messages[0].outputs[0].coins[0].amount
+          
+        // }
         // let status = 
         
         let statusArr = events.map((e) => {
+            if(!Array.isArray(e.attributes)) return
             return e.attributes.map((i) => {
                 return i.index;
             }); 
@@ -381,9 +393,9 @@ export default {
           type,
           height,
           timestamp,
-          sender:from_address || delegator_address || sender,
+          sender:from_address || delegator_address || sender || messages[0].inputs[0].address,
           targetAddress:to_address || validator_address || withdraw_address || contract,
-          tx_amount:(type === 'MsgWithdrawDelegatorReward'?reward:amount?amount.amount?amount.amount:amount[0].amount:0)/1e6,
+          tx_amount:(type === 'MsgWithdrawDelegatorReward'?reward:amount?amount.amount?amount.amount:amount[0].amount:type === 'MsgMultiSend'?messages[0].outputs[0].coins[0].amount:0)/1e6,
           fee:auth_info.fee.amount[0].amount,
           result,
           gas_used,
