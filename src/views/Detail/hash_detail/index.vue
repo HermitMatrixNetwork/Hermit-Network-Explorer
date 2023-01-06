@@ -282,24 +282,47 @@ export default {
   },
   created() {
     if (this.$route.query.hash) {
-      console.log(this.$route.query.hash);
-      return this.queryData(JSON.parse(this.$route.query.hash));
+      // console.log(JSON.parse(this.$route.query.hash));
+      // return
+      return this.queryData(JSON.parse(this.$route.query.hash).hash);
     }
     this.queryData(this.hashList, this.hashIndex);
   },
   methods: {
+    //处理交易数据
     async queryData(hash, index, status) {
-      this.waitResult = true;
-      let res;
-      if (!Array.isArray(hash)) {
-        res = await getHashContent(hash.hash);
-      } else {
-        res = await getHashContent(hash[index].hash);
+      let Detail_Obj;
+      if(!Array.isArray(hash)){
+        //当用户搜索进入交易详情时
+        Detail_Obj = hash
+      }else{
+        //当用户点击交易列表进入交易详情时
+        Detail_Obj = hash[index].txDetail
       }
-      console.log("通过hash查找信息", res);
-      if (res) {
-        this.waitResult = false;
-      }
+      // this.waitResult = true;
+      // let res;
+      // if (!Array.isArray(hash)) {
+      //   res = await getHashContent(hash.hash);
+      // } else {
+      //   return
+      //   res = await getHashContent(hash[index].hash);
+      // }
+      // console.log("通过hash查找信息", res);
+      // if (res) {
+      //   this.waitResult = false;
+      // }
+      // const {
+      //   tx_response: {
+      //     txhash,
+      //     timestamp,
+      //     height,
+      //     gas_used,
+      //     gas_wanted,
+      //     events,
+      //     logs,
+      //   },
+      //   tx: { auth_info, body },
+      // } = res.data.list;
       const {
         tx_response: {
           txhash,
@@ -311,7 +334,8 @@ export default {
           logs,
         },
         tx: { auth_info, body },
-      } = res.data.list;
+      } = Detail_Obj;
+      // console.log(hash[index].txDetail);
       let message = body.messages[0];
       //如果没有交易状态或者交易状态为undifind时通过events来判断交易状态
       if (!this.TxStatus) {
@@ -419,6 +443,7 @@ export default {
     },
     queryStatus(arr) {
       let arr2 = arr.map((e) => {
+        if(!Array.isArray(e.attributes)) return
         return e.attributes.map((i) => {
           return i.index;
         });
@@ -433,20 +458,14 @@ export default {
   },
   watch: {
     hashIndex(value) {
-     
-      const { hash } = this.$route.params;
-      if (hash) {
-        this.queryData(hash, value);
-      } else {
         this.queryData(this.hashList, value);
-      }
     },
     "$route.query": {
       handler(val) {
         if (val.hash) {
           // console.log('query中的hash',val);
           // console.log("通过query", JSON.parse(val.hash).hash);
-          this.queryData(JSON.parse(val.hash));
+          this.queryData(JSON.parse(val.hash).hash);
         }
       },
       // deep: true,

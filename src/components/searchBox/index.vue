@@ -100,11 +100,11 @@ export default {
         //   break;
         case 3:
           if (value.length !== 64) break;
-          var {code} = await getHashContent(value);
-          console.log(code);
+          var {code,data:{list}} = await getHashContent(value);
+          // console.log(list);
           if (code === 0) {
             this.queryDealtoHash({
-              hash: value,
+              hash: list,
               random: Math.floor(Math.random() * 10000),
             });
             this.searchVal = ''

@@ -9,7 +9,7 @@ module.exports = defineConfig({
   assetsDir: 'assets',
   publicPath: './',
   devServer: {
-    port: 8888,
+    port: 8889,
     https: false,
     proxy: {  //代理服务器
       '/api': {

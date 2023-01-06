@@ -80,7 +80,7 @@
         <div slot="empty">{{languagePack.prompttext11}}</div>
           <el-table-column :label="languagePack.blocktext22">
             <template slot-scope="scope">
-              <div class="specialFont" @click="queryDealtoHash({hash: scope.row._id})">
+              <div class="specialFont" @click="queryDealtoHash({hash:deatil_Arr[scope.$index]})">
                 <el-tooltip effect="dark" :content="languagePack.prompttext05" placement="top">
                   <img
                     src="@/assets/img/table_mistake.png"
@@ -113,7 +113,6 @@
           </el-table-column>
           <el-table-column
             :label="languagePack.blocktext26"
-            :show-overflow-tooltip="true"
             width="150px"
           >
             <template slot-scope="scope">
@@ -192,6 +191,7 @@ export default {
       commitHeight: 0,
       blockHight: 0,
       tableData: [],
+      deatil_Arr:[],
       page: {
         currentPage: 0,
         pageSize: 10,
@@ -221,6 +221,7 @@ export default {
       this.blockData.timestamp = this.dealwithTime(timestamp)
       this.blockData.utc = '(UTC) '+ timestamp.slice(0,19)
       let arr = []
+      this.deatil_Arr =  res.data.txs
       if(res.data.txs === null){
         this.tableData = null
       }else{

@@ -364,7 +364,8 @@ export default {
       let arr = []
       this.hashList = []
       if(Array.isArray(list)&&list.length >= 1){
-        list.forEach(({tx_response:{txhash,height,timestamp,gas_used,gas_wanted,logs,events},tx:{auth_info,body:{messages}}})=>{
+        list.forEach((item)=>{
+        let {tx_response:{txhash,height,timestamp,gas_used,gas_wanted,logs,events},tx:{auth_info,body:{messages}}} = item
         let {amount,from_address,to_address,delegator_address,validator_address,withdraw_address,sender,contract} = messages[0]
         let type = messages[0]['@type'].split('.').pop()
         let reward;
@@ -402,7 +403,7 @@ export default {
           eyePopover:false
         })
         this.hashList.push({
-          hash: txhash, type: type, status:result
+          txDetail: item, type: type, status:result
         }) 
       })
       }
@@ -432,6 +433,10 @@ export default {
     toAddress(address){
       if(address.includes('valoper')){
         return this.$router.push({path:'/node_detail',query:{address}})
+      }
+      this.page = {
+        currentPage: 0,
+        pageSize: 10,
       }
       this.$router.push({ path: "/address_detail", query: { address } });
     },

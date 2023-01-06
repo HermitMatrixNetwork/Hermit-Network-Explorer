@@ -270,7 +270,7 @@ export default {
           eyePopover:false
         })
         this.hashList.push({
-          hash: txhash, type: type, status:result
+          txDetail: item, type: type, status:result
         }) 
       })
       this.tableData = arr;

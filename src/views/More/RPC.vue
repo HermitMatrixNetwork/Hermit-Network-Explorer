@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       active: 1,
-      chainId: "ghmdev", //cosmoshub-5
+      chainId: "Hermit", //cosmoshub-5
     };
   },
   async mounted() {},
@@ -80,9 +80,9 @@ export default {
         return this.messageBox(this.languagePack.RPCtext11, "error");
       }
       await window.keplr.experimentalSuggestChain({
-        chainId: "ghmdev",
-        chainName: "ghmdev chain",
-        rpc: "https://rpc.hermit.network:1317",
+        chainId: "Hermit",
+        chainName: "HermitChain",
+        rpc: "https://rpc.hermit.network:26657",
         rest: "https://rpc.hermit.network:1317",
         bip44: {
           coinType: 928,

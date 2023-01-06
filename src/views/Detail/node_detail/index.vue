@@ -450,7 +450,7 @@ export default {
           reward:reward/1e6,
           result,
         });
-        this.hashList.push({hash:txhash,status: result})
+        this.hashList.push({txDetail: item,status: result})
       });
       this.rewardTable = { list: arr, total }
 
@@ -486,7 +486,7 @@ export default {
         "hashList",
         JSON.stringify({ hashList: this.hashList, index })
       );
-      this.$router.replace({ name: "hash_detail" });
+      this.$router.push({ name: "hash_detail" });
     },
     async blockSizeChange(value) {
       this.blockloading = true;
@@ -548,7 +548,7 @@ export default {
           reward:reward/1e6,
           result,
         });
-        this.hashList.push({hash:txhash,status: result})
+        this.hashList.push({txDetail: item,status: result})
       });
       this.rewardTable.list = arr;
       setTimeout(() => (this.rewardloading = false), 500);
@@ -583,7 +583,7 @@ export default {
           reward:reward/1e6,
           result,
         });
-        this.hashList.push({hash:txhash,status: result})
+        this.hashList.push({txDetail: item,status: result})
       });
       this.rewardTable.list = arr;
       setTimeout(() => (this.rewardloading = false), 500);
