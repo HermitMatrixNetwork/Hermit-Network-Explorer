@@ -1,6 +1,6 @@
-# 隐私链浏览器
+# Hermit Network explorer
 
-### 环境及版本说明
+### Environment and its version description
 
 * node  v16.15.0
 * vue  2.6.14
@@ -11,21 +11,21 @@
 
 
 
-### 安装依赖
+### Installation dependencies
 ```
 yarn install
 or
 npm install
 ```
 
-### 项目运行
+### project operation
 ```
 yarn serve
 or
 npm run serve
 ```
 
-### 打包
+### Bulid
 ```
 yarn build
 or
@@ -33,5 +33,5 @@ npm run build
 ```
 
 
-### 项目地址
+### Project address
 [web-browser](https://github.com/HermitMatrixNetwork/web-browser)
