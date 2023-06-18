@@ -1,5 +1,5 @@
 # Hermit Network explorer
-
+Through the following process, anyone or community organization can build their own browser based on the Hermit network. We look forward to more technologies joining our open source community to improve and strengthen the Hermit network together. All our efforts will ultimately make us better together.
 ### Environment and its version description
 
 * node  v16.15.0
